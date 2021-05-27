@@ -31,6 +31,7 @@
 *.app
 *.ipa
 
+
 # Engin-generated project files
 *.xcodeproj
 *.xcworkspace
@@ -72,13 +73,6 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor
 DerivedDataCache/*
-
-# Remove static resources
-Content/AdditionalPacks/*
-
-Content/DefaultContent/*
-
-Content/OldContent/*
 
 # Remove VS Code configuration
 .vscode/
