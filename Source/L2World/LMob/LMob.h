@@ -65,6 +65,7 @@ protected:
 	// Update skeletal mesh from variable SkeletalMeshes
 	void UpdateSkeletalMesh();
 
+
 	/* Materials */
 
 public:
@@ -99,7 +100,7 @@ public:
 protected:
 
 	// Default material
-	const UMaterial* DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+	UMaterial * DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
 	// Record original materials when updating meshes. When mat override is disabled they will be applied.
 	TArray<UMaterialInterface*> OriginalMats;
@@ -113,6 +114,9 @@ protected:
 
 	// Update materials from variables "Materials" and "MatMapping". If override is disabled it will do nothing.
 	void UpdateMaterials();
+
+	// Reset materials to original materials
+	void InitializeMaterials();
 
 
 

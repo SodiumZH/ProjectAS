@@ -30,7 +30,8 @@ void ALMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 // Construnction script
 void ALMob::OnConstruction(const FTransform & trans) {
 	Super::OnConstruction(trans);
-
+	
+	UpdateSkeletalMesh();
 }
 
 // Called when the game starts or when spawned
@@ -78,19 +79,29 @@ void ALMob::UpdateSkeletalMesh() {
 
 	USkeletalMeshComponent* temp = nullptr;
 	OriginalMats.Empty(); // Clear old original materials
+	
 	for (int i = 0; i < SkeletalMeshes.Num(); ++i) {
-		temp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh%d"), i);
+		FString CompName = TEXT("SkeletalMesh");
+		CompName = CompName + FString::Printf(TEXT("%d"), i);
+		temp = NewObject<USkeletalMeshComponent>(this, *CompName);
+		temp->RegisterComponent();
+		temp->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 		temp->SetSkeletalMesh(SkeletalMeshes[i]);
 		SkeletalMeshComponents.Add(temp);
 		OriginalMats.Append(temp->GetMaterials());// Record original materials
 	}
-	// NOT FINISHED!! Materials should be updated too
+
+	// Materials should be updated too
+	UpdateMaterials();
 }
 
 void ALMob::ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes) {
 	SkeletalMeshes = NewMeshes;
 	UpdateSkeletalMesh();
 }
+
+
+/* Materials */
 
 TArray<int> ALMob::DecodeMatMapping(const TArray<int> & input) { 
 
@@ -103,7 +114,7 @@ TArray<int> ALMob::DecodeMatMapping(const TArray<int> & input) {
 	TArray<int> Out = TArray<int>();
 	TArray<int> temp = TArray<int>();
 	int LastElem = 0;
-	for (i = 0; i < input.Num(); ++i) {
+	for (int i = 0; i < input.Num(); ++i) {
 		
 		// In case it's a number
 		if (input[i] >= 0) {
@@ -130,7 +141,7 @@ TArray<int> ALMob::DecodeMatMapping(const TArray<int> & input) {
 	return Out;
 }
 
-void ALMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const TArray<int> DecodedMap) {
+void ALMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const TArray<int> & DecodedMap) {
 
 	USkeletalMeshComponent* temp = nullptr;
 	int MeshCount;
@@ -148,8 +159,33 @@ void ALMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const
 	}
 }
 
-void ALMob::UpdateMaterials() {}
+void ALMob::UpdateMaterials() {
+	TArray<int> MapDecoded = DecodeMatMapping(MatMapping);
+	ApplyMaterials_Unsafe(Materials, MapDecoded);
+}
 
-void ALMob::ResetEnableMatOverride(bool NewEnable) {}
+void ALMob::InitializeMaterials() {
+	int matindex = 0;
+	for (int i = 0; i < SkeletalMeshComponents.Num(); ++i) {
+		for (int j = 0; j < SkeletalMeshComponents[i]->GetMaterials().Num(); ++j) {
+			SkeletalMeshComponents[i]->SetMaterial(j, OriginalMats[matindex]);
+			++matindex;
+		}
+	}
+	return;
+}
 
-void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping) {}
+void ALMob::ResetEnableMatOverride(bool NewEnable) {
+	if (NewEnable)
+		UpdateMaterials();
+	else InitializeMaterials();
+	bEnableMaterialOverride = NewEnable;
+}
+
+void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping) {
+	if (!bEnableMaterialOverride)
+		return;
+	Materials = NewMats;
+	MatMapping = NewMapping;
+	UpdateMaterials();
+}
