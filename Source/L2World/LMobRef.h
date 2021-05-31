@@ -1,4 +1,4 @@
 #progma once
 
 // Include to all mob source files
-#include "LMob.h"
+#include "LMob/LMob.h"
