@@ -3,6 +3,7 @@
 
 #include "LMob.h"
 #include "../LMathRef.h"
+#include "Components/CapsuleComponent.h"
 
 
 /** Constructor & Input */
@@ -188,4 +189,57 @@ void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TA
 	Materials = NewMats;
 	MatMapping = NewMapping;
 	UpdateMaterials();
+}
+
+
+/* Transform */
+
+void ALMob::UpdateCapsule() {
+	UCapsuleComponent* Capsule = GetCapsuleComponent();
+	Capsule->CapsuleHalfHeight = MOB_DEFAULT_HEIGHT * CapsuleHeightScale / 2.f;
+	Capsule->CapsuleRadius = MOB_DEFAULT_DIAMETER * CapsuleDiameterScale / 2.f;
+	return;
+}
+
+
+void ALMob::ResetCapsuleSize(float HeightScale, float DiameterScale) {
+	CapsuleHeightScale = HeightScale;
+	CapsuleDiameterScale = DiameterScale;
+	UpdateCapsule();
+}
+
+void ALMob::UpdateMeshTransform() {
+	GetMesh()->SetComponentTransform(MeshOffset);
+}
+
+void ALMob::ResetMeshTransform(FTransform & Trans) {
+	MeshOffset = Trans;
+	UpdateMeshTransform();
+}
+
+void ALMob::SetCapsuleScale(float HeightScale, float DiameterScale) {
+	ResetCapsuleSize(HeightScale, DiameterScale);
+}
+
+void ALMob::SetMeshOffset(FTransform & InTrans) {
+	ResetMeshTransform(InTrans);
+}
+
+void ALMob::SetMeshOffset(FVector Location, FRotator Rotation, FVector Scale) {
+	ResetMeshTransform(FTransform(Rotation, Location, Scale));
+}
+
+void ALMob::SetMeshLocation(FVector InLoc) {
+	MeshOffset.SetLocation(InLoc);
+	UpdateMeshTransform();
+}
+
+void ALMob::SetMeshRotation(FRotator InRot = FRotator()) {
+	MeshOffset.SetRotation(InRot);
+	UpdateMeshTransform();
+}
+
+void ALMob::SetMeshScale(FVector InScale) {
+	MeshOffset.SetScale3D(InScale);
+	UpdateMeshTransform();
 }

@@ -5,8 +5,11 @@
 #include "L2World.h"
 #include "LUtil.generated.h"
 
-#define DebugInfo(text) ULUTil::LPrintDebugInformation(this, text)
-#define DebugInfoDt(text, dt) ULUTil::LPrintDebugInformation(this, text, dt)
+// Simplified macros for debug displaying
+#define DebugInfo(text) ULUTil::LPrintDebugInformation(this, TEXT(text))
+#define DebugInfoDt(text, dt) ULUTil::LPrintDebugInformation(this, TEXT(text), dt)
+#define DebugInfoStr(str) ULUTil::LPrintDebugInformation(this, str)
+#define DebugInfoStrDt(str, dt) ULUTil::LPrintDebugInformation(this, str, dt)
 
 UCLASS(BlueprintType)
 class L2WORLD_API ULUtil : public UBlueprintFunctionLibrary 

@@ -172,6 +172,10 @@ public:
 	// Return rotation result. This operation do not set input variable.
 	FObjectRotator AddEuler(float Pitch = 0.f, float Yaw = 0.f, float Roll = 0.f);
 
+	// Remove roll(rotation toward own forward axis) of an objrotator.
+	FObjectRotator DeRoll();
+	static FObjectRotator DeRoll(FObjectRotator In);
+
 	// Transform world rotation to relative. This do not consider scale of objects.
 	static FObjectRotator WorldToRelative(FObjectRotator InWorldRot, FObjectRotator RelTo);
 	static FObjectRotator WorldToRelative(FObjectRotator InWorldRot, AActor* RelTo);

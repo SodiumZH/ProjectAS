@@ -2,7 +2,6 @@
 #include "ObjectRotator.h"
 
 
-
 // Constructors
 
 FObjectRotator::FObjectRotator() {
@@ -96,17 +95,6 @@ FObjectRotator FObjectRotator::GetLegalized(FObjectRotator & Rot) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Other methods to generate FObjectRotator struct
 
 FObjectRotator FObjectRotator::FromAxisAngle_d(FVector Axis, float AngleDegree) {
@@ -154,7 +142,7 @@ FObjectRotator  FObjectRotator::FromTwoVectors(FVector V1, FVector V2) {
 
 
 
-// Conversion to other formation of rot
+// Conversion to other form of rot
 
 FQuat FObjectRotator::Quat() {
 	return InteriorQuat;
@@ -227,6 +215,22 @@ FObjectRotator FObjectRotator::AddEuler(float Pitch, float Yaw, float Roll) {
 	return Result;
 
 }
+
+FObjectRotator FObjectRotator::DeRoll() {
+	FRotator Eular = this->Rotator();
+	Eular.Roll = 0.f;
+	*this = FObjectRotator(Eular);
+	return *this;
+}
+
+FObjectRotator FObjectRotator::DeRoll(FObjectRotator In) {
+	FObjectRotator InCopy = In;
+	InCopy.DeRoll();
+	return InCopy;
+}
+
+
+
 
 FObjectRotator FObjectRotator::WorldToRelative(FObjectRotator InWorldRot, FObjectRotator RelTo) {
 	return -RelTo + InWorldRot;

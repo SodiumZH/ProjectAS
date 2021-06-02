@@ -7,6 +7,10 @@
 #include "LMobBase.h"
 #include "LMob.generated.h"
 
+#define MOB_DEFAULT_HEIGHT 180.f
+#define MOB_DEFAULT_DIAMETER 60.f
+
+
 UCLASS()
 class L2WORLD_API ALMob : public ACharacter, public ILMobBase
 {
@@ -34,9 +38,9 @@ public:
 
 
 
-	/////////////////////
-	/** Skeletal Mesh **/
-	/////////////////////
+	////////////
+	/** Mesh **/
+	////////////
 
 
 	/* Mesh */
@@ -119,7 +123,53 @@ protected:
 	void InitializeMaterials();
 
 
-	/* Animations */
+	/* Mesh-collision Correction */
+
+public:
+
+	// Capsule height scale rel to default
+	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Capsule Height Scale"), category = "Mob|Collsion")
+	float CapsuleHeightScale = 1.f;
+
+	// Capsule diameter scale rel to default
+	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Capsule Diameter Scale"), category = "Mob|Collsion")
+	float CapsuleDiameterScale = 1.f;
+
+	// Mesh offset relative to capsule. Adjust this to align mesh's feet to capsule's bottom. 
+	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Mesh Offset"), category = "Mob|Mesh")
+	FTransform MeshOffset = FTransform();
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Capsule Scale", category = "L2W|Mob")
+	void SetCapsuleScale(float HeightScale = 1.f, float DiameterScale = 1.f);
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Offset", category = "L2W|Mob")
+	void SetMeshOffset(FTransform & InTrans);
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Offset (In LRS)", category = "L2W|Mob")
+	void SetMeshOffset(FVector Location = FVector(), FRotator Rotation = FRotator(), FVector Scale = FVector::OneVector);
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "L2W|Mob")
+	void SetMeshLocation(FVector InLoc = FVector());
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "L2W|Mob")
+	void SetMeshRotation(FRotator InRot = FRotator());
+	
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "L2W|Mob")
+	void SetMeshScale(FVector InScale = FVector::OneVector);
+
+protected:
+
+	// Refresh capsule size. Do this after setting capsule scale to apply it.
+	void UpdateCapsule();
+
+	// Reset capsule size
+	void ResetCapsuleSize(float HeightScale, float DiameterScale);
+
+	// Refresh mesh transform. Call this after setting mesh transfrom to apply it. 
+	void UpdateMeshTransform();
+
+	// Reset mesh size
+	void ResetMeshTransform(FTransform & Trans = FTransform());
 
 
 };
