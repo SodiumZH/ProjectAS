@@ -10,6 +10,19 @@
 #define MOB_DEFAULT_HEIGHT 180.f
 #define MOB_DEFAULT_DIAMETER 60.f
 
+/**
+
+Content
+
+General Functions	R34
+Mesh Settings		R55
+	Meshes			R59
+	Materials		R86
+Mesh-collision Transform Correction		R139
+	Capsule			R141
+	Mesh			R187
+
+*/
 
 UCLASS()
 class L2WORLD_API ALMob : public ACharacter, public ILMobBase
@@ -104,7 +117,7 @@ public:
 protected:
 
 	// Default material
-	UMaterial * DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+	UMaterial* DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
 	// Record original materials when updating meshes. When mat override is disabled they will be applied.
 	TArray<UMaterialInterface*> OriginalMats;
@@ -123,39 +136,43 @@ protected:
 	void InitializeMaterials();
 
 
-	/* Mesh-collision Correction */
+/* Mesh-collision Correction */
+
+	// Capsule //
 
 public:
 
 	// Capsule height scale rel to default
-	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Capsule Height Scale"), category = "Mob|Collsion")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (DisplayName = "Capsule Height Scale"), category = "Mob|Capsule")
 	float CapsuleHeightScale = 1.f;
 
 	// Capsule diameter scale rel to default
-	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Capsule Diameter Scale"), category = "Mob|Collsion")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (DisplayName = "Capsule Diameter Scale"), category = "Mob|Capsule")
 	float CapsuleDiameterScale = 1.f;
 
+	// If true, XYZ of mesh scale keeps equal.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Lock Mesh Scale", Keywords = "scale size"), category = "Mob|Mesh")
+	bool bLockMeshScale = true;
+
+	// Only when Lock Mesh Scale is true, this value overrides scale in Mesh Offset.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Locked Mesh Scale Value XYZ", Keywords="scale size"), category = "Mob|Mesh")
+	float LockedScale3D = 1.f;
+
+	// If true, XY of mesh scale keeps equal. Ignored if Lock Mesh Scale is true.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Lock Mesh Scale XY", Keywords = "scale size"), category = "Mob|Mesh")
+	bool bLockMeshScaleXY = false;
+	
+	// Only when Lock Mesh Scale XY is applied, this value overrides scale XY in Mesh Offset.
+	// Set Z value in variable Mesh Offset.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Locked Mesh Scale Value XY", Keywords = "scale size"), category = "Mob|Mesh")
+	float LockedScaleXY = 1.f;
+
 	// Mesh offset relative to capsule. Adjust this to align mesh's feet to capsule's bottom. 
-	UPROPERTY(EditDefaultsOnly, BluerprintReadOnly, meta = (DisplayName = "Mesh Offset"), category = "Mob|Mesh")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (DisplayName = "Mesh Offset", Keywords = "transforms"), category = "Mob|Mesh")
 	FTransform MeshOffset = FTransform();
 
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Capsule Scale", category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta=(DisplayName = "Reset Capsule Scale", Keywords = "set reset capsule scale size"), category = "L2W|Mob")
 	void SetCapsuleScale(float HeightScale = 1.f, float DiameterScale = 1.f);
-
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Offset", category = "L2W|Mob")
-	void SetMeshOffset(FTransform & InTrans);
-
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Offset (In LRS)", category = "L2W|Mob")
-	void SetMeshOffset(FVector Location = FVector(), FRotator Rotation = FRotator(), FVector Scale = FVector::OneVector);
-
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "L2W|Mob")
-	void SetMeshLocation(FVector InLoc = FVector());
-
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "L2W|Mob")
-	void SetMeshRotation(FRotator InRot = FRotator());
-	
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "L2W|Mob")
-	void SetMeshScale(FVector InScale = FVector::OneVector);
 
 protected:
 
@@ -165,11 +182,40 @@ protected:
 	// Reset capsule size
 	void ResetCapsuleSize(float HeightScale, float DiameterScale);
 
+
+
+	// Mesh //
+
+public:
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "L2W|Mob")
+	void SetMeshOffset(FTransform InTrans);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset (In LRS)", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "L2W|Mob")
+	void SetMeshOffset_LRS(FVector Location = FVector(0, 0, 0), FRotator Rotation = FRotator(0, 0, 0), FVector Scale = FVector(1, 1, 1));
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "L2W|Mob")
+	void SetMeshLocation(FVector InLoc = FVector(0, 0, 0));
+
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "L2W|Mob")
+	void SetMeshRotation(FRotator InRot = FRotator(0, 0, 0));
+	
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "L2W|Mob")
+	void SetMeshScale(FVector InScale = FVector(0, 0, 0));
+
+
+protected:
+
+	// Calculate actual transform to apply
+	FTransform GetMeshTransApplied();
+
 	// Refresh mesh transform. Call this after setting mesh transfrom to apply it. 
 	void UpdateMeshTransform();
 
 	// Reset mesh size
-	void ResetMeshTransform(FTransform & Trans = FTransform());
+	void ResetMeshTransform(FTransform Trans);
 
+	// Initialization of capsule and mesh on construction
+	void InitCapsuleMeshSize();
 
 };

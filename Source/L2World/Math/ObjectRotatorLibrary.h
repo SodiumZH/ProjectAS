@@ -11,7 +11,7 @@
  * This BP Library contains all BP functions relative to ObjectRotator.
  */
 UCLASS()
-class ENGINE_API UObjectRotatorLibrary : public UBlueprintFunctionLibrary
+class L2WORLD_API UObjectRotatorLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	

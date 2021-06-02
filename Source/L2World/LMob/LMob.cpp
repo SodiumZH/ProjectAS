@@ -33,6 +33,8 @@ void ALMob::OnConstruction(const FTransform & trans) {
 	Super::OnConstruction(trans);
 	
 	UpdateSkeletalMesh();
+	InitCapsuleMeshSize();
+	1;
 }
 
 // Called when the game starts or when spawned
@@ -194,13 +196,14 @@ void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TA
 
 /* Transform */
 
+// Capsule //
+
 void ALMob::UpdateCapsule() {
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
-	Capsule->CapsuleHalfHeight = MOB_DEFAULT_HEIGHT * CapsuleHeightScale / 2.f;
-	Capsule->CapsuleRadius = MOB_DEFAULT_DIAMETER * CapsuleDiameterScale / 2.f;
+	Capsule->SetCapsuleHalfHeight(MOB_DEFAULT_HEIGHT * CapsuleHeightScale / 2.f);
+	Capsule->SetCapsuleRadius(MOB_DEFAULT_DIAMETER * CapsuleDiameterScale / 2.f);
 	return;
 }
-
 
 void ALMob::ResetCapsuleSize(float HeightScale, float DiameterScale) {
 	CapsuleHeightScale = HeightScale;
@@ -208,24 +211,43 @@ void ALMob::ResetCapsuleSize(float HeightScale, float DiameterScale) {
 	UpdateCapsule();
 }
 
-void ALMob::UpdateMeshTransform() {
-	GetMesh()->SetComponentTransform(MeshOffset);
-}
-
-void ALMob::ResetMeshTransform(FTransform & Trans) {
-	MeshOffset = Trans;
-	UpdateMeshTransform();
-}
-
 void ALMob::SetCapsuleScale(float HeightScale, float DiameterScale) {
 	ResetCapsuleSize(HeightScale, DiameterScale);
 }
 
-void ALMob::SetMeshOffset(FTransform & InTrans) {
+// Mesh //
+
+FTransform ALMob::GetMeshTransApplied() {
+	FTransform MeshTransApplied = MeshOffset;
+	if (bLockMeshScale) {
+		MeshTransApplied.SetScale3D(FVector(LockedScale3D, LockedScale3D, LockedScale3D));
+	}
+	else if (bLockMeshScaleXY) {
+		float Z = MeshTransApplied.GetScale3D().Z;
+		MeshTransApplied.SetScale3D(FVector(LockedScaleXY, LockedScaleXY, Z));
+	}
+	return MeshTransApplied;
+}
+
+void ALMob::UpdateMeshTransform() {
+	GetMesh()->SetRelativeTransform(GetMeshTransApplied());
+}
+
+void ALMob::ResetMeshTransform(FTransform Trans) {
+	MeshOffset = Trans;
+	if (bLockMeshScale)
+		LockedScale3D = Trans.GetScale3D().X;
+	else if (bLockMeshScaleXY)
+		LockedScaleXY = Trans.GetScale3D().X;
+	UpdateMeshTransform();
+}
+
+void ALMob::SetMeshOffset(FTransform InTrans) {
+
 	ResetMeshTransform(InTrans);
 }
 
-void ALMob::SetMeshOffset(FVector Location, FRotator Rotation, FVector Scale) {
+void ALMob::SetMeshOffset_LRS(FVector Location, FRotator Rotation, FVector Scale) {
 	ResetMeshTransform(FTransform(Rotation, Location, Scale));
 }
 
@@ -234,12 +256,17 @@ void ALMob::SetMeshLocation(FVector InLoc) {
 	UpdateMeshTransform();
 }
 
-void ALMob::SetMeshRotation(FRotator InRot = FRotator()) {
-	MeshOffset.SetRotation(InRot);
+void ALMob::SetMeshRotation(FRotator InRot) {
+	MeshOffset.SetRotation(InRot.Quaternion());
 	UpdateMeshTransform();
 }
 
 void ALMob::SetMeshScale(FVector InScale) {
 	MeshOffset.SetScale3D(InScale);
+	UpdateMeshTransform();
+}
+
+void ALMob::InitCapsuleMeshSize() {
+	UpdateCapsule();
 	UpdateMeshTransform();
 }
