@@ -52,18 +52,18 @@ private:
 
 public:
 
-	FRotator GetRelRot{ return RelRot; };
+	FRotator GetRelRot(){ return RelRot; };
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Rotation (Free Look Spring Arm)"), Category = SpringArm)
 	static FRotator StaticGetRelRot(UFreeLookSpringArmComponent* Target) { return Target->GetRelRot(); };
 
 	// Set camera rotation. If force set, desired rotation will be cleared.
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Camera Rotation (Free Look Spring Arm)"), Category = SpringArm)
-	FRotator SetRelRot(float NewYaw, float NewPitch, bool ForceSet = true);
+	void SetRelRot(float NewYaw, float NewPitch, bool ForceSet = true);
 
 	// Add camera rotation offset. If force set, desired rotation will be cleared.
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add Camera Rotation (Free Look Spring Arm)"), Category = SpringArm)
-	FRotator AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet = true);
+	void AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet = true);
 
 	// Reset initial rotatio. Not recommended unless very necessary.
 	// If keep vertical, pitch and yaw will keep zero.
@@ -124,8 +124,8 @@ public:
 	// Binding functions for input component
 	void InputRotation_M(float val);
 	void InputPitch_M(float val);
-	void InputRotation_T(float val);
-	void InputPitch_T(float val);
+	void InputRotation_K(float val);
+	void InputPitch_K(float val);
 	void InputZoomIn();
 	void InputZoomOut();
 
@@ -144,10 +144,11 @@ private:
 	void TickZoomDirect();
 	void TickZoomSmooth(float dt);
 
+
 	// Called only on begin play
 	void InitRotateAndZoom();
+
 	
-public:
 
 };
 

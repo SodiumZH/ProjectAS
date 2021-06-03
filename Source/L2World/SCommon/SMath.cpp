@@ -29,6 +29,6 @@ float SMath::MoveTo(float from, float to, float max_step_length) {
 	return from;
 }
 
-bool NearlyEqual(float a, float b, float toleration) {
+bool SMath::NearlyEqual(float a, float b, float toleration) {
 	return (abs(a - b) <= toleration);
 }

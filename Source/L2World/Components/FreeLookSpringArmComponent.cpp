@@ -8,7 +8,8 @@ void UFreeLookSpringArmComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 }
 
-void BeginPlay() {
+void UFreeLookSpringArmComponent::BeginPlay() {
+	Super::BeginPlay();
 	InitRotateAndZoom();
 }
 
@@ -29,7 +30,7 @@ void UFreeLookSpringArmComponent::ClampYaw() {
 	}
 }
 
-FRotator UFreeLookSpringArmComponent::SetRelRot(float NewYaw, float NewPitch, bool ForceSet) {
+void UFreeLookSpringArmComponent::SetRelRot(float NewYaw, float NewPitch, bool ForceSet) {
 	// Clamp pitch
 	NewPitch = SMath::Clamp(NewPitch, -89.9f, 89.9f);
 	// Set RelRot first
@@ -38,7 +39,7 @@ FRotator UFreeLookSpringArmComponent::SetRelRot(float NewYaw, float NewPitch, bo
 	ApplyRelRot();
 }
 
-FRotator UFreeLookSpringArmComponent::AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet) {
+void UFreeLookSpringArmComponent::AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet) {
 	float NewPitch = RelRot.Pitch + DeltaPitch;
 	float NewYaw = RelRot.Yaw + DeltaYaw;
 	SetRelRot(NewYaw, NewPitch, ForceSet);
@@ -60,11 +61,11 @@ void UFreeLookSpringArmComponent::InputPitch_M(float val) {
 	DesiredPitch += (val*PitchSens_M);
 	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
-void UFreeLookSpringArmComponent::InputRotation_T(float val) {
-	DesiredYaw += (val*YawSens_T);
+void UFreeLookSpringArmComponent::InputRotation_K(float val) {
+	DesiredYaw += (val*YawSens_K);
 }
-void UFreeLookSpringArmComponent::InputPitch_T(float val) {
-	DesiredPitch += (val*PitchSens_T);
+void UFreeLookSpringArmComponent::InputPitch_K(float val) {
+	DesiredPitch += (val*PitchSens_K);
 	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
 void UFreeLookSpringArmComponent::InputZoomIn() {
@@ -98,7 +99,6 @@ void UFreeLookSpringArmComponent::TickRotateSmooth(float dt){
 		return;
 
 	float RotateMax = dt * SmoothRotateRate;
-	float DeltaPitch, DeltaYaw;
 
 	RelRot.Yaw = SMath::MoveTo(RelRot.Yaw, DesiredYaw, RotateMax);
 	RelRot.Pitch = SMath::MoveTo(RelRot.Pitch, DesiredPitch, RotateMax);
