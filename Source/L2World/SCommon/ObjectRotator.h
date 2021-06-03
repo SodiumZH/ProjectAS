@@ -36,7 +36,7 @@
 * 因此当你在编程中使用这个结构体，请忘掉内部四元数。将这个结构体视为一个可以与所有旋转表达互相转换的黑箱。
 *
 * 操作符被重载得可以直接操作Actor和SceneComponent，当然还有向量。下述中FObjectRotator简作ORot。
-* 零旋转：ORot_Identity = FObjectRotator() 代表不作旋转。即FQuat::Identity、实数1、单位矩阵或FRotator(0,0,0)。
+* 零旋转：ORot_Identity == FObjectRotator() 代表不作旋转。即FQuat::Identity、实数1、单位矩阵或FRotator(0,0,0)。
 * ORot = Target：将ORot的值设为目标的旋转。如果目标是向量，将取其方向旋转并设roll为零。如果目标是旋转表达，取其等值；如果目标是物体，取其世界旋转。
 * ORot1 + ORot2: 相当于先做ORot1后做ORot2的总旋转。不满足交换律！！！ "+="也可以使用，设置ORot1的值。
 * -ORot：表示ORot的逆旋转，即ORot.Inverse()。

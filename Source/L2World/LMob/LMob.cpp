@@ -2,7 +2,7 @@
 
 
 #include "LMob.h"
-#include "../LMathRef.h"
+#include "../SCommon/SCommon.h"
 #include "Components/CapsuleComponent.h"
 
 

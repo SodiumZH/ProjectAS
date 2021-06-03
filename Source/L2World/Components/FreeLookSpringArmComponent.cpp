@@ -1,39 +1,123 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Components/FreeLookSpringArmComponent.h"
+#include "FreeLookSpringArmComponent.h"
 
 void UFreeLookSpringArmComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }
 
+void BeginPlay() {
+	InitRotateAndZoom();
+}
+
+/* Set Rotation */
+
+void UFreeLookSpringArmComponent::ApplyRelRot() {
+	this << (InitRot + FObjectRotator(RelRot));
+}
+
+void UFreeLookSpringArmComponent::ClampYaw() {
+	while (RelRot.Yaw > 180.f) {
+		RelRot.Yaw -= 360.f;
+		DesiredYaw -= 360.f;
+	}
+	while (RelRot.Yaw <= -180.f) {
+		RelRot.Yaw += 360.f;
+		DesiredYaw += 360.f;
+	}
+}
+
+FRotator UFreeLookSpringArmComponent::SetRelRot(float NewYaw, float NewPitch, bool ForceSet) {
+	// Clamp pitch
+	NewPitch = SMath::Clamp(NewPitch, -89.9f, 89.9f);
+	// Set RelRot first
+	RelRot = FRotator(NewPitch, NewYaw, 0.f);	// Never allow roll
+	// Apply to object
+	ApplyRelRot();
+}
+
+FRotator UFreeLookSpringArmComponent::AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet) {
+	float NewPitch = RelRot.Pitch + DeltaPitch;
+	float NewYaw = RelRot.Yaw + DeltaYaw;
+	SetRelRot(NewYaw, NewPitch, ForceSet);
+}
+
+void UFreeLookSpringArmComponent::ResetInitRot(FRotator NewInitialRotation, bool bKeepVertical) {
+	if (bKeepVertical)
+		NewInitialRotation = FRotator(NewInitialRotation.Pitch, 0.f, 0.f);
+	InitRot = NewInitialRotation; // Rotation from old InitRot to new
+	ApplyRelRot();
+}
+
+
+/* Input Functions */
 void UFreeLookSpringArmComponent::InputRotation_M(float val) {
 	DesiredYaw += (val*YawSens_M);
 }
 void UFreeLookSpringArmComponent::InputPitch_M(float val) {
 	DesiredPitch += (val*PitchSens_M);
+	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
 void UFreeLookSpringArmComponent::InputRotation_T(float val) {
 	DesiredYaw += (val*YawSens_T);
 }
 void UFreeLookSpringArmComponent::InputPitch_T(float val) {
 	DesiredPitch += (val*PitchSens_T);
+	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
 void UFreeLookSpringArmComponent::InputZoomIn() {
 	if(bReverseZoom)
 		DesiredLength += ZoomSens;
 	else DesiredLength -= ZoomSens;
+	// Clamp length
+	DesiredLength = SMath::Clamp(DesiredLength, MinLength, MaxLength);
 }
 void UFreeLookSpringArmComponent::InputZoomOut() {
 	if (bReverseZoom)
 		DesiredLength -= ZoomSens;
 	else DesiredLength += ZoomSens;
+	// Clamp length
+	DesiredLength = SMath::Clamp(DesiredLength, MinLength, MaxLength);
 }
 
-float UFreeLookSpringArmComponent::TickRotateDirect(float dt) {
-
+/* Tickly-applied Rotation/Zoom */
+void UFreeLookSpringArmComponent::TickRotateDirect() {
+	// Skip if no need to rotate
+	if (SMath::NearlyEqual(DesiredPitch + DesiredYaw, RelRot.Pitch + RelRot.Yaw, SMALL_NUMBER))
+		return;
+	
+	RelRot = FRotator(DesiredPitch, DesiredYaw, 0.f);
+	ApplyRelRot();
+	ClampYaw();
 }
-float UFreeLookSpringArmComponent::TickRotateSmooth(float dt){}
-float UFreeLookSpringArmComponent::TickZoomDirect(float dt){}
-float UFreeLookSpringArmComponent::TickZoomSmooth(float dt){}
+void UFreeLookSpringArmComponent::TickRotateSmooth(float dt){
+	// Skip if no need to rotate
+	if (SMath::NearlyEqual(DesiredPitch + DesiredYaw, RelRot.Pitch + RelRot.Yaw, SMALL_NUMBER))
+		return;
+
+	float RotateMax = dt * SmoothRotateRate;
+	float DeltaPitch, DeltaYaw;
+
+	RelRot.Yaw = SMath::MoveTo(RelRot.Yaw, DesiredYaw, RotateMax);
+	RelRot.Pitch = SMath::MoveTo(RelRot.Pitch, DesiredPitch, RotateMax);
+
+	ApplyRelRot();
+	ClampYaw();
+}
+
+void UFreeLookSpringArmComponent::TickZoomDirect(){
+	TargetArmLength = DesiredLength;
+}
+void UFreeLookSpringArmComponent::TickZoomSmooth(float dt){
+	TargetArmLength = SMath::MoveTo(TargetArmLength, DesiredLength, SmoothZoomRate*dt);
+}
+
+void UFreeLookSpringArmComponent::InitRotateAndZoom() {
+	TargetArmLength = DesiredLength = InitLength;
+	RelRot = FRotator(InitPitch, 0.f, 0.f);
+	DesiredPitch = InitPitch;
+	DesiredYaw = 0;
+	ApplyRelRot();
+}
