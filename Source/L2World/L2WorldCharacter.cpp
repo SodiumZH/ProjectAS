@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+s// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "L2WorldCharacter.h"
 #include "HeadMountedDisplayFunctionLibrary.h"

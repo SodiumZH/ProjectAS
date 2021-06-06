@@ -32,7 +32,7 @@ private:
 
 	// Initial rotation i.e. world rotation when rotation is identity.
 	UPROPERTY(EditDefaultsOnly, meta = (DisplayName = "Initial Pitch"), category = "FreeLook")
-	float InitPitch = 30.f;
+	float InitPitch = -30.f;
 
 	// Initial rotation: defines the "forward orientation" of the camera when RelRot==Identity.
 	// Usually only contains yaw. Do not reset it unless necessary.
@@ -80,13 +80,13 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Mouse Pitching Sensitivity"), category = "FreeLook|Rotation")
 	float PitchSens_M = 1.f;
-
+/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Keyboard Rotation Sensitivity"), category = "FreeLook|Rotation")
 	float YawSens_K = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Keyboard Pitching Sensitivity"), category = "FreeLook|Rotation")
 	float PitchSens_K = 1.f;
-
+*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "Smooth Rotation"), category = "FreeLook|Rotation")
 	bool bEnableSmoothRotate = false;
 
@@ -124,11 +124,17 @@ public:
 	// Binding functions for input component
 	void InputRotation_M(float val);
 	void InputPitch_M(float val);
-	void InputRotation_K(float val);
-	void InputPitch_K(float val);
+	//void InputRotateLeft_K() { KRotLeft = true; };
+	//void InputRotateLeftEnd_K() { KRotLeft = false; };
+	//void InputRotateRight_K() { KRotRight = true; }
+	//void InputRotateRightEnd_K() { KRotRight = false; };
+	//void InputPitchUp_K() { KRotUp = true; };
+	//void InputPitchUpEnd_K() { KRotUp = false; };
+	//void InputPitchDown_K() { KRotDown = true; };
+	//void InputPitchDownEnd_K() { KRotDown = false; };
 	void InputZoomIn();
 	void InputZoomOut();
-
+	
 
 
 
@@ -139,17 +145,62 @@ private:
 	float DesiredYaw = 0.f;
 	float DesiredLength = 300.f;
 	
+	//bool KRotLeft = false;
+	//bool KRotRight = false;
+	//bool KRotUp = false;
+	//bool KRotDown = false;
+
 	void TickRotateDirect();
 	void TickRotateSmooth(float dt);
 	void TickZoomDirect();
 	void TickZoomSmooth(float dt);
-
+//	void TickKeyboardRotate();
+	void TickRotateAndZoom(float dt);
 
 	// Called only on begin play
 	void InitRotateAndZoom();
 
+	/* Direction */
+
+public:
+
 	
+	FVector GetForward() { return £¨FVector::ForwardVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+	FVector GetRight() { return £¨FVector::RightVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+	FVector GetUp() { return £¨FVector::UpVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Forward Vector (Free Look)"), Category = SpringArm)
+	FVector StaticGetForward(UFreeLookSpringArmComponent* Target) { return Target->GetForward() };
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Right Vector (Free Look)"), Category = SpringArm)
+	FVector StaticGetRight(UFreeLookSpringArmComponent* Target) { return Target->GetRight() };
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Up Vector (Free Look)"), Category = SpringArm)
+	FVector StaticGetUp(UFreeLookSpringArmComponent* Target) { return Target->GetUp() };
+
+
+
+
 
 };
 
 typedef UFreeLookSpringArmComponent UFLSpringArm;
+
+// Call this on header if FLSpringArm is used to enable input
+#define DECLARE_FREE_LOOK_INPUT(SpringArmParam) \
+	void InputZoomIn_SpringArmParam() {SpringArmParam->InputZoomIn();};\
+	void InputZoomOut_SpringArmParam() {SpringArmParam->InputZoomOut();};\
+	void InputRotation_M_SpringArmParam(float v) {SpringArmParam->InputRotation_M(v);};\
+	void InputPitch_M_SpringArmParam(float v) {SpringArmParam->InputPitch_M(v);};
+
+
+// Call this to setup input
+#define SetupFreeLookInput(SelfClass, SpringArmParam, PlayerInputComponent, NameZoomIn, NameZoomOut, NameMouseRotate, NameMousePitch) \
+	check(PlayerInputComponent);\
+	PlayerInputComponent->BindAction(NameZoomIn, IE_Pressed, this, &SelfClass::InputZoomIn_SpringArmParam);\
+	PlayerInputComponent->BindAction(NameZoomOut, IE_Pressed, this, &SelfClass::InputZoomOut_SpringArmParam);\
+	PlayerInputComponent->BindAxis(NameMouseRotate, this, &SelfClass::InputRotation_M_SpringArmParam);\
+	PlayerInputComponent->BindAxis(NameMousePitch, this, &SelfClass::InputPitch_M_SpringArmParam);
+
+#define SetupFreeLookInput_Default(SelfClass, SpringArmParam, PlayerInputComponent) SetupFreeLookInput(SelfClass, SpringArmParam, PlayerInputComponent, TEXT("CameraZoomIn"), TEXT("CameraZoomOut"), TEXT("CameraMouseRotate"), TEXT("CameraMousePitch"))
+

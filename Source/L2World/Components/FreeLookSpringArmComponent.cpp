@@ -2,10 +2,11 @@
 
 
 #include "FreeLookSpringArmComponent.h"
+#include "Components/InputComponent.h"
 
 void UFreeLookSpringArmComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	TickRotateAndZoom(DeltaTime);
 }
 
 void UFreeLookSpringArmComponent::BeginPlay() {
@@ -61,6 +62,7 @@ void UFreeLookSpringArmComponent::InputPitch_M(float val) {
 	DesiredPitch += (val*PitchSens_M);
 	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
+/*
 void UFreeLookSpringArmComponent::InputRotation_K(float val) {
 	DesiredYaw += (val*YawSens_K);
 }
@@ -68,17 +70,18 @@ void UFreeLookSpringArmComponent::InputPitch_K(float val) {
 	DesiredPitch += (val*PitchSens_K);
 	DesiredPitch = SMath::Clamp(DesiredPitch, -89.9f, 89.9f);
 }
+*/
 void UFreeLookSpringArmComponent::InputZoomIn() {
 	if(bReverseZoom)
-		DesiredLength += ZoomSens;
-	else DesiredLength -= ZoomSens;
+		DesiredLength -= ZoomSens;
+	else DesiredLength += ZoomSens;
 	// Clamp length
 	DesiredLength = SMath::Clamp(DesiredLength, MinLength, MaxLength);
 }
 void UFreeLookSpringArmComponent::InputZoomOut() {
 	if (bReverseZoom)
-		DesiredLength -= ZoomSens;
-	else DesiredLength += ZoomSens;
+		DesiredLength += ZoomSens;
+	else DesiredLength -= ZoomSens;
 	// Clamp length
 	DesiredLength = SMath::Clamp(DesiredLength, MinLength, MaxLength);
 }
@@ -114,6 +117,15 @@ void UFreeLookSpringArmComponent::TickZoomSmooth(float dt){
 	TargetArmLength = SMath::MoveTo(TargetArmLength, DesiredLength, SmoothZoomRate*dt);
 }
 
+void UFreeLookSpringArmComponent::TickRotateAndZoom(float dt) {
+	if (bEnableSmoothRotate)
+		TickRotateSmooth(dt);
+	else TickRotateDirect();
+	if (bEnableSmoothZoom)
+		TickZoomSmooth(dt);
+	else TickZoomDirect();
+}
+
 void UFreeLookSpringArmComponent::InitRotateAndZoom() {
 	TargetArmLength = DesiredLength = InitLength;
 	RelRot = FRotator(InitPitch, 0.f, 0.f);
@@ -121,3 +133,5 @@ void UFreeLookSpringArmComponent::InitRotateAndZoom() {
 	DesiredYaw = 0;
 	ApplyRelRot();
 }
+
+
