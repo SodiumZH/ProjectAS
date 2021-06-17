@@ -14,6 +14,7 @@ UCLASS()
 class L2WORLD_API ALPlayerMob : public ALMob
 {
 	GENERATED_BODY()
+
 public:
 
 	ALPlayerMob();
@@ -26,4 +27,11 @@ protected:
 	class UFreeLookSpringArmComponent* SpringArm;
 	class UCameraComponent* Camera;
 	DECLARE_FREE_LOOK_INPUT(SpringArm)
+
+private:
+
+	void MoveForward(float val);
+	void MoveRight(float val);
+
+
 };

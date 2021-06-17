@@ -7,7 +7,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "LMobInfo.h"
+#include "LMobData.h"
 #include "LMobBase.generated.h"
 
 // This class does not need to be modified.

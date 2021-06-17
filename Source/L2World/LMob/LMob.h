@@ -1,5 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Base class of all character-based mobs.
+// Do not make BP classes directly based on this class. Use subclasses e.g. PlayerMob, MonsterMob, NPCMob, ....
 #pragma once
 
 #include "CoreMinimal.h"

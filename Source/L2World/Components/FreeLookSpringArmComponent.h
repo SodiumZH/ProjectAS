@@ -165,18 +165,18 @@ private:
 public:
 
 	
-	FVector GetForward() { return £¨FVector::ForwardVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
-	FVector GetRight() { return £¨FVector::RightVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
-	FVector GetUp() { return £¨FVector::UpVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+	FVector GetForward() { return (FVector::ForwardVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+	FVector GetRight() { return (FVector::RightVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
+	FVector GetUp() { return (FVector::UpVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Forward Vector (Free Look)"), Category = SpringArm)
-	FVector StaticGetForward(UFreeLookSpringArmComponent* Target) { return Target->GetForward() };
+	static FVector StaticGetForward(UFreeLookSpringArmComponent* Target) { return Target->GetForward(); };
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Right Vector (Free Look)"), Category = SpringArm)
-	FVector StaticGetRight(UFreeLookSpringArmComponent* Target) { return Target->GetRight() };
+	static FVector StaticGetRight(UFreeLookSpringArmComponent* Target) { return Target->GetRight(); };
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Up Vector (Free Look)"), Category = SpringArm)
-	FVector StaticGetUp(UFreeLookSpringArmComponent* Target) { return Target->GetUp() };
+	static FVector StaticGetUp(UFreeLookSpringArmComponent* Target) { return Target->GetUp(); };
 
 
 

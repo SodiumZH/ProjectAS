@@ -7,7 +7,7 @@
 
 /* Mob Race Classes */
 UENUM(BlueprintType)
-enum class ELRace {
+enum class ELRace:uint8 {
 	// Default race that will not display anything on UI.
 	LRace_None	UMETA(DisplayName = "None"),	// 默认
 
@@ -29,7 +29,7 @@ enum class ELRace {
 	LRace_Humanoid	UMETA(DisplayName = "Humanoid"),	// 类人
 	LRace_Machine	UMETA(DisplayName = "Machine"),		// 机械
 	LRace_Demon	UMETA(DisplayName = "Demon"),	// 恶魔
-	LRace_Angel	UMETA(DisplayName = "Angel")	// 天使
+	LRace_Angel	UMETA(DisplayName = "Angel"),	// 天使
 
 	LRace_Custom	UMETA(DisplayName = "Custom")	// Manually-shown race 手动设置显示
 };
@@ -38,7 +38,7 @@ enum class ELRace {
 * L2 game contains this value, but usage is unknown
 */
 UENUM(BlueprintType)
-enum class ELGender {
+enum class ELGender:uint8 {
 	LGender_None	UMETA(DisplayName = "None"),
 	LGender_Male	UMETA(DisplayName = "Male"),
 	LGender_Female	UMETA(DisplayName = "Female"),
@@ -57,7 +57,7 @@ struct FLMobPublicData {
 
 public: 
 
-	FLMobStatus() {};
+	FLMobPublicData() {};
 
 	/* Basic Information */
 
@@ -67,10 +67,10 @@ public:
 
 	// Mob's race
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ELRace Race = ELRace::Race_None;
+	ELRace Race = ELRace::LRace_None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ELGender Gender = ELGender::None;
+	ELGender Gender = ELGender::LGender_None;
 
 
 	// Current health
@@ -112,7 +112,7 @@ public:
 	bool bIsRunning = true;
 
 	// Max acceleration
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, UMETA(DisplayName = "Max Acceleration Scale"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Max Acceleration Scale"))
 	float MaxAccelScale = 10.f;
 
 	// Enable jump?
@@ -143,4 +143,4 @@ public:
 	int32 PlayerID = 0;
 
 	
-}
+};

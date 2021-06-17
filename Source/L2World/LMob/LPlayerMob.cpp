@@ -7,6 +7,7 @@
 
 ALPlayerMob::ALPlayerMob() {
 
+	// Camera and control
 	SpringArm = CreateDefaultSubobject<UFreeLookSpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 
@@ -14,6 +15,10 @@ ALPlayerMob::ALPlayerMob() {
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); 
 	Camera->bUsePawnControlRotation = false;
 
+	// Controller affect camera only
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 }
 
 void ALPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -21,4 +26,25 @@ void ALPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	SetupFreeLookInput_Default(ALPlayerMob, SpringArm, PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &ALPlayerMob::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ALPlayerMob::MoveRight);
+
+
+}
+
+
+void ALPlayerMob::MoveForward(float val) {
+	if ((Controller != nullptr) && (val != 0.0f))
+	{
+		AddMovementInput(SpringArm->GetForward(), val);
+	}
+}
+void ALPlayerMob::MoveRight(float val) {
+	if ((Controller != nullptr) && (val != 0.0f))
+	{
+		AddMovementInput(SpringArm->GetRight(), val);
+	}
 }
