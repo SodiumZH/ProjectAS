@@ -57,6 +57,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Actor.h"
 #include "Components/SceneComponent.h"
+#include "NaUtility_Config.h"
 #include "ObjectRotator.generated.h"
 
 // Math error reporting macro

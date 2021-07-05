@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "NaUtility_Config.h"
 #include "ObjectRotator.h"
 #include "ObjectRotatorLibrary.generated.h"
 
@@ -11,7 +12,7 @@
  * This BP Library contains all BP functions relative to ObjectRotator.
  */
 UCLASS()
-class L2WORLD_API UObjectRotatorLibrary : public UBlueprintFunctionLibrary
+class GAME_PROJECT_API UObjectRotatorLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	

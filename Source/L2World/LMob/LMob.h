@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "LMobBase.h"
+#include "NaMobSystem_Config.h"
 #include "LMob.generated.h"
 
 #define MOB_DEFAULT_HEIGHT 180.f
@@ -25,7 +26,7 @@ Mesh-collision Transform Correction		R139
 */
 
 UCLASS()
-class L2WORLD_API ALMob : public ACharacter, public ILMobBase
+class GAME_PROJECT_API ALMob : public ACharacter, public ILMobBase
 {
 	GENERATED_BODY()
 

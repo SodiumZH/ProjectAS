@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "LMob.h"
 #include "../Components/FreeLookSpringArmComponent.h"
+#include "NaMobSystem_Config.h"
 #include "LPlayerMob.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class L2WORLD_API ALPlayerMob : public ALMob
+class GAME_PROJECT_API ALPlayerMob : public ALMob
 {
 	GENERATED_BODY()
 

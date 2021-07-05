@@ -7,6 +7,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "NaMobSystem_Config.h"
 #include "LMobData.h"
 #include "LMobBase.generated.h"
 
@@ -20,7 +21,7 @@ class ULMobBase : public UInterface
 /**
  * 
  */
-class L2WORLD_API ILMobBase
+class GAME_PROJECT_API ILMobBase
 {
 	GENERATED_BODY()
 

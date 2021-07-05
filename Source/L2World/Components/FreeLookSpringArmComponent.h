@@ -169,12 +169,15 @@ public:
 	FVector GetRight() { return (FVector::RightVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
 	FVector GetUp() { return (FVector::UpVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
 
+	// Get the vector toward the CHARACTER forward according to camera
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Forward Vector (Free Look)"), Category = SpringArm)
 	static FVector StaticGetForward(UFreeLookSpringArmComponent* Target) { return Target->GetForward(); };
 
+	// Get the vector toward the CHARACTER right according to camera
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Right Vector (Free Look)"), Category = SpringArm)
 	static FVector StaticGetRight(UFreeLookSpringArmComponent* Target) { return Target->GetRight(); };
 
+	// Get the vector toward the CHARACTER up according to camera
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Up Vector (Free Look)"), Category = SpringArm)
 	static FVector StaticGetUp(UFreeLookSpringArmComponent* Target) { return Target->GetUp(); };
 

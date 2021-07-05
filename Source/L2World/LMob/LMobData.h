@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "NaMobSystem_Config.h"
 #include "LMobData.generated.h"
 
 
