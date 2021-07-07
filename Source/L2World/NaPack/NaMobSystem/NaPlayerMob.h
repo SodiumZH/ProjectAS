@@ -3,22 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "LMob.h"
-#include "../Components/FreeLookSpringArmComponent.h"
-#include "NaMobSystem_Config.h"
-#include "LPlayerMob.generated.h"
+#include "NaMob.h"
+#include "../NaComponent/FreeLookSpringArmComponent.h"
+#include "../NaGlobalHeader.h"
+#include "NaPlayerMob.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAME_PROJECT_API ALPlayerMob : public ALMob
+class NAPACK_API ANaPlayerMob : public ANaMob
 {
 	GENERATED_BODY()
 
 public:
 
-	ALPlayerMob();
+	ANaPlayerMob();
 
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

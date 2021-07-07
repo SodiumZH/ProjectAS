@@ -7,13 +7,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "NaMobSystem_Config.h"
-#include "LMobData.h"
-#include "LMobBase.generated.h"
+#include "../NaGlobalHeader.h"
+#include "NaMobData.h"
+#include "NaMobBase.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class ULMobBase : public UInterface
+class UNaMobBase : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -21,7 +21,7 @@ class ULMobBase : public UInterface
 /**
  * 
  */
-class GAME_PROJECT_API ILMobBase
+class NAPACK_API INaMobBase
 {
 	GENERATED_BODY()
 

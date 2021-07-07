@@ -1,11 +1,10 @@
-// Namespace SMath is a collection of math utilities as pure C++ functions. No blueprint interface since most are implemented in kismet libraries.
-// Here S is not Slate but Sodium-Studio.
+// Namespace NaMath is a collection of math utilities as pure C++ functions. No blueprint interface since most are implemented in kismet libraries.S
 
 #pragma once
 #include "CoreMinimal.h"
 
 
-namespace SMath {
+namespace NaMath {
 
 	float Clamp(float value, float min = 0, float max = 1);
 

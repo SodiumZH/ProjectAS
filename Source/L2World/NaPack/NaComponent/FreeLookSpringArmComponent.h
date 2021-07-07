@@ -3,7 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "../SCommon/SCommon.h"
+#include "../NaUtility/NaUtility.h"
+#include "../NaGlobalHeader.h"
 #include "FreeLookSpringArmComponent.generated.h"
 
 /**

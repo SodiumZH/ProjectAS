@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LPlayerMob.h"
+#include "NaPlayerMob.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 
-ALPlayerMob::ALPlayerMob() {
+ANaPlayerMob::ANaPlayerMob() {
 
 	// Camera and control
 	SpringArm = CreateDefaultSubobject<UFreeLookSpringArmComponent>(TEXT("SpringArm"));
@@ -21,28 +21,28 @@ ALPlayerMob::ALPlayerMob() {
 	bUseControllerRotationRoll = false;
 }
 
-void ALPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
+void ANaPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	SetupFreeLookInput_Default(ALPlayerMob, SpringArm, PlayerInputComponent);
+	SetupFreeLookInput_Default(ANaPlayerMob, SpringArm, PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ALPlayerMob::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ALPlayerMob::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ANaPlayerMob::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ANaPlayerMob::MoveRight);
 
 
 }
 
 
-void ALPlayerMob::MoveForward(float val) {
+void ANaPlayerMob::MoveForward(float val) {
 	if ((Controller != nullptr) && (val != 0.0f))
 	{
 		AddMovementInput(SpringArm->GetForward(), val);
 	}
 }
-void ALPlayerMob::MoveRight(float val) {
+void ANaPlayerMob::MoveRight(float val) {
 	if ((Controller != nullptr) && (val != 0.0f))
 	{
 		AddMovementInput(SpringArm->GetRight(), val);

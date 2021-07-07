@@ -1,7 +1,7 @@
 #pragma once
-#include "SMath.h"
+#include "NaMath.h"
 
-float SMath::Clamp(float value, float min, float max) {
+float NaMath::Clamp(float value, float min, float max) {
 	if (min > max) {
 		float temp = max;
 		max = min;
@@ -15,7 +15,7 @@ float SMath::Clamp(float value, float min, float max) {
 	return value;
 }
 
-float SMath::MoveTo(float from, float to, float max_step_length) {
+float NaMath::MoveTo(float from, float to, float max_step_length) {
 	if (from < to) {
 		from += max_step_length;
 		if (from > to)
@@ -29,6 +29,6 @@ float SMath::MoveTo(float from, float to, float max_step_length) {
 	return from;
 }
 
-bool SMath::NearlyEqual(float a, float b, float toleration) {
+bool NaMath::NearlyEqual(float a, float b, float toleration) {
 	return (abs(a - b) <= toleration);
 }

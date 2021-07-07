@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LMob.h"
-#include "../SCommon/SCommon.h"
+#include "NaMob.h"
+#include "../NaUtility/NaUtility.h"
 #include "Components/CapsuleComponent.h"
 
 
 /** Constructor & Input */
 
 // Sets default values
-ALMob::ALMob()
+ANaMob::ANaMob()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,7 +17,7 @@ ALMob::ALMob()
 }
 
 // Called to bind functionality to input
-void ALMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ANaMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -29,7 +29,7 @@ void ALMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 /** Original Construction */
 
 // Construnction script
-void ALMob::OnConstruction(const FTransform & trans) {
+void ANaMob::OnConstruction(const FTransform & trans) {
 	Super::OnConstruction(trans);
 	
 	UpdateSkeletalMesh();
@@ -38,14 +38,14 @@ void ALMob::OnConstruction(const FTransform & trans) {
 }
 
 // Called when the game starts or when spawned
-void ALMob::BeginPlay()
+void ANaMob::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ALMob::Tick(float DeltaTime)
+void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -61,7 +61,7 @@ void ALMob::Tick(float DeltaTime)
 
 /* Mesh */
 
-void ALMob::ClearSkeletalMesh() {
+void ANaMob::ClearSkeletalMesh() {
 	
 	int MeshCount = SkeletalMeshComponents.Num();
 	if (MeshCount == 0)
@@ -76,7 +76,7 @@ void ALMob::ClearSkeletalMesh() {
 	return;
 }
 
-void ALMob::UpdateSkeletalMesh() {
+void ANaMob::UpdateSkeletalMesh() {
 	
 	ClearSkeletalMesh();
 
@@ -98,7 +98,7 @@ void ALMob::UpdateSkeletalMesh() {
 	UpdateMaterials();
 }
 
-void ALMob::ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes) {
+void ANaMob::ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes) {
 	SkeletalMeshes = NewMeshes;
 	UpdateSkeletalMesh();
 }
@@ -106,7 +106,7 @@ void ALMob::ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes) {
 
 /* Materials */
 
-TArray<int> ALMob::DecodeMatMapping(const TArray<int> & input) { 
+TArray<int> ANaMob::DecodeMatMapping(const TArray<int> & input) { 
 
 	// Count total mat socket counts of all skeletal meshes
 	int TotalCount = 0;
@@ -144,7 +144,7 @@ TArray<int> ALMob::DecodeMatMapping(const TArray<int> & input) {
 	return Out;
 }
 
-void ALMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const TArray<int> & DecodedMap) {
+void ANaMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const TArray<int> & DecodedMap) {
 
 	USkeletalMeshComponent* temp = nullptr;
 	int MeshCount;
@@ -162,12 +162,12 @@ void ALMob::ApplyMaterials_Unsafe(const TArray<UMaterialInterface*> & Mat, const
 	}
 }
 
-void ALMob::UpdateMaterials() {
+void ANaMob::UpdateMaterials() {
 	TArray<int> MapDecoded = DecodeMatMapping(MatMapping);
 	ApplyMaterials_Unsafe(Materials, MapDecoded);
 }
 
-void ALMob::InitializeMaterials() {
+void ANaMob::InitializeMaterials() {
 	int matindex = 0;
 	for (int i = 0; i < SkeletalMeshComponents.Num(); ++i) {
 		for (int j = 0; j < SkeletalMeshComponents[i]->GetMaterials().Num(); ++j) {
@@ -178,14 +178,14 @@ void ALMob::InitializeMaterials() {
 	return;
 }
 
-void ALMob::ResetEnableMatOverride(bool NewEnable) {
+void ANaMob::ResetEnableMatOverride(bool NewEnable) {
 	if (NewEnable)
 		UpdateMaterials();
 	else InitializeMaterials();
 	bEnableMaterialOverride = NewEnable;
 }
 
-void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping) {
+void ANaMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping) {
 	if (!bEnableMaterialOverride)
 		return;
 	Materials = NewMats;
@@ -198,26 +198,26 @@ void ALMob::ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TA
 
 // Capsule //
 
-void ALMob::UpdateCapsule() {
+void ANaMob::UpdateCapsule() {
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->SetCapsuleHalfHeight(MOB_DEFAULT_HEIGHT * CapsuleHeightScale / 2.f);
 	Capsule->SetCapsuleRadius(MOB_DEFAULT_DIAMETER * CapsuleDiameterScale / 2.f);
 	return;
 }
 
-void ALMob::ResetCapsuleSize(float HeightScale, float DiameterScale) {
+void ANaMob::ResetCapsuleSize(float HeightScale, float DiameterScale) {
 	CapsuleHeightScale = HeightScale;
 	CapsuleDiameterScale = DiameterScale;
 	UpdateCapsule();
 }
 
-void ALMob::SetCapsuleScale(float HeightScale, float DiameterScale) {
+void ANaMob::SetCapsuleScale(float HeightScale, float DiameterScale) {
 	ResetCapsuleSize(HeightScale, DiameterScale);
 }
 
 // Mesh //
 
-FTransform ALMob::GetMeshTransApplied() {
+FTransform ANaMob::GetMeshTransApplied() {
 	FTransform MeshTransApplied = MeshOffset;
 	if (bLockMeshScale) {
 		MeshTransApplied.SetScale3D(FVector(LockedScale3D, LockedScale3D, LockedScale3D));
@@ -229,11 +229,11 @@ FTransform ALMob::GetMeshTransApplied() {
 	return MeshTransApplied;
 }
 
-void ALMob::UpdateMeshTransform() {
+void ANaMob::UpdateMeshTransform() {
 	GetMesh()->SetRelativeTransform(GetMeshTransApplied());
 }
 
-void ALMob::ResetMeshTransform(FTransform Trans) {
+void ANaMob::ResetMeshTransform(FTransform Trans) {
 	MeshOffset = Trans;
 	if (bLockMeshScale)
 		LockedScale3D = Trans.GetScale3D().X;
@@ -242,31 +242,31 @@ void ALMob::ResetMeshTransform(FTransform Trans) {
 	UpdateMeshTransform();
 }
 
-void ALMob::SetMeshOffset(FTransform InTrans) {
+void ANaMob::SetMeshOffset(FTransform InTrans) {
 
 	ResetMeshTransform(InTrans);
 }
 
-void ALMob::SetMeshOffset_LRS(FVector Location, FRotator Rotation, FVector Scale) {
+void ANaMob::SetMeshOffset_LRS(FVector Location, FRotator Rotation, FVector Scale) {
 	ResetMeshTransform(FTransform(Rotation, Location, Scale));
 }
 
-void ALMob::SetMeshLocation(FVector InLoc) {
+void ANaMob::SetMeshLocation(FVector InLoc) {
 	MeshOffset.SetLocation(InLoc);
 	UpdateMeshTransform();
 }
 
-void ALMob::SetMeshRotation(FRotator InRot) {
+void ANaMob::SetMeshRotation(FRotator InRot) {
 	MeshOffset.SetRotation(InRot.Quaternion());
 	UpdateMeshTransform();
 }
 
-void ALMob::SetMeshScale(FVector InScale) {
+void ANaMob::SetMeshScale(FVector InScale) {
 	MeshOffset.SetScale3D(InScale);
 	UpdateMeshTransform();
 }
 
-void ALMob::InitCapsuleMeshSize() {
+void ANaMob::InitCapsuleMeshSize() {
 	UpdateCapsule();
 	UpdateMeshTransform();
 }

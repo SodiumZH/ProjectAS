@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "LMobBase.h"
-#include "NaMobSystem_Config.h"
-#include "LMob.generated.h"
+#include "NaMobBase.h"
+#include "../NaGlobalHeader.h"
+#include "NaMob.generated.h"
 
 #define MOB_DEFAULT_HEIGHT 180.f
 #define MOB_DEFAULT_DIAMETER 60.f
@@ -26,13 +26,13 @@ Mesh-collision Transform Correction		R139
 */
 
 UCLASS()
-class GAME_PROJECT_API ALMob : public ACharacter, public ILMobBase
+class NAPACK_API ANaMob : public ACharacter, public INaMobBase
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ALMob();
+	ANaMob();
 
 protected:
 	// Called when the game starts or when spawned
