@@ -77,3 +77,7 @@ DerivedDataCache/*
 
 # Remove VS Code configuration
 .vscode/
+
+# Project files
+*.sln
+*.uproject
