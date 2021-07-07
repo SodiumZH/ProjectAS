@@ -1,11 +1,11 @@
 /* By Sodium */
 /**
 
-	This is the global header of all Na-packs.
-	Any usage of Na-packs needs to correctly set this header and place it at the parent folder of Na-packs.
+	This is the global header of all NaPacks.
+	Any usage of Na-packs needs to correctly set this header and place it at the parent folder of NaPacks.
 
 */
 
 #pragma once
-// Match Na-API to the project's API.
+// Match NaPack-API to the project's API.
 #define NAPACK_API L2WORLD_API

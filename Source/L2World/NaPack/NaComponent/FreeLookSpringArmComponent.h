@@ -13,7 +13,7 @@
  */
 
 UCLASS()
-class L2WORLD_API UFreeLookSpringArmComponent : public USpringArmComponent
+class NAPACK_API UFreeLookSpringArmComponent : public USpringArmComponent
 {
 	GENERATED_BODY()
 	
