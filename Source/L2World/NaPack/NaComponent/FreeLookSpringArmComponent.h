@@ -12,7 +12,7 @@
  * Designed for character control in third-person game. 
  */
 
-UCLASS()
+UCLASS(BlueprintType)
 class NAPACK_API UFreeLookSpringArmComponent : public USpringArmComponent
 {
 	GENERATED_BODY()
@@ -191,11 +191,11 @@ public:
 typedef UFreeLookSpringArmComponent UFLSpringArm;
 
 // Call this on header if FLSpringArm is used to enable input
-#define DECLARE_FREE_LOOK_INPUT(SpringArmParam) \
+#define SetupFreeLookInput_Header(SpringArmParam) \
 	void InputZoomIn_SpringArmParam() {SpringArmParam->InputZoomIn();};\
 	void InputZoomOut_SpringArmParam() {SpringArmParam->InputZoomOut();};\
 	void InputRotation_M_SpringArmParam(float v) {SpringArmParam->InputRotation_M(v);};\
-	void InputPitch_M_SpringArmParam(float v) {SpringArmParam->InputPitch_M(v);};
+	void InputPitch_M_SpringArmParam(float v) {SpringArmParam->InputPitch_M(v);}
 
 
 // Call this to setup input
@@ -204,7 +204,7 @@ typedef UFreeLookSpringArmComponent UFLSpringArm;
 	PlayerInputComponent->BindAction(NameZoomIn, IE_Pressed, this, &SelfClass::InputZoomIn_SpringArmParam);\
 	PlayerInputComponent->BindAction(NameZoomOut, IE_Pressed, this, &SelfClass::InputZoomOut_SpringArmParam);\
 	PlayerInputComponent->BindAxis(NameMouseRotate, this, &SelfClass::InputRotation_M_SpringArmParam);\
-	PlayerInputComponent->BindAxis(NameMousePitch, this, &SelfClass::InputPitch_M_SpringArmParam);
+	PlayerInputComponent->BindAxis(NameMousePitch, this, &SelfClass::InputPitch_M_SpringArmParam)
 
 #define SetupFreeLookInput_Default(SelfClass, SpringArmParam, PlayerInputComponent) SetupFreeLookInput(SelfClass, SpringArmParam, PlayerInputComponent, TEXT("CameraZoomIn"), TEXT("CameraZoomOut"), TEXT("CameraMouseRotate"), TEXT("CameraMousePitch"))
 

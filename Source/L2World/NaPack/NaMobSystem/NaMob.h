@@ -25,7 +25,7 @@ Mesh-collision Transform Correction		R139
 
 */
 
-UCLASS()
+UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
 {
 	GENERATED_BODY()

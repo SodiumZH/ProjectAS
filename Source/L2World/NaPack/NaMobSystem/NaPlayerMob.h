@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class NAPACK_API ANaPlayerMob : public ANaMob
 {
 	GENERATED_BODY()
@@ -22,12 +22,12 @@ public:
 
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual void Tick(float dt) override;
 protected:
 	
 	class UFreeLookSpringArmComponent* SpringArm;
 	class UCameraComponent* Camera;
-	DECLARE_FREE_LOOK_INPUT(SpringArm)
+	SetupFreeLookInput_Header(SpringArm);
 
 private:
 

@@ -21,6 +21,11 @@ ANaPlayerMob::ANaPlayerMob() {
 	bUseControllerRotationRoll = false;
 }
 
+ANaPlayerMob::Tick(float dt) {
+	Super::Tick(dt);
+
+}
+
 void ANaPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -48,3 +53,4 @@ void ANaPlayerMob::MoveRight(float val) {
 		AddMovementInput(SpringArm->GetRight(), val);
 	}
 }
+
