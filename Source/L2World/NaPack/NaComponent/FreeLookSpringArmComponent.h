@@ -66,7 +66,7 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add Camera Rotation (Free Look Spring Arm)"), Category = SpringArm)
 	void AddRelRot(float DeltaYaw, float DeltaPitch, bool ForceSet = true);
 
-	// Reset initial rotatio. Not recommended unless very necessary.
+	// Reset initial rotatin. Not recommended unless very necessary.
 	// If keep vertical, pitch and yaw will keep zero.
 	// Warning: if it is called in runtime, a vision jump will occur.
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Camera Initial Rotation (Free Look Spring Arm)"), Category = SpringArm)

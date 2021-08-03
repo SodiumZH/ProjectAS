@@ -9,6 +9,7 @@
 #include "UObject/Interface.h"
 #include "../NaGlobalHeader.h"
 #include "NaMobData.h"
+#include "../NaUtility/NaUtility.h"
 #include "NaMobBase.generated.h"
 
 // This class does not need to be modified.

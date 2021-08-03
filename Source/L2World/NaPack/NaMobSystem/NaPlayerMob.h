@@ -31,8 +31,21 @@ protected:
 
 private:
 
+
+	/* Movement module */
 	void MoveForward(float val);
 	void MoveRight(float val);
 
+	// Record axis value. These 2 values are for calculating the input orientation.
+	float ForwardAxisValue = 0.f;
+	float RightAxisValue = 0.f;
+
+	// Align player rotation to the input orientation tickly
+	void Tick_PlayerRotation();
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerMob|Movement")
+	float PlayerRotationMaxSpeed = 3.f;
+private:
+	
 
 };

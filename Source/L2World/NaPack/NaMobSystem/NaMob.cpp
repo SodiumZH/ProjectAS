@@ -2,7 +2,6 @@
 
 
 #include "NaMob.h"
-#include "../NaUtility/NaUtility.h"
 #include "Components/CapsuleComponent.h"
 
 
