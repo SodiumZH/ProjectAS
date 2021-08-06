@@ -39,9 +39,28 @@ void ANaPlayerMob::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveForward", this, &ANaPlayerMob::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ANaPlayerMob::MoveRight);
 
-
+	// Add custom input
+	PlayerInputComponent->BindAction("BasicAttack", IE_Pressed, this, &ANaPlayerMob::Action_BasicAttack);
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ANaPlayerMob::Action_Dash);
 }
 
+/* Controller */
+
+ANaPlayerMobController* ANaPlayerMob::GetPlayerMobController_BP(ANaPlayerMob* PlayerMob) {
+	return PlayerMob->GetPlayerMobController();
+}
+
+ANaPlayerMobController* ANaPlayerMob::GetPlayerMobController() {
+	ANaPlayerMobController* Ctrler = dynamic_cast<ANaPlayerMobController*>(GetController());
+	if (Ctrler)
+		return Ctrler;
+	else LogError("Player mob has no correct controller");
+	return nullptr;
+}
+
+
+
+/* Movement */
 
 void ANaPlayerMob::MoveForward(float val) {
 	if ((Controller != nullptr) && (val != 0.0f))
@@ -60,35 +79,53 @@ void ANaPlayerMob::MoveRight(float val) {
 	RightAxisValue = val;
 }
 
+#pragma optimize( "", off )
 void ANaPlayerMob::Tick_PlayerRotation() {
-	FVector InputOrientation = SpringArm->GetForward()*ForwardAxisValue + SpringArm->GetRight()*RightAxisValue;
-	FRotator InputRot = InputOrientation.ToOrientationRotator();
-
-
-	// Don't rotate if no input
-	if (NaMath::NearlyEqual(InputOrientation.Size(), 0.f))
-		return;
 	
+	FVector InputDirection_Local = SpringArm->GetForward()*ForwardAxisValue + SpringArm->GetRight()*RightAxisValue;
+	
+	// Don't rotate if no input
+	if (NaMath::NearlyEqual(InputDirection_Local.Size(), 0.f)) {
+		InputDirection = FVector();
+		return;
+	}
+
+	// Get final input rotation
+	InputDirection = InputDirection_Local.GetSafeNormal();
+	FRotator InputRot = InputDirection_Local.ToOrientationRotator();
+
 	// Record camera rotation to finally keep the camera static
 	FRotator CameraRot = SpringArm->GetRelRot();
 
 	// Get old rotation and delta rotation
 	FRotator CurrentRot = GetActorRotation();
-	float TargetYaw = InputRot.Yaw;//NaMath::MoveTo(CurrentRot.Yaw, InputRot.Yaw, PlayerRotationMaxSpeed);
+	float TargetYaw = NaMath::AngularMoveTo_Deg(CurrentRot.Yaw, InputRot.Yaw, PlayerRotationMaxSpeed);
 
 	// Set rotation and set back the camera
 	SetActorRotation(FRotator(CurrentRot.Pitch, TargetYaw, CurrentRot.Roll));
-	//SpringArm->SetRelRot(CameraRot.Yaw, CameraRot.Pitch);
+	SpringArm->SetRelRot(CameraRot.Yaw, CameraRot.Pitch);
 	
 	UKismetSystemLibrary::PrintString(this,
-		UKismetStringLibrary::Conv_RotatorToString(CurrentRot),
+		TEXT("Input:") + UKismetStringLibrary::Conv_RotatorToString(InputRot), 
 		true, false, FLinearColor(0, 0.66, 1),
-		20);
+		1);
 
 	UKismetSystemLibrary::PrintString(this,
-		UKismetStringLibrary::Conv_RotatorToString(CameraRot),
+		TEXT("Camera:") + UKismetStringLibrary::Conv_RotatorToString(CameraRot),
 		true, false, FLinearColor(0, 1, 0.33),
-		20);
+		1);
+
+	UKismetSystemLibrary::PrintString(this,
+		TEXT("Actor:") + UKismetStringLibrary::Conv_RotatorToString(GetActorRotation()),
+		true, false, FLinearColor(1, 0.33, 0),
+		1);
+
+	UKismetSystemLibrary::PrintString(this,
+		TEXT("Mesh:") + UKismetStringLibrary::Conv_RotatorToString(GetMesh()->GetComponentRotation()),
+		true, false, FLinearColor(0.33, 1, 0),
+		1);
+
 
 }
 
+#pragma optimize( "", on )

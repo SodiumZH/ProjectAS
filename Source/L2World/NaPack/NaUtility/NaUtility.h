@@ -10,4 +10,5 @@
 
 #pragma once
 #include "NaMath.h"
+#include "NaDebugUtility.h"
 #include "ObjectRotatorLibrary.h"

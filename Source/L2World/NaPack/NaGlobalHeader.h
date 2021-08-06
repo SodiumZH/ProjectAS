@@ -9,3 +9,4 @@
 #pragma once
 // Match NaPack-API to the project's API.
 #define NAPACK_API L2WORLD_API
+#define NAPACK_ENABLE_DEBUG true
