@@ -43,11 +43,8 @@
     <ClInclude Include="..\..\Source\L2World\L2World.h">
       <Filter>Source\L2World</Filter>
     </ClInclude>
-    <Filter Include="Source\L2World\L2WMob">
-      <UniqueIdentifier>{7ABA59B6-7895-4B28-BBA1-70CE8F3E186F}</UniqueIdentifier>
-    </Filter>
     <ClInclude Include="..\..\Source\L2World\L2WMob\LMobData.h">
-      <Filter>Source\L2World\L2WMob</Filter>
+      <Filter>Source\L2World\LMob</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack">
       <UniqueIdentifier>{956834D0-A5A1-4D73-A15F-03CD89CA0749}</UniqueIdentifier>
@@ -144,6 +141,15 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\MobDamage.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkill.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaSystem.h">
+      <Filter>Source\L2World\NaPack\NaUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\L2WMob\LPlayerMob.h">
+      <Filter>Source\L2World\LMob</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaDebugUtility.cpp">
@@ -152,10 +158,25 @@
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaString.cpp">
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkill.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\源.cpp">
+      <Filter>Source\L2World\NaPack\NaUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaSystem.cpp">
+      <Filter>Source\L2World\NaPack\NaUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\L2WMob\LPlayerMob.cpp">
+      <Filter>Source\L2World\LMob</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Combat">
       <UniqueIdentifier>{2463f858-be10-4c03-8d2d-07057de1e4d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\L2World\LMob">
+      <UniqueIdentifier>{7ABA59B6-7895-4B28-BBA1-70CE8F3E186F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

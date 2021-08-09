@@ -273,6 +273,9 @@
     <AdditionalOptions>/std:c++14</AdditionalOptions>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\L2World\L2WMob\LPlayerMob.cpp" />
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaSystem.cpp" />
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\源.cpp" />
     <None Include="..\..\L2World.uproject" />
     <None Include="..\..\Source\L2World.Target.cs" />
     <None Include="..\..\Source\L2WorldEditor.Target.cs" />
@@ -288,6 +291,7 @@
       <AdditionalIncludeDirectories>$(NMakeIncludeSearchPath);E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\cudamanager;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\filebuf;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\foundation;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\pvd;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\task;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\cooking;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\common;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\extensions;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\geometry;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\clothing;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\nvparameterized;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\legacy;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\PhysX3;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\RenderDebug\public;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\PairFilter\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\internal\include;</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(NMakeForcedIncludes);$(SolutionDir)Intermediate\Build\Win64\UE4Editor\Development\L2World\Definitions.L2World.h;$(SolutionDir)Intermediate\Build\Win64\L2WorldEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h</ForcedIncludeFiles>
     </ClCompile>
+    <ClInclude Include="..\..\Source\L2World\L2WMob\LPlayerMob.h" />
     <ClInclude Include="..\..\Source\L2World\L2World.h" />
     <ClInclude Include="..\..\Source\L2World\L2WMob\LMobData.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaGlobalHeader.h" />
@@ -297,11 +301,13 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaComponent\FreeLookSpringArmComponent.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaComponent\NaComponent.h" />
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkill.cpp" />
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMob.cpp">
       <AdditionalIncludeDirectories>$(NMakeIncludeSearchPath);E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\cudamanager;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\filebuf;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\foundation;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\pvd;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\task;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\cooking;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\common;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\extensions;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\geometry;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\clothing;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\nvparameterized;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\legacy;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\PhysX3;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\RenderDebug\public;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\PairFilter\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\internal\include;</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(NMakeForcedIncludes);$(SolutionDir)Intermediate\Build\Win64\UE4Editor\Development\L2World\Definitions.L2World.h;$(SolutionDir)Intermediate\Build\Win64\L2WorldEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h</ForcedIncludeFiles>
     </ClCompile>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\MobDamage.h" />
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkill.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMob.h" />
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMobBase.cpp">
       <AdditionalIncludeDirectories>$(NMakeIncludeSearchPath);E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\cudamanager;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\filebuf;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\foundation;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\pvd;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PxShared\include\task;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\cooking;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\common;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\extensions;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\PhysX_3.4\Include\geometry;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\clothing;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\nvparameterized;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\legacy;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\include\PhysX3;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\common\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\framework\include\autogen;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\RenderDebug\public;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\general\PairFilter\include;E:\UE_4.26\Engine\Source\ThirdParty\PhysX3\APEX_1.4\shared\internal\include;</AdditionalIncludeDirectories>
@@ -333,6 +339,7 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaDebugUtility.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaMath.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaString.h" />
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaSystem.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaUtility.h" />
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaString.cpp" />
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\ObjectRotator.cpp">
