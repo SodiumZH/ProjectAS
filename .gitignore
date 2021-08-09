@@ -35,8 +35,8 @@
 # Engin-generated project files
 *.xcodeproj
 *.xcworkspace
-*.sln
-*.uproject
+#*.sln
+#*.uproject
 *.suo
 *.opensdf
 *.sdf
@@ -71,6 +71,7 @@ Saved/*
 # Compiled source files for the engine
 Intermediate/*
 Plugins/*/Intermediate/*
+!/Intermediate/ProjectFiles/*
 
 # Cache files for the editor
 DerivedDataCache/*
@@ -78,6 +79,4 @@ DerivedDataCache/*
 # Remove VS Code configuration
 .vscode/
 
-# Project files
-*.sln
-*.uproject
+

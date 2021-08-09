@@ -22,6 +22,8 @@ Mesh Settings		R55
 Mesh-collision Transform Correction		R139
 	Capsule			R141
 	Mesh			R187
+Data				R227
+Basic Action		R240
 
 */
 
@@ -66,11 +68,11 @@ public:
 	TArray<USkeletalMesh*> SkeletalMeshes;
 
 	// Skeletal mesh component array. Each update of skeletal mesh should reset this array.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Skeletal Mesh Components", Keywords = "skmesh"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Skeletal Mesh Components", Keywords = "skmesh"), category = "NaPack|MobSystem")
 	TArray<USkeletalMeshComponent*> GetSkeletalMeshComponents() { return SkeletalMeshComponents; };
 
 	// Reset skeletal mesh components from skeletal mesh setting.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Skeletal Mesh Components", Keywords = "skmesh"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Skeletal Mesh Components", Keywords = "skmesh"), category = "NaPack|MobSystem")
 	void ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes);
 
 protected:
@@ -107,11 +109,11 @@ public:
 	TArray<int> MatMapping;
 
 	// Reset boolean "enable material override" and update materials if needed.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Enable Material Override", Keywords = "enable"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Enable Material Override", Keywords = "enable"), category = "NaPack|MobSystem")
 	void ResetEnableMatOverride(bool NewEnable);
 
 	// Reset material overrides. If material override is disabled, it will do nothing.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Materials"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Materials"), category = "NaPack|MobSystem")
 	void ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping);
 
 
@@ -172,7 +174,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (DisplayName = "Mesh Offset", Keywords = "transforms"), category = "Mob|Mesh")
 	FTransform MeshOffset = FTransform();
 
-	UFUNCTION(BlueprintCallable, meta=(DisplayName = "Reset Capsule Scale", Keywords = "set reset capsule scale size"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta=(DisplayName = "Reset Capsule Scale", Keywords = "set reset capsule scale size"), category = "NaPack|MobSystem")
 	void SetCapsuleScale(float HeightScale = 1.f, float DiameterScale = 1.f);
 
 protected:
@@ -189,19 +191,19 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "NaPack|MobSystem")
 	void SetMeshOffset(FTransform InTrans);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset (In LRS)", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset (In LRS)", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "NaPack|MobSystem")
 	void SetMeshOffset_LRS(FVector Location = FVector(0, 0, 0), FRotator Rotation = FRotator(0, 0, 0), FVector Scale = FVector(1, 1, 1));
 
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "NaPack|MobSystem")
 	void SetMeshLocation(FVector InLoc = FVector(0, 0, 0));
 
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "NaPack|MobSystem")
 	void SetMeshRotation(FRotator InRot = FRotator(0, 0, 0));
 	
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "L2W|Mob")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "NaPack|MobSystem")
 	void SetMeshScale(FVector InScale = FVector(0, 0, 0));
 
 
@@ -218,5 +220,56 @@ protected:
 
 	// Initialization of capsule and mesh on construction
 	void InitCapsuleMeshSize();
+
+public: 
+
+
+	/* Mob Data */
+
+	// Mob's general data
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mob|Data")
+	FNaMobGeneralData GeneralData = FNaMobGeneralData();
+	
+	// Tickly update interior variables from GeneralData
+	virtual void Tick_DataSync();
+	// Actions when tickly update the interior variables from General Data
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	void OnDataSync();
+	void OnDataSync_Implementation() {};
+
+	/* Basic actions */
+
+	// Kill a mob
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	virtual void MobDie();
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	void OnMobDying();
+	void OnMobDying_Implementation() {};
+
+	// Resume a mob, set HP & MP max with no other effects
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void DefaultMobResume();
+
+	// Resume a mob, with custom settings
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	virtual void CustomMobResume(int64 NewHP = 1);
+
+	// Actions on any type of resuming
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	void OnMobResuming();
+	void OnMobResuming_Implementation() {};
+
+	// Actions only on custom resuming
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	void OnCustomMobResuming(int64 NewHP);
+	void OnCustomMobResuming_Implementation(int64 NewHP) {};
+
+	// Take damage
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	virtual void MobTakeDamage(int64 Damage);
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	void OnMobTakingDamage(int64 Damage);
+	void OnMobTakingDamage_Implementation(int64 Damage) {};
+
 
 };

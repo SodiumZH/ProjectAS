@@ -63,6 +63,11 @@ ANaPlayerMobController* ANaPlayerMob::GetPlayerMobController() {
 /* Movement */
 
 void ANaPlayerMob::MoveForward(float val) {
+
+	// Do only when enable movement
+	if (!GeneralData.bCanMove)
+		val = 0.f;
+
 	if ((Controller != nullptr) && (val != 0.0f))
 	{
 		AddMovementInput(SpringArm->GetForward(), val);
@@ -72,6 +77,11 @@ void ANaPlayerMob::MoveForward(float val) {
 }
 
 void ANaPlayerMob::MoveRight(float val) {
+	
+	// Do only when enable movement
+	if (!GeneralData.bCanMove)
+		val = 0.f;
+
 	if ((Controller != nullptr) && (val != 0.0f))
 	{
 		AddMovementInput(SpringArm->GetRight(), val);
@@ -79,9 +89,13 @@ void ANaPlayerMob::MoveRight(float val) {
 	RightAxisValue = val;
 }
 
-#pragma optimize( "", off )
+
 void ANaPlayerMob::Tick_PlayerRotation() {
 	
+	// Do only when enable movement
+	if (!GeneralData.bCanMove)
+		return;
+
 	FVector InputDirection_Local = SpringArm->GetForward()*ForwardAxisValue + SpringArm->GetRight()*RightAxisValue;
 	
 	// Don't rotate if no input
@@ -105,6 +119,7 @@ void ANaPlayerMob::Tick_PlayerRotation() {
 	SetActorRotation(FRotator(CurrentRot.Pitch, TargetYaw, CurrentRot.Roll));
 	SpringArm->SetRelRot(CameraRot.Yaw, CameraRot.Pitch);
 	
+	/*
 	UKismetSystemLibrary::PrintString(this,
 		TEXT("Input:") + UKismetStringLibrary::Conv_RotatorToString(InputRot), 
 		true, false, FLinearColor(0, 0.66, 1),
@@ -125,7 +140,5 @@ void ANaPlayerMob::Tick_PlayerRotation() {
 		true, false, FLinearColor(0.33, 1, 0),
 		1);
 
-
+*/
 }
-
-#pragma optimize( "", on )

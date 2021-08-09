@@ -269,3 +269,48 @@ void ANaMob::InitCapsuleMeshSize() {
 	UpdateCapsule();
 	UpdateMeshTransform();
 }
+
+/* Data */
+void ANaMob::Tick_DataSync(){
+	OnDataSync();
+}
+
+
+
+/* Basic actions */
+
+void ANaMob::MobDie() {
+	
+	GeneralData.CurrentHP = 0;
+	GeneralData.bCanMove = false;
+	GeneralData.bCanJump = false;
+	GeneralData.bIsDead = true;
+	OnMobDying();
+
+}
+void ANaMob::DefaultMobResume() {
+	GeneralData.CurrentHP = GeneralData.MaxHP;
+	GeneralData.CurrentMP = GeneralData.MaxMP;
+	GeneralData.bCanMove = true;
+	GeneralData.bCanJump = true;
+	GeneralData.bIsDead = false;
+	OnMobResuming();
+}
+
+void ANaMob::CustomMobResume(int64 NewHP) {
+	GeneralData.CurrentHP = NewHP;
+	GeneralData.bCanMove = true;
+	GeneralData.bCanJump = true;
+	GeneralData.bIsDead = false;
+	OnMobResuming();
+	OnCustomMobResuming(NewHP);
+}
+
+void ANaMob::MobTakeDamage(int64 Damage) {
+	GeneralData.CurrentHP -= Damage;
+
+	if (GeneralData.CurrentHP <= 0)
+		MobDie();
+
+	OnMobTakingDamage(Damage);
+}

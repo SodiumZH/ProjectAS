@@ -17,13 +17,17 @@
  */
 
 /* Custom Actions */
+
+// These are macros that declare a custom virtual action/axis function. If the function need to be implemented in .cpp file, write:
+// void ClassName::Action_xxx(){...}
+// void ClassName::Axis_xxx(float val){...}
 #define DECLARE_CUSTOM_ACTION(ActionName) \
 	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem|PlayerMob|CustomPlayerActions")\
-	virtual void Action_##ActionName##(){};
+	virtual void Action_##ActionName##()
 
 #define DECLARE_CUSTOM_AXIS(AxisName) \
 	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem|PlayerMob|CustomPlayerActions")\
-	virtual void Axis_##AxisName##(float val){};
+	virtual void Axis_##AxisName##(float val)
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaPlayerMob : public ANaMob
@@ -44,7 +48,7 @@ public:
 	/* Controller related */
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "GetPlayerMobController"), Category = "NaPack|MobSystem|PlayerMob")
-	ANaPlayerMobController* GetPlayerMobController_BP(ANaPlayerMob* PlayerMob);
+	static ANaPlayerMobController* GetPlayerMobController_BP(ANaPlayerMob* PlayerMob);
 	ANaPlayerMobController* GetPlayerMobController();
 	
 protected:
@@ -77,12 +81,12 @@ public:
 	FVector GetInputDirection() { return InputDirection; };
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerMob|Movement")
-	float PlayerRotationMaxSpeed = 4.5;
+	float PlayerRotationMaxSpeed = 9;
 
 	/* Custom Inputs */
 
 protected:
-	DECLARE_CUSTOM_ACTION(BasicAttack)
-	DECLARE_CUSTOM_ACTION(Dash)
+	DECLARE_CUSTOM_ACTION(BasicAttack) {};
+	DECLARE_CUSTOM_ACTION(Dash) {};
 
 };

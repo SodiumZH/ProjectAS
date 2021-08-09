@@ -17,18 +17,17 @@ enum class EMobGender:uint8 {
 	Gender_Custom	UMETA(DisplayName = "Custom Gender")
 };
 
-
 /**
 * Public status data for all mobs
 */
 USTRUCT(BlueprintType)
-struct FNaMobPublicData {
+struct FNaMobGeneralData {
 
 	GENERATED_USTRUCT_BODY()
 
 public: 
 
-	FNaMobPublicData() {};
+	FNaMobGeneralData() {};
 
 	/* Basic Information */
 
@@ -41,32 +40,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EMobGender Gender = EMobGender::Gender_None;
 
-	// Current health
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 CurrentHP = 100;
-
-	// Current magic
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 CurrentMP = 100;
-
-	// Max health
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 MaxHP = 100;
-
-	// Max magic
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 MaxMP = 100;
-
-	// Attack
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 Atk = 1;
-
-	// Defense
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 Def = 1;
 
 
 	/* Movement related */
+
+	// Speed on walking
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanMove = true;
 
 	// Speed on walking
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -92,7 +72,30 @@ public:
 	float JumpHeightScale = 1.f;
 
 
+	/* Stamina Related */
 
+	// Current health
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsInvincible = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int64 CurrentHP = 100;
+
+	// Current magic
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int64 CurrentMP = 100;
+
+	// Max health
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int64 MaxHP = 100;
+
+	// Max magic
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int64 MaxMP = 100;
+
+	// Whether the mob is dead
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDead = false;
 
 
 };
