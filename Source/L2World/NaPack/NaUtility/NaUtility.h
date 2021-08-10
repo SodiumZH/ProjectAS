@@ -11,4 +11,6 @@
 #pragma once
 #include "NaMath.h"
 #include "NaDebugUtility.h"
+#include "NaString.h"
+#include "NaSystem.h"
 #include "ObjectRotatorLibrary.h"

@@ -45,7 +45,7 @@ public:
 	/* Movement related */
 
 	// Speed on walking
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	bool bCanMove = true;
 
 	// Speed on walking
@@ -56,7 +56,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RunSpeedScale = 2.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	bool bIsRunning = true;
 
 	// Max acceleration
@@ -64,7 +64,7 @@ public:
 	float MaxAccelScale = 10.f;
 
 	// Enable jump?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	bool bCanJump = true;
 
 	// Max jump height

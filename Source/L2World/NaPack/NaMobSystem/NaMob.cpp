@@ -3,6 +3,7 @@
 
 #include "NaMob.h"
 #include "Components/CapsuleComponent.h"
+#include "NaMobPlayerComponent.h"
 
 
 /** Constructor & Input */
@@ -20,6 +21,11 @@ void ANaMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Setup if there's player component
+	TArray<UActorComponent*> PlayerComps = GetComponentsByClass(UNaMobPlayerComponent::StaticClass());
+	if (PlayerComps.Num() > 0)
+		dynamic_cast<UNaMobPlayerComponent*>(PlayerComps[0])->SetupMobPlayerInput(PlayerInputComponent);
+
 }
 
 
@@ -33,7 +39,6 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 	
 	UpdateSkeletalMesh();
 	InitCapsuleMeshSize();
-	1;
 }
 
 // Called when the game starts or when spawned

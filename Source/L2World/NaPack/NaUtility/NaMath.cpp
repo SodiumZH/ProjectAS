@@ -48,10 +48,10 @@ float NaMath::MoveTo(float from, float to, float max_step_length) {
 
 float NaMath::AngularMoveTo_Deg(float from, float to, float max_step_length) {
 	float res;
-	if (from - to <= 180)
+	if (abs(from - to) <= 180)
 		res = NaMath::MoveTo(from, to, max_step_length);
-	else if (from > to)
-		res = NaMath::MoveTo(from - 360, to, max_step_length);
+	else if (from < to)
+		res = NaMath::MoveTo(from, to - 360, max_step_length);
 	else
 		res = NaMath::MoveTo(from, to + 360, max_step_length);
 	NaMath::YawClamp(res);

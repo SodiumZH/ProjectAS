@@ -120,7 +120,7 @@ public:
 protected:
 
 	// Default material
-	UMaterial* DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+	UMaterial* DefaultMat = nullptr;//LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
 	// Record original materials when updating meshes. When mat override is disabled they will be applied.
 	TArray<UMaterialInterface*> OriginalMats;
@@ -271,5 +271,7 @@ public:
 	void OnMobTakingDamage(int64 Damage);
 	void OnMobTakingDamage_Implementation(int64 Damage) {};
 
+	/* Control */
 
+	
 };
