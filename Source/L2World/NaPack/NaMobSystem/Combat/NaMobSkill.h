@@ -28,7 +28,7 @@ public:
 
 	virtual void OnConstruction(const FTransform & Trans) override;
 
-	vritual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 
 	/* Installation */
 
@@ -49,8 +49,8 @@ public:
 
 	TMultiMap<float, FNaMobSkillTimelineEvent> TimelineMap;
 
-	void AddTimepointEvent(float Time, void(*Event)(void));
-	void AddTimepointEvent(float Time, void(*Event)(void), UObject* Target);
+	void AddTimepointEvent(float Time, void(UObject::*Event)(void));
+	void AddTimepointEvent(float Time, void(UObject::*Event)(void), UObject* Target);
 
 	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
 	void AddTimepointEvent_Delegate(float Time, FNaMobSkillTimelineEvent Event);

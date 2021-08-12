@@ -331,6 +331,7 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 	OnMobTakingDamage(Damage);
 }
 
-ANaMobSkill* UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
-	return ANaMobSkill::UseSkillByClass(this, SkillClass, SocketName, InTransform);
+ANaMobSkill* ANaMob::UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
+	
+	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, SocketName);
 }

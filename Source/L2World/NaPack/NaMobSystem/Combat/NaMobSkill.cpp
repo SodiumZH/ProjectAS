@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NaMobSkill.h"
+#include "../NaMob.h"
 
 void ANaMobSkill::OnConstruction(const FTransform & Trans) {
 	Super::OnConstruction(Trans);
@@ -12,24 +13,24 @@ void ANaMobSkill::Tick(float DeltaTime) {
 	Tick_Timeline();
 }
 
-ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTranform, FName SocketName) {
-	
-	ANaMobSkill* OutSkill = dynamic_cast<ANaMobSkill*>(SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform));
+ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
+	AActor* OutSkillActor = SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform);
+	ANaMobSkill* OutSkill = dynamic_cast<ANaMobSkill*>(OutSkillActor);
 	check(OutSkill);
 	OutSkill->Source = SourceMob;
 	OutSkill->Socket = SocketName;
-	OutSkill->AttachToActor(SourceMob, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+	OutSkill->AttachToActor(dynamic_cast<AActor*>(SourceMob), FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 	return OutSkill;
 }
 
-void ANaMobSkill::AddTimepointEvent(float Time, void(*Event)(void), UObject* Object) {
+void ANaMobSkill::AddTimepointEvent(float Time, void(UObject::*Event)(void), UObject* Object) {
 	check(Object);
 	FNaMobSkillTimelineEvent NewEvent;
-	NewEvent.BindUObject(Object, Event);
+	NewEvent.BindDynamic(Object, Event);
 	TimelineMap.Emplace(Time, NewEvent);
 }
 
-void ANaMobSkill::AddTimepointEvent(float Time, void(*Event)(void)) {
+void ANaMobSkill::AddTimepointEvent(float Time, void(UObject::*Event)(void)) {
 	UObject* Object = dynamic_cast<UObject*>(this);
 	check(Object);
 	AddTimepointEvent(Time, Event, Object);
