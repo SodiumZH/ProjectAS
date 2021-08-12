@@ -12,7 +12,6 @@ namespace NaMath {
 	template <typename T>
 	T Min(T a, T b) { return a > b ? b : a; };
 
-
 	float Clamp(float value, float min = 0, float max = 1);
 
 	// Clamp a yaw value between -180~180 w/o changing its true value.

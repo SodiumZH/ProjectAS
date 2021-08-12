@@ -546,6 +546,7 @@ FObjectRotator FObjectRotator::operator=(USceneComponent* Comp) {
 	return (*this);
 }
 
+
 FObjectRotator FObjectRotator::operator+(const FObjectRotator& Next) {
 	return Compose(Next);
 }

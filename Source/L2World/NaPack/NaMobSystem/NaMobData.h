@@ -5,9 +5,7 @@
 #include "NaMobData.generated.h"
 
 
-/* Mob gender 
-* L2 game contains this value, but usage is unknown
-*/
+// Mob gender 
 UENUM(BlueprintType)
 enum class EMobGender:uint8 {
 	Gender_None	UMETA(DisplayName = "None"),
@@ -17,19 +15,14 @@ enum class EMobGender:uint8 {
 	Gender_Custom	UMETA(DisplayName = "Custom Gender")
 };
 
-/**
-* Public status data for all mobs
-*/
 USTRUCT(BlueprintType)
-struct FNaMobGeneralData {
+struct FNaMobBasicInformation {
 
 	GENERATED_USTRUCT_BODY()
 
-public: 
+public:
 
-	FNaMobGeneralData() {};
-
-	/* Basic Information */
+	FNaMobBasicInformation() {};
 
 	// Mob's display name in UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -40,13 +33,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EMobGender Gender = EMobGender::Gender_None;
 
+};
 
+USTRUCT(BlueprintType)
+struct FNaMobMovementData {
 
-	/* Movement related */
+	GENERATED_USTRUCT_BODY()
 
-	// Speed on walking
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
-	bool bCanMove = true;
+public:
+
+	FNaMobMovementData() {};
 
 	// Speed on walking
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -56,23 +52,32 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RunSpeedScale = 2.f;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	// Switch of walk/run
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsRunning = true;
 
 	// Max acceleration
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Max Acceleration Scale"))
 	float MaxAccelScale = 10.f;
 
-	// Enable jump?
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
-	bool bCanJump = true;
-
 	// Max jump height
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float JumpHeightScale = 1.f;
 
+	// Enable movement?
+	bool bCanMove = true;
 
-	/* Stamina Related */
+	// Enable jump?
+	bool bCanJump = true;
+
+};
+
+USTRUCT(BlueprintType)
+struct FNaMobStamina {
+
+	GENERATED_USTRUCT_BODY()
+
+public:
 
 	// Current health
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -94,20 +99,76 @@ public:
 	int64 MaxMP = 100;
 
 	// Whether the mob is dead
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsDead = false;
 
+};
+/**
+* Public state data for all mobs
+*/
+USTRUCT(BlueprintType)
+struct FNaMobGeneralData {
+
+	GENERATED_USTRUCT_BODY()
+
+public: 
+
+	FNaMobGeneralData() {};
+
+	/* Basic Information */
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FNaMobBasicInformation BasicInfo;
+
+	/* Movement related */
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FNaMobMovementData Movement;
+
+	/* Stamina Related */
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FNaMobStamina Stamina;
 
 };
+
+/*
+*	Mob's constant variables. This should not be changed during gameplay.
+*/
+USTRUCT(BlueprintType)
+struct FNaMobConstants {
+
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	FNaMobConstants() {};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float BasicWalkSpeed = 600.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float BasicAccel = 2048.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="Basic Jump Z Velocity")
+	float BasicJumpZVelocity = 420.f;
+
+
+	
+};
+
 
 /**
 * Data valid only on players
 */
 USTRUCT(BlueprintType)
-struct FNaPlayerStatus {
+struct FNaMobPlayerData {
 
 	GENERATED_USTRUCT_BODY()
+
 public:
+
+	FNaMobPlayerData() {};
 
 	// Unique ID of player data.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

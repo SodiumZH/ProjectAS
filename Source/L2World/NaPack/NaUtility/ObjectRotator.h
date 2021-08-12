@@ -275,6 +275,7 @@ public:
 	FObjectRotator operator=(AActor* Actor);
 	FObjectRotator operator=(USceneComponent* Comp);
 
+
 	// Return result of overall rotation with this and Next successively
 	// Not exchangable!!
 	FObjectRotator operator+(const FObjectRotator& Next);

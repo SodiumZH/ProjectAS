@@ -3,7 +3,9 @@
 
 #include "NaMob.h"
 #include "Components/CapsuleComponent.h"
-#include "NaMobPlayerComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Combat/NaMobSkill.h"
+#include "Component/NaMobPlayerComponent.h"
 
 
 /** Constructor & Input */
@@ -14,6 +16,8 @@ ANaMob::ANaMob()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+
 }
 
 // Called to bind functionality to input
@@ -22,7 +26,8 @@ void ANaMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Setup if there's player component
-	TArray<UActorComponent*> PlayerComps = GetComponentsByClass(UNaMobPlayerComponent::StaticClass());
+	TArray<UActorComponent*> PlayerComps;
+	GetComponents(UNaMobPlayerComponent::StaticClass(), PlayerComps);
 	if (PlayerComps.Num() > 0)
 		dynamic_cast<UNaMobPlayerComponent*>(PlayerComps[0])->SetupMobPlayerInput(PlayerInputComponent);
 
@@ -52,7 +57,7 @@ void ANaMob::BeginPlay()
 void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	Tick_DataSync();
 }
 
 
@@ -277,6 +282,12 @@ void ANaMob::InitCapsuleMeshSize() {
 
 /* Data */
 void ANaMob::Tick_DataSync(){
+	
+	GetCharacterMovement()->MaxWalkSpeed = Constants.BasicWalkSpeed*(GeneralData.Movement.bIsRunning ? GeneralData.Movement.RunSpeedScale : GeneralData.Movement.WalkSpeedScale);
+	GetCharacterMovement()->MaxAcceleration = Constants.BasicAccel*GeneralData.Movement.MaxAccelScale;
+	GetCharacterMovement()->JumpZVelocity = Constants.BasicJumpZVelocity*GeneralData.Movement.JumpHeightScale;
+
+	
 	OnDataSync();
 }
 
@@ -286,36 +297,40 @@ void ANaMob::Tick_DataSync(){
 
 void ANaMob::MobDie() {
 	
-	GeneralData.CurrentHP = 0;
-	GeneralData.bCanMove = false;
-	GeneralData.bCanJump = false;
-	GeneralData.bIsDead = true;
+	GeneralData.Stamina.CurrentHP = 0;
+	GeneralData.Movement.bCanMove = false;
+	GeneralData.Movement.bCanJump = false;
+	GeneralData.Stamina.bIsDead = true;
 	OnMobDying();
 
 }
 void ANaMob::DefaultMobResume() {
-	GeneralData.CurrentHP = GeneralData.MaxHP;
-	GeneralData.CurrentMP = GeneralData.MaxMP;
-	GeneralData.bCanMove = true;
-	GeneralData.bCanJump = true;
-	GeneralData.bIsDead = false;
+	GeneralData.Stamina.CurrentHP = GeneralData.Stamina.MaxHP;
+	GeneralData.Stamina.CurrentMP = GeneralData.Stamina.MaxMP;
+	GeneralData.Movement.bCanMove = true;
+	GeneralData.Movement.bCanJump = true;
+	GeneralData.Stamina.bIsDead = false;
 	OnMobResuming();
 }
 
 void ANaMob::CustomMobResume(int64 NewHP) {
-	GeneralData.CurrentHP = NewHP;
-	GeneralData.bCanMove = true;
-	GeneralData.bCanJump = true;
-	GeneralData.bIsDead = false;
+	GeneralData.Stamina.CurrentHP = NewHP;
+	GeneralData.Movement.bCanMove = true;
+	GeneralData.Movement.bCanJump = true;
+	GeneralData.Stamina.bIsDead = false;
 	OnMobResuming();
 	OnCustomMobResuming(NewHP);
 }
 
 void ANaMob::MobTakeDamage(int64 Damage) {
-	GeneralData.CurrentHP -= Damage;
+	GeneralData.Stamina.CurrentHP -= Damage;
 
-	if (GeneralData.CurrentHP <= 0)
+	if (GeneralData.Stamina.CurrentHP <= 0)
 		MobDie();
 
 	OnMobTakingDamage(Damage);
+}
+
+ANaMobSkill* UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
+	return ANaMobSkill::UseSkillByClass(this, SkillClass, SocketName, InTransform);
 }

@@ -53,7 +53,7 @@ public:
 
 
 
-
+	/*==========================================================================*/
 	////////////
 	/** Mesh **/
 	////////////
@@ -85,7 +85,7 @@ protected:
 	// Update skeletal mesh from variable SkeletalMeshes
 	void UpdateSkeletalMesh();
 
-
+	/*==========================================================================*/
 	/* Materials */
 
 public:
@@ -120,7 +120,7 @@ public:
 protected:
 
 	// Default material
-	UMaterial* DefaultMat = nullptr;//LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+	UMaterial* DefaultMat;
 
 	// Record original materials when updating meshes. When mat override is disabled they will be applied.
 	TArray<UMaterialInterface*> OriginalMats;
@@ -138,8 +138,8 @@ protected:
 	// Reset materials to original materials
 	void InitializeMaterials();
 
-
-/* Mesh-collision Correction */
+	/*==========================================================================*/
+	/* Mesh-collision Correction */
 
 	// Capsule //
 
@@ -221,30 +221,69 @@ protected:
 	// Initialization of capsule and mesh on construction
 	void InitCapsuleMeshSize();
 
-public: 
+ 
 
-
+	/*==========================================================================*/
 	/* Mob Data */
+
+public:
 
 	// Mob's general data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mob|Data")
 	FNaMobGeneralData GeneralData = FNaMobGeneralData();
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mob|Data")
+	FNaMobConstants Constants = FNaMobConstants();
+
 	// Tickly update interior variables from GeneralData
 	virtual void Tick_DataSync();
 	// Actions when tickly update the interior variables from General Data
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnDataSync();
-	void OnDataSync_Implementation() {};
 
+	// Get if mob enables movement
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	static bool MobCanMove(ANaMob* Target) { return Target->GeneralData.Movement.bCanMove; };
+
+	// Enable/disable mob movement
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void SetMobEnableMovement(bool Value) { GeneralData.Movement.bCanMove = Value; };
+
+	// Get if mob enables jump
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	static bool MobCanJump(ANaMob* Target) { return Target->GeneralData.Movement.bCanJump; };
+
+	// Enable/disable mob jump
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void SetMobEnableJump(bool Value) { GeneralData.Movement.bCanJump = Value; };
+
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	static FNaMobBasicInformation GetBasicInformation(ANaMob* Target) { return Target->GeneralData.BasicInfo; };
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void SetBasicInformation(const FNaMobBasicInformation& Value) { GeneralData.BasicInfo = Value; };
+
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	static FNaMobMovementData GetMovementData(ANaMob* Target) { return Target->GeneralData.Movement; };
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void SetMovementData(const FNaMobMovementData& Value) { GeneralData.Movement = Value; };
+
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	static FNaMobStamina GetStamina(ANaMob* Target) { return Target->GeneralData.Stamina; };
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	void SetStamina(const FNaMobStamina& Value) { GeneralData.Stamina = Value; };
+
+
+	/*==========================================================================*/
 	/* Basic actions */
 
 	// Kill a mob
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
 	virtual void MobDie();
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnMobDying();
-	void OnMobDying_Implementation() {};
 
 	// Resume a mob, set HP & MP max with no other effects
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
@@ -252,26 +291,27 @@ public:
 
 	// Resume a mob, with custom settings
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
-	virtual void CustomMobResume(int64 NewHP = 1);
+	void CustomMobResume(int64 NewHP = 1);
 
 	// Actions on any type of resuming
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnMobResuming();
-	void OnMobResuming_Implementation() {};
 
 	// Actions only on custom resuming
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnCustomMobResuming(int64 NewHP);
-	void OnCustomMobResuming_Implementation(int64 NewHP) {};
 
 	// Take damage
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
 	virtual void MobTakeDamage(int64 Damage);
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem")
+	// Actions when taking damage
+	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnMobTakingDamage(int64 Damage);
-	void OnMobTakingDamage_Implementation(int64 Damage) {};
 
-	/* Control */
+
+	/* Skill */
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Combat")
+	class ANaMobSkill* UseSkill(TSubclassOf<class ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None);
 
 	
 };

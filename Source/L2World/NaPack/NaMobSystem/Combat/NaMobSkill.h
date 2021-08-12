@@ -26,11 +26,49 @@ public:
 
 	ANaMobSkill() {};
 
+	virtual void OnConstruction(const FTransform & Trans) override;
+
+	vritual void Tick(float DeltaTime) override;
+
+	/* Installation */
+
+	UPROPERTY(BlueprintReadOnly)
 	class ANaMob* Source;
 
+	UPROPERTY(BlueprintReadOnly)
 	FName Socket;
 
+	// Generate a skill object from a mob
+	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
+		static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None);
 
+	/* Timeline */
+
+
+	DECLARE_DYNAMIC_DELEGATE(FNaMobSkillTimelineEvent);
+
+	TMultiMap<float, FNaMobSkillTimelineEvent> TimelineMap;
+
+	void AddTimepointEvent(float Time, void(*Event)(void));
+	void AddTimepointEvent(float Time, void(*Event)(void), UObject* Target);
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
+	void AddTimepointEvent_Delegate(float Time, FNaMobSkillTimelineEvent Event);
+
+protected:
+
+	float StartTime = -1; // -1 means uninitialized
+	float TimeNow = -1;
+	float TimeLastTick = -1;
+
+	// Get time in seconds from skill spawning
+	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
+	float GetTime();
+
+	// Get time in seconds from skill spawning to last tick
+	float GetTimeLastTick();
+
+	void Tick_Timeline();
 
 
 };
