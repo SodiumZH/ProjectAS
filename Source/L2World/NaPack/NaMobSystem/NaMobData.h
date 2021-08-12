@@ -5,16 +5,6 @@
 #include "NaMobData.generated.h"
 
 
-// Mob gender 
-UENUM(BlueprintType)
-enum class EMobGender:uint8 {
-	Gender_None	UMETA(DisplayName = "None"),
-	Gender_Male	UMETA(DisplayName = "Male"),
-	Gender_Female	UMETA(DisplayName = "Female"),
-	Gender_Other	UMETA(DisplayName = "Other"),
-	Gender_Custom	UMETA(DisplayName = "Custom Gender")
-};
-
 USTRUCT(BlueprintType)
 struct FNaMobBasicInformation {
 
@@ -28,10 +18,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name = TEXT("Mob");
 
-	// Mob's gender
-	// If not needed, just ignore it.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EMobGender Gender = EMobGender::Gender_None;
+
 
 };
 

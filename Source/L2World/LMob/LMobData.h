@@ -3,6 +3,16 @@
 #include "CoreMinimal.h"
 #include "LMobData.generated.h"
 
+// Mob gender 
+UENUM(BlueprintType)
+enum class ELMobGender :uint8 {
+	Gender_None	UMETA(DisplayName = "None"),
+	Gender_Male	UMETA(DisplayName = "Male"),
+	Gender_Female	UMETA(DisplayName = "Female"),
+	Gender_Other	UMETA(DisplayName = "Other"),
+	Gender_Custom	UMETA(DisplayName = "Custom Gender")
+};
+
 /* Mob Race Classes */
 UENUM(BlueprintType)
 enum class ELMobRace :uint8 {
@@ -125,6 +135,9 @@ struct FLMobGeneralData {
 	GENERATED_USTRUCT_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ELMobGender Gender = ELMobGender::Gender_None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ELMobRace Race = ELMobRace::LRace_None;
