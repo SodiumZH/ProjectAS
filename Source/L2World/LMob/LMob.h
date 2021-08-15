@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class L2WORLD_API ALMob : public ANaMob
 {
 	GENERATED_BODY()
