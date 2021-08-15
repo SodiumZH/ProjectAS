@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "CoreMinimal.h"
 #include "LMobData.generated.h"
@@ -17,29 +17,30 @@ enum class ELMobGender :uint8 {
 UENUM(BlueprintType)
 enum class ELMobRace :uint8 {
 	// Default race that will not display anything on UI.
-	LRace_None	UMETA(DisplayName = "None"),	// Ä¬ÈÏ
+	LRace_None	UMETA(DisplayName = "None"),	// é»˜è®¤
 
 	// Races of controllable characters. Also available on NPCs/monsters.
-	LRace_Human	UMETA(DisplayName = "Human"), 	// ÈËÀà
-	LRace_Elf	UMETA(DisplayName = "Elf"),		// ¾«Áé
-	LRace_DElf	UMETA(DisplayName = "DarkElf"),	// °µ¾«Áé
-	LRace_Dwarf	UMETA(DisplayName = "Dwarf"),	// °«ÈË
-	LRace_Orc	UMETA(DisplayName = "Orc"),		// °ëÊŞÈË
-	LRace_Kamael	UMETA(DisplayName = "Kamael"),	// °µÌìÊ¹
-	LRace_Ertheia	UMETA(DisplayName = "Ertheia"),	// ÒíÈË
+	LRace_Human	UMETA(DisplayName = "Human"), 	// äººç±»
+	LRace_Elf	UMETA(DisplayName = "Elf"),		// ç²¾çµ
+	LRace_DElf	UMETA(DisplayName = "DarkElf"),	// æš—ç²¾çµ
+	LRace_Dwarf	UMETA(DisplayName = "Dwarf"),	// çŸ®äºº
+	LRace_Orc	UMETA(DisplayName = "Orc"),		// åŠå…½äºº
+	LRace_Kamael	UMETA(DisplayName = "Kamael"),	// æš—å¤©ä½¿
+	LRace_Ertheia	UMETA(DisplayName = "Ertheia"),	// ç¿¼äºº
 
 	// Races applied only on NPCs and monsters.
-	LRace_Animal	UMETA(DisplayName = "Animal"),	// ¶¯Îï
-	LRace_Monster	UMETA(DisplayName = "Monster"),		// ¹ÖÊŞ
-	LRace_Element	UMETA(DisplayName = "Element"),		// ÔªËØ
-	LRace_Fairy	UMETA(DisplayName = "Fairy"),	// Ñı¾«
-	LRace_Undead	UMETA(DisplayName = "Undead"),	// ²»ËÀ×å
-	LRace_Humanoid	UMETA(DisplayName = "Humanoid"),	// ÀàÈË
-	LRace_Machine	UMETA(DisplayName = "Machine"),		// »úĞµ
-	LRace_Demon	UMETA(DisplayName = "Demon"),	// ¶ñÄ§
-	LRace_Angel	UMETA(DisplayName = "Angel"),	// ÌìÊ¹
+	LRace_Animal	UMETA(DisplayName = "Animal"),	// åŠ¨ç‰©
+	LRace_Monster	UMETA(DisplayName = "Monster"),		// æ€ªå…½
+	LRace_Element	UMETA(DisplayName = "Element"),		// å…ƒç´ 
+	LRace_Fairy	UMETA(DisplayName = "Fairy"),	// å¦–ç²¾
+	LRace_Undead	UMETA(DisplayName = "Undead"),	// ä¸æ­»æ—
+	LRace_Humanoid	UMETA(DisplayName = "Humanoid"),	// ç±»äºº
+	LRace_Machine	UMETA(DisplayName = "Machine"),		// æœºæ¢°
+	LRace_MagCre	UMETA(DisplayName = "MagicalCreature"),		// é­”æ³•ç”Ÿç‰©
+	LRace_Demon	UMETA(DisplayName = "Demon"),	// æ¶é­”
+	LRace_Angel	UMETA(DisplayName = "Angel"),	// å¤©ä½¿
 
-	LRace_Custom	UMETA(DisplayName = "Custom")	// Manually-shown race ÊÖ¶¯ÉèÖÃÏÔÊ¾
+	LRace_Custom	UMETA(DisplayName = "Custom")	// Manually-shown race æ‰‹åŠ¨è®¾ç½®æ˜¾ç¤º
 };
 
 

@@ -5,6 +5,8 @@
 #include "LCombatData.h"
 #include "LCombatRule.generated.h"
 
+class ALMob;
+
 /* Attack type: physical/magical */
 UENUM(BlueprintType)
 enum class ELAtkType :uint8 {
@@ -25,10 +27,10 @@ public:
 	ELAtkType Type = ELAtkType::Atk_Phys;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 BasicValue = 1;
+	int64 Basic = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ELCombatElement Element = ELCombatElement::LElem_None;
+	ELElement Element = ELElement::LElem_None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIgnoreDefence = false;
@@ -41,11 +43,12 @@ public:
 *
 */
 
+/* Definition of constants */
 #define BASIC_DAMAGE_CONST 20.0
 #define BASIC_DEFENCE_CONST 20.0
 #define ELEM_CONST 20.0
 #define BASIC_ANTICRIT 20.0
-#define CRIT_MAX 200.0
+#define CRIT_MAX 100.0
 #define DAMAGE_FLUCTUATE_RATE 0.1
 
 UCLASS()
@@ -55,14 +58,19 @@ class L2WORLD_API ULCombatRule : public UBlueprintFunctionLibrary {
 
 public:
 
+	// Get basic damage of a skill. 
+	// 
+	UFUNCTION(BlueprintPure, Category="L2|Combat")
+	int64 GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData);
 
+	// Get probability of critical
+	UFUNCTION(BlueprintPure, meta=(DisplayName="GetCriticalRate"), Category = "L2|Combat")
+	float GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData);
 
-	int64 GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData);
+	// Damage rate from element. NOT IMPLEMENTED and return 1.0 by default
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "GetElementDamageRate"), Category = "L2|Combat")
+	float GetElemDamageRate(const FLSkillAtk & SkillAtk, ALMob* Source, ALMob* TargetData)
 
-	float GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData);
-
-
-	float GetElemDamageRate(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData)
-
+	
 
 };

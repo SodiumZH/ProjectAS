@@ -54,7 +54,7 @@ public:
 
 // Elements in L2
 UENUM(BlueprintType)
-enum class ELCombatElement :uint8 {
+enum class ELElement :uint8 {
 	LElem_None	UMETA(DisplayName = "None"),
 	LElem_Fire	UMETA(DisplayName = "Fire"),
 	LElem_Water	UMETA(DisplayName = "Water"),
@@ -64,154 +64,143 @@ enum class ELCombatElement :uint8 {
 	LElem_Dark	UMETA(DisplayName = "Darkness")
 };
 
-typedef FLElementValue TMap<ELCombatElement, int64>
-// Mob's element attack data
-USTRUCT(BlueprintType)
-struct FLMobElementAtk {
 
+// Mob's element numerical data
+typedef TMap<ELElement, int64> FLElementValueMap;
+#define L_ELEMENT_NONE_ERROR LogError("Invalid element key: \"None\"")
+USTRUCT(BlueprintType)
+struct FLElementValue {
 
 	GENERATED_USTRUCT_BODY()
 
 protected:
 
-	FLElementValue Value= [
-	{ ELCombatElement::Fire, 0 },
-	{ ELCombatElement::Water, 0 },
-	{ ELCombatElement::Earth, 0 },
-	{ ELCombatElement::Wind, 0 },
-	{ ELCombatElement::Holy, 0 },
-	{ ELCombatElement::Dark, 0 },
-	{ ELCombatElement::None, 0 }	// No real meaning, just for avoiding undefined key error
+	FLElementValueMap Value= [
+	{ ELElement::LElem_Fire, 0 },
+	{ ELElement::LElem_Water, 0 },
+	{ ELElement::LElem_Earth, 0 },
+	{ ELElement::LElem_Wind, 0 },
+	{ ELElement::LElem_Holy, 0 },
+	{ ELElement::LElem_Dark, 0 },
+	{ ELElement::LElem_None, 0 }	// No real meaning, just for avoiding undefined key error
 	];
 
 public:
 
-	FLMobElementData() {};
+	FLMobElementAtk() {};
 
-	FLMobElementData(int64 Fire = 0, int64 Water = 0, int64 Earth = 0, int64 Wind = 0, int64 Holy = 0, int64 Dark = 0):
+	FLMobElementAtk(int64 Fire = 0, int64 Water = 0, int64 Earth = 0, int64 Wind = 0, int64 Holy = 0, int64 Dark = 0):
 		Value([
-	{ ELCombatElement::Fire, Fire},
-	{ ELCombatElement::Water, Water },
-	{ ELCombatElement::Earth, Earth },
-	{ ELCombatElement::Wind, Wind },
-	{ ELCombatElement::Holy, Holy },
-	{ ELCombatElement::Dark, Dark },
-	{ ELCombatElement::None, 0 }	// No real meaning, just for avoiding undefined key error
-	]);
+	{ ELElement::LElem_Fire, Fire},
+	{ ELElement::LElem_Water, Water },
+	{ ELElement::LElem_Earth, Earth },
+	{ ELElement::LElem_Wind, Wind },
+	{ ELElement::LElem_Holy, Holy },
+	{ ELElement::LElem_Dark, Dark },
+	{ ELElement::LElem_None, 0 }	// No real meaning, just for avoiding undefined key error
+	])
 	{};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "FireAttack")
-		int64 FireAtk = 0;
+	FLElementValueMap GetValue() { return Value; };
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "WaterAttack")
-		int64 WaterAtk = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "EarthAttack")
-		int64 EarthAtk = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "WindAttack")
-		int64 WindAtk = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "HolynessAttack")
-		int64 HolyAtk = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "DarknessAttack")
-		int64 DarkAtk = 0;
-
-	int64 GetValue(ELCombatElement Element) { 
-		if (Element != ELCombatElement::LElem_None) {
+	int64 Get(ELElement Element) { 
+		if (Element != ELElement::LElem_None) {
 			return Value[Element];
 		}
 		else {
-			LogError("Invalid key: \"None\"");
+			L_ELEMENT_NONE_ERROR;
 			return 0;
 			}
 		};
-	int64 SetValue(ELCombatElement Element, int64 Val) {
-		if (Element != ELCombatElement::LElem_None)
+	int64 Set(ELElement Element, int64 Val) {
+		if (Element != ELElement::LElem_None)
 			Value[Element] = Val;
-		else LogError("Invalid key: \"None\"");
+		else L_ELEMENT_NONE_ERROR;
 	}
+
+	int64 operator[](ELElement Elem) { return Get(Elem); };
 }
 
-// Mob's element defence data
+
+// Struct to show whether an attack is in elements
+typedef TMap<ELElement, bool> FLElementTypeMap;
 USTRUCT(BlueprintType)
-struct FLMobElementDef {
-
-
-	GENERATED_USTRUCT_BODY()
-
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "FireDefence")
-		int64 FireDef = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "WaterDefence")
-		int64 WaterDef = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "EarthDefence")
-		int64 EarthDef = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "WindDefence")
-		int64 WindDef = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "HolynessDefence")
-		int64 HolyDef = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "DarknessDefence")
-		int64 DarkDef = 0;
-
-
-};
-
-typedef FLAtkElementMap TMap<ELCombatElement, bool>;
-
-USTRUCT(BlueprintType)
-struct FLAtkElement {
+struct FLElementType {
 
 	GENERATED_USTRUCT_BODY()
 
 protected:
 
-	FLAtkElementMap ElementMap = [
-	{ ELCombatElement::Fire, false },
-	{ ELCombatElement::Water, false },
-	{ ELCombatElement::Earth, false },
-	{ ELCombatElement::Wind, false },
-	{ ELCombatElement::Holy, false },
-	{ ELCombatElement::Dark, false },
-	{ ELCombatElement::None, false }	// No real meaning, just for avoiding undefined key error
+	FLElementTypeMap Map = [
+	{ ELElement::LElem_Fire, false },
+	{ ELElement::LElem_Water, false },
+	{ ELElement::LElem_Earth, false },
+	{ ELElement::LElem_Wind, false },
+	{ ELElement::LElem_Holy, false },
+	{ ELElement::LElem_Dark, false },
+	{ ELElement::LElem_None, false }	// No real meaning, just for avoiding undefined key error.
 	];
 
 public:
 
 	// No element
-	FLAtkElement() {};
+	FLElementType() {};
 
 	// Single element; None => no element
-	FLAtkElement(ELCombatElement Element);
+	FLElementType(ELElement Element);
 
-	static FLAtkElement NoElement;
-	static FLAtkElement FireElement;
-	static FLAtkElement WaterElement;
-	static FLAtkElement EarthElement;
-	static FLAtkElement WindElement;
-	static FLAtkElement HolyElement;
-	static FLAtkElement DarkElement;
+	static FLElementType None;
+	static FLElementType Fire;
+	static FLElementType Water;
+	static FLElementType Earth;
+	static FLElementType Wind;
+	static FLElementType Holy;
+	static FLElementType Dark;
 
 	// Get the whole element existance map
-	FLAtkElementMap & GetMap() { return ElementMap };
+	FLElementTypeMap & GetValue() { return Map };
 
 	// Get existance of one element
-	bool GetElemValue(ELCombatElement Element) { return ElementMap[Element]; };
+	bool IsIn(ELElement Element);
+	bool Get(ELElement Element) { return IsIn(Element); };
+	bool operator[](ELElement Elem) { return IsIn(Elem); };
 
 	// Get how many elements exist
-	int ElementCount();
+	int Count();
 
 	// Set existance of one element
-	void SetElemValue(ELCombatElement Element, bool value) { if (Element != FLCombatElement::None) ElementMap[Element] = value; };
+	void Set(ELElement Element, bool value);
 
 	// Get double-element atk
-	void DoubleElement(FLAtkElement Elem1, FLAtkElement Elem2);
+	void Double(ELElement Elem1, ELElement Elem2);
+
+};
+
+
+/* Overall */
+
+// Overall combat data for mobs
+USTRUCT(BlueprintType)
+struct FLMobCombatData {
+
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLMobCombatBasicData Basic;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "ElementAttack")
+	FLElementValue ElemAtk;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "ElementDefence")
+	FLElementValue ElemDef;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "BasicAttackElement")
+	FLElementType BasicAtkElem;
+
+
+
+
 
 };

@@ -2,41 +2,62 @@
 
 #include "LCombatRule.h"
 
-/* Attack element */
 
-FLAtkElement::FLAtkElement(ELCombatElement Element) {
+
+
+/* Element Type */
+
+FLElementType::FLElementType(ELElement Element) {
 	ElementMap = [
-	{ ELCombatElement::Fire, false },
-	{ ELCombatElement::Water, false },
-	{ ELCombatElement::Earth, false },
-	{ ELCombatElement::Wind, false },
-	{ ELCombatElement::Holy, false },
-	{ ELCombatElement::Dark, false },
-	{ ELCombatElement::None, false }
+	{ ELElement::LElem_Fire, false },
+	{ ELElement::LElem_Water, false },
+	{ ELElement::LElem_Earth, false },
+	{ ELElement::LElem_Wind, false },
+	{ ELElement::LElem_Holy, false },
+	{ ELElement::LElem_Dark, false },
+	{ ELElement::LElem_None, false }
 	];
-	if (Element != ELCombatElement::None)
+	if (Element != ELElement::None)
 		ElementMap[Element] = true;
 }
 
-int FLAtkElement::ElementCount() {
+bool FLElementType::IsIn(ELElement Element) {
+	if (Element != ELElement::LElem_None)
+		return Map[Element];
+	else {
+		L_ELEMENT_NONE_ERROR;
+		return false;
+	}
+}
+
+int FLElementType::Count() {
 	int Out = 0;
 	for (auto & pair : ElementMap) {
-		if ((pair.Key != ELCombatElement::None) && (pair.Value))
+		if ((pair.Key != ELElement::LElem_None) && (pair.Value))
 			Out++;
 	}
 	return Out;
 }
 
-FLAtkElement FLAtkElement::NoElement = FLAtkElement();
-FLAtkElement FLAtkElement::FireElement = FLAtkElement(ELCombatElement::Fire);
-FLAtkElement FLAtkElement::WaterElement = FLAtkElement(ELCombatElement::Water);
-FLAtkElement FLAtkElement::EarthElement = FLAtkElement(ELCombatElement::Earth);
-FLAtkElement FLAtkElement::WindElement = FLAtkElement(ELCombatElement::Wind);
-FLAtkElement FLAtkElement::HolyElement = FLAtkElement(ELCombatElement::Holy);
-FLAtkElement FLAtkElement::DarkElement = FLAtkElement(ELCombatElement::Dark);
+void FLElementType::Set(ELElement Element, bool value){
+	if (Element != ELElement::LElem_None) 
+		Map[Element] = value; 
+	else 
+		L_ELEMENT_NONE_ERROR;
+}
 
-void FLAtkElement::DoubleElement(FLAtkElement Elem1, FLAtkElement Elem2) {
-	FLAtkElement Out = FLAtkElement(Elem1);
-	Out.SetElement(Elem2, true);
+void FLElementType::Double(ELElement Elem1, ELElement Elem2) {
+	FLElementType Out = FLElementType(Elem1);
+	Out.Set(Elem2, true);
 	return Out;
-};
+}
+
+FLElementType FLElementType::None = FLElementType();
+FLElementType FLElementType::Fire = FLElementType(ELElement::LElem_Fire);
+FLElementType FLElementType::Water = FLElementType(ELElement::LElem_Water);
+FLElementType FLElementType::Earth = FLElementType(ELElement::LElem_Earth);
+FLElementType FLElementType::Wind = FLElementType(ELElement::LElem_Wind);
+FLElementType FLElementType::Holy = FLElementType(ELElement::LElem_Holy);
+FLElementType FLElementType::Dark = FLElementType(ELElement::LElem_Dark);
+
+

@@ -2,18 +2,19 @@
 
 #include "LCombatRule.h"
 
-double ULCombatRule::GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData) {
+
+double ULCombatRule::GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
 	int64 Atk = 0;
 	int64 Def = 0;
 	switch (SkillAtk.Type) {
 	case ELAtkType::Atk_Phys: {
-		Atk = SourceData.PhysAtk;
-		Def = TargetData.PhysDef;
+		Atk = SourceData.Basic.PhysAtk;
+		Def = TargetData.Basic.PhysDef;
 		break;
 	}
 	case ELAtkType::Atk_Mag: {
-		Atk = SourceData.MagAtk;
-		Def = TargetData.MagDef;
+		Atk = SourceData.Basic.MagAtk;
+		Def = TargetData.Basic.MagDef;
 		break;
 	}
 	default: {
@@ -24,22 +25,22 @@ double ULCombatRule::GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobComb
 		Def = 0;
 
 	double DamageRate = (double)Atk / ((double)Def + BASIC_DEFENCE_CONST);
-	return DamageRate*SkillAtk.BasicValue*BASIC_DAMAGE_CONST*FMath::RandRange(1.0 - DAMAGE_FLUCTUATE_RATE, 1.0 + DAMAGE_FLUCTUATE_RATE);
+	return DamageRate * SkillAtk.Basic * BASIC_DAMAGE_CONST * FMath::FRandRange(1.0 - DAMAGE_FLUCTUATE_RATE, 1.0 + DAMAGE_FLUCTUATE_RATE);
 }
 
-float ULCombatRule::GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData) {
+float ULCombatRule::GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
 	int64 Crit = 0;
 	int64 Acri = 0;
 
 	switch (SkillAtk.Type) {
 	case ELAtkType::Atk_Phys: {
-		Crit = SourceData.PhysCrit;
-		Acri = SourceData.PhysAcri;
+		Crit = SourceData.Basic.PhysCrit;
+		Acri = SourceData.Basic.PhysAcri;
 		break;
 	}
 	case ELAtkType::Atk_Mag: {
-		Crit = SourceData.MagCrit;
-		Crit = SourceData.MagAcri;
+		Crit = SourceData.Basic.MagCrit;
+		Crit = SourceData.Basic.MagAcri;
 		break;
 	}
 	default: {
@@ -51,6 +52,6 @@ float ULCombatRule::GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatBa
 
 }
 
-float ULCombatRule::GetElemDamageRate(const FLSkillAtk & SkillAtk, const FLMobCombatBasicData & SourceData, const FLMobCombatBasicData & TargetData) {
-
+float ULCombatRule::GetElemDamageRate(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
+	return 1.0;
 }

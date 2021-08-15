@@ -188,7 +188,6 @@ public:
 
 };
 
-typedef UFreeLookSpringArmComponent UFLSpringArm;
 
 // Call this on header if FLSpringArm is used to enable input
 #define SetupFreeLookInput_Header(SpringArmParam) \
