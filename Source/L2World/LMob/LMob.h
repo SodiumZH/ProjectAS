@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "../NaPack/NaMobSystem/NaMob.h"
 #include "LMobData.h"
+#include "Combat/LCombatRule.h"
 #include "LMob.generated.h"
 
 /**
@@ -24,9 +25,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLMobCombatData LCombatData;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLMobElementData LElementData;
 
 
 

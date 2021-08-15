@@ -1,24 +1,70 @@
 #pragma once
 
+#include "LCombatData.h"
 #include "LCombatRule.h"
 
+/* Element Value */
 
+FLElementValue::FLElementValue() {
 
+	Value.Emplace(ELElement::LElem_Fire, 0);
+	Value.Emplace(ELElement::LElem_Water, 0);
+	Value.Emplace(ELElement::LElem_Earth, 0);
+	Value.Emplace(ELElement::LElem_Wind, 0);
+	Value.Emplace(ELElement::LElem_Holy, 0);
+	Value.Emplace(ELElement::LElem_Dark, 0);
+	Value.Emplace(ELElement::LElem_None, 0); // No real meaning, just for avoiding undefined key error
+	
+};
+
+FLElementValue FLElementValue::Make(int64 Fire, int64 Water, int64 Earth, int64 Wind, int64 Holy, int64 Dark) {
+	FLElementValue Out = FLElementValue();
+	Out.Value.Emplace(ELElement::LElem_Fire, Fire);
+	Out.Value.Emplace(ELElement::LElem_Water, Water);
+	Out.Value.Emplace(ELElement::LElem_Earth, Earth);
+	Out.Value.Emplace(ELElement::LElem_Wind, Wind);
+	Out.Value.Emplace(ELElement::LElem_Holy, Holy);
+	Out.Value.Emplace(ELElement::LElem_Dark, Dark);
+	return Out;
+}
+
+int64 FLElementValue::Get(ELElement Element) {
+	if (Element != ELElement::LElem_None) {
+		return Value[Element];
+	}
+	else {
+		L_ELEMENT_NONE_ERROR;
+		return 0;
+	}
+}
+
+void FLElementValue::Set(ELElement Element, int64 Val) {
+	if (Element != ELElement::LElem_None)
+		Value[Element] = Val;
+	else L_ELEMENT_NONE_ERROR;
+}
 
 /* Element Type */
 
+FLElementType::FLElementType(){
+	Map.Emplace(ELElement::LElem_Fire, false);
+	Map.Emplace(ELElement::LElem_Water, false);
+	Map.Emplace(ELElement::LElem_Earth, false);
+	Map.Emplace(ELElement::LElem_Wind, false);
+	Map.Emplace(ELElement::LElem_Holy, false);
+	Map.Emplace(ELElement::LElem_Dark, false);
+	Map.Emplace(ELElement::LElem_None, false); // No real meaning, just for avoiding undefined key error
+}
 FLElementType::FLElementType(ELElement Element) {
-	ElementMap = [
-	{ ELElement::LElem_Fire, false },
-	{ ELElement::LElem_Water, false },
-	{ ELElement::LElem_Earth, false },
-	{ ELElement::LElem_Wind, false },
-	{ ELElement::LElem_Holy, false },
-	{ ELElement::LElem_Dark, false },
-	{ ELElement::LElem_None, false }
-	];
-	if (Element != ELElement::None)
-		ElementMap[Element] = true;
+	Map.Emplace(ELElement::LElem_Fire, false);
+	Map.Emplace(ELElement::LElem_Water, false);
+	Map.Emplace(ELElement::LElem_Earth, false);
+	Map.Emplace(ELElement::LElem_Wind, false);
+	Map.Emplace(ELElement::LElem_Holy, false);
+	Map.Emplace(ELElement::LElem_Dark, false);
+	Map.Emplace(ELElement::LElem_None, false); // No real meaning, just for avoiding undefined key error
+	if (Element != ELElement::LElem_None)
+		Map[Element] = true;
 }
 
 bool FLElementType::IsIn(ELElement Element) {
@@ -32,7 +78,7 @@ bool FLElementType::IsIn(ELElement Element) {
 
 int FLElementType::Count() {
 	int Out = 0;
-	for (auto & pair : ElementMap) {
+	for (auto & pair : Map) {
 		if ((pair.Key != ELElement::LElem_None) && (pair.Value))
 			Out++;
 	}
@@ -46,7 +92,7 @@ void FLElementType::Set(ELElement Element, bool value){
 		L_ELEMENT_NONE_ERROR;
 }
 
-void FLElementType::Double(ELElement Elem1, ELElement Elem2) {
+FLElementType FLElementType::Double(ELElement Elem1, ELElement Elem2) {
 	FLElementType Out = FLElementType(Elem1);
 	Out.Set(Elem2, true);
 	return Out;

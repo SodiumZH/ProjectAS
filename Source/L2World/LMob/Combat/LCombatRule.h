@@ -61,7 +61,7 @@ public:
 	// Get basic damage of a skill. 
 	// 
 	UFUNCTION(BlueprintPure, Category="L2|Combat")
-	int64 GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData);
+	float GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData);
 
 	// Get probability of critical
 	UFUNCTION(BlueprintPure, meta=(DisplayName="GetCriticalRate"), Category = "L2|Combat")
@@ -69,8 +69,7 @@ public:
 
 	// Damage rate from element. NOT IMPLEMENTED and return 1.0 by default
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "GetElementDamageRate"), Category = "L2|Combat")
-	float GetElemDamageRate(const FLSkillAtk & SkillAtk, ALMob* Source, ALMob* TargetData)
+	float GetElemDamageRate(const FLSkillAtk & SkillAtk, ALMob* Source, ALMob* TargetData);
 
-	
 
 };

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "LCombatRule.h"
+#include "../LMob.h"
 
 
-double ULCombatRule::GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
+float ULCombatRule::GetBasicDamage(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
 	int64 Atk = 0;
 	int64 Def = 0;
 	switch (SkillAtk.Type) {
@@ -47,11 +48,11 @@ float ULCombatRule::GetCritRate(const FLSkillAtk & SkillAtk, const FLMobCombatDa
 		checkNoEntry();
 	}
 	}
-
-	return FMath::Clamp(((float)Crit / (float)(Acri + BASIC_ANTICRIT)) / CRIT_MAX, 0, 1);
+	float RawVal = (((float)Crit) / ((float)(Acri + BASIC_ANTICRIT))) / CRIT_MAX;
+	return FMath::Clamp(RawVal, 0.f, 1.f);
 
 }
 
-float ULCombatRule::GetElemDamageRate(const FLSkillAtk & SkillAtk, const FLMobCombatData & SourceData, const FLMobCombatData & TargetData) {
+float ULCombatRule::GetElemDamageRate(const FLSkillAtk & SkillAtk, ALMob* Source, ALMob* TargetData) {
 	return 1.0;
 }

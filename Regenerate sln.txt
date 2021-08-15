@@ -1,0 +1,2 @@
+D:/UE_4.26/Engine/Binaries/DotNET/UnrealBuildTool.exe -projectfiles -project="H:\Unreal Projects\L2World\L2World.uproject" -game -rocket -progress
+(copy the command above to regenerate sln)
