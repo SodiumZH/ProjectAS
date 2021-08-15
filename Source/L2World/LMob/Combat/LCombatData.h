@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../../NaPack/NaUtility/NaUtility.h"
 #include "LCombatData.generated.h"
 
 /* Basic */
@@ -63,6 +64,7 @@ enum class ELCombatElement :uint8 {
 	LElem_Dark	UMETA(DisplayName = "Darkness")
 };
 
+typedef FLElementValue TMap<ELCombatElement, int64>
 // Mob's element attack data
 USTRUCT(BlueprintType)
 struct FLMobElementAtk {
@@ -70,9 +72,33 @@ struct FLMobElementAtk {
 
 	GENERATED_USTRUCT_BODY()
 
+protected:
+
+	FLElementValue Value= [
+	{ ELCombatElement::Fire, 0 },
+	{ ELCombatElement::Water, 0 },
+	{ ELCombatElement::Earth, 0 },
+	{ ELCombatElement::Wind, 0 },
+	{ ELCombatElement::Holy, 0 },
+	{ ELCombatElement::Dark, 0 },
+	{ ELCombatElement::None, 0 }	// No real meaning, just for avoiding undefined key error
+	];
+
 public:
 
 	FLMobElementData() {};
+
+	FLMobElementData(int64 Fire = 0, int64 Water = 0, int64 Earth = 0, int64 Wind = 0, int64 Holy = 0, int64 Dark = 0):
+		Value([
+	{ ELCombatElement::Fire, Fire},
+	{ ELCombatElement::Water, Water },
+	{ ELCombatElement::Earth, Earth },
+	{ ELCombatElement::Wind, Wind },
+	{ ELCombatElement::Holy, Holy },
+	{ ELCombatElement::Dark, Dark },
+	{ ELCombatElement::None, 0 }	// No real meaning, just for avoiding undefined key error
+	]);
+	{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "FireAttack")
 		int64 FireAtk = 0;
@@ -92,6 +118,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, DisplayName = "DarknessAttack")
 		int64 DarkAtk = 0;
 
+	int64 GetValue(ELCombatElement Element) { 
+		if (Element != ELCombatElement::LElem_None) {
+			return Value[Element];
+		}
+		else {
+			LogError("Invalid key: \"None\"");
+			return 0;
+			}
+		};
+	int64 SetValue(ELCombatElement Element, int64 Val) {
+		if (Element != ELCombatElement::LElem_None)
+			Value[Element] = Val;
+		else LogError("Invalid key: \"None\"");
+	}
 }
 
 // Mob's element defence data
