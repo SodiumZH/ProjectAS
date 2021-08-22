@@ -4,6 +4,11 @@
 #include "../NaGlobalHeader.h"
 #include "NaMobData.generated.h"
 
+#define BASIC_WALK_SPEED 200.f
+#define BASIC_ACCEL 2048.f
+#define BASIC_JUMP_Z_VELOCITY 420.f 
+
+
 
 USTRUCT(BlueprintType)
 struct FNaMobBasicInformation {

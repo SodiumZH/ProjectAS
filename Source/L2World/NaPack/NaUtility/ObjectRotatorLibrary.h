@@ -14,6 +14,7 @@
 UCLASS()
 class NAPACK_API UObjectRotatorLibrary : public UBlueprintFunctionLibrary
 {
+
 	GENERATED_BODY()
 	
 public:

@@ -31,6 +31,7 @@ void ANaMob::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (PlayerComps.Num() > 0)
 		dynamic_cast<UNaMobPlayerComponent*>(PlayerComps[0])->SetupMobPlayerInput(PlayerInputComponent);
 
+
 }
 
 
@@ -44,6 +45,7 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 	
 	UpdateSkeletalMesh();
 	InitCapsuleMeshSize();
+	UpdateAnimClass();
 }
 
 // Called when the game starts or when spawned
@@ -334,4 +336,20 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 ANaMobSkill* ANaMob::UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
 	
 	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, SocketName);
+}
+
+
+/* Animation */
+
+void ANaMob::UpdateAnimClass() {
+	for (auto SkComp : SkeletalMeshComponents) {
+		SkComp->SetAnimInstanceClass(AnimClass.Get());
+	}
+}
+
+void ANaMob::SetAnimClass(TSubclassOf<UAnimInstance> NewClass) {
+	
+	AnimClass = NewClass;
+	UpdateAnimClass();
+
 }

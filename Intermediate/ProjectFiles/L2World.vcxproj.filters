@@ -203,8 +203,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\L2World\FPMovement.h">
-      <Filter>Source\L2World</Filter>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMobStatics.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMobStatics.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
