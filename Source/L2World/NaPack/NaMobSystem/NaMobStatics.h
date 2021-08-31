@@ -18,15 +18,15 @@ public:
 	
 	// Get world basic walking speed. To set this value, you need to change the macro value in "NaMobData.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static float GetBasicWalkSpeed() { return BASIC_WALK_SPEED; };
+	static float GetMobBasicWalkSpeed() { return MOB_BASIC_WALK_SPEED; };
 
 	// Get world basic acceleration. To set this value, you need to change the macro value in "NaMobData.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static float GetBasicAcceleration() { return BASIC_ACCEL; };
+	static float GetMobBasicAcceleration() { return MOB_BASIC_ACCEL; };
 
 	// Get world basic jump Z velocity. To set this value, you need to change the macro value in "NaMobData.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static float GetBasicJumpZ_Velocity() { return BASIC_JUMP_Z_VELOCITY; };
+	static float GetMobBasicJumpZ_Velocity() { return MOB_BASIC_JUMP_Z_VELOCITY; };
 
 	// Get mob default height. To set this value, you need to change the macro value in "NaMob.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")

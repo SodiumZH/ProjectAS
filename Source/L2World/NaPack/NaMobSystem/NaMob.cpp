@@ -285,9 +285,9 @@ void ANaMob::InitCapsuleMeshSize() {
 /* Data */
 void ANaMob::Tick_DataSync(){
 	
-	GetCharacterMovement()->MaxWalkSpeed = Constants.BasicWalkSpeed*(GeneralData.Movement.bIsRunning ? GeneralData.Movement.RunSpeedScale : GeneralData.Movement.WalkSpeedScale);
-	GetCharacterMovement()->MaxAcceleration = Constants.BasicAccel*GeneralData.Movement.MaxAccelScale;
-	GetCharacterMovement()->JumpZVelocity = Constants.BasicJumpZVelocity*GeneralData.Movement.JumpHeightScale;
+	GetCharacterMovement()->MaxWalkSpeed = MOB_BASIC_WALK_SPEED*(GeneralData.Movement.bIsRunning ? GeneralData.Movement.RunSpeedScale : GeneralData.Movement.WalkSpeedScale);
+	GetCharacterMovement()->MaxAcceleration = MOB_BASIC_ACCEL*GeneralData.Movement.MaxAccelScale;
+	GetCharacterMovement()->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY*GeneralData.Movement.JumpHeightScale;
 
 	
 	OnDataSync();

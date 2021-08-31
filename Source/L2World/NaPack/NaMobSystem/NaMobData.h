@@ -4,9 +4,9 @@
 #include "../NaGlobalHeader.h"
 #include "NaMobData.generated.h"
 
-#define BASIC_WALK_SPEED 200.f
-#define BASIC_ACCEL 2048.f
-#define BASIC_JUMP_Z_VELOCITY 420.f 
+#define MOB_BASIC_WALK_SPEED 200.f
+#define MOB_BASIC_ACCEL 2048.f
+#define MOB_BASIC_JUMP_Z_VELOCITY 420.f 
 
 
 
@@ -122,31 +122,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FNaMobStamina Stamina;
 
-};
-
-/*
-*	Mob's constant variables. This should not be changed during gameplay.
-*/
-USTRUCT(BlueprintType)
-struct FNaMobConstants {
-
-	GENERATED_USTRUCT_BODY()
-
-public:
-
-	FNaMobConstants() {};
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float BasicWalkSpeed = 600.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float BasicAccel = 2048.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="Basic Jump Z Velocity")
-	float BasicJumpZVelocity = 420.f;
-
-
-	
 };
 
 

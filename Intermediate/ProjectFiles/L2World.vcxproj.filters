@@ -206,10 +206,16 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMobStatics.h">
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkillCollision.h">
+      <Filter>Source\L2World\LMob\Combat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMobStatics.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobSkillCollision.cpp">
+      <Filter>Source\L2World\LMob\Combat</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

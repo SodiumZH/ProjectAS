@@ -232,9 +232,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mob|Data")
 	FNaMobGeneralData GeneralData = FNaMobGeneralData();
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mob|Data")
-	FNaMobConstants Constants = FNaMobConstants();
-
 	// Tickly update interior variables from GeneralData
 	virtual void Tick_DataSync();
 	// Actions when tickly update the interior variables from General Data
