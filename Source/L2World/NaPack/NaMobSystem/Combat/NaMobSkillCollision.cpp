@@ -2,7 +2,11 @@
 
 #include "NaMobSkillCollision.h"
 
+ANaMobSkillCollision::ANaMobSkillCollision() {
 
+	RootComponent = CreateDefaultSubobject<UShapeComponent>(TEXT("CollisionDefault"));
+
+}
 
 
 
@@ -31,7 +35,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 	}
 	temp->RegisterComponent();
 	RootComponent = temp;
-
+	//RootComponent->
 }
 
 void ANaMobSkillCollision::BeginPlay() {

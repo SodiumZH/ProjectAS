@@ -32,6 +32,8 @@ protected:
 
 public:
 
+	ANaMobSkillCollision();
+
 	// Construction script
 	virtual void OnConstruction(const FTransform & trans) override;
 
@@ -45,7 +47,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ESkillCollisonShape CollisionShape = ESkillCollisonShape::SCS_Capsule;
 
-	UShapeComponent* Collision;
 
 
 
