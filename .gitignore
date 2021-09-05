@@ -75,6 +75,8 @@ Plugins/*/Intermediate/*
 
 !Intermediate/ProjectFiles/*.vcxproj.user
 
+Intermediate/ProjectFiles/UE4.*
+
 # Cache files for the editor
 DerivedDataCache/*
 
