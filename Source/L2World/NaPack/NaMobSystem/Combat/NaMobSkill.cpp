@@ -2,6 +2,7 @@
 
 #include "NaMobSkill.h"
 #include "../NaMob.h"
+#include "Components/SceneComponent.h"
 
 void ANaMobSkill::OnConstruction(const FTransform & Trans) {
 	Super::OnConstruction(Trans);
@@ -13,12 +14,34 @@ void ANaMobSkill::Tick(float DeltaTime) {
 	Tick_Timeline();
 }
 
-ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
+ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, USceneComponent* AttachToComponent, AActor* AttachToActor) {
+	if (!IsValid(SourceMob)) {
+		LogError("Trying using skill from invalid mob. Use skill failed.");
+		return nullptr;
+	}
+	
 	AActor* OutSkillActor = SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform);
 	ANaMobSkill* OutSkill = dynamic_cast<ANaMobSkill*>(OutSkillActor);
 	check(OutSkill);
+
+	// Set up attachment
+
+	if (!IsValid(AttachToActor)) {
+		if (AttachToActor)
+			LogError("Trying attaching skill to invalid actor. Attach to source mob instead.");
+		AttachToActor = SourceMob;
+	}
+	if (!IsValid(AttachToComponent)) {
+		if (AttachToComponent)
+			LogError("Trying attaching skill to invalid component. Attach to root component instead.");
+		AttachToComponent = SourceMob->RootComponent;
+	}
+	if(AttachToComponent->)
+
 	OutSkill->Source = SourceMob;
 	OutSkill->Socket = SocketName;
+
+
 	OutSkill->AttachToActor(dynamic_cast<AActor*>(SourceMob), FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 	return OutSkill;
 }

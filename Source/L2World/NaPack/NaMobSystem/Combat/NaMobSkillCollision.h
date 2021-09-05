@@ -47,6 +47,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ESkillCollisonShape CollisionShape = ESkillCollisonShape::SCS_Capsule;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FName SocketName;
+	
 
 
 

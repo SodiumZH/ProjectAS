@@ -35,7 +35,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 	}
 	temp->RegisterComponent();
 	RootComponent = temp;
-	//RootComponent->
+	
 }
 
 void ANaMobSkillCollision::BeginPlay() {

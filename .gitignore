@@ -71,7 +71,9 @@ Saved/*
 # Compiled source files for the engine
 Intermediate/*
 Plugins/*/Intermediate/*
-!Intermediate/ProjectFiles/*.filters
+!Intermediate/ProjectFiles/*.vcxproj.filters
+
+!Intermediate/ProjectFiles/*.vcxproj.user
 
 # Cache files for the editor
 DerivedDataCache/*

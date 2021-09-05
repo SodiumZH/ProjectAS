@@ -16,6 +16,8 @@
 *	-> send back skill result to Source
 */
 
+DECLARE_DYNAMIC_DELEGATE(FNaMobSkillTimelineEvent);
+
 UCLASS(BlueprintType)
 class NAPACK_API ANaMobSkill : public AActor 
 {
@@ -38,14 +40,21 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FName Socket;
 
-	// Generate a skill object from a mob
+	/** Generate a skill object from a mob.
+	* @Param SourceMob The mob as source of this skill.
+	* @Param SkillClass Applied skill class.
+	* @Param InTransform Relative transform.
+	* @Param SocketName Socket of attachment of this skill.
+	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
+	* @Param AttachToActor Actor this skill should attach. If this param is left null, skill will attach to the source mob.
+	*/
 	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-		static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None);
+	static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, USceneComponent* AttachToComponent=nullptr, AActor* AttachToActor=nullptr);
 
 	/* Timeline */
 
 
-	DECLARE_DYNAMIC_DELEGATE(FNaMobSkillTimelineEvent);
+	
 
 	TMultiMap<float, FNaMobSkillTimelineEvent> TimelineMap;
 
