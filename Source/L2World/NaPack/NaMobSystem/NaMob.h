@@ -23,7 +23,9 @@ Mesh-collision Transform Correction		R139
 	Capsule			R141
 	Mesh			R187
 Data				R227
-Basic Action		R240
+Basic Action		R282
+Animation			R321
+	Animation State Switch	
 
 */
 
@@ -313,7 +315,7 @@ public:
 
 	/* Skill */
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Combat")
-	class ANaMobSkill* UseSkill(TSubclassOf<class ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None);
+		class ANaMobSkill* UseSkill(TSubclassOf<class ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, AActor* AttachToActor = nullptr, class USceneComponent* AttachToComponent = nullptr);
 
 	
 	//=======================================================================
@@ -330,5 +332,43 @@ public:
 
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	void SetAnimClass(TSubclassOf<UAnimInstance> NewClass);
+
+
+	/* Anim state switch */
+
+protected:
+
+	TMap<FName, bool> AnimStateSwitch;
+
+	TMap<FName, float> AnimSwitchCloseTime;
+
+	void Tick_CloseAnimSwitch();
+
+public:
+
+	/* Get the animation switch value of a name. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	bool GetAnimStateSwitch(FName Key);
+
+	/** Turn on an animation switch.
+	@Param Key Switch name.
+	@Param DeltaTime Time span that the switch keeps on. If this value is set non-positive, it will keep on until manually set off or overriden by next open action.
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	void OpenAnimStateSwitch(FName Key, float DeltaTime = 0.1);
+
+	/* Turn off an animation switch. */
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	void CloseAnimStateSwitch(FName Key);
+
+
+	/* Time related */
+
+protected:
+
+	float StartTime = -1;
+	
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	float GetTimeFromSpawn();
 
 };

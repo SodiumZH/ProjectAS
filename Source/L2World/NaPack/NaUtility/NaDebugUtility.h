@@ -9,12 +9,15 @@
 #if NAPACK_ENABLE_DEBUG
 #define LogWarning(text) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
 #define LogError(text) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
-#define LogWarningNoContext UE_LOG(LogTemp, Warning, TEXT(text))
-#define LogErrorNoContext UE_LOG(LogTemp, Error, TEXT(text))
+#define LogWarningNoContext(text) UE_LOG(LogTemp, Warning, TEXT(text))
+#define LogErrorNoContext(text) UE_LOG(LogTemp, Error, TEXT(text))
 #define PrintToScreen(text) NaDebugUtility::DebugInfo(this, TEXT(text))
 #else
-#define LogWarning(text)
-#define LogError(text)
+#define LogWarning(text) 0
+#define LogError(text) 0
+#define LogWarningNoContext(text) 0
+#define LogErrorNoContext(text) 0
+#define PrintToScreen(text) 0
 #endif
 
 

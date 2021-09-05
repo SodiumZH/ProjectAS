@@ -8,6 +8,7 @@
 #include "Component/NaMobPlayerComponent.h"
 
 
+
 /** Constructor & Input */
 
 // Sets default values
@@ -52,7 +53,7 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 void ANaMob::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	StartTime = GetWorld()->GetTimeSeconds();
 }
 
 // Called every frame
@@ -60,6 +61,7 @@ void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	Tick_DataSync();
+	Tick_CloseAnimSwitch();
 }
 
 
@@ -333,9 +335,9 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 	OnMobTakingDamage(Damage);
 }
 
-ANaMobSkill* ANaMob::UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName) {
+ANaMobSkill* ANaMob::UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent) {
 	
-	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, SocketName);
+	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, SocketName, AttachToActor, AttachToComponent);
 }
 
 
@@ -352,4 +354,42 @@ void ANaMob::SetAnimClass(TSubclassOf<UAnimInstance> NewClass) {
 	AnimClass = NewClass;
 	UpdateAnimClass();
 
+}
+
+/* Animation state switch */
+
+void ANaMob::Tick_CloseAnimSwitch() {
+	float Time = GetTimeFromSpawn();
+	for (auto& Elem : AnimSwitchCloseTime) 
+		if (Time >= Elem.Value) 
+			CloseAnimStateSwitch(Elem.Key);
+}
+
+bool ANaMob::GetAnimStateSwitch(FName Key) {
+	bool* resptr = AnimStateSwitch.Find(Key);
+	if (resptr)
+		return *resptr;
+	else {
+		AnimStateSwitch.Emplace(Key, false);
+		return false;
+	}
+}
+
+void ANaMob::OpenAnimStateSwitch(FName Key, float DeltaTime) {
+	// Set true
+	AnimStateSwitch.FindOrAdd(Key) = true;
+	// Set time to delay close
+	if (DeltaTime > 0) 
+		AnimSwitchCloseTime.FindOrAdd(Key) = GetTimeFromSpawn() + DeltaTime;
+}
+
+void ANaMob::CloseAnimStateSwitch(FName Key) {
+	AnimStateSwitch.FindOrAdd(Key) = false;
+	AnimSwitchCloseTime.Remove(Key);
+}
+
+
+/* Time */
+float ANaMob::GetTimeFromSpawn() {
+	return GetWorld()->GetTimeSeconds() - StartTime;
 }

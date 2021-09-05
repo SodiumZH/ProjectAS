@@ -28,11 +28,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
 	static float GetMobBasicJumpZ_Velocity() { return MOB_BASIC_JUMP_Z_VELOCITY; };
 
-	// Get mob default height. To set this value, you need to change the macro value in "NaMob.h".
+	// Get mob default height. To set this value, you need to change the macro value in "NaMobData.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
 	static float GetMobDefaultHeight() { return MOB_DEFAULT_HEIGHT; };
 
-	// Get mob default diameter. To set this value, you need to change the macro value in "NaMob.h".
+	// Get mob default diameter. To set this value, you need to change the macro value in "NaMobData.h".
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
 	static float GetMobDefaultDiameter() { return MOB_DEFAULT_DIAMETER; };
 

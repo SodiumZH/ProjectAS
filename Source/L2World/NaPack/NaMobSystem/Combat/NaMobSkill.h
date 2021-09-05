@@ -49,7 +49,7 @@ public:
 	* @Param AttachToActor Actor this skill should attach. If this param is left null, skill will attach to the source mob.
 	*/
 	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-	static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, USceneComponent* AttachToComponent=nullptr, AActor* AttachToActor=nullptr);
+	static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, AActor* AttachToActor = nullptr, USceneComponent* AttachToComponent=nullptr);
 
 	/* Timeline */
 
