@@ -77,6 +77,8 @@ Plugins/*/Intermediate/*
 
 Intermediate/ProjectFiles/UE4.*
 
+*.sln
+
 # Cache files for the editor
 DerivedDataCache/*
 
