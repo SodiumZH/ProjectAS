@@ -347,18 +347,18 @@ protected:
 public:
 
 	/* Get the animation switch value of a name. */
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
 	bool GetAnimStateSwitch(FName Key);
 
 	/** Turn on an animation switch.
 	@Param Key Switch name.
 	@Param DeltaTime Time span that the switch keeps on. If this value is set non-positive, it will keep on until manually set off or overriden by next open action.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
 	void OpenAnimStateSwitch(FName Key, float DeltaTime = 0.1);
 
 	/* Turn off an animation switch. */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
 	void CloseAnimStateSwitch(FName Key);
 
 
