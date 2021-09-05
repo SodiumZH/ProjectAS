@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\L2World.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{896B6580-BE1B-4C95-8ED9-44C2F2B1976C}</UniqueIdentifier>
+      <UniqueIdentifier>{F12FAF5A-6AD3-4EED-AAF2-2C4765EBA07D}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\L2World.Target.cs">
       <Filter>Source</Filter>
@@ -16,7 +16,7 @@
     <None Include="..\..\README.md" />
     <None Include="..\..\Regenerate sln.txt" />
     <Filter Include="Config">
-      <UniqueIdentifier>{A723077B-822C-41AA-882B-5A698B536D61}</UniqueIdentifier>
+      <UniqueIdentifier>{FCA07DB2-53F8-4E7D-90BA-DFA7E1030663}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -37,7 +37,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\L2World">
-      <UniqueIdentifier>{FCDA0EAE-EB09-4970-B52F-3D4F2502A24D}</UniqueIdentifier>
+      <UniqueIdentifier>{F3D705CC-6575-4188-A2E4-948A384DDC74}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\L2World\L2World.Build.cs">
       <Filter>Source\L2World</Filter>
@@ -49,7 +49,7 @@
       <Filter>Source\L2World</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\LMob">
-      <UniqueIdentifier>{7847A038-4B5F-48FF-8D7F-F8ECF83292AA}</UniqueIdentifier>
+      <UniqueIdentifier>{EEBAFC1D-F05D-49E7-B641-6FC0E81F86C3}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\LMob\LMob.cpp">
       <Filter>Source\L2World\LMob</Filter>
@@ -76,7 +76,7 @@
       <Filter>Source\L2World\LMob</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\LMob\Combat">
-      <UniqueIdentifier>{28F94202-C43E-4993-843A-095758969D85}</UniqueIdentifier>
+      <UniqueIdentifier>{D5BE5626-535A-4D1C-B81B-53D0FE259BB3}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\LMob\Combat\LCombatData.cpp">
       <Filter>Source\L2World\LMob\Combat</Filter>
@@ -97,13 +97,13 @@
       <Filter>Source\L2World\LMob\Combat</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack">
-      <UniqueIdentifier>{8757D6BD-C0AB-481D-B019-BA00583B795B}</UniqueIdentifier>
+      <UniqueIdentifier>{92E8072C-0FC8-4203-96B2-69171A9C5823}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaGlobalHeader.h">
       <Filter>Source\L2World\NaPack</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaComponent">
-      <UniqueIdentifier>{784776C3-6029-4EB8-96BD-67D57E2366FF}</UniqueIdentifier>
+      <UniqueIdentifier>{B97D1B9C-FAEE-4267-8BA1-143C6B76E736}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaComponent\FreeLookSpringArmComponent.cpp">
       <Filter>Source\L2World\NaPack\NaComponent</Filter>
@@ -115,7 +115,7 @@
       <Filter>Source\L2World\NaPack\NaComponent</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem">
-      <UniqueIdentifier>{102CC9D3-F6D4-4C01-B76F-67B026313EEA}</UniqueIdentifier>
+      <UniqueIdentifier>{FFB800AF-446A-4C74-8E8D-A1911C743AB7}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMob.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
@@ -145,7 +145,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Combat">
-      <UniqueIdentifier>{EEE5FA82-529E-4EB4-A6A3-05CA93CA1896}</UniqueIdentifier>
+      <UniqueIdentifier>{F4DE71B5-4A22-4D2C-AC35-0AF866103F59}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\MobDamage.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
@@ -163,7 +163,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Component">
-      <UniqueIdentifier>{4B21F8EB-F09B-4868-B842-810B29E0B945}</UniqueIdentifier>
+      <UniqueIdentifier>{E81B5555-77AE-4676-936C-501B283EC54A}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobComponent.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
@@ -175,7 +175,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaUtility">
-      <UniqueIdentifier>{07E5375A-BAF1-4962-AB3E-631970F3DEF8}</UniqueIdentifier>
+      <UniqueIdentifier>{80EEFF53-EA53-4316-8FFF-F9195AC4F21D}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaDebugUtility.cpp">
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
@@ -187,6 +187,12 @@
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaMath.h">
+      <Filter>Source\L2World\NaPack\NaUtility</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaObjectStatics.cpp">
+      <Filter>Source\L2World\NaPack\NaUtility</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaObjectStatics.h">
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaString.cpp">
@@ -216,15 +222,5 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\ObjectRotatorLibrary.h">
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaObjectStatics.h">
-      <Filter>Source\L2World\NaPack\NaUtility</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaObjectStatics.cpp">
-      <Filter>Source\L2World\NaPack\NaUtility</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
