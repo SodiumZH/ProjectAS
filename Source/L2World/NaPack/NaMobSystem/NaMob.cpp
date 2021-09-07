@@ -53,7 +53,7 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 void ANaMob::BeginPlay()
 {
 	Super::BeginPlay();
-	StartTime = GetWorld()->GetTimeSeconds();
+	StartTime = FPlatformTime::Seconds();
 }
 
 // Called every frame
@@ -390,6 +390,9 @@ void ANaMob::CloseAnimStateSwitch(FName Key) {
 
 
 /* Time */
+
+//double GetTimeFromSpawn_Double();
+
 float ANaMob::GetTimeFromSpawn() {
-	return GetWorld()->GetTimeSeconds() - StartTime;
+	return (float)(FPlatformTime::Seconds() - StartTime);
 }

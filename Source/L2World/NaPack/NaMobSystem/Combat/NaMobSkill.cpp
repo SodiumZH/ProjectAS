@@ -6,7 +6,7 @@
 
 void ANaMobSkill::OnConstruction(const FTransform & Trans) {
 	Super::OnConstruction(Trans);
-	TimeLastTick = TimeNow = StartTime = GetWorld()->GetTimeSeconds();
+	TimeLastTick = TimeNow = StartTime = FPlatformTime::Seconds();
 }
 
 void ANaMobSkill::Tick(float DeltaTime) {
@@ -83,7 +83,7 @@ float ANaMobSkill::GetTimeLastTick() {
 void ANaMobSkill::Tick_Timeline() {
 	// Update time
 	TimeLastTick = TimeNow;
-	TimeNow = GetWorld()->GetTimeSeconds();
+	TimeNow = FPlatformTime::Seconds();
 
 	// Execute event if on time
 	if (TimelineMap.Num() > 0) {
