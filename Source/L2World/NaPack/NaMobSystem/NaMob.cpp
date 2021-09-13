@@ -4,6 +4,7 @@
 #include "NaMob.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "../NaComponent/TimeControlComponent.h"
 #include "Combat/NaMobSkill.h"
 #include "Component/NaMobPlayerComponent.h"
 
@@ -19,6 +20,8 @@ ANaMob::ANaMob()
 
 	DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
+	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
+	
 }
 
 // Called to bind functionality to input
@@ -53,7 +56,7 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 void ANaMob::BeginPlay()
 {
 	Super::BeginPlay();
-	StartTime = FPlatformTime::Seconds();
+	
 }
 
 // Called every frame
@@ -394,5 +397,5 @@ void ANaMob::CloseAnimStateSwitch(FName Key) {
 //double GetTimeFromSpawn_Double();
 
 float ANaMob::GetTimeFromSpawn() {
-	return (float)(FPlatformTime::Seconds() - StartTime);
+	return TimeControl->GetTime();
 }

@@ -3,15 +3,27 @@
 #include "NaMobSkill.h"
 #include "../NaMob.h"
 #include "Components/SceneComponent.h"
+#include "../../NaComponent/TimeControlComponent.h"
+
+ANaMobSkill::ANaMobSkill(){
+
+	PrimaryActorTick.bCanEverTick = true;
+
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SkillRoot"));
+	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
+}
+
 
 void ANaMobSkill::OnConstruction(const FTransform & Trans) {
 	Super::OnConstruction(Trans);
-	TimeLastTick = TimeNow = StartTime = FPlatformTime::Seconds();
 }
 
 void ANaMobSkill::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-	Tick_Timeline();
+}
+
+UTimeControlComponent* ANaMobSkill::GetTimeControl() {
+	return TimeControl;
 }
 
 ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent) {
@@ -29,16 +41,16 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobS
 	/* Check validity */
 	if (!IsValid(AttachToActor)) {
 		if (AttachToActor)	// existing but invalid
-			LogErrorNoContext("Trying attaching skill to invalid actor. Attach to source mob instead.");
+			LogErrorNoContext("Trying attaching skill to invalid actor. Will attach to source mob instead.");
 		AttachToActor = SourceMob;
 	}
 	if (!IsValid(AttachToComponent)) {
 		if (AttachToComponent)
-			LogErrorNoContext("Trying attaching skill to invalid component. Attach to root component instead.");
+			LogErrorNoContext("Trying attaching skill to invalid component. Will attach to root component instead.");
 		AttachToComponent = AttachToActor->GetRootComponent();
 	}
 	if (AttachToComponent->GetOwner() != AttachToActor) {
-		LogErrorNoContext("Trying to attach to a component not owned by the attaching actor. Attach to root component instead.");
+		LogErrorNoContext("Trying to attach to a component not owned by the attaching actor. Will attach to root component of the actor of attachment instead.");
 		AttachToComponent= AttachToActor->GetRootComponent();
 	}
 
@@ -51,46 +63,3 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobS
 	return OutSkill;
 }
 
-void ANaMobSkill::AddTimepointEvent(float Time, void(UObject::*Event)(void), UObject* Object) {
-	check(Object);
-	FNaMobSkillTimelineEvent NewEvent;
-	NewEvent.BindDynamic(Object, Event);
-	TimelineMap.Emplace(Time, NewEvent);
-}
-
-void ANaMobSkill::AddTimepointEvent(float Time, void(UObject::*Event)(void)) {
-	UObject* Object = dynamic_cast<UObject*>(this);
-	check(Object);
-	AddTimepointEvent(Time, Event, Object);
-}
-
-void ANaMobSkill::AddTimepointEvent_Delegate(float Time, FNaMobSkillTimelineEvent Event) {
-	TimelineMap.Emplace(Time, Event);
-}
-
-float ANaMobSkill::GetTime() {
-	check(StartTime > 0);
-	check(TimeNow > 0);
-	return TimeNow - StartTime;
-}
-
-float ANaMobSkill::GetTimeLastTick() {
-	check(StartTime > 0);
-	check(TimeLastTick > 0);
-	return TimeLastTick - StartTime;
-}
-
-void ANaMobSkill::Tick_Timeline() {
-	// Update time
-	TimeLastTick = TimeNow;
-	TimeNow = FPlatformTime::Seconds();
-
-	// Execute event if on time
-	if (TimelineMap.Num() > 0) {
-		for (auto & Elem : TimelineMap) {
-			if ((Elem.Key > GetTimeLastTick()) && (Elem.Key <= GetTime())) {
-				Elem.Value.ExecuteIfBound();
-			}
-		}
-	}
-}

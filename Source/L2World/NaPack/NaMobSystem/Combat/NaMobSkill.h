@@ -16,7 +16,18 @@
 *	-> send back skill result to Source
 */
 
-DECLARE_DYNAMIC_DELEGATE(FNaMobSkillTimelineEvent);
+class ANaMob;
+class UTimeControlComponent;
+
+UENUM(BlueprintType)
+enum class ESkillCollisionLocationType :uint8 {
+	SCLT_RelToSkill		UMETA(DisplayName = "RelativeToSkill"),
+	SCLT_RelToSource	UMETA(DisplayName = "RelativeToSource"),
+	SCLT_RelToActor		UMETA(DisplayName = "RelativeToAttachedActor"),
+	SCLT_RelToComponent	UMETA(DisplayName = "RelativeToAttachedComponent"),
+	SCLT_Rel
+};
+
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMobSkill : public AActor 
@@ -26,16 +37,27 @@ class NAPACK_API ANaMobSkill : public AActor
 
 public:
 
-	ANaMobSkill() {};
+	ANaMobSkill();
 
 	virtual void OnConstruction(const FTransform & Trans) override;
 
 	virtual void Tick(float DeltaTime) override;
 
+	/* Components */
+
+protected:
+
+	UTimeControlComponent* TimeControl;
+
+public:
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|NaMobSystem")
+	UTimeControlComponent* GetTimeControl();
+
 	/* Installation */
 
 	UPROPERTY(BlueprintReadOnly)
-	class ANaMob* Source;
+	ANaMob* Source;
 
 	UPROPERTY(BlueprintReadOnly)
 	FName Socket;
@@ -51,33 +73,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
 	static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, AActor* AttachToActor = nullptr, USceneComponent* AttachToComponent=nullptr);
 
-	/* Timeline */
-
-
-	
-
-	TMultiMap<float, FNaMobSkillTimelineEvent> TimelineMap;
-
-	void AddTimepointEvent(float Time, void(UObject::*Event)(void));
-	void AddTimepointEvent(float Time, void(UObject::*Event)(void), UObject* Target);
-
-	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-	void AddTimepointEvent_Delegate(float Time, FNaMobSkillTimelineEvent Event);
-
 protected:
 
-	float StartTime = -1; // -1 means uninitialized
-	float TimeNow = -1;
-	float TimeLastTick = -1;
-
-	// Get time in seconds from skill spawning
-	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-	float GetTime();
-
-	// Get time in seconds from skill spawning to last tick
-	float GetTimeLastTick();
-
-	void Tick_Timeline();
-
+	
 
 };

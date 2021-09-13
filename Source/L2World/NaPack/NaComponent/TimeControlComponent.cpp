@@ -55,7 +55,8 @@ void UTimeControlComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	Tick_UpdateTime();
-
+	Tick_PointEvents();
+	Tick_LoopEvents();
 	
 }
 
@@ -63,50 +64,68 @@ void UTimeControlComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 /* Time */
 
 void UTimeControlComponent::TimeInit() {
-	TimeThisTick = TimeLastTick = TimeBeginPlay = FPlatformTime::Seconds();
+	AbsTimeThisTick = AbsTimeLastTick = AbsTimeBeginPlay = FPlatformTime::Seconds();
 }
 
 void UTimeControlComponent::Tick_UpdateTime() {
-	TimeLastTick = TimeThisTick;
-	TimeThisTick = FPlatformTime::Seconds();
+	AbsTimeLastTick = AbsTimeThisTick;
+	AbsTimeThisTick = FPlatformTime::Seconds();
 }
 
 double UTimeControlComponent::GetTime() {
-	return TimeThisTick - TimeBeginPlay;
+	return AbsTimeThisTick - AbsTimeBeginPlay;
+}
+
+float UTimeControlComponent::GetTimeFloat() {
+	return (float)GetTime();
 }
 
 double UTimeControlComponent::GetTimeLastTick() {
-	return TimeLastTick - TimeBeginPlay;
+	return AbsTimeLastTick - AbsTimeBeginPlay;
+}
+
+float UTimeControlComponent::GetTimeLastTickFloat() {
+	return (float)GetTimeLastTick();
 }
 
 float UTimeControlComponent::GetTimeSecondsFromBeginPlay() {
 	return (float)GetTime();
 }
 
+bool UTimeControlComponent::IsPassing(double TimePoint) {
+	return (GetTime() >= TimePoint) && (GetTimeLastTick() < TimePoint);
+}
+
+bool UTimeControlComponent::IsPassing_Float(float TimePoint) {
+	return IsPassing((double)TimePoint);
+}
+
+
+
 void UTimeControlComponent::AddTimePointEvent(FName Name, float TimeSecondsFromNow, const FTimePointEventSignature & Event, bool bForceAdd) {
 
 	if (bForceAdd) {
-		PointEvents.Emplace(Name, FTimePointEvent((double)TimeSecondsFromNow + TimeThisTick, Event));
+		PointEvents.Emplace(Name, FTimePointEvent((double)TimeSecondsFromNow + GetTime(), Event));
 	}
 	else if (!PointEvents.Contains(Name)) {
-		PointEvents.Emplace(Name, FTimePointEvent((double)TimeSecondsFromNow + TimeThisTick, Event));
+		PointEvents.Emplace(Name, FTimePointEvent((double)TimeSecondsFromNow + GetTime(), Event));
 	}
 
 }
 
-void UTimeControlComponent::AddLoopEvent(FName Name, float TimeSecondsFromNow, float Period, const FTimeLoopEventSignature & Event, bool bForceAdd) {
+void UTimeControlComponent::AddLoopEvent(FName Name, float TimeSecondsFromNow, float Period, FTimeLoopEventSignature  Event, bool bForceAdd) {
 	if (bForceAdd) {
-		LoopEvents.Emplace(Name, FTimeLoopEvent((double)TimeSecondsFromNow + TimeThisTick, (double)Period, Event));
+		LoopEvents.Emplace(Name, FTimeLoopEvent((double)TimeSecondsFromNow + GetTime(), (double)Period, Event));
 	}
 	else if (!PointEvents.Contains(Name)) {
-		LoopEvents.Emplace(Name, FTimeLoopEvent((double)TimeSecondsFromNow + TimeThisTick, (double)Period, Event));
+		LoopEvents.Emplace(Name, FTimeLoopEvent((double)TimeSecondsFromNow + GetTime(), (double)Period, Event));
 	}
 }
 
 void UTimeControlComponent::Tick_PointEvents() {
 
 	for (auto & Elem : PointEvents) {
-		if ((GetTime() >= Elem.Value.TimePointSeconds) && (GetTimeLastTick() < Elem.Value.TimePointSeconds)) {
+		if (IsPassing(Elem.Value.TimePointSeconds)) {
 			Elem.Value.EventDelegate.ExecuteIfBound();
 			PointEvents.Remove(Elem.Key);
 		}
@@ -116,7 +135,7 @@ void UTimeControlComponent::Tick_PointEvents() {
 void UTimeControlComponent::Tick_LoopEvents() {
 
 	for (auto & Elem : LoopEvents) {
-		if ((GetTime() >= Elem.Value.NextTime) && (GetTimeLastTick() < Elem.Value.NextTime)) {
+		if (IsPassing(Elem.Value.NextTime)) {
 			if (Elem.Value.EventDelegate.IsBound()) {
 				Elem.Value.EventDelegate.Execute((float)GetTime());
 			}

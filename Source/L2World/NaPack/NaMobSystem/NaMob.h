@@ -29,6 +29,9 @@ Animation			R321
 
 */
 
+
+class UTimeControlComponent;
+
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
 {
@@ -54,6 +57,21 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+
+	/* Components */
+
+protected:
+
+	UTimeControlComponent * TimeControl;
+
+public:
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UTimeControlComponent * GetTimeControl() { return TimeControl; };
+
+
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
+	float GetTimeFromSpawn();
 
 	/*==========================================================================*/
 	////////////
@@ -371,11 +389,9 @@ public:
 
 protected:
 
-	double StartTime = -1;
-	
+
 	//double GetTimeFromSpawn_Double();
 
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	float GetTimeFromSpawn();
+
 
 };
