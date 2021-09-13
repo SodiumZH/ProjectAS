@@ -18,6 +18,7 @@
 
 class ANaMob;
 class UTimeControlComponent;
+class ANaMobSkillCollision;
 
 UENUM(BlueprintType)
 enum class ESkillCollisionLocationType :uint8 {
@@ -56,6 +57,8 @@ public:
 
 	/* Installation */
 
+public:
+
 	UPROPERTY(BlueprintReadOnly)
 	ANaMob* Source;
 
@@ -67,14 +70,38 @@ public:
 	* @Param SkillClass Applied skill class.
 	* @Param InTransform Relative transform.
 	* @Param SocketName Socket of attachment of this skill.
-	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
 	* @Param AttachToActor Actor this skill should attach. If this param is left null, skill will attach to the source mob.
+	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
+	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
 	*/
 	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-	static ANaMobSkill* UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, AActor* AttachToActor = nullptr, USceneComponent* AttachToComponent=nullptr);
+		static ANaMobSkill* UseSkillByClass(
+			ANaMob* SourceMob,
+			TSubclassOf<ANaMobSkill> SkillClass,
+			const FTransform & InTransform = FTransform(),
+			FName SocketName = NAME_None,
+			AActor* AttachToActor = nullptr,
+			USceneComponent* AttachToComponent = nullptr,
+			bool DoAttachment = true
+	);
+
+	/* Collision check */
 
 protected:
 
-	
+	TSet<ANaMobSkillCollision*> CollisionSet;
+
+	// Remove all invalid collisions from set. Always call this before iterating the collision set.
+	void ClearCollisionSet();
+
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
+	void GetCollisions(TSet<ANaMobSkillCollision*>& Collisions);
+
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|NaMobSystem")
+	void ReceiveCollisionHit(ANaMobSkillCollision* SourceCollision, ANaMob* HitMob);
+	void ReceiveCollisionHit_Implementation(ANaMobSkillCollision* SourceCollision, ANaMob* HitMob) {};
+
 
 };

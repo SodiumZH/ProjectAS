@@ -26,17 +26,22 @@ UTimeControlComponent* ANaMobSkill::GetTimeControl() {
 	return TimeControl;
 }
 
-ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent) {
+ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent, bool DoAttachment) {
 	if (!IsValid(SourceMob)) {
 		LogErrorNoContext("Trying using skill from invalid mob. Use skill failed.");
 		return nullptr;
 	}
 	
+
 	AActor* OutSkillActor = SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform);
 	ANaMobSkill* OutSkill = static_cast<ANaMobSkill*>(OutSkillActor);
 	check(OutSkill);
 
 	// Set up attachment
+
+	if (!DoAttachment) {
+		return OutSkill;
+	}
 
 	/* Check validity */
 	if (!IsValid(AttachToActor)) {
@@ -63,3 +68,13 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobS
 	return OutSkill;
 }
 
+void ANaMobSkill::ClearCollisionSet() {
+	for (auto & Col : CollisionSet) {
+		if (!IsValid(Col)) 
+			Collisions.Remove(Col);
+	}
+}
+
+void ANaMobSkill::GetCollisions(TSet<ANaMobSkillCollision*>& Collisions) {
+	Collisions = CollisionSet;
+}

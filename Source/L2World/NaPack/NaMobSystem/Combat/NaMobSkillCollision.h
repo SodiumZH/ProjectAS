@@ -51,6 +51,18 @@ protected:
 	FName SocketName;
 	
 
+	/* Generating */
+
+	// Make a collision. AttachToActor == nullptr => attach to source mob. AttachToComponent == nullptr => attach to root component.
+	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
+	static ANaMobSkillCollision* MakeCollision(
+		ANaMobSkill* Source,
+		TSubclassOf<ANaMobSkillCollision> Class,
+		AActor* AttachToActor = nullptr,
+		USceneComponent* AttachToComponent = nullptr,
+		FTransform Tranform = FTransform(),
+		bool DoAttachment = true
+	);
 
 
 };
