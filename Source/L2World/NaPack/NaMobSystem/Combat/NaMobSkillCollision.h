@@ -2,10 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/ShapeComponent.h"
-#include "Components/BoxComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "Components/SphereComponent.h"
 #include "../../NaGlobalHeader.h"
 #include "NaMobSkillCollision.generated.h"
 
@@ -13,6 +9,12 @@
 
 class ANaMob;
 class ANaMobSkill;
+class USceneComponent;
+class UShapeComponent;
+class UBoxComponent;
+class UCapsuleComponent;
+class USphereComponent;
+class UPrimitiveComponent;
 
 UENUM()
 enum class ESkillCollisonShape :uint8 {
@@ -53,17 +55,36 @@ protected:
 
 	/* Generating */
 
-	// Make a collision. AttachToActor == nullptr => attach to source mob. AttachToComponent == nullptr => attach to root component.
-	UFUNCTION(BlueprintCallable, Category = "NaPack|NaMobSystem")
-	static ANaMobSkillCollision* MakeCollision(
-		ANaMobSkill* Source,
+	/** Make a collision from a skill.
+	* @Param SourceSkill The skill owning this collision.
+	* @Param Class Applied skill collision class.
+	* @Param InTransform Relative transform.
+	* @Param AttachToComponent Component this collision should attach. If this param is left null, skill will attach to the root component.
+	* @Param SocketName Socket of attachment of this skill.
+	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
+	*/
+	static ANaMobSkillCollision* MakeCollisionByClass(
+		ANaMobSkill* SourceSkill,
 		TSubclassOf<ANaMobSkillCollision> Class,
-		AActor* AttachToActor = nullptr,
+		const FTransform & InTranform,
 		USceneComponent* AttachToComponent = nullptr,
-		FTransform Tranform = FTransform(),
+		FName SocketName = NAME_None,
+		float LifeSpan = 0.f,
 		bool DoAttachment = true
 	);
 
+	void Destroyed() override;
+
+	/* Collision detecting */
+
+	// Called when hit detected. Initial overlap will not call this, but call SendInitialOverlap().
+	void SendHit(
+		UPrimitiveComponent* HitComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		FVector NormalImpulse,
+		FHitResult& HitResult
+	);
 
 };
 

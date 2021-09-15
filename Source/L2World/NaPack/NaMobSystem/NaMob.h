@@ -331,8 +331,14 @@ public:
 
 
 	/* Skill */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Combat")
-		class ANaMobSkill* UseSkill(TSubclassOf<class ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName = NAME_None, AActor* AttachToActor = nullptr, class USceneComponent* AttachToComponent = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	class ANaMobSkill* UseSkill(
+		TSubclassOf<class ANaMobSkill> SkillClass,
+		const FTransform & InTransform,
+		class USceneComponent* AttachToComponent = nullptr,
+		FName SocketName = NAME_None,
+		bool DoAttachment = true
+	);
 
 	
 	//=======================================================================

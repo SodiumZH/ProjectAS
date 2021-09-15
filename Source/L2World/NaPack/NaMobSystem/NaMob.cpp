@@ -338,9 +338,14 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 	OnMobTakingDamage(Damage);
 }
 
-ANaMobSkill* ANaMob::UseSkill(TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent) {
-	
-	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, SocketName, AttachToActor, AttachToComponent);
+ANaMobSkill* ANaMob::UseSkill(
+	TSubclassOf<class ANaMobSkill> SkillClass,
+	const FTransform & InTransform,
+	class USceneComponent* AttachToComponent,
+	FName SocketName,
+	bool DoAttachment
+){
+	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, AttachToComponent, SocketName, DoAttachment);
 }
 
 

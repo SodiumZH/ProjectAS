@@ -3,6 +3,7 @@
 #include "NaMobSkill.h"
 #include "../NaMob.h"
 #include "Components/SceneComponent.h"
+#include "NaMobSkillCollision.h"
 #include "../../NaComponent/TimeControlComponent.h"
 
 ANaMobSkill::ANaMobSkill(){
@@ -26,37 +27,37 @@ UTimeControlComponent* ANaMobSkill::GetTimeControl() {
 	return TimeControl;
 }
 
-ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobSkill> SkillClass, const FTransform & InTransform, FName SocketName, AActor* AttachToActor, USceneComponent* AttachToComponent, bool DoAttachment) {
+ANaMobSkill* ANaMobSkill::UseSkillByClass(
+	ANaMob* SourceMob, 
+	TSubclassOf<ANaMobSkill> SkillClass, 
+	const FTransform & InTransform, 
+	USceneComponent* AttachToComponent,
+	FName SocketName,
+	bool DoAttachment
+) {
+	// If SourceMob is invalid, stop spawning
 	if (!IsValid(SourceMob)) {
 		LogErrorNoContext("Trying using skill from invalid mob. Use skill failed.");
 		return nullptr;
 	}
 	
-
+	// Spawn skill
 	AActor* OutSkillActor = SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform);
 	ANaMobSkill* OutSkill = static_cast<ANaMobSkill*>(OutSkillActor);
 	check(OutSkill);
-
-	// Set up attachment
-
+	
+	// If use world transform, simply return without attachment
 	if (!DoAttachment) {
 		return OutSkill;
 	}
 
-	/* Check validity */
-	if (!IsValid(AttachToActor)) {
-		if (AttachToActor)	// existing but invalid
-			LogErrorNoContext("Trying attaching skill to invalid actor. Will attach to source mob instead.");
-		AttachToActor = SourceMob;
-	}
+	/* Set up attachment */
+	
+	// If remains null, attach to source
 	if (!IsValid(AttachToComponent)) {
 		if (AttachToComponent)
-			LogErrorNoContext("Trying attaching skill to invalid component. Will attach to root component instead.");
-		AttachToComponent = AttachToActor->GetRootComponent();
-	}
-	if (AttachToComponent->GetOwner() != AttachToActor) {
-		LogErrorNoContext("Trying to attach to a component not owned by the attaching actor. Will attach to root component of the actor of attachment instead.");
-		AttachToComponent= AttachToActor->GetRootComponent();
+			LogWarningContext("Trying attaching skill to invalid component. Will attach to root component of source instead.", SourceMob);
+		AttachToComponent = SourceMob->GetRootComponent();
 	}
 
 	/* Attach */
@@ -71,10 +72,19 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(ANaMob* SourceMob, TSubclassOf<ANaMobS
 void ANaMobSkill::ClearCollisionSet() {
 	for (auto & Col : CollisionSet) {
 		if (!IsValid(Col)) 
-			Collisions.Remove(Col);
+			CollisionSet.Remove(Col);
 	}
 }
 
-void ANaMobSkill::GetCollisions(TSet<ANaMobSkillCollision*>& Collisions) {
-	Collisions = CollisionSet;
+TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Unsafe() {
+	return CollisionSet;
+}
+
+TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Safe() {
+	ClearCollisionSet();
+	return CollisionSet;
+}
+
+void ANaMobSkill::GetCollisionSet_BP(TSet<ANaMobSkillCollision*>& Collisions) {
+	Collisions = GetCollisionSet_Safe();
 }
