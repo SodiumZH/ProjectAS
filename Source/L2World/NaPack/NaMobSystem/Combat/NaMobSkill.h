@@ -20,14 +20,17 @@ class ANaMob;
 class UTimeControlComponent;
 class ANaMobSkillCollision;
 
+DECLARE_DYNAMIC_DELEGATE
+
 UENUM(BlueprintType)
 enum class ESkillCollisionLocationType :uint8 {
 	SCLT_RelToSkill		UMETA(DisplayName = "RelativeToSkill"),
 	SCLT_RelToSource	UMETA(DisplayName = "RelativeToSource"),
 	SCLT_RelToActor		UMETA(DisplayName = "RelativeToAttachedActor"),
 	SCLT_RelToComponent	UMETA(DisplayName = "RelativeToAttachedComponent"),
-	SCLT_Rel
+	SCLT_World			UMETA(DisplayName = "World")
 };
+
 
 
 UCLASS(BlueprintType)
@@ -94,7 +97,7 @@ protected:
 
 public:
 
-	// Get collision set without check validity. Check validity before calling collisions or iteration.
+	// Get collision set without validity check. Check validity before calling collisions or iteration.
 	TSet<ANaMobSkillCollision*> & GetCollisionSet_Unsafe();
 
 	// Clear invalid elements and get collision set. Safe to iterate. 
@@ -104,22 +107,9 @@ public:
 	void GetCollisionSet_BP(TSet<ANaMobSkillCollision*>& Collisions);
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|NaMobSystem")
-	void ReceiveCollisionHit(
-		ANaMobSkillCollision* SourceCollision,
-		AActor* OtherActor, 
-		UPrimitiveComponent* OtherComponent,
-		FVector NormalImpulse, 
-		FHitResult& HitResult,
-		bool HitResultIsValid
-	);
-	void ReceiveCollisionHit_Implementation(
-		ANaMobSkillCollision* SourceCollision,
-		AActor* OtherActor, 
-		UPrimitiveComponent* OtherComponent,
-		FVector NormalImpulse,
-		FHitResult& HitResult,
-		bool HitResultIsValid
-	) {};
+	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);
+	void ReceiveCollisionHit_Implementation(const FSkillCollisionHitReturn & HitData) {};
+
 
 
 };

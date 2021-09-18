@@ -23,6 +23,38 @@ enum class ESkillCollisonShape :uint8 {
 	SCS_Box 	UMETA(DisplayName = "Box")
 };
 
+USTRUCT(BlueprintType)
+struct FSkillCollisionHitReturn {
+
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	FSkillCollisionHitReturn(
+		ANaMobSkillCollision* InSourceCollision,
+		AActor* InOtherActor,
+		UPrimitiveComponent* InOtherComponent,
+		FVector InNormalImpulse,
+		const FHitResult & InHitResult
+	);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ANaMobSkillCollision* SourceCollision;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	AActor* OtherActor;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPrimitiveComponent* OtherComponent;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector NormalImpulse;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FHitResult HitResult;
+
+};
+
 UCLASS(BlueprintType)
 class NAPACK_API ANaMobSkillCollision :public AActor {
 
@@ -55,6 +87,8 @@ protected:
 
 	/* Generating */
 
+public:
+
 	/** Make a collision from a skill.
 	* @Param SourceSkill The skill owning this collision.
 	* @Param Class Applied skill collision class.
@@ -77,14 +111,14 @@ protected:
 
 	/* Collision detecting */
 
-	// Called when hit detected. Initial overlap will not call this, but call SendInitialOverlap().
-	void SendHit(
-		UPrimitiveComponent* HitComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComponent,
-		FVector NormalImpulse,
-		FHitResult& HitResult
-	);
+	// Called when hit detected.
+	void SendHit(const FSkillCollisionHitReturn & Data);
+
+protected:
+
+	virtual void SendHitDelegateFunc(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult & HitResult);
+
+	TSet<AActor*> AlreadyHitActors;
 
 };
 

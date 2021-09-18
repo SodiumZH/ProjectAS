@@ -8,13 +8,28 @@
 #include "NaMobSkill.h"
 #include "../../NaUtility/NaDebugUtility.h"
 
+
+FSkillCollisionHitReturn::FSkillCollisionHitReturn(
+	ANaMobSkillCollision* InSourceCollision,
+	AActor* InOtherActor,
+	UPrimitiveComponent* InOtherComponent,
+	FVector InNormalImpulse,
+	const FHitResult & InHitResult
+) {
+	SourceCollision = InSourceCollision;
+	OtherActor = InOtherActor;
+	OtherComponent = InOtherComponent;
+	NormalImpulse = InNormalImpulse;
+	HitResult = InHitResult;
+}
+
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
 	RootComponent = CreateDefaultSubobject<UShapeComponent>(TEXT("CollisionDefault"));
 
+	OnActorHit.BindDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
+
 }
-
-
 
 void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
@@ -102,17 +117,18 @@ void ANaMobSkillCollision::Destroyed() {
 	Super::Destroyed();
 }
 
-void ANaMobSkillCollision::SendHit(
-	UPrimitiveComponent* HitComponent,
-	AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent,
-	FVector NormalImpulse,
-	FHitResult& HitResult
-){
+void ANaMobSkillCollision::SendHit(const FSkillCollisionHitReturn & Data){
 	// Send only when HitComponent is root collision body
 	if (HitComponent->GetOwner() != this)
 		return;
 
-	SourceSkill->ReceiveCollisionHit(this, OtherActor, OtherComponent, NormalImpulse, HitResult, true);
+	SourceSkill->ReceiveCollisionHit(Data);
 
+}
+
+void SendHitDelegateFunc(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult & HitResult) {
+	if (!AlreadyHitActors.Contains(OtherActor)) {
+		SendHit(FSkillCollisionHitReturn(HitComponent, OtherActor, OtherComponent, NormalImpulse, HitResult));
+		AlreadyHitActors.Emplace(OtherActor);
+	}
 }
