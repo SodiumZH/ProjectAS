@@ -98,6 +98,7 @@ void UNaMobPlayerComponent::MoveRight(float val) {
 	{
 		Mob->AddMovementInput(GetRight(), val);
 	}
+
 	RightAxisValue = val;
 }
 
