@@ -30,8 +30,11 @@ struct FSkillCollisionHitReturn {
 
 public:
 
+	FSkillCollisionHitReturn();
+
 	FSkillCollisionHitReturn(
 		ANaMobSkillCollision* InSourceCollision,
+		UPrimitiveComponent* HitComponent,
 		AActor* InOtherActor,
 		UPrimitiveComponent* InOtherComponent,
 		FVector InNormalImpulse,
@@ -40,6 +43,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ANaMobSkillCollision* SourceCollision;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPrimitiveComponent* HitComponent;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AActor* OtherActor;
@@ -111,12 +117,15 @@ public:
 
 	/* Collision detecting */
 
+protected:
+	
 	// Called when hit detected.
 	void SendHit(const FSkillCollisionHitReturn & Data);
 
-protected:
-
-	virtual void SendHitDelegateFunc(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult & HitResult);
+	virtual void ConstructHit(FSkillCollisionHitReturn & OutHit, UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult & HitResult);
+	
+	UFUNCTION()
+	void SendHitDelegateFunc(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult & HitResult);
 
 	TSet<AActor*> AlreadyHitActors;
 

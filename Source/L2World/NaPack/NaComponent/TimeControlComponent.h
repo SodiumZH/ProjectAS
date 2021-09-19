@@ -86,8 +86,14 @@ protected:
 	TMap<FName, FTimeLoopEvent> LoopEvents;
 
 	void Tick_PointEvents();
-	
+
+	// When several point events are executed in a frame, record them to remove after iterating the map "PointEvents".
+	// This is intended to prevent potential errors when changing the map during iteration.
+	// Should be emptied every frame.
+	TSet<FName> PointEventsToBeRemoved; 
+
 	void Tick_LoopEvents();
+
 
 public:	
 

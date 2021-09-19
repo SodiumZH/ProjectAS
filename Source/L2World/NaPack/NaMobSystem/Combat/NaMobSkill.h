@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../../NaGlobalHeader.h"
+#include "NaMobSkillCollision.h"
 #include "NaMobSkill.generated.h"
 
 /**
@@ -19,8 +20,7 @@
 class ANaMob;
 class UTimeControlComponent;
 class ANaMobSkillCollision;
-
-DECLARE_DYNAMIC_DELEGATE
+struct FSkillCollisionHitReturn;
 
 UENUM(BlueprintType)
 enum class ESkillCollisionLocationType :uint8 {
@@ -108,7 +108,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|NaMobSystem")
 	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);
-	void ReceiveCollisionHit_Implementation(const FSkillCollisionHitReturn & HitData) {};
+	virtual void ReceiveCollisionHit_Implementation(const FSkillCollisionHitReturn & HitData) {};
 
 
 

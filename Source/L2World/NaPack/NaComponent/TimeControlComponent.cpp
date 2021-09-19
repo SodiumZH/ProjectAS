@@ -93,7 +93,7 @@ float UTimeControlComponent::GetTimeSecondsFromBeginPlay() {
 }
 
 bool UTimeControlComponent::IsPassing(double TimePoint) {
-	return (GetTime() >= TimePoint) && (GetTimeLastTick() < TimePoint);
+	return (GetTime() >= TimePoint) && (GetTimeLastTick() < TimePoint || (GetTimeLastTick() == 0 && TimePoint == 0));
 }
 
 bool UTimeControlComponent::IsPassing_Float(float TimePoint) {
@@ -124,12 +124,20 @@ void UTimeControlComponent::AddLoopEvent(FName Name, float TimeSecondsFromNow, f
 
 void UTimeControlComponent::Tick_PointEvents() {
 
+	
 	for (auto & Elem : PointEvents) {
 		if (IsPassing(Elem.Value.TimePointSeconds)) {
 			Elem.Value.EventDelegate.ExecuteIfBound();
-			PointEvents.Remove(Elem.Key);
+			PointEventsToBeRemoved.Add(Elem.Key);
 		}
 	}
+	if (PointEventsToBeRemoved.Num() > 0) {
+		for (auto & RemvElem : PointEventsToBeRemoved) {
+			PointEvents.Remove(RemvElem);
+		}
+		PointEventsToBeRemoved.Empty();
+	}
+
 }
 
 void UTimeControlComponent::Tick_LoopEvents() {
