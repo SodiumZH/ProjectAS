@@ -26,11 +26,8 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 		Out->OwnerMob = nullptr;
 		Out->SocketName = NAME_None;
 		TArray<USceneComponent*> AllComponents;
-		Out->Mesh->GetChildrenComponents(true, AllComponents);
-		for (auto Comp : AllComponents) {
-			if (dynamic_cast<UShapeComponent>(Comp)) {
-				dynamic_cast<UShapeComponent>(Comp)->Set
-			}
+		Out->Mesh->SetSimulatePhysics(true);
+		
 		}
 
 	}
