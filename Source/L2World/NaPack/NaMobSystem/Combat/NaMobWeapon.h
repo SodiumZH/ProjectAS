@@ -2,9 +2,9 @@
 
 /* NaMobWeapon is the basic weapon class for NaMob.
 * It can be attached to the "hand" socket(s) (specified manually) of NaMob to act as weapons.
-* The root is a static mesh (visible). A method of weapon collision generation is also defined.
-* Defaultly it doesn't allow collision (ignore all). You can add shape components in BP to add collision.
-* If it doesn't have an owner (Owner == nullptr or invalid), it will simulate physics, enabling the weapon to drop on the ground.
+* The root is a static mesh (visible). 
+* A method of weapon collision generation is also defined.
+* If it doesn't have an owner (Owner == nullptr or invalid), the root static mesh will simulate physics, enabling the weapon to drop on the ground.
 */
 
 #include "CoreMinimal.h"
@@ -15,9 +15,7 @@
 class ANaMob;
 class ANaMobSkill;
 class ANaMobSkillCollision;
-
-USTRUCT(BlueprintType)
-
+class UStaticMeshComponent;
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMobWeapon : public AActor {
@@ -27,6 +25,8 @@ class NAPACK_API ANaMobWeapon : public AActor {
 public:
 
 	ANaMobWeapon();
+
+	UStaticMeshComponent* Mesh;
 
 	/* Attachment */
 
@@ -40,13 +40,14 @@ public:
 
 	/** Generate a new weapon and give it to a mob. 
 	* @Param Class Class of weapon to spawn.
-	* @Param Target Owner mob to give the weapon. If it's left null, the weapon will spawn in world transform and start to simulate physics as an "ownerless weapon".
-	* @Param Transform Relative transform of the weapon. If owner is not specified, this will be the initial world transform.
+	* @Param Target Owner mob to give the weapon. If enables no attachment, the weapon will spawn in world transform and start to simulate physics as an "ownerless weapon".
+	* @Param Transform Relative transform of the weapon. If enables no attachment, this will be the initial world transform.
 	* @Param SocketName Socket name this weapon will attach to.
+	* @Param NoAttach If true, it will generate an ownerless weapon without attaching to any mob. A valid mob "Target" is still required as world context.
 	@ @ReturnValue The weapon object generated.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn pick equip"), Category = "NaPack|MobSystem")
-	ANaMobWeapon* AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform* Transform, FName SocketName = Name_NONE);
+	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
+	ANaMobWeapon* AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket = NAME_None, bool NoAttachment = false);
 
 	/** Give an existing weapon to a mob. 
 	* @Param Weapon weapon to give.
@@ -57,21 +58,21 @@ public:
 	* If false, it will not do anything if the weapon already has an owner.
 	*/
 	
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn pick equip"), Category = "NaPack|MobSystem")
-	void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = Name_NONE, bool ForceGive = false);
+//	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
+	//void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = Name_NONE, bool ForceGive = false);
 
 	/** Delete a weapon, ignoring if it has an owner. Warning: after removal the object references (pointers) to this weapon will become invalid. 
-	* @Param Weapon weapon to delete.
+	* @Param Weapon weapon to delete.			
 	*/
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "drop remove delete"), Category = "NaPack|MobSystem")
-	void RemoveWeapon(ANaMobWeapon* Weapon);
+	//(BlueprintCallable, meta = (Keywords = "drop remove delete"), Category = "NaPack|MobSystem")
+	//void RemoveWeapon(ANaMobWeapon* Weapon);
 
 	/** Make a weapon ownerless and drop it on the ground by starting simulating physics. Warning: this action have potential risk of
 	* unexpected behaviors in the previous owner due to loss of ownership of the weapon.
 	* If the weapon is already ownerless, this function will not do anything.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "drop throw remove delete"), Category = "NaPack|MobSystem")
-	void DropWeapon(ANaMobWeapon* Weapon);
+//	UFUNCTION(BlueprintCallable, meta = (Keywords = "drop throw remove delete"), Category = "NaPack|MobSystem")
+//void DropWeapon(ANaMobWeapon* Weapon);
 
 	/* Weapon Collision */
 

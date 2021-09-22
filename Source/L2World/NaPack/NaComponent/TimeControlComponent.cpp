@@ -129,6 +129,7 @@ void UTimeControlComponent::Tick_PointEvents() {
 		if (IsPassing(Elem.Value.TimePointSeconds)) {
 			Elem.Value.EventDelegate.ExecuteIfBound();
 			PointEventsToBeRemoved.Add(Elem.Key);
+			PointEventsToBeRemoved.Add(Elem.Key);
 		}
 	}
 	if (PointEventsToBeRemoved.Num() > 0) {

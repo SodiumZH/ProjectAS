@@ -230,13 +230,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobWeapon.h">
-      <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobWeapon.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\NaMobWeapon.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
