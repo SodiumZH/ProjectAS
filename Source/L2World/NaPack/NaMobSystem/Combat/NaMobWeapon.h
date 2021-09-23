@@ -38,6 +38,24 @@ protected:
 
 public:
 
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	inline ANaMob* GetOwner() { return OwnerMob; };
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	bool HaveOwner();
+
+	/** Check if there's anything wrong with the ownership of the weapon. 
+	* For example: ownerless but not simulating physics, ownered but simulating, not attached to the owner, ...
+	* It will print error information to the log, and try fixing if needed.
+	* Warning: This is a function for debugging. Do not depend on this to fix ownership errors in runtime!! In release it will not do anything to save resource.
+	* @Param TryFixing If true, it will try fixing the problem. Generally it will set the parameters of weapon to adapt the real condition. E.g. if ownered but simulating, it will be set ownerless.
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	void CheckOwner(bool TryFixing = false);
+
+	/* Spawn */
+
+public:
 	/** Generate a new weapon and give it to a mob. 
 	* @Param Class Class of weapon to spawn.
 	* @Param Target Owner mob to give the weapon. If enables no attachment, the weapon will spawn in world transform and start to simulate physics as an "ownerless weapon".

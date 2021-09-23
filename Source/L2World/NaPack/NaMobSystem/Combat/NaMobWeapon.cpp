@@ -12,7 +12,33 @@ ANaMobWeapon::ANaMobWeapon() {
 
 	RootComponent = Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
+	Mesh->SetCollisionProfileName(TEXT("OverlapAll"));
 }
+
+bool ANaMobWeapon::HaveOwner() {
+	return IsValid(OwnerMob);
+}
+
+void ANaMobWeapon::CheckOwner(bool TryFixing) {
+	
+#if WITH_EDITOR
+
+	/* Case of wrong ownership corresponding to simulation */
+	if (HaveOwner() && Mesh->IsSimulatingPhysics()) {
+		LogError("The weapon has an owner but simulating physics.");
+		if (TryFixing)
+			OwnerMob = nullptr;
+	}
+
+	if (!HaveOwner() && !Mesh->IsSimulatingPhysics()) {
+		LogError("The weapon is ownerless but not simulating physics.");
+		if(TryFixing)
+			
+	}
+
+#endif
+}
+
 
 ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket, bool NoAttachment) {
 
@@ -25,12 +51,16 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 	if (NoAttachment) {
 		Out->OwnerMob = nullptr;
 		Out->SocketName = NAME_None;
-		TArray<USceneComponent*> AllComponents;
 		Out->Mesh->SetSimulatePhysics(true);
-		
-		}
-
+		Out->Mesh->SetCollisionProfileName(TEXT("PhysicsActor"));
 	}
-	
-	
+	else {
+		Out->OwnerMob = Target;
+		Out->SocketName = Socket;
+		Out->AttachToComponent(Target->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, Socket);
+	}
+
+	return Out;
 }
+	
+	
