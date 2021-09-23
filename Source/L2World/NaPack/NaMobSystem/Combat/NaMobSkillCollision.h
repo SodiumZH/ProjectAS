@@ -15,12 +15,14 @@ class UBoxComponent;
 class UCapsuleComponent;
 class USphereComponent;
 class UPrimitiveComponent;
+class UStaticMeshComponent;
 
 UENUM()
-enum class ESkillCollisonShape :uint8 {
+enum class ESkillCollisionShape :uint8 {
 	SCS_Sphere	UMETA(DisplayName = "Sphere"),
 	SCS_Capsule	UMETA(DisplayName = "Capsule"),
-	SCS_Box 	UMETA(DisplayName = "Box")
+	SCS_Box 	UMETA(DisplayName = "Box"),
+	SCS_StaticMesh UMETA(DisplayName = "StaticMesh")
 };
 
 USTRUCT(BlueprintType)
@@ -84,12 +86,50 @@ protected:
 
 	ANaMobSkill* SourceSkill;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	ESkillCollisonShape CollisionShape = ESkillCollisonShape::SCS_Capsule;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")
+	ESkillCollisionShape CollisionShape = ESkillCollisionShape::SCS_Capsule;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhereCategory = "MobSkillCollision")
 	FName SocketName;
 	
+	/* Transform */
+
+	// Box half X size, capsule radius or sphere radius. Invalid for static mesh.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")
+	float HalfSizeX = 8.f;
+
+	// Box half Z size or capsule half height. Invalid for sphere and static mesh.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")
+	float HalfSizeZ = 16.f;
+
+	// Box half Y size. Invalid for non-box.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")
+	float HalfSizeY = 8.f;
+
+public:
+
+	/* Get collision half size. Please note that the order is XYZ.
+	*/
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "GetHalfSize"), Category = "NaPack|MobSystem")
+	inline FVector StaticGetHalfSize() { return FVector(HalfSizeX, HalfSizeY, HalfSizeZ); };
+
+	/* Set collision half size. Please note that the order is XZY instead of XYZ. 
+	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
+	* @Param InX Box half X size, capsule radius or sphere radius.
+	* @Param InZ Box half Z size or capsule half height. Invalid for sphere (just keep default).
+	* @Param InY Box half Y size. Invalid for sphere and capsule (just keep default).
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	void SetHalfSize(InX = 8.f, InZ= 16.f, InY = 8.f);
+	
+	/* Set collision half size. Please note that the order is XZY instead of XYZ.
+	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
+	* InVec.X: Box half X size, capsule radius or sphere radius.
+	* InVec.Y: Box half Y size. Invalid for sphere and capsule (just keep default).
+	* InVec.Z: InZ Box half Z size or capsule half height. Invalid for sphere (just keep default).
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	void SetHalfSizeVector(InVec = FVector(8.f, 16.f, 8.f)) { SetHalfSize(InVec.X, InVec.Z, InVec.Y); };
 
 	/* Generating */
 
@@ -103,6 +143,7 @@ public:
 	* @Param SocketName Socket of attachment of this skill.
 	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
 	*/
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
 	static ANaMobSkillCollision* MakeCollisionByClass(
 		ANaMobSkill* SourceSkill,
 		TSubclassOf<ANaMobSkillCollision> Class,

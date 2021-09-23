@@ -45,32 +45,76 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	Super::OnConstruction(trans);
 
-	UShapeComponent* temp = nullptr;
+	UPrimitiveComponent* Root = nullptr;
+
+	RootComponent->DestroyComponent();
 
 	switch (CollisionShape) {
-	case ESkillCollisonShape::SCS_Sphere: {
-		temp = static_cast<UShapeComponent*>(NewObject<USphereComponent>(this, TEXT("Collision")));
+	case ESkillCollisionShape::SCS_Sphere: {
+		USphereComponent* ColSph = NewObject<USphereComponent>(this, TEXT("Collision"));
+		ColSph->SetSphereRadius(HalfSizeX);
+		Root = static_cast<UPrimitiveComponent*>(ColSph);
 		break;
 	}
-	case ESkillCollisonShape::SCS_Box: {
-		temp = static_cast<UShapeComponent*>(NewObject<UBoxComponent>(this, TEXT("Collision")));
+	case ESkillCollisionShape::SCS_Box: {
+		UBoxComponent* ColBox = NewObject<UBoxComponent>(this, TEXT("Collision"));
+		ColBox->SetBoxExtent(FVector(HalfSizeX, HalfSizeY, HalfSizeZ));
+		Root = static_cast<UPrimitiveComponent*>(ColBox);
 		break;
 	}
-	case ESkillCollisonShape::SCS_Capsule: {
-		temp = static_cast<UShapeComponent*>(NewObject<UCapsuleComponent>(this, TEXT("Collision")));
+	case ESkillCollisionShape::SCS_Capsule: {
+		UCapsuleComponent* ColCps = NewObject<UCapsuleComponent>(this, TEXT("Collision"));
+		ColCps->SetCapsuleSize(HalfSizeX, HalfSizeZ);
+		Root = static_cast<UPrimitiveComponent*>(ColCps);
+		break;
+	}
+	case ESkillCollisionShape::SCS_StaticMesh: {
+		UStaticMesh* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("Collision"));
+		Root = static_cast<UPrimitiveComponent*>(ColMsh);
 		break;
 	}
 	default: {
 		checkNoEntry();
 	}
 	}
-	temp->RegisterComponent();
-	RootComponent = temp;
+	Root->RegisterComponent();
+	RootComponent = Root;
 
-	static_cast<UShapeComponent*>(RootComponent)->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
+	static_cast<UPrimitiveComponent*>(RootComponent)->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
 
-	RootComponent;
 
+}
+
+void ANaMobSkillCollision::SetHalfSize(InX, InZ, InY) {
+	switch (CollisionShape) {
+	case ESkillCollisionShape::SCS_Sphere: {
+		USphereComponent* ColSph = dynamic_cast<USphereComponent*>(RootComponent);
+		check(ColSph);
+		ColSph->SetSphereRadius(InX);
+		break;
+	}
+	case ESkillCollisionShape::SCS_Box: {
+		UBoxComponent* ColBox = dynamic_cast<UBoxComponent*>(RootComponent);
+		check(ColBox);
+		ColBox->SetBoxExtent(FVector(InX, InY, InZ));
+		break;
+	}
+	case ESkillCollisionShape::SCS_Capsule: {
+		UCapsuleComponent* ColCps = dynamic_cast<UCapsuleComponent*>(RootComponent);
+		check(ColCps);
+		ColCps->SetCapsuleSize(InX, InZ);
+		break;
+	}
+	case ESkillCollisionShape::SCS_StaticMesh: {
+		break;
+	}
+	default: {
+		checkNoEntry();
+	}
+	}
+	HalfSizeX = InX;
+	HalfSizeY = InY;
+	HalfSizeZ = InZ;
 }
 
 void ANaMobSkillCollision::BeginPlay() {
