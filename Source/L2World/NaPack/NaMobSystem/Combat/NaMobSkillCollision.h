@@ -89,7 +89,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")
 	ESkillCollisionShape CollisionShape = ESkillCollisionShape::SCS_Capsule;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhereCategory = "MobSkillCollision")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision")
 	FName SocketName;
 	
 	/* Transform */
@@ -120,7 +120,7 @@ public:
 	* @Param InY Box half Y size. Invalid for sphere and capsule (just keep default).
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetHalfSize(InX = 8.f, InZ= 16.f, InY = 8.f);
+	void SetHalfSize(float InX = 8.f, float InZ= 16.f, float InY = 8.f);
 	
 	/* Set collision half size. Please note that the order is XZY instead of XYZ.
 	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
@@ -129,7 +129,7 @@ public:
 	* InVec.Z: InZ Box half Z size or capsule half height. Invalid for sphere (just keep default).
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetHalfSizeVector(InVec = FVector(8.f, 16.f, 8.f)) { SetHalfSize(InVec.X, InVec.Z, InVec.Y); };
+	void SetHalfSizeVector(FVector InVec = FVector(8.f, 16.f, 8.f)) { SetHalfSize(InVec.X, InVec.Z, InVec.Y); };
 
 	/* Generating */
 
@@ -149,7 +149,7 @@ public:
 		TSubclassOf<ANaMobSkillCollision> Class,
 		const FTransform & InTranform,
 		USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
+		FName Socket = NAME_None,
 		float LifeSpan = 0.f,
 		bool DoAttachment = true
 	);

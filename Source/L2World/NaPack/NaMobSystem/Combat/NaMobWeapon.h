@@ -50,15 +50,15 @@ protected:
 
 	ANaMob* OwnerMob;
 
-	FName* SocketName;
+	FName SocketName;
 
 public:
 
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	inline ANaMob* GetOwner() { return OwnerMob; };
+	inline ANaMob* GetOwnerMob() { return OwnerMob; };
 
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	inline bool HasOwner() { return IsValid(OwnerMob); };
+	inline bool HasOwner();
 
 	/** Check if there's anything wrong with the ownership of the weapon. 
 	* For example: ownerless but not simulating physics, ownered but simulating, not attached to the owner, ...
@@ -93,7 +93,7 @@ public:
 	*/
 	
 	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
-	static void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = Name_NONE, bool ForceGive = false);
+	static void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = NAME_None, bool ForceGive = false);
 
 	/** Make a weapon ownerless and drop it on the ground by starting simulating physics. Warning: this action have potential risk of
 	* unexpected behaviors in the previous owner due to loss of ownership of the weapon.

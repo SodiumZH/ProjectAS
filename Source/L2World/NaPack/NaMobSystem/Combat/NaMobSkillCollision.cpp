@@ -69,7 +69,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 		break;
 	}
 	case ESkillCollisionShape::SCS_StaticMesh: {
-		UStaticMesh* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("Collision"));
+		UStaticMeshComponent* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("Collision"));
 		Root = static_cast<UPrimitiveComponent*>(ColMsh);
 		break;
 	}
@@ -85,7 +85,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 }
 
-void ANaMobSkillCollision::SetHalfSize(InX, InZ, InY) {
+void ANaMobSkillCollision::SetHalfSize(float InX, float InZ, float InY) {
 	switch (CollisionShape) {
 	case ESkillCollisionShape::SCS_Sphere: {
 		USphereComponent* ColSph = dynamic_cast<USphereComponent*>(RootComponent);

@@ -15,7 +15,9 @@ ANaMobWeapon::ANaMobWeapon() {
 	Mesh->SetCollisionProfileName(TEXT("OverlapAll"));
 }
 
-
+bool ANaMobWeapon::HasOwner() {
+	return IsValid(OwnerMob);
+}
 
 void ANaMobWeapon::CheckOwner(bool TryFixing) {
 	
@@ -61,7 +63,7 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 		return nullptr;
 	}
 	
-	ANaMobWeapon* Out = static_cast<ANaMobWeapon*>(Target->GetWorld()->SpawnActor(Class.Get(), &InTransform));
+	ANaMobWeapon* Out = static_cast<ANaMobWeapon*>(Target->GetWorld()->SpawnActor(Class.Get(), &Transform));
 	if (NoAttachment) {
 		Out->OwnerMob = nullptr;
 		Out->SocketName = NAME_None;
@@ -95,8 +97,8 @@ void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket
 		Weapon->OwnerMob = Target;
 		Weapon->SocketName = Socket;
 	}
-	else if (!ForceGive && Weapon->HasOwner() && (Weapon->HasOwner() != Target)) {
-		LogWarning("GiveWeapon: trying giving an ownered weapon to another mob without Force Give. Will not do anything.");
+	else if (!ForceGive && Weapon->HasOwner() && (Weapon->GetOwnerMob() != Target)) {
+		LogWarningContext("GiveWeapon: trying giving an ownered weapon to another mob without Force Give. Will not do anything.", Target);
 	}
 
 	return;
