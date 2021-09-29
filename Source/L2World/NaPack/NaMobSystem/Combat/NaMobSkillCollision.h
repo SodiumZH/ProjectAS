@@ -84,6 +84,8 @@ public:
 
 protected:
 
+	UPrimitiveComponent* RootCollision;
+
 	ANaMobSkill* SourceSkill;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision|Shape")

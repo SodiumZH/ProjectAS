@@ -37,7 +37,8 @@ FSkillCollisionHitReturn::FSkillCollisionHitReturn(
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
-	RootComponent = CreateDefaultSubobject<UShapeComponent>(TEXT("CollisionDefault"));
+	RootComponent = RootCollision = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionDefault"));
+	
 
 }
 
@@ -51,25 +52,25 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	switch (CollisionShape) {
 	case ESkillCollisionShape::SCS_Sphere: {
-		USphereComponent* ColSph = NewObject<USphereComponent>(this, TEXT("Collision"));
+		USphereComponent* ColSph = NewObject<USphereComponent>(this, TEXT("CollisionSphere"));
 		ColSph->SetSphereRadius(HalfSizeX);
 		Root = static_cast<UPrimitiveComponent*>(ColSph);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Box: {
-		UBoxComponent* ColBox = NewObject<UBoxComponent>(this, TEXT("Collision"));
+		UBoxComponent* ColBox = NewObject<UBoxComponent>(this, TEXT("CollisionBox"));
 		ColBox->SetBoxExtent(FVector(HalfSizeX, HalfSizeY, HalfSizeZ));
 		Root = static_cast<UPrimitiveComponent*>(ColBox);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Capsule: {
-		UCapsuleComponent* ColCps = NewObject<UCapsuleComponent>(this, TEXT("Collision"));
+		UCapsuleComponent* ColCps = NewObject<UCapsuleComponent>(this, TEXT("CollisionCapsule"));
 		ColCps->SetCapsuleSize(HalfSizeX, HalfSizeZ);
 		Root = static_cast<UPrimitiveComponent*>(ColCps);
 		break;
 	}
 	case ESkillCollisionShape::SCS_StaticMesh: {
-		UStaticMeshComponent* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("Collision"));
+		UStaticMeshComponent* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("CollisionMesh"));
 		Root = static_cast<UPrimitiveComponent*>(ColMsh);
 		break;
 	}
@@ -169,7 +170,9 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 }
 
 void ANaMobSkillCollision::Destroyed() {
-	SourceSkill->GetCollisionSet_Unsafe().Remove(this);
+	if (IsValid(SourceSkill) && SourceSkill->GetCollisionSet_Unsafe().Contains(this)) {
+		SourceSkill->GetCollisionSet_Unsafe().Remove(this);
+	}
 	Super::Destroyed();
 }
 
