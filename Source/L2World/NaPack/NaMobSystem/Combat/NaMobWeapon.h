@@ -42,6 +42,7 @@ public:
 
 	ANaMobWeapon();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* Mesh;
 
 	/* Attachment */

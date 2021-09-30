@@ -78,7 +78,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 		checkNoEntry();
 	}
 	}
-	//Root->RegisterComponent();
+	//4Root->RegisterComponent();
 	//RootComponent = Root;
 
 	static_cast<UPrimitiveComponent*>(RootComponent)->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);

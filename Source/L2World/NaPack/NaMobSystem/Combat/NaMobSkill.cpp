@@ -94,6 +94,10 @@ void ANaMobSkill::GetCollisionSet_BP(TSet<ANaMobSkillCollision*>& Collisions) {
 }
 
 void ANaMobSkill::Destroyed() {
-	
+	for (auto & Col : CollisionSet) {
+		if (IsValid(Col)) {
+			Col->Destroy();
+		}
+	}
 	Super::Destroyed();
 }

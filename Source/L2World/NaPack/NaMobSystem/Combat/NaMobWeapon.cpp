@@ -59,8 +59,13 @@ void ANaMobWeapon::CheckOwner(bool TryFixing) {
 ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket, bool NoAttachment) {
 
 	if (!IsValid(Target)) {
-		LogErrorNoContext("Add New Weapon: invalid target. Weapon generation failed. Please note that a valid target mob is still needed as world context if enabled no attachment.");
+		LogErrorNoContext("Add New Weapon Failed:: invalid target. Weapon generation failed. Please note that a valid target mob is still needed as world context if enabled no attachment.");
 		return nullptr;
+	}
+
+	if (((Target->GetSkeletalMeshComponents().Num() == 0) || (!IsValid(Target->GetSkeletalMeshComponents()[0]))) && (!NoAttachment)) {
+		LogErrorNoContext("Add New Weapon: target doesn't have a valid skeletal mesh. This error emerges if no skeletal mesh is added to the target, or the first skeletal mesh component is invalid. Will not do attachment.");
+		NoAttachment = true;
 	}
 	
 	ANaMobWeapon* Out = static_cast<ANaMobWeapon*>(Target->GetWorld()->SpawnActor(Class.Get(), &Transform));
@@ -73,7 +78,7 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 	else {
 		Out->OwnerMob = Target;
 		Out->SocketName = Socket;
-		Out->AttachToComponent(Target->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, Socket);
+		Out->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
 	}
 
 	return Out;
@@ -82,18 +87,23 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket, bool ForceGive) {
 
 	if (!IsValid(Weapon)) {
-		LogErrorNoContext("Give Weapon: invalid weapon. To spawn a new weapon, use \"Add New Weapon\".");
+		LogErrorNoContext("Give Weapon Failed:: invalid weapon. To spawn a new weapon, use \"Add New Weapon\".");
 		return;
 	}
 
 	if (!IsValid(Target)) {
-		LogErrorNoContext("Give Weapon: invalid target mob.");
+		LogErrorNoContext("Give Weapon Failed: invalid target mob.");
+		return;
+	}
+
+	if ((Target->GetSkeletalMeshComponents().Num() == 0) || (!IsValid(Target->GetSkeletalMeshComponents()[0]))) {
+		LogErrorNoContext("Give Weapon Failed:: target doesn't have a valid skeletal mesh. This error emerges if no skeletal mesh is added to the target, or the first skeletal mesh component is invalid.");
 		return;
 	}
 
 	if (ForceGive || (!Weapon->HasOwner())) {
 		Weapon->Mesh->SetSimulatePhysics(false);
-		Weapon->AttachToComponent(Target->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, Socket);
+		Weapon->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
 		Weapon->OwnerMob = Target;
 		Weapon->SocketName = Socket;
 	}
