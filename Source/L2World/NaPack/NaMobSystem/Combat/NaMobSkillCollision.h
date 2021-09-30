@@ -110,6 +110,18 @@ protected:
 
 public:
 
+	/* Get functions */
+
+	// Get collision body of skill collision
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	inline UPrimitiveComponent* GetCollision() { return RootCollision; };
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	inline ANaMobSkill* GetSourceSkill() { return SourceSkill; };
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	inline FName GetSocketName() { return SocketName; };
+	
 	/* Get collision half size. Please note that the order is XYZ.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "GetHalfSize"), Category = "NaPack|MobSystem")
@@ -124,14 +136,14 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	void SetHalfSize(float InX = 8.f, float InZ= 16.f, float InY = 8.f);
 	
-	/* Set collision half size. Please note that the order is XZY instead of XYZ.
+	/* Set collision half size with vector input.
 	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
 	* InVec.X: Box half X size, capsule radius or sphere radius.
 	* InVec.Y: Box half Y size. Invalid for sphere and capsule (just keep default).
 	* InVec.Z: InZ Box half Z size or capsule half height. Invalid for sphere (just keep default).
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetHalfSizeVector(FVector InVec = FVector(8.f, 16.f, 8.f)) { SetHalfSize(InVec.X, InVec.Z, InVec.Y); };
+	void SetHalfSizeVector(FVector InVec = FVector(8.f, 8.f, 16.f)) { SetHalfSize(InVec.X, InVec.Z, InVec.Y); };
 
 	/* Generating */
 

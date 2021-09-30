@@ -37,7 +37,7 @@ FSkillCollisionHitReturn::FSkillCollisionHitReturn(
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
-	RootComponent = RootCollision = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionDefault"));
+	RootComponent = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionDefault"));
 	
 
 }
@@ -48,7 +48,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	UPrimitiveComponent* Root = nullptr;
 
-	RootComponent->DestroyComponent();
+	//RootComponent->DestroyComponent();
 
 	switch (CollisionShape) {
 	case ESkillCollisionShape::SCS_Sphere: {
@@ -78,8 +78,8 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 		checkNoEntry();
 	}
 	}
-	Root->RegisterComponent();
-	RootComponent = Root;
+	//Root->RegisterComponent();
+	//RootComponent = Root;
 
 	static_cast<UPrimitiveComponent*>(RootComponent)->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
 
