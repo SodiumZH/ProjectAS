@@ -84,7 +84,7 @@ public:
 
 protected:
 
-	UPrimitiveComponent* RootCollision;
+	UPrimitiveComponent* Collision;
 
 	ANaMobSkill* SourceSkill;
 
@@ -114,7 +114,7 @@ public:
 
 	// Get collision body of skill collision
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	inline UPrimitiveComponent* GetCollision() { return RootCollision; };
+	inline UPrimitiveComponent* GetCollision() { return Collision; };
 
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	inline ANaMobSkill* GetSourceSkill() { return SourceSkill; };
@@ -184,5 +184,10 @@ protected:
 
 	TSet<AActor*> AlreadyHitActors;
 
+public:
+	
+	// If true, the collision will not detect collision to the mob owning it (i.e. source mob of the source mob skill)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MobSkillCollision")
+	bool bIgnoreSourceMob = true;
 };
 

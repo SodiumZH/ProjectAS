@@ -25,11 +25,21 @@ struct FMobWeaponCollisionSpawnInfo {
 
 public:
 
-	ESkillCollisionShape Shape = ESkillCollisionShape::SCS_Capsule;
+	// Class of collision.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ANaMobSkillCollision> Class;
 
-	FTransform Transform = FTransform();
+	// Relative transform. To determine the transform, you can add a skill collision as child component to the root, adjust the transform, copy to this parameter and remove the collision.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTransform Transform = FTransform::Identity;
 
+	// Component the collision should attach to. If not specified, it will attach to the root component (i.e. static mesh).
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USceneComponent* AttachToComponent = nullptr;
 
+	// Socket of the weapon. Works only when the collision should attach to a component which has sockets. Note: this is not the mob socket.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName WeaponSocketName = NAME_None;
 
 };
 
@@ -105,6 +115,11 @@ public:
 
 	/* Weapon Collision */
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobWeapon|Collision")
+	FMobWeaponCollisionSpawnInfo CollisionSpawnInfo;
 
+	// Make weapon collision from a skill. Parameters of the collision are defined in the param "Collision Spawn Info". Set that param to change the collision spawning configs.
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	ANaMobSkillCollision* MakeWeaponCollision(ANaMobSkill* SourceSkill, float LifeSpan = 0.f);
 
 };

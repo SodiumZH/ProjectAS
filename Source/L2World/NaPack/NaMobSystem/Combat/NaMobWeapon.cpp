@@ -4,6 +4,9 @@
 #include "../NaMob.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ShapeComponent.h"
+#include "../NaMob.h"
+#include "NaMobSkill.h"
+#include "NaMobSkillCollision.h"
 #include "../../NaUtility/NaUtility.h"
 
 ANaMobWeapon::ANaMobWeapon() {
@@ -123,4 +126,28 @@ void ANaMobWeapon::DropWeapon() {
 		OwnerMob = nullptr;
 		SocketName = NAME_None;
 	}
+}
+
+ANaMobSkillCollision* ANaMobWeapon::MakeWeaponCollision(ANaMobSkill* SourceSkill, float LifeSpan) {
+
+	if (!IsValid(SourceSkill)) {
+		LogError("Make Weapon Collision Failed: invalid source skill.");
+		return nullptr;
+	}
+
+	if (IsValid(CollisionSpawnInfo.AttachToComponent) && CollisionSpawnInfo.AttachToComponent->GetOwner() != this) {
+		LogError("Make Weapon Collision: trying to attach to a component not owned by the weapon. Will attach to root component of weapon instead.");
+		CollisionSpawnInfo.AttachToComponent = nullptr;
+	}
+
+	return ANaMobSkillCollision::MakeCollisionByClass(
+		SourceSkill,
+		CollisionSpawnInfo.Class,
+		CollisionSpawnInfo.Transform,
+		IsValid(CollisionSpawnInfo.AttachToComponent) ? CollisionSpawnInfo.AttachToComponent : RootComponent,
+		CollisionSpawnInfo.WeaponSocketName,
+		LifeSpan,
+		true
+	);
+
 }

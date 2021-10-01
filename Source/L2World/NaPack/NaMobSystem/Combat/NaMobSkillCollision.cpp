@@ -37,7 +37,7 @@ FSkillCollisionHitReturn::FSkillCollisionHitReturn(
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
-	RootComponent = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionDefault"));
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	
 
 }
@@ -46,7 +46,7 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	Super::OnConstruction(trans);
 
-	UPrimitiveComponent* Root = nullptr;
+	UPrimitiveComponent* Col = nullptr;
 
 	//RootComponent->DestroyComponent();
 
@@ -54,34 +54,34 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 	case ESkillCollisionShape::SCS_Sphere: {
 		USphereComponent* ColSph = NewObject<USphereComponent>(this, TEXT("CollisionSphere"));
 		ColSph->SetSphereRadius(HalfSizeX);
-		Root = static_cast<UPrimitiveComponent*>(ColSph);
+		Col = static_cast<UPrimitiveComponent*>(ColSph);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Box: {
 		UBoxComponent* ColBox = NewObject<UBoxComponent>(this, TEXT("CollisionBox"));
 		ColBox->SetBoxExtent(FVector(HalfSizeX, HalfSizeY, HalfSizeZ));
-		Root = static_cast<UPrimitiveComponent*>(ColBox);
+		Col = static_cast<UPrimitiveComponent*>(ColBox);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Capsule: {
 		UCapsuleComponent* ColCps = NewObject<UCapsuleComponent>(this, TEXT("CollisionCapsule"));
 		ColCps->SetCapsuleSize(HalfSizeX, HalfSizeZ);
-		Root = static_cast<UPrimitiveComponent*>(ColCps);
+		Col = static_cast<UPrimitiveComponent*>(ColCps);
 		break;
 	}
 	case ESkillCollisionShape::SCS_StaticMesh: {
 		UStaticMeshComponent* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("CollisionMesh"));
-		Root = static_cast<UPrimitiveComponent*>(ColMsh);
+		Col = static_cast<UPrimitiveComponent*>(ColMsh);
 		break;
 	}
 	default: {
 		checkNoEntry();
 	}
 	}
-	//4Root->RegisterComponent();
-	//RootComponent = Root;
-
-	static_cast<UPrimitiveComponent*>(RootComponent)->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
+	Col->RegisterComponent();
+	Col->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Collision = Col;
+	Col->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
 
 
 }
@@ -155,7 +155,7 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 	// If remains null, attach to source
 	if (!IsValid(AttachToComponent)) {
 		if (AttachToComponent)
-			LogWarningContext("Trying attaching skill to invalid component. Will attach to root component of source instead.", InSourceSkill);
+			LogWarningContext("Trying attaching skill collision to invalid component. Will attach to root component of source instead.", InSourceSkill);
 		AttachToComponent = InSourceSkill->GetRootComponent();
 	}
 
@@ -180,6 +180,10 @@ void ANaMobSkillCollision::SendHit(const FSkillCollisionHitReturn & Data){
 	// Send only when HitComponent is root collision body
 	if (Data.HitComponent->GetOwner() != this)
 		return;
+	// Ignore owner
+	if (bIgnoreSourceMob && (Data.OtherActor == static_cast<AActor*>(SourceSkill->Source))) {
+		return;
+	}
 
 	SourceSkill->ReceiveCollisionHit(Data);
 

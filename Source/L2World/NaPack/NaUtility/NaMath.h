@@ -1,8 +1,10 @@
-// Namespace NaMath is a collection of math utilities as pure C++ functions. No blueprint interface since most are implemented in kismet libraries.S
+// Namespace NaMath is a collection of math utilities as pure C++ functions. No blueprint interface since most are implemented in kismet libraries.
 
 #pragma once
 #include "CoreMinimal.h"
-
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "../NaGlobalHeader.h"
+#include "NaMath.generated.h"
 
 namespace NaMath {
 
@@ -26,3 +28,15 @@ namespace NaMath {
 
 	bool NearlyEqual(float a, float b, float toleration = KINDA_SMALL_NUMBER);
 }
+
+UCLASS()
+class NAPACK_API UNaMath : public UBlueprintFunctionLibrary {
+
+	GENERATED_BODY()
+
+public:
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Identity (Transform)", Keywords = "identity zero"), Category = "NaPack|Utility|Math")
+	static void IdentityTransform(FTransform & Value) { Value = FTransform::Identity; };
+
+};
