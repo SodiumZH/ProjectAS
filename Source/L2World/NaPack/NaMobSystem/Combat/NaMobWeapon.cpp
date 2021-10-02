@@ -59,7 +59,7 @@ void ANaMobWeapon::CheckOwner(bool TryFixing) {
 }
 
 
-ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket, bool NoAttachment) {
+ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket, FName RegisterName, bool NoAttachment) {
 
 	if (!IsValid(Target)) {
 		LogErrorNoContext("Add New Weapon Failed:: invalid target. Weapon generation failed. Please note that a valid target mob is still needed as world context if enabled no attachment.");
@@ -82,12 +82,13 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 		Out->OwnerMob = Target;
 		Out->SocketName = Socket;
 		Out->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
+		Target->RegisterWeapon(RegisterName, Out);
 	}
 
 	return Out;
 }
 	
-void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket, bool ForceGive) {
+void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket, FName RegisterName, bool ForceGive) {
 
 	if (!IsValid(Weapon)) {
 		LogErrorNoContext("Give Weapon Failed:: invalid weapon. To spawn a new weapon, use \"Add New Weapon\".");
@@ -100,15 +101,18 @@ void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket
 	}
 
 	if ((Target->GetSkeletalMeshComponents().Num() == 0) || (!IsValid(Target->GetSkeletalMeshComponents()[0]))) {
-		LogErrorNoContext("Give Weapon Failed:: target doesn't have a valid skeletal mesh. This error emerges if no skeletal mesh is added to the target, or the first skeletal mesh component is invalid.");
+		LogErrorNoContext("Give Weapon Failed: target doesn't have a valid skeletal mesh. This error emerges if no skeletal mesh is added to the target, or the first skeletal mesh component is invalid.");
 		return;
 	}
 
 	if (ForceGive || (!Weapon->HasOwner())) {
+		if (Weapon->HasOwner())
+			Weapon->GetOwnerMob()->RemoveWeapon(Weapon);
 		Weapon->Mesh->SetSimulatePhysics(false);
 		Weapon->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
 		Weapon->OwnerMob = Target;
 		Weapon->SocketName = Socket;
+		Target->RegisterWeapon(RegisterName, Weapon);
 	}
 	else if (!ForceGive && Weapon->HasOwner() && (Weapon->GetOwnerMob() != Target)) {
 		LogWarningContext("GiveWeapon: trying giving an ownered weapon to another mob without Force Give. Will not do anything.", Target);
@@ -122,7 +126,9 @@ void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket
 void ANaMobWeapon::DropWeapon() {
 
 	if (HasOwner()) {
+		
 		Mesh->SetSimulatePhysics(true);
+		OwnerMob->RemoveWeapon(this);
 		OwnerMob = nullptr;
 		SocketName = NAME_None;
 	}

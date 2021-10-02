@@ -23,10 +23,6 @@ void ANaMobSkill::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 }
 
-USceneComponent* ANaMobSkill::GetSkillRoot() {
-	return RootComponent;
-}
-
 UTimeControlComponent* ANaMobSkill::GetTimeControl() {
 	return TimeControl;
 }
@@ -87,10 +83,6 @@ TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Unsafe() {
 TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Safe() {
 	ClearCollisionSet();
 	return CollisionSet;
-}
-
-void ANaMobSkill::GetCollisionSet_BP(TSet<ANaMobSkillCollision*>& Collisions) {
-	Collisions = GetCollisionSet_Safe();
 }
 
 void ANaMobSkill::Destroyed() {

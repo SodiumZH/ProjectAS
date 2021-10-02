@@ -55,10 +55,6 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	USceneComponent* GetSkillRoot();
-
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	UTimeControlComponent* GetTimeControl();
 
 	/* Installation */
@@ -79,14 +75,13 @@ public:
 	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
 	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
 	*/
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
-		static ANaMobSkill* UseSkillByClass(
-			ANaMob* SourceMob,
-			TSubclassOf<ANaMobSkill> SkillClass,
-			const FTransform & InTransform,
-			USceneComponent* AttachToComponent = nullptr,
-			FName SocketName = NAME_None,
-			bool DoAttachment = true
+	static ANaMobSkill* UseSkillByClass(
+		ANaMob* SourceMob,
+		TSubclassOf<ANaMobSkill> SkillClass,
+		const FTransform & InTransform,
+		USceneComponent* AttachToComponent = nullptr,
+		FName SocketName = NAME_None,
+		bool DoAttachment = true
 	);
 
 	/* Collision check */
@@ -105,9 +100,6 @@ public:
 
 	// Clear invalid elements and get collision set. Safe to iterate. 
 	TSet<ANaMobSkillCollision*> & GetCollisionSet_Safe();
-
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
-	void GetCollisionSet_BP(TSet<ANaMobSkillCollision*>& Collisions);
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|MobSystem")
 	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);

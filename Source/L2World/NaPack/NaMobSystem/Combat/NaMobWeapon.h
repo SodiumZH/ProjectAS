@@ -88,23 +88,24 @@ public:
 	* @Param Target Owner mob to give the weapon. If enables no attachment, the weapon will spawn in world transform and start to simulate physics as an "ownerless weapon".
 	* @Param Transform Relative transform of the weapon. If enables no attachment, this will be the initial world transform.
 	* @Param SocketName Socket name this weapon will attach to.
+	* @Param RegisterName Name to register at the owner mob. This is the name for searching weapon from mob. 
 	* @Param NoAttach If true, it will generate an ownerless weapon without attaching to any mob. A valid mob "Target" is still required as world context.
 	@ @ReturnValue The weapon object generated.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
-	static ANaMobWeapon* AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket = NAME_None, bool NoAttachment = false);
+	static ANaMobWeapon* AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket = NAME_None, FName RegisterName = NAME_None, bool NoAttachment = false);
 
 	/** Give an existing weapon to a mob. 
 	* @Param Weapon weapon to give.
 	* @Param Target Mob the weapon will give to.
 	* @Param SocketName SocketName Socket name this weapon will attach to.
-	* @Param ForceGive If true, it will transfer owner if the weapon already has an owner. Warning: this action have potential risk of
-	* unexpected behaviors in the previous owner due to loss of ownership of the weapon.
+	* @Param RegisterName Name to register at the owner mob. This is the name for searching weapon from mob.
+	* @Param ForceGive If true, it will transfer owner if the weapon already has an owner. Warning: this action have potential risk of unexpected behaviors in the previous owner due to loss of ownership of the weapon.
 	* If false, it will not do anything if the weapon already has an owner.
 	*/
 	
 	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
-	static void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = NAME_None, bool ForceGive = false);
+	static void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = NAME_None, FName RegisterName = NAME_None, bool ForceGive = false);
 
 	/** Make a weapon ownerless and drop it on the ground by starting simulating physics. Warning: this action have potential risk of
 	* unexpected behaviors in the previous owner due to loss of ownership of the weapon.

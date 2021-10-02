@@ -37,8 +37,10 @@ FSkillCollisionHitReturn::FSkillCollisionHitReturn(
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
+	CollisionRoot = CreateDefaultSubobject<USceneComponent>(TEXT("CollisionRoot"));
+	CollisionRoot->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 
@@ -46,47 +48,45 @@ void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	Super::OnConstruction(trans);
 
-	UPrimitiveComponent* Col = nullptr;
-
-	//RootComponent->DestroyComponent();
+	if(IsValid(Collision))
+		Collision->DestroyComponent();
 
 	switch (CollisionShape) {
 	case ESkillCollisionShape::SCS_Sphere: {
 		USphereComponent* ColSph = NewObject<USphereComponent>(this, TEXT("CollisionSphere"));
 		ColSph->SetSphereRadius(HalfSizeX);
-		Col = static_cast<UPrimitiveComponent*>(ColSph);
+		Collision = static_cast<UPrimitiveComponent*>(ColSph);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Box: {
 		UBoxComponent* ColBox = NewObject<UBoxComponent>(this, TEXT("CollisionBox"));
 		ColBox->SetBoxExtent(FVector(HalfSizeX, HalfSizeY, HalfSizeZ));
-		Col = static_cast<UPrimitiveComponent*>(ColBox);
+		Collision = static_cast<UPrimitiveComponent*>(ColBox);
 		break;
 	}
 	case ESkillCollisionShape::SCS_Capsule: {
 		UCapsuleComponent* ColCps = NewObject<UCapsuleComponent>(this, TEXT("CollisionCapsule"));
 		ColCps->SetCapsuleSize(HalfSizeX, HalfSizeZ);
-		Col = static_cast<UPrimitiveComponent*>(ColCps);
+		Collision = static_cast<UPrimitiveComponent*>(ColCps);
 		break;
 	}
 	case ESkillCollisionShape::SCS_StaticMesh: {
 		UStaticMeshComponent* ColMsh = NewObject<UStaticMeshComponent>(this, TEXT("CollisionMesh"));
-		Col = static_cast<UPrimitiveComponent*>(ColMsh);
+		Collision = static_cast<UPrimitiveComponent*>(ColMsh);
 		break;
 	}
 	default: {
 		checkNoEntry();
 	}
 	}
-	Col->RegisterComponent();
-	Col->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	Collision = Col;
-	Col->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
+	Collision->RegisterComponent();
+	Collision->AttachToComponent(CollisionRoot, FAttachmentTransformRules::KeepRelativeTransform);
+	Collision->OnComponentHit.AddDynamic(this, &ANaMobSkillCollision::SendHitDelegateFunc);
 
 
 }
 
-void ANaMobSkillCollision::SetHalfSize(float InX, float InZ, float InY) {
+void ANaMobSkillCollision::SetHalfSize(float InX, float InY, float InZ) {
 	switch (CollisionShape) {
 	case ESkillCollisionShape::SCS_Sphere: {
 		USphereComponent* ColSph = dynamic_cast<USphereComponent*>(RootComponent);
