@@ -43,6 +43,20 @@ public:
 
 	/****************	Mob	  *******************/
 
+	/*** Animation Switch ***/
+	
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Animation State Switch Value", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
+	static bool GetAnimStateSwitch_BP(ANaMob* Target, FName Key, bool& SwitchValue);
+
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Open Animation State Switch", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
+	static void OpenAnimStateSwitch_BP(ANaMob* Target, FName Key, float DeltaTime = 0.1);
+
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Close Animation State Switch", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
+	static void CloseAnimStateSwitch_BP(ANaMob* Target, FName Key);
+
+
+	/*** Weapon Registeration ****/
+
 	/* Get a weapon's register name on a mob. If the weapon is not registered, return empty name (""). */
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Weapon Register Name", Keywords = "weapon name get name"), Category = "NaPack|MobSystem|Mob|Weapon")
 	static void GetWeaponRegisterName_BP(ANaMob* Target, ANaMobWeapon* Weapon, FName& RegisterName);

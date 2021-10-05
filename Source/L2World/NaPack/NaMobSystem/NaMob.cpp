@@ -378,10 +378,8 @@ bool ANaMob::GetAnimStateSwitch(FName Key) {
 	bool* resptr = AnimStateSwitch.Find(Key);
 	if (resptr)
 		return *resptr;
-	else {
-		AnimStateSwitch.Emplace(Key, false);
+	else
 		return false;
-	}
 }
 
 void ANaMob::OpenAnimStateSwitch(FName Key, float DeltaTime) {

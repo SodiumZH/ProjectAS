@@ -8,6 +8,20 @@
 
 /* Mob */
 
+/* Anim Switch */
+bool UNaMobStatics::GetAnimStateSwitch_BP(ANaMob* Target, FName Key, bool& SwitchValue) {
+	SwitchValue = Target->GetAnimStateSwitch(Key);
+}
+
+void UNaMobStatics::OpenAnimStateSwitch_BP(ANaMob* Target, FName Key, float DeltaTime) {
+	Target->OpenAnimStateSwitch(Key, DeltaTime);
+}
+
+void UNaMobStatics::CloseAnimStateSwitch_BP(ANaMob* Target, FName Key) {
+	Target->CloseAnimStateSwitch(Key);
+}
+
+/* Weapon Registeration */
 void UNaMobStatics::GetWeaponRegisterName_BP(ANaMob* Target, ANaMobWeapon* Weapon, FName& RegisterName) {
 	RegisterName = Target->GetRegisterName(Weapon);
 }

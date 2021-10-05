@@ -372,7 +372,7 @@ public:
 	/** Get the animation switch value of a name. 
 	Animation switch is a boolean specified by name for animation blueprint. In animation blueprint you can call switch value for state change.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "animation switch anim switch animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
 	bool GetAnimStateSwitch(FName Key);
 
 	/** Turn on an animation switch.
@@ -380,13 +380,13 @@ public:
 	* @Param Key Switch name.
 	* @Param DeltaTime Time span that the switch keeps on. If this value is set non-positive, it will keep on until manually set off or overriden by next open action.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
 	void OpenAnimStateSwitch(FName Key, float DeltaTime = 0.1);
 
 	/** Turn off an animation switch.
 	* Animation switch is a boolean specified by name for animation blueprint. In animation blueprint you can call switch value for state change.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "animation switch anim switch animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
 	void CloseAnimStateSwitch(FName Key);
 
 
