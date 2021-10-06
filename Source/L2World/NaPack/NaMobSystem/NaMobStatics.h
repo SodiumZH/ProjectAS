@@ -10,6 +10,7 @@ class ANaMobSkill;
 class ANaMobSkillCollision;
 class ANaMobWeapon;
 class UTimeControlComponent;
+class UNaMobPlayerComponent;
 
 UCLASS()
 class NAPACK_API UNaMobStatics : public UBlueprintFunctionLibrary
@@ -43,14 +44,42 @@ public:
 
 	/****************	Mob	  *******************/
 
+	/*** Component ***/
+
+	//UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "", Keywords = ""), Category = "NaPack|MobSystem|Mob")
+	// Return whether the mob is set as a player mob. It will not check if it is really controlled by a player.
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Player Mob", Keywords = "controlled"), Category = "NaPack|MobSystem|Mob|Components")
+	static bool IsPlayerMob_BP(ANaMob* Target);
+	
+	// Get player component of a mob. If the mob is not a player mob, return null.
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm "), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent);
+
+	// Get time control component of a mob
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Time Control (Mob)", Keywords = "timeline time line time controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl);
+
+
+
 	/*** Animation Switch ***/
 	
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Animation State Switch Value", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
-	static bool GetAnimStateSwitch_BP(ANaMob* Target, FName Key, bool& SwitchValue);
+	/** Get the animation switch value of a name.
+	Animation switch is a boolean specified by name for animation blueprint. In animation blueprint you can call switch value for state change.
+	*/
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, BlueprintThreadSafe, DisplayName = "Get Animation State Switch Value", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
+	static void GetAnimStateSwitch_BP(ANaMob* Target, FName Key, bool& SwitchValue);
 
+	/** Turn on an animation switch.
+	* Animation switch is a boolean specified by name for animation blueprint. In animation blueprint you can call switch value for state change.
+	* @Param Key Switch name.
+	* @Param DeltaTime Time span that the switch keeps on. If this value is set non-positive, it will keep on until manually set off or overriden by next open action.
+	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Open Animation State Switch", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
 	static void OpenAnimStateSwitch_BP(ANaMob* Target, FName Key, float DeltaTime = 0.1);
 
+	/** Turn off an animation switch.
+	* Animation switch is a boolean specified by name for animation blueprint. In animation blueprint you can call switch value for state change.
+	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Close Animation State Switch", Keywords = "animation switch anim switch anim state animation state"), Category = "NaPack|MobSystem|AnimationSwitch")
 	static void CloseAnimStateSwitch_BP(ANaMob* Target, FName Key);
 

@@ -11,8 +11,7 @@ class NAPACK_API UNaObjectStatics : public UBlueprintFunctionLibrary {
 
 public:
 
-	template <typename T, typename S>
-	static bool HaveSubclassOf(const TArray<T> & InArray, S * ClassContextPtr, TArray<S> & CastArray);
+	
 
-//			UFUNCTION(BlueprintPure, Category = "NaPack|Utility")
+
 };

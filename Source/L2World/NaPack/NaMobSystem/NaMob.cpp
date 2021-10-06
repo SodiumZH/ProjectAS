@@ -375,6 +375,10 @@ void ANaMob::Tick_CloseAnimSwitch() {
 }
 
 bool ANaMob::GetAnimStateSwitch(FName Key) {
+	
+	if (!this)
+		return false;	// This check is for animation BPs in which this function will be called with null object
+
 	bool* resptr = AnimStateSwitch.Find(Key);
 	if (resptr)
 		return *resptr;

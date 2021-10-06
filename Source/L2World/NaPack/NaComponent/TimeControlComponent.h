@@ -1,4 +1,4 @@
-
+// Time Control Component is an alternative option of timeline in c++. It allows to bind functions to execute at specific time point or do loop execution.
 
 #pragma once
 
