@@ -5,6 +5,7 @@
 #include "Components/SceneComponent.h"
 #include "NaMobSkillCollision.h"
 #include "../../NaComponent/TimeControlComponent.h"
+#include "../Component/NaMobSkillManager.h"
 
 ANaMobSkill::ANaMobSkill(){
 
@@ -31,6 +32,7 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	ANaMob* SourceMob, 
 	TSubclassOf<ANaMobSkill> SkillClass, 
 	const FTransform & InTransform, 
+	FName InRegisterName,
 	USceneComponent* AttachToComponent,
 	FName SocketName,
 	bool DoAttachment
@@ -66,6 +68,8 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	OutSkill->Socket = SocketName;
 
 	OutSkill->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+	SourceMob->GetSkillManager()->RegisterSkill(InRegisterName, OutSkill);
+	OutSkill->RegisterName = InRegisterName;
 	return OutSkill;
 }
 
@@ -91,5 +95,9 @@ void ANaMobSkill::Destroyed() {
 			Col->Destroy();
 		}
 	}
+	if (IsValid(Source))
+		Source->GetSkillManager()->UnregisterSkill(RegisterName);
 	Super::Destroyed();
 }
+
+

@@ -5,6 +5,7 @@
 #include "../NaGlobalHeader.h"
 #include "NaObjectStatics.generated.h"
 
+UCLASS()
 class NAPACK_API UNaObjectStatics : public UBlueprintFunctionLibrary {
 	
 	GENERATED_BODY()

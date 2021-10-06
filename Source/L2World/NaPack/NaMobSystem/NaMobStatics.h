@@ -42,6 +42,9 @@ public:
 	static void GetMobDefaultDiameter(float& Value) { Value = MOB_DEFAULT_DIAMETER; };
 
 
+
+
+
 	/****************	Mob	  *******************/
 
 	/*** Component ***/
@@ -52,13 +55,16 @@ public:
 	static bool IsPlayerMob_BP(ANaMob* Target);
 	
 	// Get player component of a mob. If the mob is not a player mob, return null.
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm "), Category = "NaPack|MobSystem|Mob|Components")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm "), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent);
 
 	// Get time control component of a mob
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Time Control (Mob)", Keywords = "timeline time line time controller"), Category = "NaPack|MobSystem|Mob|Components")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Time Control (Mob)", Keywords = "timeline time line time controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl);
 
+	// Get skill manager component of a mob
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager);
 
 
 	/*** Animation Switch ***/
@@ -94,10 +100,14 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Weapon from Register Name", Keywords = "weapon name get weapon from name"), Category = "NaPack|MobSystem|Mob|Weapon")
 	static void GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterName, ANaMobWeapon*& Weapon);
 
+
+
+
+
 	/****************** Skill *********************/
 
 	/* Get time control component of mob skill */
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Time Control (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Time Control (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
 	static void GetTimeControl_BP_Skill(ANaMobSkill* InSkill, UTimeControlComponent*& TimeControl);
 
 	/** Generate a skill object from a mob.
@@ -115,10 +125,19 @@ public:
 		ANaMob* SourceMob,
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
+		FName RegisterName,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true
 	);
+
+	/* Get skill from mob by register name. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill By Register Name", Keywords = "register name reg name"), Category = "NaPack|MobSystem|Skill")
+	static void GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill);
+
+	/* Get skill's source mob and register name. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill Registeration", Keywords = "register name reg name"), Category = "NaPack|MobSystem|Skill")
+	static void GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& SourceMob, FName& RegisterName);
 
 	/* Get collision set of mob skill. Collision set is the set of existing collisions of the skill.
 	* This function will clear all invalid collisions before return, so it's safe for iteration.

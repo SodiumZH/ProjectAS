@@ -53,6 +53,8 @@ protected:
 
 	UTimeControlComponent* TimeControl;
 
+	
+
 public:
 
 	UTimeControlComponent* GetTimeControl();
@@ -67,6 +69,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FName Socket;
 
+	//UPROPERTY(BlueprintReadOnly)
+	FName RegisterName;
+
 	/** Generate a skill object from a mob.
 	* @Param SourceMob The mob as source of this skill.
 	* @Param SkillClass Applied skill class.
@@ -79,6 +84,7 @@ public:
 		ANaMob* SourceMob,
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
+		FName InRegisterName,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true

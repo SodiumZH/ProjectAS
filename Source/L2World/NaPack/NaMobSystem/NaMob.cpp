@@ -8,6 +8,7 @@
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobWeapon.h"
 #include "Component/NaMobPlayerComponent.h"
+#include "Component/NaMobSkillManager.h"
 
 
 
@@ -22,7 +23,8 @@ ANaMob::ANaMob()
 	DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
 	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
-	
+	SkillManager = CreateDefaultSubobject<UNaMobSkillManager>(TEXT("SkillManager"));
+
 }
 
 // Called to bind functionality to input
@@ -339,17 +341,6 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 	OnMobTakingDamage(Damage);
 }
 
-ANaMobSkill* ANaMob::UseSkill(
-	TSubclassOf<class ANaMobSkill> SkillClass,
-	const FTransform & InTransform,
-	class USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
-){
-	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, AttachToComponent, SocketName, DoAttachment);
-}
-
-
 /* Animation */
 
 void ANaMob::UpdateAnimClass() {
@@ -368,8 +359,8 @@ void ANaMob::SetAnimClass(TSubclassOf<UAnimInstance> NewClass) {
 /* Animation state switch */
 
 void ANaMob::Tick_CloseAnimSwitch() {
-	float Time = GetTimeFromSpawn();
-	for (auto& Elem : AnimSwitchCloseTime) 
+	double Time = TimeControl->GetTime();
+	for (auto & Elem : AnimSwitchCloseTime) 
 		if (Time >= Elem.Value) 
 			CloseAnimStateSwitch(Elem.Key);
 }
@@ -391,21 +382,12 @@ void ANaMob::OpenAnimStateSwitch(FName Key, float DeltaTime) {
 	AnimStateSwitch.FindOrAdd(Key) = true;
 	// Set time to delay close
 	if (DeltaTime > 0) 
-		AnimSwitchCloseTime.FindOrAdd(Key) = GetTimeFromSpawn() + DeltaTime;
+		AnimSwitchCloseTime.FindOrAdd(Key) = TimeControl->GetTime() + (double)DeltaTime;
 }
 
 void ANaMob::CloseAnimStateSwitch(FName Key) {
 	AnimStateSwitch.FindOrAdd(Key) = false;
 	AnimSwitchCloseTime.Remove(Key);
-}
-
-
-/* Time */
-
-//double GetTimeFromSpawn_Double();
-
-float ANaMob::GetTimeFromSpawn() {
-	return TimeControl->GetTime();
 }
 
 /* Weapon */

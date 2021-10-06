@@ -13,4 +13,6 @@
 #include "NaDebugUtility.h"
 #include "NaString.h"
 #include "NaSystem.h"
+#include "NaObjectStatics.h"
+#include "NaContainerUtility.h"
 #include "ObjectRotatorLibrary.h"

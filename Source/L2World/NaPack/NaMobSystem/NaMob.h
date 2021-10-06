@@ -30,6 +30,9 @@ Animation			R321
 
 class ANaMobWeapon;
 class UTimeControlComponent;
+class UNaMobSkillManager;
+class ANaMobSkill;
+
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
@@ -61,13 +64,17 @@ public:
 
 protected:
 
-	UTimeControlComponent * TimeControl;
+	UTimeControlComponent* TimeControl;
+
+	UNaMobSkillManager* SkillManager;
 
 public:
 
 	UTimeControlComponent * GetTimeControl() { return TimeControl; };
 
-	float GetTimeFromSpawn();
+	UNaMobSkillManager* GetSkillManager() { return SkillManager; };
+
+	
 
 	/*==========================================================================*/
 	////////////
@@ -325,18 +332,6 @@ public:
 	// Actions when taking damage
 	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnMobTakingDamage(int64 Damage);
-
-
-	/* Skill */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	class ANaMobSkill* UseSkill(
-		TSubclassOf<class ANaMobSkill> SkillClass,
-		const FTransform & InTransform,
-		class USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
-	);
-
 	
 	//=======================================================================
 	//	Animation
@@ -360,7 +355,7 @@ protected:
 
 	TMap<FName, bool> AnimStateSwitch;
 
-	TMap<FName, float> AnimSwitchCloseTime;
+	TMap<FName, double> AnimSwitchCloseTime;
 
 	void Tick_CloseAnimSwitch();
 

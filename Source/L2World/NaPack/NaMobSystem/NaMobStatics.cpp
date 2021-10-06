@@ -7,6 +7,7 @@
 #include "Combat/NaMobSkillCollision.h"
 #include "Combat/NaMobWeapon.h"
 #include "Component/NaMobPlayerComponent.h"
+#include "Component/NaMobSkillManager.h"
 
 /* Mob */
 
@@ -58,6 +59,15 @@ void UNaMobStatics::GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& Ti
 
 	TimeControl = Target->GetTimeControl();
 }
+
+void UNaMobStatics::GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager) {
+	if (!IsValid(Target)) {
+		SkillManager = nullptr;
+		return;
+	}
+	SkillManager = Target->GetSkillManager();
+}
+
 
 
 /* Anim Switch */
@@ -119,11 +129,30 @@ void UNaMobStatics::UseSkillByClass_BP(
 	ANaMob* SourceMob,
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
+	FName RegisterName,
 	USceneComponent* AttachToComponent,
 	FName SocketName,
 	bool DoAttachment
 ) {
-	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, AttachToComponent, SocketName, DoAttachment);
+	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, AttachToComponent, SocketName, DoAttachment);
+}
+
+void UNaMobStatics::GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill) {
+	if (!IsValid(SourceMob)) {
+		Skill = nullptr;
+		return;
+	}
+	Skill = SourceMob->GetSkillManager()->GetSkillFromRegisterName(InRegisterName);
+}
+
+void UNaMobStatics::GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& SourceMob, FName& RegisterName) {
+	if (!IsValid(InSkill)) {
+		SourceMob = nullptr;
+		RegisterName = NAME_None;
+		return;
+	}
+	SourceMob = InSkill->Source;
+	RegisterName = InSkill->RegisterName;
 }
 
 void UNaMobStatics::GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillCollision*>& CollisionSet) {
