@@ -235,26 +235,4 @@
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobSkillManager.h">
-      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobWeaponManager.h">
-      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\NaContainerUtility.h">
-      <Filter>Source\L2World\NaPack\NaUtility</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobSkillManager.cpp">
-      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobWeaponManager.cpp">
-      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaUtility\NaContainerUtility.cpp">
-      <Filter>Source\L2World\NaPack\NaUtility</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>
