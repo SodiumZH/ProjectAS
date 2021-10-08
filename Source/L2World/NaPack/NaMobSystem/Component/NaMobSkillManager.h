@@ -34,7 +34,7 @@ public:
 
 	/* Skill Registry R&W */
 
-	void RegisterSkill(FName RegisterName, ANaMobSkill* InSkill);
+	bool RegisterSkill(FName RegisterName, ANaMobSkill* InSkill);
 
 	void UnregisterSkill(FName RegisterName);
 

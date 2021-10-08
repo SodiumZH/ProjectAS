@@ -12,26 +12,27 @@ UNaMobSkillManager::UNaMobSkillManager() {
 
 }
 
-void UNaMobSkillManager::RegisterSkill(FName RegisterName, ANaMobSkill* InSkill) {
+bool UNaMobSkillManager::RegisterSkill(FName RegisterName, ANaMobSkill* InSkill) {
 
-	if (!IsValid(this)) return;
+	if (!IsValid(this)) return false;
 
 	if (!IsValid(InSkill)) {
 		LogError("Register Skill Failed: registering invalid skill.");
-		return;
+		return false;
 	}
 
 	if (RegisterName == FName(NAME_None)) {
 		LogError("Register Skill Failed: \"None\" is an invalid name.");
-		return;
+		return false;
 	}
 
 	if (SkillRegistry.Contains(RegisterName)) {
-		LogError("Register Skill Failed: register name is occupied.");
-		return;
+		UE_LOG(LogTemp, Log, TEXT("Register Skill Failed: name occupied."));
+		return false;
 	}
 
 	SkillRegistry.Emplace(RegisterName, InSkill);
+	return true;
 
 }
 

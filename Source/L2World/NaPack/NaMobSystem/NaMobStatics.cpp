@@ -116,13 +116,37 @@ void UNaMobStatics::GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterN
 
 /* Skill */
 
-void UNaMobStatics::GetTimeControl_BP_Skill(ANaMobSkill* Target, UTimeControlComponent*& TimeControl) {
-	if (!IsValid(Target)) {
+void UNaMobStatics::GetTimeControl_BP_Skill(ANaMobSkill* InSkill, UTimeControlComponent*& TimeControl) {
+	if (!IsValid(InSkill)) {
 		TimeControl = nullptr;
 		return;
 	}
-	TimeControl = Target->GetTimeControl();
+	TimeControl = InSkill->GetTimeControl();
 }
+
+void UNaMobStatics::GetSource_BP_Skill(ANaMobSkill* InSkill, ANaMob*& Source) {
+	if (!IsValid(InSkill)) {
+		Source = nullptr;
+		return;
+	}
+	Source = InSkill->GetSource(); 
+};
+
+void UNaMobStatics::GetSocket_BP_Skill(ANaMobSkill* InSkill, FName& Socket) {
+	if (!IsValid(InSkill)) {
+		Socket = NAME_None;
+		return;
+	}
+	Socket = InSkill->GetSocket();
+};
+
+void UNaMobStatics::GetRegisterName_BP_Skill(ANaMobSkill* InSkill, FName& RegName) {
+	if (!IsValid(InSkill)) {
+		RegName = NAME_None;
+		return;
+	}
+	RegName = InSkill->GetRegisterName(); 
+};
 
 void UNaMobStatics::UseSkillByClass_BP(
 	ANaMobSkill*& OutSkill,
@@ -151,8 +175,8 @@ void UNaMobStatics::GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& Sour
 		RegisterName = NAME_None;
 		return;
 	}
-	SourceMob = InSkill->Source;
-	RegisterName = InSkill->RegisterName;
+	SourceMob = InSkill->GetSource();
+	RegisterName = InSkill->GetRegisterName();
 }
 
 void UNaMobStatics::GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillCollision*>& CollisionSet) {

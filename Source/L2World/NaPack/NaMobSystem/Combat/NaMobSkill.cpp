@@ -66,10 +66,11 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 
 	OutSkill->Source = SourceMob;
 	OutSkill->Socket = SocketName;
+	OutSkill->RegisterName = InRegisterName;
 
 	OutSkill->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 	SourceMob->GetSkillManager()->RegisterSkill(InRegisterName, OutSkill);
-	OutSkill->RegisterName = InRegisterName;
+	
 	return OutSkill;
 }
 

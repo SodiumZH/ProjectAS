@@ -181,7 +181,7 @@ void ANaMobSkillCollision::SendHit(const FSkillCollisionHitReturn & Data){
 	if (Data.HitComponent->GetOwner() != this)
 		return;
 	// Ignore owner
-	if (bIgnoreSourceMob && (Data.OtherActor == static_cast<AActor*>(SourceSkill->Source))) {
+	if (bIgnoreSourceMob && (Data.OtherActor == static_cast<AActor*>(SourceSkill->GetSource()))) {
 		return;
 	}
 

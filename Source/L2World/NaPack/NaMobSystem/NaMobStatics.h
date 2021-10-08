@@ -110,6 +110,24 @@ public:
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Time Control (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
 	static void GetTimeControl_BP_Skill(ANaMobSkill* InSkill, UTimeControlComponent*& TimeControl);
 
+	/* Get source mob of skill.
+	* Warning: this result is invalid on begin play. If it's needed to call it on begin play, delay a short time (e.g. 0.01s) first.
+	*/
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Source Mob (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	static void GetSource_BP_Skill(ANaMobSkill* InSkill, ANaMob*& Source);
+
+	/* Get socket name of skill.
+	* Warning: this result is invalid on begin play. If it's needed to call it on begin play, delay a short time (e.g. 0.01s) first.
+	*/
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Socket Name (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	static void GetSocket_BP_Skill(ANaMobSkill* InSkill, FName& Socket);
+
+	/* Get register name of skill.
+	* Warning: this result is invalid on begin play. If it's needed to call it on begin play, delay a short time (e.g. 0.01s) first.
+	*/
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Register Name (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	static void GetRegisterName_BP_Skill(ANaMobSkill* InSkill, FName& RegName);
+
 	/** Generate a skill object from a mob.
 	* @Param OutSkill Skill actor reference generated.
 	* @Param SourceMob The mob as source of this skill.

@@ -61,7 +61,7 @@ public:
 
 	/* Installation */
 
-public:
+protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	ANaMob* Source;
@@ -71,6 +71,17 @@ public:
 
 	//UPROPERTY(BlueprintReadOnly)
 	FName RegisterName;
+
+public:
+
+	ANaMob* GetSource() { return Source; };
+
+	FName GetSocket() { return Socket; };
+
+	FName GetRegisterName() { return RegisterName; };
+
+	// Only on initialization of skill. DO NOT call this function in runtime!!
+	//void InitSourceSocketRegname(ANaMob* InSource, FName InSocket, FName InRegname) { Source = InSource; Socket = InSocket; RegisterName = InRegname; };
 
 	/** Generate a skill object from a mob.
 	* @Param SourceMob The mob as source of this skill.
