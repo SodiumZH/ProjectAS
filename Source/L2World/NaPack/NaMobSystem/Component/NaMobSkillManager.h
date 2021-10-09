@@ -34,7 +34,13 @@ public:
 
 	/* Skill Registry R&W */
 
-	bool RegisterSkill(FName RegisterName, ANaMobSkill* InSkill);
+	// Return if a register name exists
+	bool ContainsRegisterName(FName InName);
+
+	/* Register a skill in skill manager.
+	* @Param bForce If true, when the register name exists, the new skill will overwrite the old one.
+	*/
+	bool RegisterSkill(FName RegisterName, ANaMobSkill* InSkill, bool bForce = false);
 
 	void UnregisterSkill(FName RegisterName);
 
@@ -48,6 +54,7 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
+		bool Force = false,
 		class USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true

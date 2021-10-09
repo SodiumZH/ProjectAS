@@ -133,6 +133,8 @@ public:
 	* @Param SourceMob The mob as source of this skill.
 	* @Param SkillClass Applied skill class.
 	* @Param InTransform Relative transform.
+	* @Param RegisterName Register name in source mob.
+	* @Param Force If true, skill will be force spawned even if the register name is occupied in source mob. In this case the old registered skill will be overwritten.
 	* @Param SocketName Socket of attachment of this skill.
 	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
 	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
@@ -144,6 +146,7 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName RegisterName,
+		bool Force = false,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true

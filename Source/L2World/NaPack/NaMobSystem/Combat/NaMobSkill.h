@@ -47,13 +47,22 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	/* On skill initialized. Use this instead of begin play in mob skill, since begin play will cause error. */
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "On Initialized (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	void OnSkillInitialized();
+	void OnSkillInitialized_Implementation() {};
+
+	
+
+
 	/* Components */
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTimeControlComponent* TimeControl;
 
-	
+	virtual void BeginPlay() override;
 
 public:
 
@@ -96,6 +105,7 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
+		bool ForceSpawn = false,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true

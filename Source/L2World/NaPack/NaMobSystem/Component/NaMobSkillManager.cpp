@@ -12,7 +12,11 @@ UNaMobSkillManager::UNaMobSkillManager() {
 
 }
 
-bool UNaMobSkillManager::RegisterSkill(FName RegisterName, ANaMobSkill* InSkill) {
+bool UNaMobSkillManager::ContainsRegisterName(FName InName) {
+	return SkillRegistry.Contains(InName);
+}
+
+bool UNaMobSkillManager::RegisterSkill(FName RegisterName, ANaMobSkill* InSkill, bool bForce) {
 
 	if (!IsValid(this)) return false;
 
@@ -27,8 +31,15 @@ bool UNaMobSkillManager::RegisterSkill(FName RegisterName, ANaMobSkill* InSkill)
 	}
 
 	if (SkillRegistry.Contains(RegisterName)) {
-		UE_LOG(LogTemp, Log, TEXT("Register Skill Failed: name occupied."));
-		return false;
+		if (bForce) {
+			SkillRegistry.Emplace(RegisterName, InSkill);
+			UE_LOG(LogTemp, Log, TEXT("Register Skill: an existing registered skill has been overwritten. Register name: %s"), *RegisterName.ToString());
+			return true;
+		}
+		else {
+			UE_LOG(LogTemp, Log, TEXT("Register Skill Failed: name occupied."));
+			return false;
+		}
 	}
 
 	SkillRegistry.Emplace(RegisterName, InSkill);
@@ -99,7 +110,8 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
 	FName RegisterName,
-	class USceneComponent* AttachToComponent,
+	bool Force,
+	USceneComponent* AttachToComponent,
 	FName SocketName,
 	bool DoAttachment
 ) {
@@ -117,6 +129,7 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 		SkillClass,
 		InTransform,
 		RegisterName,
+		Force,
 		AttachToComponent,
 		SocketName,
 		DoAttachment

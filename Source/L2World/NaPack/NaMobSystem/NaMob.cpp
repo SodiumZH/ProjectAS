@@ -360,9 +360,12 @@ void ANaMob::SetAnimClass(TSubclassOf<UAnimInstance> NewClass) {
 
 void ANaMob::Tick_CloseAnimSwitch() {
 	double Time = TimeControl->GetTime();
-	for (auto & Elem : AnimSwitchCloseTime) 
-		if (Time >= Elem.Value) 
-			CloseAnimStateSwitch(Elem.Key);
+	TSet<FName> ToCloseNames;
+	for (auto & Elem : AnimSwitchCloseTime)
+		if (Time >= Elem.Value)
+			ToCloseNames.Emplace(Elem.Key);
+	for (auto & Name : ToCloseNames)
+		CloseAnimStateSwitch(Name);
 }
 
 bool ANaMob::GetAnimStateSwitch(FName Key) {
