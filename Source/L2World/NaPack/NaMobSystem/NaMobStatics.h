@@ -248,6 +248,18 @@ public:
 
 
 	/** Weapon **/
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Owner Mob (Weapon)"), Category = "NaPack|MobSystem|Weapon")
+	static void GetOwnerMob_BP_Weapon(ANaMobWeapon* InWeapon, ANaMob*& OwnerMob);
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Has Owner (Weapon)", Keywords = "is owned"), Category = "NaPack|MobSystem|Weapon")
+	static void HasOwner_BP_Weapon(ANaMobWeapon* InWeapon, bool& HasOwner);
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Register Name (Weapon)", Keywords = "reg name regname"), Category = "NaPack|MobSystem|Weapon")
+	static void GetRegName_BP_Weapon(ANaMobWeapon* InWeapon, FName& RegName);
+
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Socket Name (Weapon)", Keywords = "reg name regname"), Category = "NaPack|MobSystem|Weapon")
+	static void GetSocketName_BP_Weapon(ANaMobWeapon* InWeapon, FName& SocketName);
 };
 
 

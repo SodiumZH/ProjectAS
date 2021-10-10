@@ -27,7 +27,7 @@ void ANaMobSkill::Tick(float DeltaTime) {
 void ANaMobSkill::BeginPlay() {
 	Super::BeginPlay();
 	FTimerHandle InitHandle;
-	GetWorldTimerManager().SetTimer(InitHandle, this, &ANaMobSkill::OnSkillInitialized, 0.0001f);
+	GetWorldTimerManager().SetTimer(InitHandle, this, &ANaMobSkill::Initialized, 0.0001f);
 }
 
 

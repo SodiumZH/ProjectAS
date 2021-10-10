@@ -8,6 +8,7 @@
 #include "NaMobSkill.h"
 #include "NaMobSkillCollision.h"
 #include "../../NaUtility/NaUtility.h"
+#include "../Component/NaMobWeaponManager.h"
 
 ANaMobWeapon::ANaMobWeapon() {
 
@@ -17,6 +18,13 @@ ANaMobWeapon::ANaMobWeapon() {
 
 	Mesh->SetCollisionProfileName(TEXT("OverlapAll"));
 }
+
+void ANaMobWeapon::BeginPlay() {
+	Super::BeginPlay();
+	FTimerHandle InitHandle;
+	GetWorldTimerManager().SetTimer(InitHandle, this, &ANaMobWeapon::Initialized, 0.0001f);
+}
+
 
 bool ANaMobWeapon::HasOwner() {
 	return IsValid(OwnerMob);
@@ -82,7 +90,7 @@ ANaMobWeapon* ANaMobWeapon::AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob
 		Out->OwnerMob = Target;
 		Out->SocketName = Socket;
 		Out->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
-		Target->RegisterWeapon(RegisterName, Out);
+		Target->GetWeaponManager()->RegisterWeapon(RegisterName, Out);
 	}
 
 	return Out;
@@ -107,12 +115,12 @@ void ANaMobWeapon::GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName Socket
 
 	if (ForceGive || (!Weapon->HasOwner())) {
 		if (Weapon->HasOwner())
-			Weapon->GetOwnerMob()->RemoveWeapon(Weapon);
+			Weapon->GetOwnerMob()->GetWeaponManager()->RemoveWeapon(Weapon);
 		Weapon->Mesh->SetSimulatePhysics(false);
 		Weapon->AttachToComponent(Target->GetSkeletalMeshComponents()[0], FAttachmentTransformRules::KeepRelativeTransform, Socket);
 		Weapon->OwnerMob = Target;
 		Weapon->SocketName = Socket;
-		Target->RegisterWeapon(RegisterName, Weapon);
+		Target->GetWeaponManager()->RegisterWeapon(RegisterName, Weapon);
 	}
 	else if (!ForceGive && Weapon->HasOwner() && (Weapon->GetOwnerMob() != Target)) {
 		LogWarningContext("GiveWeapon: trying giving an ownered weapon to another mob without Force Give. Will not do anything.", Target);
@@ -128,7 +136,7 @@ void ANaMobWeapon::DropWeapon() {
 	if (HasOwner()) {
 		
 		Mesh->SetSimulatePhysics(true);
-		OwnerMob->RemoveWeapon(this);
+		OwnerMob->GetWeaponManager()->RemoveWeapon(this);
 		OwnerMob = nullptr;
 		SocketName = NAME_None;
 	}

@@ -47,10 +47,13 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	/* On skill initialized. Use this instead of begin play in mob skill, since begin play will cause error. */
-	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "On Initialized (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
-	void OnSkillInitialized();
-	void OnSkillInitialized_Implementation() {};
+	/* On skill initialized. 
+	* Use this instead of begin play in mob skill, since begin play will cause initialization issues.
+	* Will be called on the first frame, after a tick delta time from begin play.
+	*/
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "Initialized (Skill)"), Category = "NaPack|MobSystem|Skill")
+	void Initialized();
+	void Initialized_Implementation() {};
 
 	
 

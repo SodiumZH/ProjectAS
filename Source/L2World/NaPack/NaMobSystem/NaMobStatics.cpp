@@ -6,6 +6,7 @@
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobSkillCollision.h"
 #include "Combat/NaMobWeapon.h"
+#include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobPlayerComponent.h"
 #include "Component/NaMobSkillManager.h"
 
@@ -103,7 +104,7 @@ void UNaMobStatics::GetWeaponRegisterName_BP(ANaMob* Target, ANaMobWeapon* Weapo
 		RegisterName = TEXT("");
 		return;
 	}
-	RegisterName = Target->GetRegisterName(Weapon);
+	RegisterName = Target->GetWeaponManager()->GetRegisterName(Weapon);
 }
 
 void UNaMobStatics::GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterName, ANaMobWeapon*& Weapon) {
@@ -111,7 +112,7 @@ void UNaMobStatics::GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterN
 		Weapon = nullptr;
 		return;
 	}
-	Weapon = Target->GetWeaponFromRegisterName(RegisterName);
+	Weapon = Target->GetWeaponManager()->GetWeaponFromRegisterName(RegisterName);
 }
 
 /* Skill */
@@ -267,5 +268,37 @@ void UNaMobStatics::MakeCollisionByClass_BP(
 	bool DoAttachment
 ) {
 	OutCollision = ANaMobSkillCollision::MakeCollisionByClass(SourceSkill, Class, InTranform, AttachToComponent, Socket, LifeSpan, DoAttachment);
+}
+
+void UNaMobStatics::GetOwnerMob_BP_Weapon(ANaMobWeapon* InWeapon, ANaMob*& OwnerMob) {
+	if (!IsValid(InWeapon)) {
+		OwnerMob = nullptr;
+		return;
+	}
+	OwnerMob = InWeapon->GetOwnerMob();
+}
+
+void UNaMobStatics::HasOwner_BP_Weapon(ANaMobWeapon* InWeapon, bool& HasOwner) {
+	if (!IsValid(InWeapon)) {
+		HasOwner = false;
+		return;
+	}
+	HasOwner = InWeapon->HasOwner();
+}
+
+void UNaMobStatics::GetRegName_BP_Weapon(ANaMobWeapon* InWeapon, FName& RegName) {
+	if (!IsValid(InWeapon)) {
+		RegName = NAME_None;
+		return;
+	}
+	RegName = InWeapon->GetRegisterName();
+}
+
+void UNaMobStatics::GetSocketName_BP_Weapon(ANaMobWeapon* InWeapon, FName& SocketName) {
+	if (!IsValid(InWeapon)) {
+		SocketName = NAME_None;
+		return;
+	}
+	SocketName = InWeapon->GetSocketName();
 }
 
