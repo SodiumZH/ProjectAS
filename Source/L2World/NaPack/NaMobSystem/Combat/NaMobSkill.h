@@ -47,6 +47,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Destroyed() override;
+
 	/* On skill initialized. 
 	* Use this instead of begin play in mob skill, since begin play will cause initialization issues.
 	* Will be called on the first frame, after a tick delta time from begin play.
@@ -75,10 +77,10 @@ public:
 
 protected:
 
-	UPROPERTY(BlueprintReadOnly)
+	//UPROPERTY(BlueprintReadOnly)
 	ANaMob* Source;
 
-	UPROPERTY(BlueprintReadOnly)
+	//UPROPERTY(BlueprintReadOnly)
 	FName Socket;
 
 	//UPROPERTY(BlueprintReadOnly)

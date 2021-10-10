@@ -50,6 +50,8 @@ public:
 
 	FName GetSkillRegisterName(ANaMobSkill* Skill);
 
+	void DestroySkillFromName(FName Name);
+
 	ANaMobSkill* UseSkill(
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,

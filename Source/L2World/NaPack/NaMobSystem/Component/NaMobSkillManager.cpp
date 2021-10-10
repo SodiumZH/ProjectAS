@@ -56,9 +56,9 @@ void UNaMobSkillManager::UnregisterSkill(FName RegisterName) {
 		return;
 	}
 
+	// Remove here
 	if (!SkillRegistry.Remove(RegisterName)) {
 		LogWarning("Unregister Skill Failed: register name doesn't exist.");
-		return;
 	}
 
 	
@@ -104,6 +104,14 @@ FName UNaMobSkillManager::GetSkillRegisterName(ANaMobSkill* Skill) {
 		return NAME_None;
 	}
 
+}
+
+UNaMobSkillManager::DestroySkillFromName(FName Name) {
+	if (ContainsRegisterName(Name)) {
+		GetSkillFromRegisterName(Name)->Destroy();
+		if (ContainsRegisterName(Name))
+			UnregisterSkill(Name);
+	}
 }
 
 ANaMobSkill* UNaMobSkillManager::UseSkill(

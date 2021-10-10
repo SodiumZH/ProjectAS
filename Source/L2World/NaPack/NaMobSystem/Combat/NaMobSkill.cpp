@@ -24,6 +24,10 @@ void ANaMobSkill::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 }
 
+void ANaMobSkill::Destroyed() {
+	Super::Destroyed();
+	Source->GetSkillManager()->UnregisterSkill(RegisterName);
+}
 void ANaMobSkill::BeginPlay() {
 	Super::BeginPlay();
 	FTimerHandle InitHandle;
