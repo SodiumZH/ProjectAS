@@ -106,7 +106,7 @@ FName UNaMobSkillManager::GetSkillRegisterName(ANaMobSkill* Skill) {
 
 }
 
-UNaMobSkillManager::DestroySkillFromName(FName Name) {
+void UNaMobSkillManager::DestroySkillFromName(FName Name) {
 	if (ContainsRegisterName(Name)) {
 		GetSkillFromRegisterName(Name)->Destroy();
 		if (ContainsRegisterName(Name))

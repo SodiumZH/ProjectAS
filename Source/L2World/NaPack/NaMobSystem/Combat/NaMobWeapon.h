@@ -137,6 +137,6 @@ public:
 
 	// Make weapon collision from a skill. Parameters of the collision are defined in the param "Collision Spawn Info". Set that param to change the collision spawning configs.
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Weapon")
-	ANaMobSkillCollision* MakeWeaponCollision(ANaMobSkill* SourceSkill, float LifeSpan = 0.f);
+	ANaMobSkillCollision* MakeWeaponCollision(ANaMobSkill* SourceSkill);
 
 };

@@ -242,7 +242,6 @@ public:
 		const FTransform & InTranform,
 		USceneComponent* AttachToComponent = nullptr,
 		FName Socket = NAME_None,
-		float LifeSpan = 0.f,
 		bool DoAttachment = true
 	);
 

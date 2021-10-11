@@ -47,8 +47,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Destroyed() override;
-
 	/* On skill initialized. 
 	* Use this instead of begin play in mob skill, since begin play will cause initialization issues.
 	* Will be called on the first frame, after a tick delta time from begin play.
@@ -132,6 +130,12 @@ public:
 
 	// Clear invalid elements and get collision set. Safe to iterate. 
 	TSet<ANaMobSkillCollision*> & GetCollisionSet_Safe();
+
+	// Add collision to set
+	void AddCollision(ANaMobSkillCollision* InCol);
+
+	// Remove collision from set
+	void RemoveCollision(ANaMobSkillCollision* InCol);
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|MobSystem")
 	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);

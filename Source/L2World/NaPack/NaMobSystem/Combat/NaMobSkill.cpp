@@ -24,10 +24,6 @@ void ANaMobSkill::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 }
 
-void ANaMobSkill::Destroyed() {
-	Super::Destroyed();
-	Source->GetSkillManager()->UnregisterSkill(RegisterName);
-}
 void ANaMobSkill::BeginPlay() {
 	Super::BeginPlay();
 	FTimerHandle InitHandle;
@@ -104,6 +100,14 @@ TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Unsafe() {
 TSet<ANaMobSkillCollision*> & ANaMobSkill::GetCollisionSet_Safe() {
 	ClearCollisionSet();
 	return CollisionSet;
+}
+
+void ANaMobSkill::AddCollision(ANaMobSkillCollision* InCol) {
+	CollisionSet.Emplace(InCol);
+}
+
+void ANaMobSkill::RemoveCollision(ANaMobSkillCollision* InCol) {
+	CollisionSet.Remove(InCol);
 }
 
 void ANaMobSkill::Destroyed() {

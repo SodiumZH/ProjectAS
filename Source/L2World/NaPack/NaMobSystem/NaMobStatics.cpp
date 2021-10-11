@@ -264,10 +264,9 @@ void UNaMobStatics::MakeCollisionByClass_BP(
 	const FTransform & InTranform,
 	USceneComponent* AttachToComponent,
 	FName Socket,
-	float LifeSpan,
 	bool DoAttachment
 ) {
-	OutCollision = ANaMobSkillCollision::MakeCollisionByClass(SourceSkill, Class, InTranform, AttachToComponent, Socket, LifeSpan, DoAttachment);
+	OutCollision = ANaMobSkillCollision::MakeCollisionByClass(SourceSkill, Class, InTranform, AttachToComponent, Socket, DoAttachment);
 }
 
 void UNaMobStatics::GetOwnerMob_BP_Weapon(ANaMobWeapon* InWeapon, ANaMob*& OwnerMob) {

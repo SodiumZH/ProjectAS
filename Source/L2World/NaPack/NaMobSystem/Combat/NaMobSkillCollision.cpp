@@ -132,7 +132,6 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 	const FTransform & InTransform,
 	USceneComponent* AttachToComponent,
 	FName InSocketName,
-	float LifeSpan,
 	bool DoAttachment
 ) {
 	// If Source is invalid, stop spawning
@@ -163,7 +162,7 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 
 	OutCol->SourceSkill = InSourceSkill;
 	OutCol->SocketName = InSocketName;
-	OutCol->SetLifeSpan(LifeSpan);
+	InSourceSkill->AddCollision(OutCol);
 
 	OutCol->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepRelativeTransform, InSocketName);
 	return OutCol;

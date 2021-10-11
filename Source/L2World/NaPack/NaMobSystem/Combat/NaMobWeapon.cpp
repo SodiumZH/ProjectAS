@@ -142,7 +142,7 @@ void ANaMobWeapon::DropWeapon() {
 	}
 }
 
-ANaMobSkillCollision* ANaMobWeapon::MakeWeaponCollision(ANaMobSkill* SourceSkill, float LifeSpan) {
+ANaMobSkillCollision* ANaMobWeapon::MakeWeaponCollision(ANaMobSkill* SourceSkill) {
 
 	if (!IsValid(SourceSkill)) {
 		LogError("Make Weapon Collision Failed: invalid source skill.");
@@ -160,7 +160,6 @@ ANaMobSkillCollision* ANaMobWeapon::MakeWeaponCollision(ANaMobSkill* SourceSkill
 		CollisionSpawnInfo.Transform,
 		IsValid(CollisionSpawnInfo.AttachToComponent) ? CollisionSpawnInfo.AttachToComponent : RootComponent,
 		CollisionSpawnInfo.WeaponSocketName,
-		LifeSpan,
 		true
 	);
 
