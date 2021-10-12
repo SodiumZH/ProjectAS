@@ -108,7 +108,7 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
-		bool ForceSpawn = false,
+		bool Force = false,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true
