@@ -6,7 +6,9 @@
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobSkillCollision.h"
 #include "Combat/NaMobWeapon.h"
+#include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobPlayerComponent.h"
+#include "Component/NaMobSkillManager.h"
 
 /* Mob */
 
@@ -59,6 +61,15 @@ void UNaMobStatics::GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& Ti
 	TimeControl = Target->GetTimeControl();
 }
 
+void UNaMobStatics::GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager) {
+	if (!IsValid(Target)) {
+		SkillManager = nullptr;
+		return;
+	}
+	SkillManager = Target->GetSkillManager();
+}
+
+
 
 /* Anim Switch */
 void UNaMobStatics::GetAnimStateSwitch_BP(ANaMob* Target, FName Key, bool& SwitchValue) {
@@ -93,7 +104,7 @@ void UNaMobStatics::GetWeaponRegisterName_BP(ANaMob* Target, ANaMobWeapon* Weapo
 		RegisterName = TEXT("");
 		return;
 	}
-	RegisterName = Target->GetRegisterName(Weapon);
+	RegisterName = Target->GetWeaponManager()->GetRegisterName(Weapon);
 }
 
 void UNaMobStatics::GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterName, ANaMobWeapon*& Weapon) {
@@ -101,29 +112,73 @@ void UNaMobStatics::GetWeaponFromRegisterName_BP(ANaMob* Target, FName RegisterN
 		Weapon = nullptr;
 		return;
 	}
-	Weapon = Target->GetWeaponFromRegisterName(RegisterName);
+	Weapon = Target->GetWeaponManager()->GetWeaponFromRegisterName(RegisterName);
 }
 
 /* Skill */
 
-void UNaMobStatics::GetTimeControl_BP_Skill(ANaMobSkill* Target, UTimeControlComponent*& TimeControl) {
-	if (!IsValid(Target)) {
+void UNaMobStatics::GetTimeControl_BP_Skill(ANaMobSkill* InSkill, UTimeControlComponent*& TimeControl) {
+	if (!IsValid(InSkill)) {
 		TimeControl = nullptr;
 		return;
 	}
-	TimeControl = Target->GetTimeControl();
+	TimeControl = InSkill->GetTimeControl();
 }
+
+void UNaMobStatics::GetSource_BP_Skill(ANaMobSkill* InSkill, ANaMob*& Source) {
+	if (!IsValid(InSkill)) {
+		Source = nullptr;
+		return;
+	}
+	Source = InSkill->GetSource(); 
+};
+
+void UNaMobStatics::GetSocket_BP_Skill(ANaMobSkill* InSkill, FName& Socket) {
+	if (!IsValid(InSkill)) {
+		Socket = NAME_None;
+		return;
+	}
+	Socket = InSkill->GetSocket();
+};
+
+void UNaMobStatics::GetRegisterName_BP_Skill(ANaMobSkill* InSkill, FName& RegName) {
+	if (!IsValid(InSkill)) {
+		RegName = NAME_None;
+		return;
+	}
+	RegName = InSkill->GetRegisterName(); 
+};
 
 void UNaMobStatics::UseSkillByClass_BP(
 	ANaMobSkill*& OutSkill,
 	ANaMob* SourceMob,
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
+	FName RegisterName,
+	bool ForceSpawn,
 	USceneComponent* AttachToComponent,
 	FName SocketName,
 	bool DoAttachment
 ) {
-	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, AttachToComponent, SocketName, DoAttachment);
+	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, ForceSpawn, AttachToComponent, SocketName, DoAttachment);
+}
+
+void UNaMobStatics::GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill) {
+	if (!IsValid(SourceMob)) {
+		Skill = nullptr;
+		return;
+	}
+	Skill = SourceMob->GetSkillManager()->GetSkillFromRegisterName(InRegisterName);
+}
+
+void UNaMobStatics::GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& SourceMob, FName& RegisterName) {
+	if (!IsValid(InSkill)) {
+		SourceMob = nullptr;
+		RegisterName = NAME_None;
+		return;
+	}
+	SourceMob = InSkill->GetSource();
+	RegisterName = InSkill->GetRegisterName();
 }
 
 void UNaMobStatics::GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillCollision*>& CollisionSet) {
@@ -209,9 +264,40 @@ void UNaMobStatics::MakeCollisionByClass_BP(
 	const FTransform & InTranform,
 	USceneComponent* AttachToComponent,
 	FName Socket,
-	float LifeSpan,
 	bool DoAttachment
 ) {
-	OutCollision = ANaMobSkillCollision::MakeCollisionByClass(SourceSkill, Class, InTranform, AttachToComponent, Socket, LifeSpan, DoAttachment);
+	OutCollision = ANaMobSkillCollision::MakeCollisionByClass(SourceSkill, Class, InTranform, AttachToComponent, Socket, DoAttachment);
+}
+
+void UNaMobStatics::GetOwnerMob_BP_Weapon(ANaMobWeapon* InWeapon, ANaMob*& OwnerMob) {
+	if (!IsValid(InWeapon)) {
+		OwnerMob = nullptr;
+		return;
+	}
+	OwnerMob = InWeapon->GetOwnerMob();
+}
+
+void UNaMobStatics::HasOwner_BP_Weapon(ANaMobWeapon* InWeapon, bool& HasOwner) {
+	if (!IsValid(InWeapon)) {
+		HasOwner = false;
+		return;
+	}
+	HasOwner = InWeapon->HasOwner();
+}
+
+void UNaMobStatics::GetRegName_BP_Weapon(ANaMobWeapon* InWeapon, FName& RegName) {
+	if (!IsValid(InWeapon)) {
+		RegName = NAME_None;
+		return;
+	}
+	RegName = InWeapon->GetRegisterName();
+}
+
+void UNaMobStatics::GetSocketName_BP_Weapon(ANaMobWeapon* InWeapon, FName& SocketName) {
+	if (!IsValid(InWeapon)) {
+		SocketName = NAME_None;
+		return;
+	}
+	SocketName = InWeapon->GetSocketName();
 }
 

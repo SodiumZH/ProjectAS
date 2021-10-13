@@ -48,6 +48,7 @@ class NAPACK_API ANaMobWeapon : public AActor {
 
 	GENERATED_BODY()
 
+
 public:
 
 	ANaMobWeapon();
@@ -56,20 +57,35 @@ public:
 	UStaticMeshComponent* Mesh;
 
 	/* Attachment */
-
 protected:
 
+	virtual void BeginPlay() override;
+
+	/* On weapon initialized. 
+	* Use this instead of begin play in weapon, since begin play will cause initialization issues.
+	* Will be called on the first frame, after a tick delta time from begin play.
+	*/
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "Initialized (Weapon)"), Category = "NaPack|MobSystem|Weapon")
+	void Initialized();
+	void Initialized_Implementation() {};
+	
 	ANaMob* OwnerMob;
 
 	FName SocketName;
 
+	FName RegisterName;
+
 public:
 
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	//UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	inline ANaMob* GetOwnerMob() { return OwnerMob; };
 
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	//UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
 	inline bool HasOwner();
+
+	inline FName GetSocketName() { return SocketName; };
+
+	inline FName GetRegisterName() { return RegisterName; };
 
 	/** Check if there's anything wrong with the ownership of the weapon. 
 	* For example: ownerless but not simulating physics, ownered but simulating, not attached to the owner, ...
@@ -77,7 +93,7 @@ public:
 	* Warning: This is a function for debugging. Do not depend on this to fix ownership errors in runtime!! In release it will not do anything to save resource.
 	* @Param TryFixing If true, it will try fixing the problem. Generally it will set the parameters of weapon to adapt the real condition. E.g. if ownered but simulating, it will be set ownerless.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Weapon")
 	void CheckOwner(bool TryFixing = false);
 
 	/* Spawn */
@@ -92,7 +108,7 @@ public:
 	* @Param NoAttach If true, it will generate an ownerless weapon without attaching to any mob. A valid mob "Target" is still required as world context.
 	@ @ReturnValue The weapon object generated.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem|Weapon")
 	static ANaMobWeapon* AddNewWeapon(TSubclassOf<ANaMobWeapon> Class, ANaMob* Target, const FTransform & Transform, FName Socket = NAME_None, FName RegisterName = NAME_None, bool NoAttachment = false);
 
 	/** Give an existing weapon to a mob. 
@@ -104,14 +120,14 @@ public:
 	* If false, it will not do anything if the weapon already has an owner.
 	*/
 	
-	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (Keywords = "add give spawn generate pick equip"), Category = "NaPack|MobSystem|Weapon")
 	static void GiveWeapon(ANaMobWeapon* Weapon, ANaMob* Target, FName SocketName = NAME_None, FName RegisterName = NAME_None, bool ForceGive = false);
 
 	/** Make a weapon ownerless and drop it on the ground by starting simulating physics. Warning: this action have potential risk of
 	* unexpected behaviors in the previous owner due to loss of ownership of the weapon.
 	* If the weapon is already ownerless, this function will not do anything.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "drop throw remove delete"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "drop throw remove delete"), Category = "NaPack|MobSystem|Weapon")
 	void DropWeapon();
 
 	/* Weapon Collision */
@@ -120,7 +136,7 @@ public:
 	FMobWeaponCollisionSpawnInfo CollisionSpawnInfo;
 
 	// Make weapon collision from a skill. Parameters of the collision are defined in the param "Collision Spawn Info". Set that param to change the collision spawning configs.
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	ANaMobSkillCollision* MakeWeaponCollision(ANaMobSkill* SourceSkill, float LifeSpan = 0.f);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem|Weapon")
+	ANaMobSkillCollision* MakeWeaponCollision(ANaMobSkill* SourceSkill);
 
 };

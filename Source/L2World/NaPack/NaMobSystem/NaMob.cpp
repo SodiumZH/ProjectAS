@@ -8,6 +8,8 @@
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobWeapon.h"
 #include "Component/NaMobPlayerComponent.h"
+#include "Component/NaMobSkillManager.h"
+#include "Component/NaMobWeaponManager.h"
 
 
 
@@ -22,7 +24,8 @@ ANaMob::ANaMob()
 	DefaultMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/Content/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
 
 	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
-	
+	SkillManager = CreateDefaultSubobject<UNaMobSkillManager>(TEXT("SkillManager"));
+	WeaponManager = CreateDefaultSubobject<UNaMobWeaponManager>(TEXT("WeaponManager"));
 }
 
 // Called to bind functionality to input
@@ -339,17 +342,6 @@ void ANaMob::MobTakeDamage(int64 Damage) {
 	OnMobTakingDamage(Damage);
 }
 
-ANaMobSkill* ANaMob::UseSkill(
-	TSubclassOf<class ANaMobSkill> SkillClass,
-	const FTransform & InTransform,
-	class USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
-){
-	return ANaMobSkill::UseSkillByClass(this, SkillClass, InTransform, AttachToComponent, SocketName, DoAttachment);
-}
-
-
 /* Animation */
 
 void ANaMob::UpdateAnimClass() {
@@ -368,10 +360,13 @@ void ANaMob::SetAnimClass(TSubclassOf<UAnimInstance> NewClass) {
 /* Animation state switch */
 
 void ANaMob::Tick_CloseAnimSwitch() {
-	float Time = GetTimeFromSpawn();
-	for (auto& Elem : AnimSwitchCloseTime) 
-		if (Time >= Elem.Value) 
-			CloseAnimStateSwitch(Elem.Key);
+	double Time = TimeControl->GetTime();
+	TSet<FName> ToCloseNames;
+	for (auto & Elem : AnimSwitchCloseTime)
+		if (Time >= Elem.Value)
+			ToCloseNames.Emplace(Elem.Key);
+	for (auto & Name : ToCloseNames)
+		CloseAnimStateSwitch(Name);
 }
 
 bool ANaMob::GetAnimStateSwitch(FName Key) {
@@ -391,7 +386,7 @@ void ANaMob::OpenAnimStateSwitch(FName Key, float DeltaTime) {
 	AnimStateSwitch.FindOrAdd(Key) = true;
 	// Set time to delay close
 	if (DeltaTime > 0) 
-		AnimSwitchCloseTime.FindOrAdd(Key) = GetTimeFromSpawn() + DeltaTime;
+		AnimSwitchCloseTime.FindOrAdd(Key) = TimeControl->GetTime() + (double)DeltaTime;
 }
 
 void ANaMob::CloseAnimStateSwitch(FName Key) {
@@ -400,99 +395,3 @@ void ANaMob::CloseAnimStateSwitch(FName Key) {
 }
 
 
-/* Time */
-
-//double GetTimeFromSpawn_Double();
-
-float ANaMob::GetTimeFromSpawn() {
-	return TimeControl->GetTime();
-}
-
-/* Weapon */
-
-ANaMobWeapon* ANaMob::GetWeaponFromRegisterName(FName Name) {
-	
-	if (Name == TEXT("")) {
-		LogError("Get Weapon From Name Failed: name cannot be empty.");
-		return nullptr;
-	}
-
-	ANaMobWeapon** OutPtr = Weapons.Find(Name);
-	if (OutPtr) {	// Check if the name is valid
-		if (IsValid(*OutPtr)) {		// Check if the weapon is valid
-			if ((*OutPtr)->GetOwnerMob() == this) {		// Check if the weapon is really attached to this mob
-				return (*OutPtr);
-			}
-			else {	// Case when weapon is not attached to this mob
-				LogError("Get Weapon From Name: weapon registered to this mob is not correctly attached.");
-				return (*OutPtr);	// Return anyway, but print an error msg to log
-			}
-		}
-		else {	// Case when the found weapon is not valid
-			LogError("Get Weapon From Name Failed: input name is registered, but the weapon is invalid. Return value will be null.");
-			return nullptr;
-		}
-	}
-	else {	// Case when the name is invalid
-		LogError("Get Weapon From Name Failed: invalid name. Return value will be null.");
-		return nullptr;
-	}
-}
-
-FName ANaMob::GetRegisterName(ANaMobWeapon* Weapon) {
-	TSet<FName> FoundNames;
-	for (auto & Reg : Weapons) {
-		if (Reg.Value == Weapon)
-			FoundNames.Emplace(Reg.Key);
-	}
-	if (FoundNames.Num() == 0) {
-		LogWarning("Get Register Name: weapon is not found.");
-		return TEXT("");
-	}
-	else if (FoundNames.Num() >= 2) {
-		LogError("Get Register Name: multiple register detected on getting weapon register name. This weapon is registered more than once. Will return a random name in the names found.")
-	}
-
-	// This is for returning a random element in the found names. If the name is unique, return value will be specific.
-	for (auto & FoundName : FoundNames) {
-		return FoundName;
-	}
-
-	checkNoEntry();
-	return TEXT("");
-}
-
-void ANaMob::RegisterWeapon(FName Name, ANaMobWeapon* Weapon, bool ReplacementNoWarning) {
-	
-	if (Name == TEXT("")) {
-		LogError("Register Weapon Failed: name cannot be empty.");
-		return;
-	}
-	
-	ANaMobWeapon** WeaponFoundPtr = Weapons.Find(Name);
-	if (!WeaponFoundPtr) {
-		Weapons.Emplace(Name, Weapon);
-		return;
-	}
-	else {
-		if (!ReplacementNoWarning)
-			LogWarning("Register Weapon: input name is existing. ");
-		Weapons[Name] = Weapon;
-		return;
-	}
-}
-
-void ANaMob::RemoveWeapon(FName Name) {
-	Weapons.Remove(Name);
-}
-
-void ANaMob::RemoveWeapon(ANaMobWeapon* Weapon) {
-
-	FName Key = GetRegisterName(Weapon);
-	if (Key == TEXT("")) {
-		LogWarning("Remove Weapon: weapon not found.")
-	}
-	else
-		Weapons.Remove(Key);
-
-}

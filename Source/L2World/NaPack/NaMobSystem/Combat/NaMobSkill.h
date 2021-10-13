@@ -47,11 +47,25 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	/* On skill initialized. 
+	* Use this instead of begin play in mob skill, since begin play will cause initialization issues.
+	* Will be called on the first frame, after a tick delta time from begin play.
+	*/
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "Initialized (Skill)"), Category = "NaPack|MobSystem|Skill")
+	void Initialized();
+	void Initialized_Implementation() {};
+
+	
+
+
 	/* Components */
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTimeControlComponent* TimeControl;
+
+	virtual void BeginPlay() override;
 
 public:
 
@@ -59,13 +73,27 @@ public:
 
 	/* Installation */
 
-public:
+protected:
 
-	UPROPERTY(BlueprintReadOnly)
+	//UPROPERTY(BlueprintReadOnly)
 	ANaMob* Source;
 
-	UPROPERTY(BlueprintReadOnly)
+	//UPROPERTY(BlueprintReadOnly)
 	FName Socket;
+
+	//UPROPERTY(BlueprintReadOnly)
+	FName RegisterName;
+
+public:
+
+	ANaMob* GetSource() { return Source; };
+
+	FName GetSocket() { return Socket; };
+
+	FName GetRegisterName() { return RegisterName; };
+
+	// Only on initialization of skill. DO NOT call this function in runtime!!
+	//void InitSourceSocketRegname(ANaMob* InSource, FName InSocket, FName InRegname) { Source = InSource; Socket = InSocket; RegisterName = InRegname; };
 
 	/** Generate a skill object from a mob.
 	* @Param SourceMob The mob as source of this skill.
@@ -79,6 +107,8 @@ public:
 		ANaMob* SourceMob,
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
+		FName InRegisterName,
+		bool Force = false,
 		USceneComponent* AttachToComponent = nullptr,
 		FName SocketName = NAME_None,
 		bool DoAttachment = true
@@ -100,6 +130,12 @@ public:
 
 	// Clear invalid elements and get collision set. Safe to iterate. 
 	TSet<ANaMobSkillCollision*> & GetCollisionSet_Safe();
+
+	// Add collision to set
+	void AddCollision(ANaMobSkillCollision* InCol);
+
+	// Remove collision from set
+	void RemoveCollision(ANaMobSkillCollision* InCol);
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|MobSystem")
 	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);

@@ -30,6 +30,10 @@ Animation			R321
 
 class ANaMobWeapon;
 class UTimeControlComponent;
+class UNaMobSkillManager;
+class ANaMobSkill;
+class UNaMobWeaponManager;
+
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
@@ -61,13 +65,22 @@ public:
 
 protected:
 
-	UTimeControlComponent * TimeControl;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UTimeControlComponent* TimeControl;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UNaMobSkillManager* SkillManager;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UNaMobWeaponManager* WeaponManager;
 
 public:
 
 	UTimeControlComponent * GetTimeControl() { return TimeControl; };
 
-	float GetTimeFromSpawn();
+	UNaMobSkillManager* GetSkillManager() { return SkillManager; };
+
+	UNaMobWeaponManager* GetWeaponManager() { return WeaponManager; };
 
 	/*==========================================================================*/
 	////////////
@@ -325,18 +338,6 @@ public:
 	// Actions when taking damage
 	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
 	void OnMobTakingDamage(int64 Damage);
-
-
-	/* Skill */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	class ANaMobSkill* UseSkill(
-		TSubclassOf<class ANaMobSkill> SkillClass,
-		const FTransform & InTransform,
-		class USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
-	);
-
 	
 	//=======================================================================
 	//	Animation
@@ -360,7 +361,7 @@ protected:
 
 	TMap<FName, bool> AnimStateSwitch;
 
-	TMap<FName, float> AnimSwitchCloseTime;
+	TMap<FName, double> AnimSwitchCloseTime;
 
 	void Tick_CloseAnimSwitch();
 
@@ -386,27 +387,5 @@ public:
 
 	/* Weapon related */
 
-protected:
-	
-	TMap<FName, ANaMobWeapon*> Weapons;
 
-public:
-
-	ANaMobWeapon* GetWeaponFromRegisterName(FName Name);
-
-	/* Get register name of a weapon. Please note that empty name ("") is a null return. If empty name is returned, it means the weapon is not registered. */
-	FName GetRegisterName(ANaMobWeapon* Weapon);
-
-	// Register a weapon to a mob. Please note that the empty name ("") cannot be a register name.
-	// WARNING: this action will NOT attach the weapon or setup any ownership!!!
-	// WARNING: If the same name is existing, this action will replace the old weapon and print warning to log.
-	// @Param ReplacementNoWarning If true, warning will not be printed when replacement happens. For cases when replacement is intended.
-	void RegisterWeapon(FName Name, ANaMobWeapon* Weapon, bool ReplacementNoWarning = false);
-
-	// Remove a weapon by name. WARNING: this action will NOT detach the weapon!!!
-	void RemoveWeapon(FName Name);
-
-	// Remove a weapon by ptr. WARNING: this action will NOT detach the weapon!!!
-	// If the weapon is registered more than once, it will remove all.
-	void RemoveWeapon(ANaMobWeapon* Weapon);
 };
