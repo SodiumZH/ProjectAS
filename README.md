@@ -6,7 +6,8 @@ L2World (*Lineage 2: World*) is an Lineage2-based fan game project remaking L2 i
 
 ### Progress
 
-2021-5-27 Just started. Some features has been partly implemented previously with BP and now I  will refactor them into C++. 
+2021-5-27 Just started. Some features has been partly implemented previously with BP and now I will refactor them into C++. 
+2021-10-13 Basic character movement, jump and normal attack have been implemented. Working on combat hit detection.
 
 ### Copyright Issues
 
