@@ -1,19 +1,79 @@
 #include "HitDetector.h"
 #include "Components/BoxComponent.h"
 
+/* Hit detector interface */
 
-void AHitDetector::CalledOnHitDetected(const FHitResult & HitResult) {
+void AHitDetectorInterface::CalledOnHitDetected(const FHitResult & HitResult) {
 	OnHitDetected(HitResult);
 	OnHitDetected_BP(HitResult);
 }
 
+void AHitDetectorInterface::AddIgnore(AActor* Ignore) {
+	IgnoreActors.Emplace(Ignore);
+}
+
+void AHitDetectorInterface::AddIgnoreMulti(const TArray<AActor*> Ignore) {
+	IgnoreActors.Append(Ignore);
+}
+
+void AHitDetectorInterface::ResumeIgnored(AActor* InActor) {
+	IgnoreActors.Remove(InActor);
+}
+
+void AHitDetectorInterface::ResumeIgnoredMulti(const TArray<AActor*> InActorSet) {
+	for (auto & InActor : InActorSet) {
+		ResumeIgnored(InActor);
+	}
+}
+
+// General templated tick detection implementation
+void AHitDetectorInterface::Tick(float dt) {
+	
+	Super::Tick(dt);
+
+	// Clear array first
+	HitResultTemp.Empty();
+
+	if (bOpened) {
+		// Custom implementation of hit detection
+		if (bDetectionUseBlueprintOverride)
+			Tick_DetectHit_BP(dt, HitResultTemp);
+		else
+			Tick_DetectHit(dt, HitResultTemp);
+
+		// Generate OnHitDetected events
+		AActor* HitActorTemp = nullptr;
+
+		for (int i = 0; i < HitResultTemp.Num(); ++i) {
+
+			HitActorTemp = HitResultTemp[i].Actor.Get();
+			check(HitActorTemp);
+
+			if (!IgnoreActors.Contains(HitActorTemp)) {
+
+				// Generate OnHitDetected event and add to ignore list
+				OnHitDetected(HitResultTemp[i]);
+				OnHitDetected_BP(HitResultTemp[i]);
+				if (OnHitDetected_Delegate.IsBound())
+					OnHitDetected_Delegate.ExecuteIfBound(HitResultTemp[i]);
+
+				IgnoreActors.Emplace(HitActorTemp);
+			}
+		}
+	}
+
+}
+
+
+/* Box hit detector */
 
 ABoxHitDetector::ABoxHitDetector(){
 
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent = SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	TemplateBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TemplateBox"));
-	RootComponent = TemplateBox;
+	TemplateBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 	
 }
@@ -24,7 +84,7 @@ void ABoxHitDetector::OnConstruction(const FTransform& trans) {
 
 	// As the box component is just a template, disable its collision
 	TemplateBox->SetCollisionProfileName(TEXT("NoCollision"));
-
+	LastLocation = GetActorLocation();
 }
 
 void ABoxHitDetector::BeginPlay() {
@@ -36,55 +96,20 @@ void ABoxHitDetector::BeginPlay() {
 }
 
 void ABoxHitDetector::Tick(float dt) {
+	
 	Super::Tick(dt);
-	Tick_DetectHit(dt, HitResultTemp);
 
+	LastLocation = TemplateBox->GetComponentLocation();
 }
 
 void ABoxHitDetector::Tick_DetectHit(float dt, TArray<FHitResult> & HitResult) {
 
-	FVector ThisLocation = GetActorLocation();
+	FVector ThisLocation = TemplateBox->GetComponentLocation();
 
-	if (!bOpened) {
-		LastLocation = ThisLocation;
-		HitResultTemp.Empty();
-		return;
-	}
-
-	HitResultTemp.Empty();
-
-	bool bHit = UKismetSystemLibrary::BoxTraceMulti(this, LastLocation, ThisLocation, TemplateBox->GetScaledBoxExtent(), TemplateBox->GetComponentRotation(), TraceChannel, bTraceComplex, IgnoreActors, DrawDebugType, HitResultTemp, true, TraceColor, TraceHitColor, DrawTime);
+	UKismetSystemLibrary::BoxTraceMulti(this, LastLocation, ThisLocation, TemplateBox->GetScaledBoxExtent(), TemplateBox->GetComponentRotation(), TraceChannel, bTraceComplex, IgnoreActors, DrawDebugType, HitResultTemp, true, TraceColor, TraceHitColor, DrawTime);
 
 	LastLocation = ThisLocation;
 
-	if (!bHit) 
-		return;
-	
-
-	for (int i = 0; i < HitResult.Num(); i++) {
-		if (!IgnoreActors.Contains(HitResultTemp[i].Actor.Get())) {
-			CalledOnHitDetected(HitResultTemp[i]);
-			IgnoreActors.Emplace(HitResultTemp[i].Actor.Get());
-		}
-	}
-
 }
 
 
-void ABoxHitDetector::AddIgnore(AActor* Ignore) {
-	IgnoreActors.Emplace(Ignore);
-}
-
-void ABoxHitDetector::AddIgnoreMulti(const TArray<AActor*> Ignore) {
-	IgnoreActors.Append(Ignore);
-}
-
-void ABoxHitDetector::Retrieve(AActor* InActor) {
-	IgnoreActors.Remove(InActor);
-}
-
-void ABoxHitDetector::RetrieveMulti(const TArray<AActor*> InActorSet) {
-	for (auto & InActor : InActorSet) {
-		Retrieve(InActor);
-	}
-}
