@@ -255,4 +255,19 @@
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\L2World\NaPack\NaActor">
+      <UniqueIdentifier>{646c34c1-3656-4225-bd1d-0f94955c0544}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaActor\HitDetector.cpp">
+      <Filter>Source\L2World\NaPack\NaActor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaActor\HitDetector.h">
+      <Filter>Source\L2World\NaPack\NaActor</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
