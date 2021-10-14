@@ -11,6 +11,7 @@ class ANaMobSkillCollision;
 class ANaMobWeapon;
 class UTimeControlComponent;
 class UNaMobPlayerComponent;
+class AHitDetectorInterface;
 
 UCLASS()
 class NAPACK_API UNaMobStatics : public UBlueprintFunctionLibrary
@@ -176,6 +177,10 @@ public:
 	/* Get socket name of skill collision */
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Socket Name (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
 	static void GetSocketName_BP(ANaMobSkillCollision* Target, FName& SocketName);
+
+	/* Get hit detector of skill collision */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Hit Detector (Skill Collision)", Keywords = "get detector"), Category = "NaPack|MobSystem|SkillCollision")
+	static void GetDetector_BP(ANaMobSkillCollision* Target, AHitDetectorInterface*& Detector);
 
 	/** Make a collision from a skill.
 	* @Param OutCollision Skill collision generated.

@@ -65,7 +65,7 @@ protected:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UChildActorComponent* HitDetector;
+	UChildActorComponent* HitDetectorSpawner;
 
 	ANaMobSkill* SourceSkill;
 

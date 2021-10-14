@@ -208,6 +208,14 @@ void UNaMobStatics::GetSocketName_BP(ANaMobSkillCollision* Target, FName& Socket
 	SocketName = Target->GetSocketName(); 
 }
 
+void UNaMobStatics::GetDetector_BP(ANaMobSkillCollision* Target, AHitDetectorInterface*& Detector) {
+	if (!IsValid(Target)) {
+		Detector = nullptr;
+		return;
+	}
+	Detector = Target->GetDetector();
+}
+
 void UNaMobStatics::MakeCollisionByClass_BP(
 	ANaMobSkillCollision*& OutCollision,
 	ANaMobSkill* SourceSkill,

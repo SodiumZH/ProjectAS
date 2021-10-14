@@ -9,15 +9,16 @@
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
-	HitDetector = CreateDefaultSubobject<UChildActorComponent>(TEXT("HitDetector"));
-	RootComponent = HitDetector;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	HitDetectorSpawner = CreateDefaultSubobject<UChildActorComponent>(TEXT("HitDetector"));
+	HitDetectorSpawner->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 
 void ANaMobSkillCollision::OnConstruction(const FTransform & trans) {
 
 	Super::OnConstruction(trans);
-	HitDetector->SetChildActorClass(DetectorClass);
+	//HitDetector->SetChildActorClass(DetectorClass);
 
 }
 
@@ -44,7 +45,7 @@ void ANaMobSkillCollision::Destroyed() {
 }
 
 AHitDetectorInterface* ANaMobSkillCollision::GetDetector() {
-	return dynamic_cast<AHitDetectorInterface*>(HitDetector->GetChildActor());
+	return dynamic_cast<AHitDetectorInterface*>(HitDetectorSpawner->GetChildActor());
 }
 
 

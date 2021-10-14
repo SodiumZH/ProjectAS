@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "../NaGlobalHeader.h"
+#include "../NaUtility/NaUtility.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "HitDetector.generated.h"
@@ -10,6 +11,7 @@ class UBoxComponent;
 struct FHitResult;
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FHitDetectedSignature, const FHitResult &, HitResult);
+DECLARE_DELEGATE_TwoParams(FTickHitDetectionSignature, float, TArray<FHitResult> &);
 
 /* Hit Detector is an actor class which detects overlap hit with other actors.
 * Designed for combats that need to detect hit of overlap objects e.g. weapon.
@@ -21,6 +23,9 @@ class NAPACK_API AHitDetectorInterface :public AActor {
 
 	GENERATED_BODY()
 
+protected:
+
+	virtual void BeginPlay() override;
 
 	/* Hit notify */
 
@@ -33,11 +38,13 @@ public:
 
 	// C++ actions when hit is detected
 	virtual void OnHitDetected(const FHitResult & HitResult) {};
+	
 
 	// BP Actions when hit is detected
 	UFUNCTION(BlueprintNativeEvent, DisplayName = "On Hit Detected", Category = "NaPack|Actor|HitDetector")
 	void OnHitDetected_BP(const FHitResult & HitResult);
 	void OnHitDetected_BP_Implementation(const FHitResult & HitResult) {};
+
 
 	// Actions when hit is detected as delegate
 	UPROPERTY(DisplayName = "On Hit Detected Delegate")
@@ -106,31 +113,21 @@ public:
 
 	/* Hit detection */
 
-	virtual void Tick_DetectHit(float dt, TArray<FHitResult> & HitResult) {};
-
 	virtual void Tick(float dt) override;
 
-	/* Blueprint method override to detect hit. Will be executed every tick unless closed (bOpened == false).
-	* To enable this function, set bDetectionUseBlueprintOverride = true in the detail panel.
+	/* Method override to detect hit. Will be executed every tick unless closed (bOpened == false).
 	* Note: DO NOT add the detected actors to ignore list!! This will be done automatically. If an actor is added to ignore list before or in this function, the OnHitDetected event will not generate for it.
 	* Note: DO NOT execute it in Tick manually! Or it will be executed twice. 
 	* Note: this function will not be executed when closed (bOpened == false). If something needs to be updated when closed, implement in Tick function instead.
 	* @Param DeltaTime Tick delta time.
 	* @Param HitResult Hit result array generated from tick detection. It will automatically generate OnHitDetected event with each element.
 	*/
-	UFUNCTION(BlueprintNativeEvent, DisplayName = "Tickly Hit Detecting Method", Category = "NaPack|Actor|HitDetector")
-	void Tick_DetectHit_BP(float DeltaTime, TArray<FHitResult> & HitResult);
-	void Tick_DetectHit_BP_Implementation(float DeltaTime, TArray<FHitResult> & HitResult) {};
-
-	/* If true, hit detecting method will use blueprint implementation override ("Tickly Hit Detecting Method").
-	* Else C++ implementation will be applied ("Tick_DetectHit()").
-	*/
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HitDetector")
-	bool bDetectionUseBlueprintOverride = false;
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Tick Hit Detecting Method", Keywords = "hit detect hit check"), Category = "NaPack|Actor|HitDetector")
+	void Tick_DetectHit(float DeltaTime, TArray<FHitResult> & HitResult);
+	virtual void Tick_DetectHit_Implementation(float DeltaTime, TArray<FHitResult> & HitResult) {};
 
 	// Hit result array. It will be updated every frame.
 	TArray<FHitResult> HitResultTemp;
-
 
 };
 
@@ -164,10 +161,13 @@ protected:
 	/* Hit detection */
 
 	FVector LastLocation;
+	
+	bool bIsLastLocationInitialized = false;
 
 public:
 
 	// Main detection function by box sweeping
-	virtual void Tick_DetectHit(float dt, TArray<FHitResult> & HitResult) override;
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Default Hit Detecting Method (Box Hit Detector)", Keywords = "hit detect hit check hit"))
+	void Tick_DetectHit_BoxHitDetector(float TickDeltaTime, TArray<FHitResult> & HitResult);
 
 };

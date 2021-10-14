@@ -3,6 +3,12 @@
 
 /* Hit detector interface */
 
+void AHitDetectorInterface::BeginPlay() {
+	Super::BeginPlay();
+
+
+}
+
 void AHitDetectorInterface::CalledOnHitDetected(const FHitResult & HitResult) {
 	OnHitDetected(HitResult);
 	OnHitDetected_BP(HitResult);
@@ -36,10 +42,7 @@ void AHitDetectorInterface::Tick(float dt) {
 
 	if (bOpened) {
 		// Custom implementation of hit detection
-		if (bDetectionUseBlueprintOverride)
-			Tick_DetectHit_BP(dt, HitResultTemp);
-		else
-			Tick_DetectHit(dt, HitResultTemp);
+		Tick_DetectHit(dt, HitResultTemp);
 
 		// Generate OnHitDetected events
 		AActor* HitActorTemp = nullptr;
@@ -85,6 +88,7 @@ void ABoxHitDetector::OnConstruction(const FTransform& trans) {
 	// As the box component is just a template, disable its collision
 	TemplateBox->SetCollisionProfileName(TEXT("NoCollision"));
 	LastLocation = GetActorLocation();
+
 }
 
 void ABoxHitDetector::BeginPlay() {
@@ -92,23 +96,33 @@ void ABoxHitDetector::BeginPlay() {
 	Super::BeginPlay();
 
 	LastLocation = GetActorLocation();
-
+	bIsLastLocationInitialized = true;
 }
 
 void ABoxHitDetector::Tick(float dt) {
 	
 	Super::Tick(dt);
 
-	LastLocation = TemplateBox->GetComponentLocation();
+	
 }
 
-void ABoxHitDetector::Tick_DetectHit(float dt, TArray<FHitResult> & HitResult) {
+
+void ABoxHitDetector::Tick_DetectHit_BoxHitDetector(float DeltaTime, TArray<FHitResult> & HitResult) {
+
+	if(!bOpened)
+		bIsLastLocationInitialized = false;
+	else if (bIsLastLocationInitialized == false) {
+		LastLocation = TemplateBox->GetComponentLocation();
+		bIsLastLocationInitialized = true;
+	}
+
 
 	FVector ThisLocation = TemplateBox->GetComponentLocation();
 
 	UKismetSystemLibrary::BoxTraceMulti(this, LastLocation, ThisLocation, TemplateBox->GetScaledBoxExtent(), TemplateBox->GetComponentRotation(), TraceChannel, bTraceComplex, IgnoreActors, DrawDebugType, HitResultTemp, true, TraceColor, TraceHitColor, DrawTime);
 
 	LastLocation = ThisLocation;
+	
 
 }
 
