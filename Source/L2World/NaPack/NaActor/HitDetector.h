@@ -59,10 +59,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HitDetector")
 	bool bOpened = true;
 
-	// If true, the hit event will generate only once for an actor, unless the actor is manually retrieved.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HitDetector")
-	bool bHitOnlyOnce = true;
-
 	// Whether the hit detection will trace complex collision.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HitDetector")
 	bool bTraceComplex = false;
@@ -78,6 +74,9 @@ protected:
 	TArray<AActor*> IgnoreActors;
 
 public:
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	void GetIgnoreList(TArray<AActor*>& IgnoreList) { IgnoreList = IgnoreActors; };
 
 	// Add an actor to ignore list
 	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
@@ -163,6 +162,9 @@ protected:
 	FVector LastLocation;
 	
 	bool bIsLastLocationInitialized = false;
+
+	// On first tick the location will be wrong, so disable trace at first tick.
+	bool bIsFirstTick = true;
 
 public:
 

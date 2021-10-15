@@ -43,6 +43,7 @@ void AHitDetectorInterface::Tick(float dt) {
 	if (bOpened) {
 		// Custom implementation of hit detection
 		Tick_DetectHit(dt, HitResultTemp);
+		
 
 		// Generate OnHitDetected events
 		AActor* HitActorTemp = nullptr;
@@ -53,7 +54,7 @@ void AHitDetectorInterface::Tick(float dt) {
 			check(HitActorTemp);
 
 			if (!IgnoreActors.Contains(HitActorTemp)) {
-
+				UE_LOG(LogTemp, Log, TEXT("HitDetected: %s"), *AActor::GetDebugName(HitActorTemp));
 				// Generate OnHitDetected event and add to ignore list
 				OnHitDetected(HitResultTemp[i]);
 				OnHitDetected_BP(HitResultTemp[i]);
@@ -95,8 +96,7 @@ void ABoxHitDetector::BeginPlay() {
 
 	Super::BeginPlay();
 
-	LastLocation = GetActorLocation();
-	bIsLastLocationInitialized = true;
+
 }
 
 void ABoxHitDetector::Tick(float dt) {
@@ -116,14 +116,13 @@ void ABoxHitDetector::Tick_DetectHit_BoxHitDetector(float DeltaTime, TArray<FHit
 		bIsLastLocationInitialized = true;
 	}
 
-
 	FVector ThisLocation = TemplateBox->GetComponentLocation();
-
-	UKismetSystemLibrary::BoxTraceMulti(this, LastLocation, ThisLocation, TemplateBox->GetScaledBoxExtent(), TemplateBox->GetComponentRotation(), TraceChannel, bTraceComplex, IgnoreActors, DrawDebugType, HitResultTemp, true, TraceColor, TraceHitColor, DrawTime);
+	if (bIsLastLocationInitialized&&(!bIsFirstTick))
+		UKismetSystemLibrary::BoxTraceMulti(this, LastLocation, ThisLocation, TemplateBox->GetScaledBoxExtent(), TemplateBox->GetComponentRotation(), TraceChannel, bTraceComplex, IgnoreActors, DrawDebugType, HitResult, true, TraceColor, TraceHitColor, DrawTime);
 
 	LastLocation = ThisLocation;
 	
-
+	bIsFirstTick = false;
 }
 
 
