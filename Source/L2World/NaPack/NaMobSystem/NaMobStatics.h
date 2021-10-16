@@ -11,6 +11,7 @@ class ANaMobSkillCollision;
 class ANaMobWeapon;
 class UTimeControlComponent;
 class UNaMobPlayerComponent;
+class AHitDetectorInterface;
 
 UCLASS()
 class NAPACK_API UNaMobStatics : public UBlueprintFunctionLibrary
@@ -166,20 +167,8 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Collision Set (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
 	static void GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillCollision*>& CollisionSet);
 
+
 	/* Skill Collision */
-
-	/* Get collision root of skill collision. 
-	* Set transform of this component instead of the collision body.
-	*/
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Collision Root(Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void GetCollisionRoot_BP(ANaMobSkillCollision* Target, USceneComponent*& CollisionRoot);
-
-	/* Get collision component of skill collision. 
-	* Collision component can be a sphere, capsule, box or static mesh component.
-	* Return value is in primitive component. Cast if specific class is needed.
-	*/
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Collision (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void GetCollision_BP(ANaMobSkillCollision* Target, UPrimitiveComponent*& Collision);
 
 	/* Get source skill of skill collision. */
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Source Skill (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
@@ -189,41 +178,9 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Socket Name (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
 	static void GetSocketName_BP(ANaMobSkillCollision* Target, FName& SocketName);
 
-	/* Get collision half size.
-	* Warning: this result is not valid for static mesh collision.
-	* @Param X: Box half X size, capsule radius or sphere radius.
-	* @Param Y: Box half Y size. Invalid for sphere and capsule.
-	* @Param Z: InZ Box half Z size or capsule half height. Invalid for sphere.
-	*/
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Half Size (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void GetHalfSize_BP(ANaMobSkillCollision* Target, float& X, float& Y, float& Z);
-
-	/* Get collision half size in vector.
-	* Warning: this result is not valid for static mesh collision.
-	* HalfSize.X: Box half X size, capsule radius or sphere radius.
-	* HalfSize.Y: Box half Y size. Invalid for sphere and capsule.
-	* HalfSize.Z: InZ Box half Z size or capsule half height. Invalid for sphere.
-	*/
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Half Size in Vector (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void GetHalfSize_BP_Vec(ANaMobSkillCollision* Target, FVector& HalfSize);
-
-	/* Set collision half size.
-	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
-	* @Param InX Box half X size, capsule radius or sphere radius.
-	* @Param InY Box half Y size. Invalid for sphere and capsule.
-	* @Param InZ Box half Z size or capsule half height. Invalid for sphere.
-	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Set Half Size (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void SetHalfSize_BP(ANaMobSkillCollision* Target, float InX = 8.f, float InY = 8.f, float InZ = 16.f);
-
-	/* Set collision half size with vector input.
-	* This function doesn't work for static mesh collision. For static mesh please set actor transform directly.
-	* InVec.X: Box half X size, capsule radius or sphere radius.
-	* InVec.Y: Box half Y size. Invalid for sphere and capsule (just keep default).
-	* InVec.Z: InZ Box half Z size or capsule half height. Invalid for sphere (just keep default).
-	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Set Half Size in Vector (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
-	static void SetHalfSize_BP_Vec(ANaMobSkillCollision* Target, FVector InVec = FVector(8.f, 8.f, 16.f));
+	/* Get hit detector of skill collision */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Hit Detector (Skill Collision)", Keywords = "get detector"), Category = "NaPack|MobSystem|SkillCollision")
+	static void GetDetector_BP(ANaMobSkillCollision* Target, AHitDetectorInterface*& Detector);
 
 	/** Make a collision from a skill.
 	* @Param OutCollision Skill collision generated.

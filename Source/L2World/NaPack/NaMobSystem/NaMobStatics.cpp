@@ -192,22 +192,6 @@ void UNaMobStatics::GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillColl
 
 /* Skill Collision */
 
-void UNaMobStatics::GetCollisionRoot_BP(ANaMobSkillCollision* Target, USceneComponent*& CollisionRoot) {
-	if (!IsValid(Target)) {
-		CollisionRoot = nullptr;
-		return;
-	}
-	CollisionRoot = Target->GetCollisionRoot();
-}
-
-void UNaMobStatics::GetCollision_BP(ANaMobSkillCollision* Target, UPrimitiveComponent*& Collision) {
-	if (!IsValid(Target)) {
-		Collision = nullptr;
-		return;
-	}
-	Collision = Target->GetCollision(); 
-}
-
 void UNaMobStatics::GetSourceSkill_BP(ANaMobSkillCollision* Target, ANaMobSkill*& SourceSkill) {
 	if (!IsValid(Target)) {
 		SourceSkill = nullptr;
@@ -224,37 +208,12 @@ void UNaMobStatics::GetSocketName_BP(ANaMobSkillCollision* Target, FName& Socket
 	SocketName = Target->GetSocketName(); 
 }
 
-void UNaMobStatics::GetHalfSize_BP(ANaMobSkillCollision* Target, float& X, float& Y, float& Z) {
+void UNaMobStatics::GetDetector_BP(ANaMobSkillCollision* Target, AHitDetectorInterface*& Detector) {
 	if (!IsValid(Target)) {
-		X = 0; Y = 0; Z = 0;
+		Detector = nullptr;
 		return;
 	}
-	FVector V = Target->GetHalfSize();
-	X = V.X;
-	Y = V.Y;
-	Z = V.Z;
-}
-
-void UNaMobStatics::GetHalfSize_BP_Vec(ANaMobSkillCollision* Target, FVector& HalfSize) {
-	if (!IsValid(Target)) {
-		HalfSize = FVector::ZeroVector;
-		return;
-	}
-	HalfSize = Target->GetHalfSize();
-}
-
-void UNaMobStatics::SetHalfSize_BP(ANaMobSkillCollision* Target, float InX, float InY, float InZ) {
-	if (!IsValid(Target)) {
-		return;
-	}
-	Target->SetHalfSize(InX, InY, InZ);
-}
-
-void UNaMobStatics::SetHalfSize_BP_Vec(ANaMobSkillCollision* Target, FVector InVec) {
-	if (!IsValid(Target)) {
-		return;
-	}
-	Target->SetHalfSizeVector(InVec);
+	Detector = Target->GetDetector();
 }
 
 void UNaMobStatics::MakeCollisionByClass_BP(

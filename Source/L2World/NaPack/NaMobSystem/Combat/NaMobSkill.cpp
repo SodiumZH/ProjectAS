@@ -111,10 +111,15 @@ void ANaMobSkill::RemoveCollision(ANaMobSkillCollision* InCol) {
 }
 
 void ANaMobSkill::Destroyed() {
+	TSet<ANaMobSkillCollision*> DelCols;
 	for (auto & Col : CollisionSet) {
 		if (IsValid(Col)) {
-			Col->Destroy();
+			DelCols.Emplace(Col);
 		}
+	}
+	for (auto & DelCol : DelCols) {
+		if (IsValid(DelCol))
+			DelCol->Destroy();
 	}
 	if (IsValid(Source))
 		Source->GetSkillManager()->UnregisterSkill(RegisterName);

@@ -138,8 +138,8 @@ public:
 	void RemoveCollision(ANaMobSkillCollision* InCol);
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|MobSystem")
-	void ReceiveCollisionHit(const FSkillCollisionHitReturn & HitData);
-	virtual void ReceiveCollisionHit_Implementation(const FSkillCollisionHitReturn & HitData) {};
+	void ReceiveCollisionHit(ANaMobSkillCollision* SourceCollision, const FHitResult & HitData);
+	virtual void ReceiveCollisionHit_Implementation(ANaMobSkillCollision* SourceCollision, const FHitResult & HitData) {};
 
 	void Destroyed() override;
 
