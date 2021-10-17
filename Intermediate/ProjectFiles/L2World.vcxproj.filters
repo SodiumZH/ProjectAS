@@ -264,4 +264,9 @@
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStatusManager.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

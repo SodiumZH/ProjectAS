@@ -10,7 +10,7 @@
 #include "Component/NaMobPlayerComponent.h"
 #include "Component/NaMobSkillManager.h"
 #include "Component/NaMobWeaponManager.h"
-
+#include "Component/NaMobStatusManager.h"
 
 
 /** Constructor & Input */
@@ -26,6 +26,7 @@ ANaMob::ANaMob()
 	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
 	SkillManager = CreateDefaultSubobject<UNaMobSkillManager>(TEXT("SkillManager"));
 	WeaponManager = CreateDefaultSubobject<UNaMobWeaponManager>(TEXT("WeaponManager"));
+	StatusManager = CreateDefaultSubobject<UNaMobStatusManager>(TEXT("StatusManager"));
 }
 
 // Called to bind functionality to input
