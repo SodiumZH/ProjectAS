@@ -29,6 +29,7 @@ enum class ENaMobJumpType :uint8 {
 * It will update itself then the mob every tick. Data in this component should not be directly imported from save data, but calculated from Data Manager or be set in runtime.
 * Also, data in this component should be directly appliable. For example, attack stored in this component should be the real value (calculated from basic ablilty, equipment, buff, etc.) and can be directly used for damage calculation. 
 * Data directly imported or calculated from save data should be stored in Mob Data Manager (e.g. basic attack).
+* Only valid for mobs.
 */
 UCLASS(BlueprintType)
 class NAPACK_API UNaMobStatusManager : public UActorComponent {
@@ -36,6 +37,8 @@ class NAPACK_API UNaMobStatusManager : public UActorComponent {
 	GENERATED_BODY()
 
 public:
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*********** Movement related ************/
 
@@ -106,7 +109,24 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobStatus|Stamina")
 	int64 MaxMP = 100;
 
-	
+	/* Status synchonization */
 
+	/* If true, it will update properties every frame. If you're sure the properties will not change in a certain time period, set it false to improve performance.
+	* Movement properties (speed, jump, accel) in this component needs to be applied by synchonizing to movement component. 
+	* If synchoniation is off, setting these values will not change the real value until next sync. 
+	* This value can be set in runtime and works immediately.
+	* When this value is false, you can also call function "StatusSync()"(C++) or "Status Synchonize"(BP) to manually synchonize when needed.
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (Keywords = "status state data synchonize"), Category = "MobStatus|Synchonization")
+	bool bDoTickSync = true;
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Status Synchonize", Keywords = "state status data synchronize"), Category = "NaPack|MobSystem|MobStatus|Synchonization")
+	virtual void StatusSync();
+
+	/* On mob status manager doing status synchonization. 
+	* It will be executed every tick (when bDoTickSync == true) or when calling StatusSync().
+	*/
+	UFUNCTION(BlueprintNativeEvent, DisplayName = "On Status Synchonized", Category = "NaPack|MobSystem|MobStatus|Synchonization")
+	void OnStatusSync();
+	void OnStatusSync_Implementation() {};
 };

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "NaMob.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -11,6 +10,7 @@
 #include "Component/NaMobSkillManager.h"
 #include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobStatusManager.h"
+
 
 
 /** Constructor & Input */
@@ -68,7 +68,6 @@ void ANaMob::BeginPlay()
 void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Tick_DataSync();
 	Tick_CloseAnimSwitch();
 }
 
@@ -292,52 +291,39 @@ void ANaMob::InitCapsuleMeshSize() {
 	UpdateMeshTransform();
 }
 
-/* Data */
-void ANaMob::Tick_DataSync(){
-	
-	GetCharacterMovement()->MaxWalkSpeed = MOB_BASIC_WALK_SPEED*(GeneralData.Movement.bIsRunning ? GeneralData.Movement.RunSpeedScale : GeneralData.Movement.WalkSpeedScale);
-	GetCharacterMovement()->MaxAcceleration = MOB_BASIC_ACCEL*GeneralData.Movement.MaxAccelScale;
-	GetCharacterMovement()->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY*GeneralData.Movement.JumpHeightScale;
-
-	
-	OnDataSync();
-}
-
-
-
 /* Basic actions */
 
 void ANaMob::MobDie() {
 	
-	GeneralData.Stamina.CurrentHP = 0;
-	GeneralData.Movement.bCanMove = false;
-	GeneralData.Movement.bCanJump = false;
-	GeneralData.Stamina.bIsDead = true;
+	StatusManager->CurrentHP = 0;
+	StatusManager->MovementType = ENaMobMovementType::MMT_NoMove;
+	StatusManager->JumpType = ENaMobJumpType::MJT_NoJump;
+	StatusManager->bIsDead = true;
 	OnMobDying();
 
 }
 void ANaMob::DefaultMobResume() {
-	GeneralData.Stamina.CurrentHP = GeneralData.Stamina.MaxHP;
-	GeneralData.Stamina.CurrentMP = GeneralData.Stamina.MaxMP;
-	GeneralData.Movement.bCanMove = true;
-	GeneralData.Movement.bCanJump = true;
-	GeneralData.Stamina.bIsDead = false;
+	StatusManager->CurrentHP = StatusManager->MaxHP;
+	StatusManager->CurrentMP = StatusManager->MaxMP;
+	StatusManager->MovementType = ENaMobMovementType::MMT_Run;
+	StatusManager->JumpType = ENaMobJumpType::MJT_Default;
+	StatusManager->bIsDead = false;
 	OnMobResuming();
 }
 
 void ANaMob::CustomMobResume(int64 NewHP) {
-	GeneralData.Stamina.CurrentHP = NewHP;
-	GeneralData.Movement.bCanMove = true;
-	GeneralData.Movement.bCanJump = true;
-	GeneralData.Stamina.bIsDead = false;
+	StatusManager->CurrentHP = NewHP;
+	StatusManager->MovementType = ENaMobMovementType::MMT_Run;
+	StatusManager->JumpType = ENaMobJumpType::MJT_Default;
+	StatusManager->bIsDead = false;
 	OnMobResuming();
 	OnCustomMobResuming(NewHP);
 }
 
 void ANaMob::MobTakeDamage(int64 Damage) {
-	GeneralData.Stamina.CurrentHP -= Damage;
+	StatusManager->CurrentHP -= Damage;
 
-	if (GeneralData.Stamina.CurrentHP <= 0)
+	if (StatusManager->CurrentHP <= 0)
 		MobDie();
 
 	OnMobTakingDamage(Damage);
