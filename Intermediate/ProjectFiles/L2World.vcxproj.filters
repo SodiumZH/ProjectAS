@@ -265,12 +265,18 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStatusManager.h">
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobDataManager.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStateManager.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStatusManager.cpp">
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobDataManager.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStateManager.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClCompile>
   </ItemGroup>

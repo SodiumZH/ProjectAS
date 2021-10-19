@@ -9,7 +9,8 @@
 #include "Component/NaMobPlayerComponent.h"
 #include "Component/NaMobSkillManager.h"
 #include "Component/NaMobWeaponManager.h"
-#include "Component/NaMobStatusManager.h"
+#include "Component/NaMobStateManager.h"
+#include "Component/NaMobDataManager.h"
 
 
 
@@ -26,7 +27,9 @@ ANaMob::ANaMob()
 	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
 	SkillManager = CreateDefaultSubobject<UNaMobSkillManager>(TEXT("SkillManager"));
 	WeaponManager = CreateDefaultSubobject<UNaMobWeaponManager>(TEXT("WeaponManager"));
-	StatusManager = CreateDefaultSubobject<UNaMobStatusManager>(TEXT("StatusManager"));
+	StateManager = CreateDefaultSubobject<UNaMobStateManager>(TEXT("StateManager"));
+	DataManager = CreateDefaultSubobject<UNaMobDataManager>(TEXT("DataManager"));
+
 }
 
 // Called to bind functionality to input
@@ -295,35 +298,35 @@ void ANaMob::InitCapsuleMeshSize() {
 
 void ANaMob::MobDie() {
 	
-	StatusManager->CurrentHP = 0;
-	StatusManager->MovementType = ENaMobMovementType::MMT_NoMove;
-	StatusManager->JumpType = ENaMobJumpType::MJT_NoJump;
-	StatusManager->bIsDead = true;
+	StateManager->CurrentHP = 0;
+	StateManager->MovementType = ENaMobMovementType::MMT_NoMove;
+	StateManager->JumpType = ENaMobJumpType::MJT_NoJump;
+	StateManager->bIsDead = true;
 	OnMobDying();
 
 }
 void ANaMob::DefaultMobResume() {
-	StatusManager->CurrentHP = StatusManager->MaxHP;
-	StatusManager->CurrentMP = StatusManager->MaxMP;
-	StatusManager->MovementType = ENaMobMovementType::MMT_Run;
-	StatusManager->JumpType = ENaMobJumpType::MJT_Default;
-	StatusManager->bIsDead = false;
+	StateManager->CurrentHP = StateManager->MaxHP;
+	StateManager->CurrentMP = StateManager->MaxMP;
+	StateManager->MovementType = ENaMobMovementType::MMT_Run;
+	StateManager->JumpType = ENaMobJumpType::MJT_Default;
+	StateManager->bIsDead = false;
 	OnMobResuming();
 }
 
 void ANaMob::CustomMobResume(int64 NewHP) {
-	StatusManager->CurrentHP = NewHP;
-	StatusManager->MovementType = ENaMobMovementType::MMT_Run;
-	StatusManager->JumpType = ENaMobJumpType::MJT_Default;
-	StatusManager->bIsDead = false;
+	StateManager->CurrentHP = NewHP;
+	StateManager->MovementType = ENaMobMovementType::MMT_Run;
+	StateManager->JumpType = ENaMobJumpType::MJT_Default;
+	StateManager->bIsDead = false;
 	OnMobResuming();
 	OnCustomMobResuming(NewHP);
 }
 
 void ANaMob::MobTakeDamage(int64 Damage) {
-	StatusManager->CurrentHP -= Damage;
+	StateManager->CurrentHP -= Damage;
 
-	if (StatusManager->CurrentHP <= 0)
+	if (StateManager->CurrentHP <= 0)
 		MobDie();
 
 	OnMobTakingDamage(Damage);

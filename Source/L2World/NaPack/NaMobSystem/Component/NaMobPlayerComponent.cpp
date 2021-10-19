@@ -4,7 +4,7 @@
 #include "NaMobPlayerComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../../NaUtility/NaUtility.h"
-#include "NaMobStatusManager.h"
+#include "NaMobStateManager.h"
 
 // Sets default values for this component's properties
 UNaMobPlayerComponent::UNaMobPlayerComponent()
@@ -74,7 +74,7 @@ void UNaMobPlayerComponent::MoveForward(float val) {
 		return;
 
 	// Do only when enable movement
-	if (!Mob->GetStatusManager()->CanMove())
+	if (!Mob->GetStateManager()->CanMove())
 		val = 0.f;
 
 	if ((Mob->Controller != nullptr) && (val != 0.0f))
@@ -92,7 +92,7 @@ void UNaMobPlayerComponent::MoveRight(float val) {
 		return;
 
 	// Do only when enable movement
-	if (!Mob->GetStatusManager()->CanMove())
+	if (!Mob->GetStateManager()->CanMove())
 		val = 0.f;
 
 	if ((Mob->Controller != nullptr) && (val != 0.0f))
@@ -109,7 +109,7 @@ void UNaMobPlayerComponent::Tick_PlayerRotation() {
 	if (!Mob)
 		return;
 	// Do only when enable movement
-	if (!Mob->GetStatusManager()->CanMove())
+	if (!Mob->GetStateManager()->CanMove())
 		return;
 	// When falling no rotation
 	if (Mob->GetCharacterMovement()->IsFalling())

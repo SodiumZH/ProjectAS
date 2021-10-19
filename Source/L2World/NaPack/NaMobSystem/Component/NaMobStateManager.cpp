@@ -1,16 +1,16 @@
 #pragma once
 
-#include "NaMobStatusManager.h"
+#include "NaMobStateManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../NaMob.h"
 
-void UNaMobStatusManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
+void UNaMobStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (bDoTickSync)
-		StatusSync();
+		StateSync();
 }
 
-void UNaMobStatusManager::StatusSync() {
+void UNaMobStateManager::StateSync() {
 
 	ANaMob* Mob = dynamic_cast<ANaMob*>(GetOwner());
 	UCharacterMovementComponent* CharMove = Mob->GetCharacterMovement();
@@ -57,6 +57,6 @@ void UNaMobStatusManager::StatusSync() {
 	CharMove->MaxAcceleration = MOB_BASIC_ACCEL * MaxAccel;
 	CharMove->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY * RealtimeJumpHeightScale;
 
-	OnStatusSync();
+	OnStateSync();
 	
 }

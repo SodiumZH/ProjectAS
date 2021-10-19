@@ -33,7 +33,8 @@ class UTimeControlComponent;
 class UNaMobSkillManager;
 class ANaMobSkill;
 class UNaMobWeaponManager;
-class UNaMobStatusManager;
+class UNaMobStateManager;
+class UNaMobDataManager;
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
@@ -75,14 +76,18 @@ protected:
 	UNaMobWeaponManager* WeaponManager;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UNaMobStatusManager* StatusManager;
+	UNaMobStateManager* StateManager;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UNaMobDataManager* DataManager;
 
 public:
 
 	UTimeControlComponent * GetTimeControl() { return TimeControl; };
 	UNaMobSkillManager* GetSkillManager() { return SkillManager; };
 	UNaMobWeaponManager* GetWeaponManager() { return WeaponManager; };
-	UNaMobStatusManager* GetStatusManager() { return StatusManager; };
+	UNaMobStateManager* GetStateManager() { return StateManager; };
+	UNaMobDataManager* GetDataManager() { return DataManager; };
 
 	/*==========================================================================*/
 	////////////
