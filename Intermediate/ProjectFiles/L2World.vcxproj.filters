@@ -271,6 +271,12 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStateManager.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobEnemyComponent.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\WorldManager\NaWorldEnemyManager.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\WorldManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobDataManager.cpp">
@@ -279,5 +285,16 @@
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobStateManager.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobEnemyComponent.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\WorldManager\NaWorldEnemyManager.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\WorldManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\L2World\NaPack\NaMobSystem\WorldManager">
+      <UniqueIdentifier>{02be3134-9b26-4a4d-8d95-f4c7b60f75cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
