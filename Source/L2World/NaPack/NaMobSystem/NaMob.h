@@ -33,7 +33,8 @@ class UTimeControlComponent;
 class UNaMobSkillManager;
 class ANaMobSkill;
 class UNaMobWeaponManager;
-
+class UNaMobStateManager;
+class UNaMobDataManager;
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
@@ -74,13 +75,19 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UNaMobWeaponManager* WeaponManager;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UNaMobStateManager* StateManager;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UNaMobDataManager* DataManager;
+
 public:
 
 	UTimeControlComponent * GetTimeControl() { return TimeControl; };
-
 	UNaMobSkillManager* GetSkillManager() { return SkillManager; };
-
 	UNaMobWeaponManager* GetWeaponManager() { return WeaponManager; };
+	UNaMobStateManager* GetStateManager() { return StateManager; };
+	UNaMobDataManager* GetDataManager() { return DataManager; };
 
 	/*==========================================================================*/
 	////////////
@@ -252,60 +259,7 @@ protected:
 
  
 
-	/*==========================================================================*/
-	/* Mob Data */
-
 public:
-
-	// Mob's general data
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mob|Data")
-	FNaMobGeneralData GeneralData = FNaMobGeneralData();
-	
-	// Tickly update interior variables from GeneralData
-	virtual void Tick_DataSync();
-	// Actions when tickly update the interior variables from General Data
-	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
-	void OnDataSync();
-
-	// Get if mob enables movement
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static bool MobCanMove(ANaMob* Target) { return Target->GeneralData.Movement.bCanMove; };
-
-	// Enable/disable mob movement
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetMobEnableMovement(bool Value) { GeneralData.Movement.bCanMove = Value; };
-
-	// Get if mob enables jump
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static bool MobCanJump(ANaMob* Target) { return Target->GeneralData.Movement.bCanJump; };
-
-	// Enable/disable mob jump
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetMobEnableJump(bool Value) { GeneralData.Movement.bCanJump = Value; };
-
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static FNaMobBasicInformation GetBasicInformation(ANaMob* Target) { return Target->GeneralData.BasicInfo; };
-
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetBasicInformation(const FNaMobBasicInformation& Value) { GeneralData.BasicInfo = Value; };
-
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static FNaMobMovementData GetMovementData(ANaMob* Target) { return Target->GeneralData.Movement; };
-
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetMovementData(const FNaMobMovementData& Value) { GeneralData.Movement = Value; };
-
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem")
-	static FNaMobStamina GetStamina(ANaMob* Target) { return Target->GeneralData.Stamina; };
-
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SetStamina(const FNaMobStamina& Value) { GeneralData.Stamina = Value; };
-
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	static bool MobIsRunning(ANaMob* Target) { return Target->GeneralData.Movement.bIsRunning; };
-
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
-	void SwitchWalkRun() { GeneralData.Movement.bIsRunning = !GeneralData.Movement.bIsRunning; };
 
 	/*==========================================================================*/
 	/* Basic actions */

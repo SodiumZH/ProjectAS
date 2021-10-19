@@ -3,7 +3,7 @@
 
 /**
 	NaMobSystem is a creature framework for third-person RPG, including mobs(creatures) as player, npc, monster, etc.
-	Need support of NaUtility and NaComponent.
+	Need support of NaUtility, NaActor and NaComponent.
 */
 
 #pragma once

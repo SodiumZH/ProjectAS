@@ -56,7 +56,7 @@ public:
 	static bool IsPlayerMob_BP(ANaMob* Target);
 	
 	// Get player component of a mob. If the mob is not a player mob, return null.
-	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm "), Category = "NaPack|MobSystem|Mob|Components")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm camera"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent);
 
 	// Get time control component of a mob
@@ -140,7 +140,7 @@ public:
 	* @Param AttachToComponent Component of actor this skill should attach. If this param is left null, skill will attach to the root component.
 	* @Param DoAttachment If set false, the skill actor will not attach to anything and generate with world transform.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Use Skill by Class"), Category = "NaPack|MobSystem|Skill")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Use Skill by Class"), Category = "NaPack|MobSystem|Skill")
 	static void UseSkillByClass_BP(
 		ANaMobSkill*& OutSkill,
 		ANaMob* SourceMob,
@@ -164,7 +164,7 @@ public:
 	/* Get collision set of mob skill. Collision set is the set of existing collisions of the skill.
 	* This function will clear all invalid collisions before return, so it's safe for iteration.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Collision Set (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Get Collision Set (Mob Skill)"), Category = "NaPack|MobSystem|Skill")
 	static void GetCollisionSet_BP(ANaMobSkill* Target, TSet<ANaMobSkillCollision*>& CollisionSet);
 
 
