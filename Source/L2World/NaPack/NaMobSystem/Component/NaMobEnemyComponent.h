@@ -16,15 +16,17 @@ class USceneComponent;
 
 
 
-UCLASS(Blueprintable)
+UCLASS(ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
 class NAPACK_API UNaMobEnemyComponent : public USceneComponent {
 
 	GENERATED_BODY()
 
 public:
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyComponent")
 	TSubclassOf<ANaMobEnemyController> ControllerClass = ANaMobEnemyController::StaticClass();
 
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|NaMobSystem")
 	ANaMobEnemyController* AddController(bool ForceAdd = false);
 
 protected:

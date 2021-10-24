@@ -16,7 +16,7 @@
 * DO NOT attach multiple player components to one mob.
 */
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(NaMobSystem), meta=(BlueprintSpawnableComponent) )
 class NAPACK_API UNaMobPlayerComponent : public UFreeLookSpringArmComponent
 {
 	GENERATED_BODY()
