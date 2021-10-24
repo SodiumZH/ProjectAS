@@ -11,6 +11,7 @@
 #include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobStateManager.h"
 #include "Component/NaMobDataManager.h"
+#include "Component/NaMobEnemyComponent.h"
 
 
 
@@ -72,6 +73,85 @@ void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	Tick_CloseAnimSwitch();
+}
+
+
+/* Type check & get */
+
+bool ANaMob::CheckTypeConflict() {
+	TArray<UNaMobPlayerComponent*> PlayerComps;
+	TArray<UNaMobEnemyComponent*> EnemyComps;
+	GetComponents<UNaMobPlayerComponent>(PlayerComps);
+	GetComponents<UNaMobEnemyComponent>(EnemyComps);
+
+	if (PlayerComps.Num() > 1) {
+		LogError("Mob type conflict: containing multiple player components.");
+		return false;
+	}
+	else if (EnemyComps.Num() > 1) {
+		LogError("Mob type conflict: containing multiple enemy components.");
+		return false;
+	}
+	else if (PlayerComps.Num() + EnemyComps.Num() > 1) {
+		LogError("Mob type conflict: containing conflicting type components.");
+		return false;
+	}
+
+	return true;
+}
+
+bool ANaMob::AssertNoTypeConflict() {
+	bool val = CheckTypeConflict();
+	checkf(val, TEXT("Mob type conflict detected. See log for detail."));
+	return val;
+}
+
+bool ANaMob::IsPlayerMob() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobPlayerComponent*> CompArray;
+	GetComponents<UNaMobPlayerComponent>(CompArray);
+	return CompArray.Num() == 1;
+
+}
+
+UNaMobPlayerComponent* ANaMob::GetPlayerComponent() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobPlayerComponent*> CompArray;
+	GetComponents<UNaMobPlayerComponent>(CompArray);
+	return (CompArray.Num() == 1) ? CompArray[0] : nullptr;
+
+}
+
+bool ANaMob::IsEnemyMob() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobEnemyComponent*> CompArray;
+	GetComponents<UNaMobEnemyComponent>(CompArray);
+	return CompArray.Num() == 1;
+
+}
+
+UNaMobEnemyComponent* ANaMob::GetEnemyComponent() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobEnemyComponent*> CompArray;
+	GetComponents<UNaMobEnemyComponent>(CompArray);
+	return (CompArray.Num() == 1) ? CompArray[0] : nullptr;
+
 }
 
 

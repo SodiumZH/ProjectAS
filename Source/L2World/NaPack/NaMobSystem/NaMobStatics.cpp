@@ -13,43 +13,6 @@
 /* Mob */
 
 /* Components */
-bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
-
-	if (!IsValid(Target)) {
-		return false;
-	}
-
-#if WITH_EDITOR
-	TArray<UNaMobPlayerComponent*> PlayerComps;
-	Target->GetComponents<UNaMobPlayerComponent>(PlayerComps);
-	if (PlayerComps.Num() >= 2)
-		LogErrorContext("Multiple player components detect: only one player component is allowed on a mob.", Target);
-	return PlayerComps.Num() > 0;
-#else
-	UNaMobPlayerComponent* PlayerComp = Target->GetComponentByClass(UNaMobPlayerComponent::StaticClass());
-	return PlayerComp;
-#endif
-}
-
-void UNaMobStatics::GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent) {
-
-	if (!IsValid(Target)) {
-		PlayerComponent = nullptr;
-		return;
-	}
-
-#if WITH_EDITOR
-	TArray<UNaMobPlayerComponent*> PlayerComps;
-	Target->GetComponents<UNaMobPlayerComponent>(PlayerComps);
-	if (PlayerComps.Num() >= 2)
-		LogErrorContext("Multiple player components detect: only one player component is allowed on a mob.", Target);
-	PlayerComponent = PlayerComps.Num() > 0 ? PlayerComps[0] : nullptr;
-#else
-	UNaMobPlayerComponent* PlayerComp = Target->GetComponentByClass(UNaMobPlayerComponent::StaticClass());
-	PlayerComponent = PlayerComp ? PlayerComp : nullptr;
-#endif
-
-}
 
 void UNaMobStatics::GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl) {
 	
@@ -69,6 +32,31 @@ void UNaMobStatics::GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& Skil
 	SkillManager = Target->GetSkillManager();
 }
 
+/* Type */
+
+bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->IsPlayerMob();
+}
+
+UNaMobPlayerComponent* UNaMobStatics::GetPlayerComponent_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->GetPlayerComponent();
+}
+
+bool UNaMobStatics::IsEnemyMob_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->IsEnemyMob();
+}
+
+UNaMobEnemyComponent* UNaMobStatics::GetEnemyComponent_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->GetEnemyComponent();
+}
 
 
 /* Anim Switch */

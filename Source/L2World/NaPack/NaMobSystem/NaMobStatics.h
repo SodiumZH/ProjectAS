@@ -50,15 +50,6 @@ public:
 
 	/*** Component ***/
 
-	//UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "", Keywords = ""), Category = "NaPack|MobSystem|Mob")
-	// Return whether the mob is set as a player mob. It will not check if it is really controlled by a player.
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Player Mob", Keywords = "controlled"), Category = "NaPack|MobSystem|Mob|Components")
-	static bool IsPlayerMob_BP(ANaMob* Target);
-	
-	// Get player component of a mob. If the mob is not a player mob, return null.
-	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm camera"), Category = "NaPack|MobSystem|Mob|Components")
-	static void GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent);
-
 	// Get time control component of a mob
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Time Control (Mob)", Keywords = "timeline time line time controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl);
@@ -66,6 +57,25 @@ public:
 	// Get skill manager component of a mob
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager);
+
+
+	/*** Type ***/
+
+	/* Return if this mob is a player mob i.e. contains a player component. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Player Mob"), Category = "NaPack|MobSystem|Mob|Type")
+	static bool IsPlayerMob_BP(ANaMob* Target);
+
+	/* Return the mob's player component. If there isn't one, return null. */
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get Mob Player Component"), Category = "NaPack|MobSystem|Mob|Type")
+	static UNaMobPlayerComponent* GetPlayerComponent_BP(ANaMob* Target);
+
+	/* Return if this mob is an enemy mob i.e. contains an enemy component. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Enemy Mob"), Category = "NaPack|MobSystem|Mob|Type")
+	static bool IsEnemyMob_BP(ANaMob* Target);
+
+	/* Return the mob's enemy component. If there isn't one, return null. */
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get Mob Enemy Component"), Category = "NaPack|MobSystem|Mob|Type")
+	static UNaMobEnemyComponent* GetEnemyComponent_BP(ANaMob* Target);
 
 
 	/*** Animation Switch ***/

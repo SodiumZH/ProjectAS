@@ -5,14 +5,16 @@
 
 // This is a function library for C++ debugging
 
+DECLARE_LOG_CATEGORY_EXTERN(LogNaPack, Log, All);
+
 /* Debug Macros */
 #if NAPACK_ENABLE_DEBUG
-#define LogWarning(text) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
-#define LogError(text) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
-#define LogWarningContext(text, context) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *NaDebugUtility::DisplayName(context), TEXT(text))
-#define LogErrorContext(text, context) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *NaDebugUtility::DisplayName(context), TEXT(text))
-#define LogWarningNoContext(text) UE_LOG(LogTemp, Warning, TEXT(text))
-#define LogErrorNoContext(text) UE_LOG(LogTemp, Error, TEXT(text))
+#define LogWarning(text) UE_LOG(LogNaPack, Warning, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
+#define LogError(text) UE_LOG(LogNaPack, Error, TEXT("%s: %s"), *NaDebugUtility::DisplayName(this), TEXT(text))
+#define LogWarningContext(text, context) UE_LOG(LogNaPack, Warning, TEXT("%s: %s"), *NaDebugUtility::DisplayName(context), TEXT(text))
+#define LogErrorContext(text, context) UE_LOG(LogNaPack, Error, TEXT("%s: %s"), *NaDebugUtility::DisplayName(context), TEXT(text))
+#define LogWarningNoContext(text) UE_LOG(LogNaPack, Warning, TEXT(text))
+#define LogErrorNoContext(text) UE_LOG(LogNaPack, Error, TEXT(text))
 #define PrintToScreen(text) NaDebugUtility::DebugInfo(this, TEXT(text))
 #else
 #define LogWarning(text) 0
@@ -21,6 +23,7 @@
 #define LogErrorNoContext(text) 0
 #define PrintToScreen(text) 0
 #endif
+
 
 
 namespace NaDebugUtility {
