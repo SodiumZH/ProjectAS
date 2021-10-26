@@ -23,11 +23,13 @@ ANaMobEnemyController* UNaMobEnemyComponent::AddController(bool ForceAdd) {
 	else {
 		AGameModeBase* GamemodeBase = Owner->GetWorld()->GetAuthGameMode();
 		if (!IsValid(GamemodeBase)) {
-			LogError("Mob Enemy Component - Add Controller failed: Game mode isn't valid. Maybe executing on client.")
+			LogError("Mob Enemy Component - Add Controller failed: Game mode isn't valid. Maybe executing on client.");
+			return nullptr;
 		}
 		ANaGameMode* Gamemode = dynamic_cast<ANaGameMode*>(GamemodeBase);
 		if (!IsValid(Gamemode)) {
-			LogError("Mob Enemy Component - Add Controller failed: To enable NaMobSystem, the game mode must inherit ANaGameMode.")
+			LogError("Mob Enemy Component - Add Controller failed: To enable NaMobSystem, the game mode must inherit ANaGameMode.");
+			return nullptr;
 		}
 		return Gamemode->GetEnemyControllerManager()->AllocateController(Owner, ForceAdd);
 	}

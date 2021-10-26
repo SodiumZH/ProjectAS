@@ -4,6 +4,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../NaMob.h"
 
+UNaMobStateManager::UNaMobStateManager() {
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UNaMobStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (bDoTickSync)
@@ -11,8 +15,22 @@ void UNaMobStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 }
 
 void UNaMobStateManager::StateSync() {
+	OnStateSync();
+}
+
+
+void UNaMobBasicStateManager::OnConstruction(const FTransform& trans) {
+	Super::OnConstruction(trans);
+	bStateRunning = (MovementType != ENaMobMovementType::MMT_Walk);
+}
+
+void UNaMobBasicStateManager::StateSync() {
 
 	ANaMob* Mob = dynamic_cast<ANaMob*>(GetOwner());
+	if (!Mob) {
+		LogError("Mob Basic Static Manager is only valid for NaMob.")
+		return;
+	}
 	UCharacterMovementComponent* CharMove = Mob->GetCharacterMovement();
 
 	/* Set movement speed */
@@ -57,6 +75,6 @@ void UNaMobStateManager::StateSync() {
 	CharMove->MaxAcceleration = MOB_BASIC_ACCEL * MaxAccel;
 	CharMove->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY * RealtimeJumpHeightScale;
 
-	OnStateSync();
-	
+	Super::StateSync();
+
 }

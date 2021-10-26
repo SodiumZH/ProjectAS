@@ -55,9 +55,14 @@ public:
 	static void GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl);
 
 	// Get skill manager component of a mob
-	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill controller"), Category = "NaPack|MobSystem|Mob|Components")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill action controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager);
 
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Weapon Manager (Mob)", Keywords = "equipment arms controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetWeaponManager_BP(ANaMob* Target, UNaMobWeaponManager*& WeaponManager);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Basic State Manager (Mob)", Keywords = "status movement die death alive invincible controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateManager*& BasicStateManager);
 
 	/*** Type ***/
 

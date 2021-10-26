@@ -32,6 +32,22 @@ void UNaMobStatics::GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& Skil
 	SkillManager = Target->GetSkillManager();
 }
 
+void UNaMobStatics::GetWeaponManager_BP(ANaMob* Target, UNaMobWeaponManager*& WeaponManager) {
+	if (!IsValid(Target)) {
+		WeaponManager = nullptr;
+		return;
+	}
+	WeaponManager = Target->GetWeaponManager();
+}
+
+void UNaMobStatics::GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateManager*& BasicStateManager) {
+	if (!IsValid(Target)) {
+		BasicStateManager = nullptr;
+		return;
+	}
+	BasicStateManager = Target->GetBasicStateManager();
+}
+
 /* Type */
 
 bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
