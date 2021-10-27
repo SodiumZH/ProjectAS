@@ -65,7 +65,7 @@ public:
 
 
 /* Default state component for mob's basic data, including movement, jump and dead/alive. */
-UCLASS(ClassGroup = (NaMobSystem))
+UCLASS(ClassGroup = (NaMobSystem), Blueprintable)
 class NAPACK_API UNaMobBasicStateManager :public UNaMobStateManager {
 	
 	GENERATED_BODY()

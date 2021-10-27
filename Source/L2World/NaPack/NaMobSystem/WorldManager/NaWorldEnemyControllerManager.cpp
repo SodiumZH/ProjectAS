@@ -10,7 +10,7 @@ ANaMobEnemyController* UNaWorldEnemyControllerManager::FindExistingFreeControlle
 	ANaMobEnemyController* Out = nullptr;
 	
 	for (int i = 0; i < ActiveControllers.Num();++i) {
-		if (ActiveControllers[i]->GetClass() == InClass.Get()) {
+		if (ActiveControllers[i]->GetClass() == InClass.Get() && (!IsValid(ActiveControllers[i]->GetPawn()))) {
 			Out = ActiveControllers[i];
 			break;
 		}

@@ -31,6 +31,7 @@ ANaMobEnemyController* UNaMobEnemyComponent::AddController(bool ForceAdd) {
 			LogError("Mob Enemy Component - Add Controller failed: To enable NaMobSystem, the game mode must inherit ANaGameMode.");
 			return nullptr;
 		}
-		return Gamemode->GetEnemyControllerManager()->AllocateController(Owner, ForceAdd);
+		ANaMobEnemyController* Ctrler = Gamemode->GetEnemyControllerManager()->AllocateController(Owner, ForceAdd);
+		return Ctrler;
 	}
 }

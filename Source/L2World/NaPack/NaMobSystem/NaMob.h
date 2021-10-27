@@ -80,6 +80,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UNaMobBasicStateManager* BasicStateManager;
+	UNaMobBasicStateManager* BasicStateManager_0;	// For unknown nullization
 
 public:
 

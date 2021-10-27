@@ -58,7 +58,10 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	}
 
 	// Spawn skill
-	AActor* OutSkillActor = SourceMob->GetWorld()->SpawnActor(SkillClass.Get(), &InTransform);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	UWorld* ThisWorld = SourceMob->GetWorld();
+	AActor* OutSkillActor = ThisWorld->SpawnActor(SkillClass.Get(), &InTransform, SpawnParams);
 	ANaMobSkill* OutSkill = static_cast<ANaMobSkill*>(OutSkillActor);
 	check(OutSkill);
 	
