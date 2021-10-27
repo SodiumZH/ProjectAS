@@ -5,21 +5,22 @@
 #include "../NaGlobalHeader.h"
 #include "NaItemManager.generated.h"
 
+// This value is intendend to avoid integer overflow.
 #define ITEM_CONTAINER_MAX_SIZE 10000
 
 /* Struct that represents a socket */
 USTRUCT(Blueprintable)
-struct FNaItemSocket{
+struct FNaItemSocketData{
 
 	GENERATED_USTRUCT_BODY()
 
 public:
 
 	/* Default constructor */
-	FNaItemSocket() {};
+	FNaItemSocketData() {};
 
 	/* Construct from values */
-	FNaItemSocket(bool InIsEmpty, int InItemTypeID, FString InDisplayName, int InAmount, int64 InUniqueItemID = -1, FName InUniqueItemDatabaseName = NAME_None);
+	FNaItemSocketData(bool InIsEmpty, int InItemTypeID, FString InDisplayName, int InAmount, int64 InUniqueItemID = -1, FName InUniqueItemDatabaseName = NAME_None);
 
 	/* If true, it means this item socket is empty, ignoring any other properties in this struct. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -49,7 +50,7 @@ public:
 
 public:
 
-	static NAPACK_API const FNaItemSocket EmptySocket;
+	static NAPACK_API const FNaItemSocketData EmptySocket;
 
 	// Check if an item socket struct is valid. Currently it's always true. Code in NaItemSystem/NaItemManager.h or *.cpp to reset.
 //	UFUNCTION(BlueprintPure, DisplayName = "Is Valid (Item Socket)", Category = "NaPack|NaItemSystem")
@@ -62,7 +63,9 @@ enum class ENaItemContainerBrowseResult :uint8 {
 	ICBR_Filled		UMETA(DisplayName = "Filled"),			// Browsed successfully, and the socket is containing valid item(s).
 	ICBR_Empty		UMETA(DisplayName = "Empty"),		// Browsed successfully, and the socket is empty.
 	ICBR_OOS		UMETA(DisplayName = "Out of Size"),		// Trying to browse at the position out of the max size
-	ICBR_InvID		UMETA(DisplayName = "Invalid Index"),	// Trying to browse at invalid position e.g. zero or negative
+	/* The above values are correct results */
+	/* The below values are errors that should not appear */
+	ICBR_InvID		UMETA(DisplayName = "Invalid Index"),	// Trying to browse at invalid position (zero, negative or out of ITEM_CONTAINER_MAX_SIZE defined in NaItemManager.h)
 	ICBR_InvVal 	UMETA(DisplayName = "Invalid Item Record")		// Found record correctly, but the item record itself is invalid (containing something wrong)
 	//ICBR_Error		UMETA(DisplayName = "Error")			// Unexpected error
 };
@@ -77,7 +80,7 @@ class NAPACK_API UNaItemContainerComponent : public UActorComponent{
 protected:
 
 	/* ID starts from 1. */
-	TMap<int, FNaItemSocket> Container;
+	TMap<int, FNaItemSocketData> Container;
 
 	// Max container size
 	int MaxSize = 8;
@@ -99,7 +102,7 @@ public:
 	* @ReturnValue Whether the item is successfully added.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Add Item (Item Manager)"), Category = "NaPack|ItemSystem")
-	bool AddItem(int Index, const FNaItemSocket& InItem, bool AllowReplacement = true);
+	bool AddItem(int Index, const FNaItemSocketData& InItem, bool AllowReplacement = true);
 
 	/* Resize the container. 
 	* If it's expanding, the additional sockets will be empty. If shrinking, it will works only when the shrinked sockets are all empty or ForceShrink == true.
@@ -123,7 +126,7 @@ public:
 	/* Get item at a certain index and copy to OutItem. Return an enum for its correctness and error type.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Get Item (Item Container)", Keywords = "browse get item"), Category = "NaPack|ItemSystem")
-	ENaItemContainerBrowseResult GetItem(int Index, FNaItemSocket& OutItem);
+	ENaItemContainerBrowseResult GetItem(int Index, FNaItemSocketData& OutItem);
 
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, DisplayName = "Swap Items (Item Container)", Keywords = "exchange"), Category = "NaPack|ItemSystem")
 	bool Swap(int Index1, int Index2);

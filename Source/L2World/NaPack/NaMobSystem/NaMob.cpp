@@ -378,7 +378,7 @@ void ANaMob::InitCapsuleMeshSize() {
 void ANaMob::MobDie() {
 	
 	BasicStateManager->CurrentHP = 0;
-	BasicStateManager->MovementType = ENaMobMovementType::MMT_NoMove;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_NoMove);
 	BasicStateManager->JumpType = ENaMobJumpType::MJT_NoJump;
 	BasicStateManager->bIsDead = true;
 	OnMobDying();
@@ -387,7 +387,7 @@ void ANaMob::MobDie() {
 void ANaMob::DefaultMobResume() {
 	BasicStateManager->CurrentHP = BasicStateManager->MaxHP;
 	BasicStateManager->CurrentMP = BasicStateManager->MaxMP;
-	BasicStateManager->MovementType = ENaMobMovementType::MMT_Run;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_Run);
 	BasicStateManager->JumpType = ENaMobJumpType::MJT_Default;
 	BasicStateManager->bIsDead = false;
 	OnMobResuming();
@@ -395,7 +395,7 @@ void ANaMob::DefaultMobResume() {
 
 void ANaMob::CustomMobResume(int64 NewHP) {
 	BasicStateManager->CurrentHP = NewHP;
-	BasicStateManager->MovementType = ENaMobMovementType::MMT_Run;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_Run);
 	BasicStateManager->JumpType = ENaMobJumpType::MJT_Default;
 	BasicStateManager->bIsDead = false;
 	OnMobResuming();

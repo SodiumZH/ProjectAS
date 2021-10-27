@@ -74,9 +74,11 @@ public:
 
 	virtual void StateSync() override;
 
-	virtual void OnConstruction(const FTransform& trans) override;
+	virtual void BeginPlay() override;
 
 	/*********** Movement related ************/
+
+protected:
 
 	/* Mob movement type.
 	* Walking: use walk speed scale.
@@ -84,12 +86,30 @@ public:
 	* Special: use manually-set speed scale (by setting "Realtime Speed Scale").
 	* No Movement: zero speed scale which means movement disabled.
 	*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobState|Movement")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MobState|Movement")
 	ENaMobMovementType MovementType = ENaMobMovementType::MMT_Run;
 
-	/* Setting of walking or running. It's more "static" than MovementType and indicates which to pick when returning from other states to walk/run. */
-	UPROPERTY(BlueprintReadWrite, Category = "MobState|Movement")
-	bool bStateRunning = true;
+public:
+
+	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem|MobState|Movement")
+	ENaMobMovementType GetMovementType() { return MovementType; };
+
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	ENaMobMovementType SetMovementType(ENaMobMovementType NewType);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|MobState|Movement")
+	void OnSetMovementType(ENaMobMovementType OldType, ENaMobMovementType NewType);
+	void OnSetMovementType_Implementation(ENaMobMovementType OldType, ENaMobMovementType NewType) {};
+
+	/* Run/Walk setting. True for run, false for walk. It determines which to choose when the mob changes from other movement states to run/walk. */
+	UPROPERTY(BlueprintReadOnly, Category = "MobState|Movement")
+	bool bRunWalkSetting = true;
+
+	/* Set Run/Walk. This function is a setting: when it's running/walking, it will switch. In other cases, set new run/walk but doesn't immediately change movement type.
+	* True for run, false for walk. 
+	*/
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	void SetRunWalk(bool NewRunWalk);
 
 	/* Speed scale when using walk state. This value will be multiplied by basic walk speed. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobState|Movement")
@@ -112,12 +132,6 @@ public:
 
 	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "enable movement enabled"), Category = "NaPack|MobSystem|MobState|Movement")
 	bool CanMove() { return MovementType != ENaMobMovementType::MMT_NoMove; };
-
-	
-
-	/* Change the setting of run or walk. Return true if it's running after change, and false if walking. */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "walk run"), Category = "NaPack|MobSystem|MobState|Movement")
-	bool SwitchRunWalk();
 
 	/*********** Jump related ************/
 

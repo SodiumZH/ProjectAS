@@ -1,7 +1,7 @@
 #include "NaItemManager.h"
 #include "../NaUtility/NaUtility.h"
 
-FNaItemSocket::FNaItemSocket(bool InIsEmpty, int InItemTypeID, FString InDisplayName, int InAmount, int64 InUniqueItemID, FName InUniqueItemDatabaseName) {
+FNaItemSocketData::FNaItemSocketData(bool InIsEmpty, int InItemTypeID, FString InDisplayName, int InAmount, int64 InUniqueItemID, FName InUniqueItemDatabaseName) {
 	bIsEmpty = InIsEmpty;
 	ItemTypeID = InItemTypeID;
 	DisplayName = InDisplayName;
@@ -10,7 +10,7 @@ FNaItemSocket::FNaItemSocket(bool InIsEmpty, int InItemTypeID, FString InDisplay
 	UniqueItemDatabaseName = InUniqueItemDatabaseName;
 }
 
-const FNaItemSocket FNaItemSocket::EmptySocket(true, 0, TEXT("Empty"), 1, -1, NAME_None);
+const FNaItemSocketData FNaItemSocketData::EmptySocket(true, 0, TEXT("Empty"), 1, -1, NAME_None);
 
 void UNaItemContainerComponent::InitializeContainer() {
 	if (MaxSize > ITEM_CONTAINER_MAX_SIZE) {
@@ -19,7 +19,7 @@ void UNaItemContainerComponent::InitializeContainer() {
 	}
 	
 	for (int i = 1; i <= MaxSize; ++i) {
-		Container.Emplace(i, FNaItemSocket::EmptySocket);
+		Container.Emplace(i, FNaItemSocketData::EmptySocket);
 	}
 }
 
@@ -27,7 +27,7 @@ bool UNaItemContainerComponent::IsValidIndex(int Index) {
 	return Index > 0 && Index <= MaxSize;
 }
 
-bool UNaItemContainerComponent::AddItem(int Index, const FNaItemSocket& InItem, bool AllowReplacement) {
+bool UNaItemContainerComponent::AddItem(int Index, const FNaItemSocketData& InItem, bool AllowReplacement) {
 	if (!IsValidIndex(Index)) {
 		LogError("Add Item error: invalid index.");
 		return false;
@@ -58,7 +58,7 @@ bool UNaItemContainerComponent::Resize(int NewSize, bool ForceShrink) {
 
 	else if (NewSize > MaxSize) {
 		for (int i = MaxSize + 1; i <= NewSize; ++i) {
-			Container.Emplace(i, FNaItemSocket::EmptySocket);
+			Container.Emplace(i, FNaItemSocketData::EmptySocket);
 		}
 		MaxSize = NewSize;
 		return true;
@@ -100,17 +100,17 @@ ENaItemContainerBrowseResult UNaItemContainerComponent::CheckItem(int Index) {
 	else return ENaItemContainerBrowseResult::ICBR_Empty;
 }
 
-ENaItemContainerBrowseResult UNaItemContainerComponent::GetItem(int Index, FNaItemSocket& OutItem) {
+ENaItemContainerBrowseResult UNaItemContainerComponent::GetItem(int Index, FNaItemSocketData& OutItem) {
 	if (Index <= 0 || Index > ITEM_CONTAINER_MAX_SIZE) {
-		OutItem = FNaItemSocket::EmptySocket;
+		OutItem = FNaItemSocketData::EmptySocket;
 		return ENaItemContainerBrowseResult::ICBR_InvID;
 	}
 	else if (Index > MaxSize) {
-		OutItem = FNaItemSocket::EmptySocket;
+		OutItem = FNaItemSocketData::EmptySocket;
 		return ENaItemContainerBrowseResult::ICBR_OOS;
 	}
 	else if (!Container[Index].IsValidSocket()) {
-		OutItem = FNaItemSocket::EmptySocket;
+		OutItem = FNaItemSocketData::EmptySocket;
 		return ENaItemContainerBrowseResult::ICBR_InvVal;
 	}
 	else if (Container[Index].bIsEmpty) {
@@ -138,7 +138,7 @@ bool UNaItemContainerComponent::Swap(int Index1, int Index2) {
 	if ((!IsValidIndex(Index1)) || (!IsValidIndex(Index2))) {
 		return false;
 	}
-	FNaItemSocket temp = Container[Index2];
+	FNaItemSocketData temp = Container[Index2];
 	Container[Index2] = Container[Index1];
 	Container[Index1] = temp;
 	return true;

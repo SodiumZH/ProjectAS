@@ -19,9 +19,9 @@ void UNaMobStateManager::StateSync() {
 }
 
 
-void UNaMobBasicStateManager::OnConstruction(const FTransform& trans) {
-	Super::OnConstruction(trans);
-	bStateRunning = (MovementType != ENaMobMovementType::MMT_Walk);
+void UNaMobBasicStateManager::BeginPlay() {
+	Super::BeginPlay();
+	bRunWalkSetting = (MovementType != ENaMobMovementType::MMT_Walk);
 }
 
 void UNaMobBasicStateManager::StateSync() {
@@ -76,5 +76,42 @@ void UNaMobBasicStateManager::StateSync() {
 	CharMove->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY * RealtimeJumpHeightScale;
 
 	Super::StateSync();
+
+}
+
+ENaMobMovementType UNaMobBasicStateManager::SetMovementType(ENaMobMovementType NewType) {
+
+	ENaMobMovementType OldType = MovementType;
+
+	switch (NewType) {
+	case ENaMobMovementType::MMT_Run: {
+		if (!bRunWalkSetting)
+			bRunWalkSetting = true;
+		break;
+	}
+	case ENaMobMovementType::MMT_Walk:{
+		if (bRunWalkSetting)
+			bRunWalkSetting = false;
+		break;
+		}
+	default: {
+		break;
+	}
+	}
+
+	MovementType = NewType;
+	OnSetMovementType(OldType, NewType);
+	return NewType;
+}
+
+void UNaMobBasicStateManager::SetRunWalk(bool NewRunWalk) {
+
+	bRunWalkSetting = NewRunWalk;
+
+	if (MovementType == ENaMobMovementType::MMT_Run || MovementType == ENaMobMovementType::MMT_Walk) {
+		MovementType = NewRunWalk ? ENaMobMovementType::MMT_Run : ENaMobMovementType::MMT_Walk;
+	}
+
+	return;
 
 }
