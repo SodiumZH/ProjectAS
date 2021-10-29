@@ -12,7 +12,8 @@ class NAPACK_API UNaObjectStatics : public UBlueprintFunctionLibrary {
 
 public:
 
-	
+	/* Test if the input object is subject of one of the classes in array. */
+	static bool IsSubclassOf(UObject* TestObject, const TArray<UClass*>& ClassArray);
 
 
 };

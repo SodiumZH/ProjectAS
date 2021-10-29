@@ -57,21 +57,8 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 		return nullptr;
 	}
 
-	// Spawn skill
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	UWorld* ThisWorld = SourceMob->GetWorld();
-	AActor* OutSkillActor = ThisWorld->SpawnActor(SkillClass.Get(), &InTransform, SpawnParams);
-	ANaMobSkill* OutSkill = static_cast<ANaMobSkill*>(OutSkillActor);
-	check(OutSkill);
-	
-	// If use world transform, simply return without attachment
-	if (!DoAttachment) {
-		return OutSkill;
-	}
-
 	/* Set up attachment */
-	
+
 	// If remains null, attach to source
 	if (!IsValid(AttachToComponent)) {
 		if (AttachToComponent)
@@ -79,12 +66,34 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 		AttachToComponent = SourceMob->GetRootComponent();
 	}
 
+	/* Make final transform */
+	FTransform FinalTransform = DoAttachment ? AttachToComponent->GetComponentTransform() * InTransform : InTransform; 
+
+
+	// Spawn skill
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	UWorld* ThisWorld = SourceMob->GetWorld();
+	AActor* OutSkillActor = ThisWorld->SpawnActor(SkillClass.Get(), &FinalTransform, SpawnParams);
+	ANaMobSkill* OutSkill = static_cast<ANaMobSkill*>(OutSkillActor);
+	if (!IsValid(OutSkill)) {
+		LogErrorContext("Use skill failed: skill actor is not correctly spawned.", SourceMob);
+		return nullptr;
+	}
+	
+	// If use world transform, simply return without attachment
+	if (!DoAttachment) {
+		return OutSkill;
+	}
+
+	
+
 	/* Attach */
 
 	OutSkill->Source = SourceMob;
 	OutSkill->Socket = SocketName;
 	OutSkill->RegisterName = InRegisterName;
-	OutSkill->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+	OutSkill->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepWorldTransform, SocketName);
 	SourceMob->GetSkillManager()->RegisterSkill(InRegisterName, OutSkill);
 	return OutSkill;
 }
