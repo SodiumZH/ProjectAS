@@ -51,10 +51,16 @@ AHitDetectorInterface* ANaMobSkillCollision::GetDetector() {
 
 void ANaMobSkillCollision::SendSkillHit(const FHitResult& HitResult) {
 	// Check validity
-	if (!IsValid(SourceSkill)) {
-		GetDetector()->ResumeIgnored(HitResult.Actor.Get());
+	AActor* HitActor = HitResult.Actor.Get();
+	if (!IsValid(SourceSkill) || !IsValid(SourceSkill->GetSource())) {
+		GetDetector()->ResumeIgnored(HitActor);	// Should not send hit but has added ignored. Resume it.
 		return;
 	}
+
+	if (HitActor == static_cast<AActor*>(GetSourceSkill()->GetSource())	// Source Mob
+		|| GetSourceSkill()->GetSource()->GetWeaponManager()->GetAllWeapons().Contains(HitActor)	// Weapon of source mob
+		)
+		return;
 
 	SourceSkill->ReceiveCollisionHit(this, HitResult);
 

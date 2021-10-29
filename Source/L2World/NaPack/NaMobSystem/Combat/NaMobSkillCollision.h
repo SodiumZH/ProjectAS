@@ -112,6 +112,8 @@ public:
 	bool bIgnoreSourceMob = true;
 
 
+
+
 	/* Notify */
 
 	// Send hit event to source skill

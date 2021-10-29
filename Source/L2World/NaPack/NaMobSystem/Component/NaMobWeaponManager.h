@@ -24,6 +24,8 @@ protected:
 
 public:
 
+	TArray<ANaMobWeapon*> GetAllWeapons();
+
 	ANaMobWeapon* GetWeaponFromRegisterName(FName Name);
 
 	/* Get register name of a weapon. Please note that name "none" is a null return. If empty name is returned, it means the weapon is not registered. */

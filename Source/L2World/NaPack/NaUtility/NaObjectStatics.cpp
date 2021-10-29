@@ -1,8 +1,8 @@
 #include "NaObjectStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
-bool UNaObjectStatics::IsSubclassOf(UObject* TestObject, const TArray<TSubclassOf<UObject>>& ClassArray) {
-	TSubclassOf<UObject*> InClass = TestObject->GetClass();
+bool UNaObjectStatics::IsSubclassOf_InArray(UObject* TestObject, const TArray<TSubclassOf<UObject>>& ClassArray) {
+	TSubclassOf<UObject> InClass = TestObject->GetClass();
 	if (!InClass)
 		return false;
 	for (int i = 0; i < ClassArray.Num(); ++i) {
