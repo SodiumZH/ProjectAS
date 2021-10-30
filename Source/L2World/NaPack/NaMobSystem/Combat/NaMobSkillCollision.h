@@ -71,7 +71,8 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision")
 	FName SocketName;
-	
+
+
 public:
 
 	/************** Get functions *****************/

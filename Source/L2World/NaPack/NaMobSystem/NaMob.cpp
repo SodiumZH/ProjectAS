@@ -106,6 +106,27 @@ bool ANaMob::AssertNoTypeConflict() {
 	return val;
 }
 
+void ANaMob::GetAllRelatives(TArray<AActor*>& Out) {
+	Out.Empty();
+	Out.Emplace(this);
+	TArray<ANaMobSkill*> Skills = SkillManager->GetAllSkills();
+	Out.Append(Skills);
+	Out.Append(WeaponManager->GetAllWeapons());
+
+	TArray<ANaMobSkillCollision*> Cols;
+	for (int i = 0; i < Skills.Num(); ++i) { // For all skills
+		if (!IsValid(Skills[i]))
+			continue;
+		Cols = Skills[i]->GetCollisionSet_Safe().Array();	// Add collisions
+		Out.Append(Cols);
+		for (int j = 0; j < Cols.Num(); ++j) {
+			if (!IsValid(Cols[j]))
+				continue;
+			Out.Emplace(Cols[j]->GetDetector()); // Add collision hit detector
+		}
+	}
+}
+
 bool ANaMob::IsPlayerMob() {
 
 #if WITH_EDITOR

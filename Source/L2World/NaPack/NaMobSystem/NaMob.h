@@ -89,6 +89,9 @@ public:
 	UNaMobWeaponManager* GetWeaponManager() { return WeaponManager; };
 	UNaMobBasicStateManager* GetBasicStateManager() { return BasicStateManager; };
 
+	// Get all actors related to this mob, including itself, skills, skill collisions, weapons
+	void GetAllRelatives(TArray<AActor*>& Out);
+
 
 	/* Types */
 

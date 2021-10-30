@@ -105,7 +105,8 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 	// Calculate the spawn transform
 
 	// Spawn col
-	AActor* OutColActor = InSourceSkill->GetWorld()->SpawnActor(Class.Get(), DoAttachment ? InTransform : (AttachToComponent->GetComponentTransform() * InTransform));
+	FTransform Trans = DoAttachment ? (AttachToComponent->GetComponentTransform() * InTransform) : InTransform;
+	AActor* OutColActor = InSourceSkill->GetWorld()->SpawnActor(Class.Get(), &Trans);
 	ANaMobSkillCollision* OutCol = static_cast<ANaMobSkillCollision*>(OutColActor);
 	check(OutCol);
 
