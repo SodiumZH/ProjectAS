@@ -72,8 +72,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision")
 	FName SocketName;
 	
-	TSubclassOf<AHitDetectorInterface> DetectorClass;
-
 public:
 
 	/************** Get functions *****************/

@@ -13,7 +13,7 @@ class NAPACK_API UNaObjectStatics : public UBlueprintFunctionLibrary {
 public:
 
 	/* Test if the input object is subject of one of the classes in array. */
-	UFUNCTION(meta = (DisplayName = "Is Subclass Of (Class Array)", Keywords = "child inherit parent"), Category = "NaPack|Utility")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Is Subclass Of (Class Array)", Keywords = "child inherit parent"), Category = "NaPack|Utility")
 	static bool IsSubclassOf_InArray(UObject* TestObject, const TArray<TSubclassOf<UObject>>& ClassArray);
 
 
