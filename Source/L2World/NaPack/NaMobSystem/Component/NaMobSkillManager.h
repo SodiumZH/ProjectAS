@@ -36,6 +36,8 @@ public:
 
 	TArray<ANaMobSkill*> GetAllSkills();
 
+	TArray<FName> GetAllRegisterNames();
+
 	// Return if a register name exists
 	bool ContainsRegisterName(FName InName);
 

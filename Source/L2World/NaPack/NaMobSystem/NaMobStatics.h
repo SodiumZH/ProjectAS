@@ -64,6 +64,10 @@ public:
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Basic State Manager (Mob)", Keywords = "status movement die death alive invincible controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateManager*& BasicStateManager);
 
+	// Get all related actors of a mob, including weapons, skills, skill collisions, and skill collision hti detectors
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get All Related Actors (Mob)", Keywords = "relative accessory accessories attached bound bind"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetAllRelatives_BP(ANaMob* Target, TArray<AActor*>& RelatedActors);
+
 	/*** Type ***/
 
 	/* Return if this mob is a player mob i.e. contains a player component. */
@@ -82,6 +86,19 @@ public:
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get Mob Enemy Component"), Category = "NaPack|MobSystem|Mob|Type")
 	static UNaMobEnemyComponent* GetEnemyComponent_BP(ANaMob* Target);
 
+	/*** Skill & weapon possessions ***/
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Skill Names"), Category = "NaPack|MobSystem|Skill")
+	static void GetAllSkillNames_BP(ANaMob* Target, TArray<FName>& SkillNames);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Skills"), Category = "NaPack|MobSystem|Skill")
+	static void GetAllSkills_BP(ANaMob* Target, TArray<ANaMobSkill*>& Skills);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Weapon Names"), Category = "NaPack|MobSystem|Weapon")
+	static void GetAllWeaponNames_BP(ANaMob* Target, TArray<FName>& WeaponNames);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Weapons"), Category = "NaPack|MobSystem|Weapon")
+	static void GetAllWeapons_BP(ANaMob* Target, TArray<ANaMobWeapon*>& Weapons);
 
 	/*** Animation Switch ***/
 	
@@ -173,7 +190,7 @@ public:
 	static void GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill);
 
 	/* Get skill's source mob and register name. */
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill Registeration", Keywords = "register name reg name"), Category = "NaPack|MobSystem|Skill")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill Registeration", Keywords = "source register name reg name"), Category = "NaPack|MobSystem|Skill")
 	static void GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& SourceMob, FName& RegisterName);
 
 	/* Get collision set of mob skill. Collision set is the set of existing collisions of the skill.

@@ -104,6 +104,13 @@ ENaMobMovementType UNaMobBasicStateManager::SetMovementType(ENaMobMovementType N
 	return NewType;
 }
 
+void UNaMobBasicStateManager::SetCanMove(bool CanMove) {
+	if (CanMove)
+		MovementType = bRunWalkSetting ? ENaMobMovementType::MMT_Run : ENaMobMovementType::MMT_Walk;
+	else
+		MovementType = ENaMobMovementType::MMT_NoMove;
+}
+
 void UNaMobBasicStateManager::SetRunWalk(bool NewRunWalk) {
 
 	bRunWalkSetting = NewRunWalk;

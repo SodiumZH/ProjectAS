@@ -94,8 +94,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem|MobState|Movement")
 	ENaMobMovementType GetMovementType() { return MovementType; };
 
+	// Force set movement type.
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
 	ENaMobMovementType SetMovementType(ENaMobMovementType NewType);
+	
+	// Enable/Disable movement. When enabling, it will refer to bRunWalkSetting to choose run or walk.
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	void SetCanMove(bool CanMove);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|MobState|Movement")
 	void OnSetMovementType(ENaMobMovementType OldType, ENaMobMovementType NewType);

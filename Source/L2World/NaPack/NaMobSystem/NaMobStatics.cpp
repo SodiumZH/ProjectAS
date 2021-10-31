@@ -48,6 +48,49 @@ void UNaMobStatics::GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateMana
 	BasicStateManager = Target->GetBasicStateManager();
 }
 
+void UNaMobStatics::GetAllRelatives_BP(ANaMob* Target, TArray<AActor*>& RelatedActors) {
+	if (!IsValid(Target)) {
+		RelatedActors.Empty();
+		return;
+	}
+	Target->GetAllRelatives(RelatedActors);
+}
+
+/* Skill & Weapon possessions */
+
+void UNaMobStatics::GetAllSkillNames_BP(ANaMob* Target, TArray<FName>& SkillNames) {
+	if (!IsValid(Target)) {
+		SkillNames.Empty();
+		return;
+	}
+	SkillNames = Target->GetSkillManager()->GetAllRegisterNames();
+}
+
+void UNaMobStatics::GetAllSkills_BP(ANaMob* Target, TArray<ANaMobSkill*>& Skills) {
+	if (!IsValid(Target)) {
+		Skills.Empty();
+		return;
+	}
+	Skills = Target->GetSkillManager()->GetAllSkills();
+}
+
+void UNaMobStatics::GetAllWeaponNames_BP(ANaMob* Target, TArray<FName>& WeaponNames) {
+	if (!IsValid(Target)) {
+		WeaponNames.Empty();
+		return;
+	}
+	WeaponNames = Target->GetWeaponManager()->GetAllRegisterNames();
+}
+
+void UNaMobStatics::GetAllWeapons_BP(ANaMob* Target, TArray<ANaMobWeapon*>& Weapons) {
+	if (!IsValid(Target)) {
+		Weapons.Empty();
+		return;
+	}
+	Weapons = Target->GetWeaponManager()->GetAllWeapons();
+}
+
+
 /* Type */
 
 bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {

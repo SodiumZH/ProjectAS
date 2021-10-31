@@ -76,24 +76,23 @@ public:
 protected:
 
 	//UPROPERTY(BlueprintReadOnly)
-	ANaMob* Source;
+	ANaMob* Source = nullptr;
 
 	//UPROPERTY(BlueprintReadOnly)
-	FName Socket;
+	FName Socket = NAME_None;
 
 	//UPROPERTY(BlueprintReadOnly)
-	FName RegisterName;
+	FName RegisterName = NAME_None;
 
 public:
 
-	ANaMob* GetSource() { return Source; };
+	ANaMob* GetSource() { if (!Source) LogError("Source is invalid. For skills DO NOT use BeginPlay. Use OnInitialized instead.");	return Source; };
 
 	FName GetSocket() { return Socket; };
 
-	FName GetRegisterName() { return RegisterName; };
+	FName GetRegisterName() { if (RegisterName == NAME_None) LogError("Register name is invalid. For skills DO NOT use BeginPlay. Use OnInitialized instead."); return RegisterName; };
 
-	// Only on initialization of skill. DO NOT call this function in runtime!!
-	//void InitSourceSocketRegname(ANaMob* InSource, FName InSocket, FName InRegname) { Source = InSource; Socket = InSocket; RegisterName = InRegname; };
+	/* Usage of skills */
 
 	/** Generate a skill object from a mob.
 	* @Param SourceMob The mob as source of this skill.
@@ -113,6 +112,44 @@ public:
 		FName SocketName = NAME_None,
 		bool DoAttachment = true
 	);
+
+	// If true, this skill can be used when moving. You must correctly set the behavior when skill is used when moving to avoid errors. 
+	// Generally set this value and LockMovementWhenUsing true can allow mob to use skill on movement and simutaneously stop moving.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bCanUseOnMoving = true;
+
+	// If true, this skill can be used when jumping. You must correctly set the behavior when skill is used when jumping to avoid errors. 
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bCanUseOnJumping = false;
+
+	// If true, this skill can be used when other skill exists. Or any skill in usage will block it's spawning.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bCanOverlapOtherSkills = false;
+
+	// If true, this skill can be used when skill which is subclass of this skill exists. Or any subclass skills in usage will block it's spawning.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bCanOverlapSubclassedSkills = false;
+
+	// If true, this skill can be used for multiple times. Or an existing skill instance (right the same class of this skill, excluding subclasses) will block it's spawning.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bCanUseMultipleTimes = false;
+
+	// If true, this skill blocks user's movement when used, until it's destroyed. And on destroyed it will unlock movement. (Warning when can overlap other skills!)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bLockMovement = true;
+
+	// If true and if this skill locks movement, when this skill is destroyed it will automatically unlock movement. Set false and handle movement manually when it can overlap other skills.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bUnlockMovementOnDestroyed = true;
+
+	// If true, this skill blocks user's jump when used, until it's destroyed. And on destroyed it will unlock jump. (Warning when can overlap other skills!)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bLockJump = true;
+
+	// If true and if this skill locks jump, when this skill is destroyed it will automatically unlock jump. Set false and handle jump manually when it can overlap other skills.
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "MobSkill|Usage")
+	bool bUnlockJumpWhenDestroyed = true;
+
 
 	/* Collision check */
 

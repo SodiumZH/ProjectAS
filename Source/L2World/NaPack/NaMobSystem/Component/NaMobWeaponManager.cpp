@@ -20,6 +20,15 @@ TArray<ANaMobWeapon*> UNaMobWeaponManager::GetAllWeapons() {
 	return Out;
 }
 
+TArray<FName> UNaMobWeaponManager::GetAllRegisterNames() {
+	TArray<FName> Out;
+	Out.Empty();
+	for (auto& Elem : WeaponRegistry) {
+		Out.Emplace(Elem.Key);
+	}
+	return Out;
+}
+
 ANaMobWeapon* UNaMobWeaponManager::GetWeaponFromRegisterName(FName Name) {
 
 	if (Name == NAME_None) {

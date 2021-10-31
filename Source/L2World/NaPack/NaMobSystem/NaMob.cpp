@@ -110,8 +110,8 @@ void ANaMob::GetAllRelatives(TArray<AActor*>& Out) {
 	Out.Empty();
 	Out.Emplace(this);
 	TArray<ANaMobSkill*> Skills = SkillManager->GetAllSkills();
-	Out.Append(Skills);
-	Out.Append(WeaponManager->GetAllWeapons());
+	Out.Append(Skills);		// Skill Actors
+	Out.Append(WeaponManager->GetAllWeapons());		// Weapons
 
 	TArray<ANaMobSkillCollision*> Cols;
 	for (int i = 0; i < Skills.Num(); ++i) { // For all skills
@@ -122,7 +122,7 @@ void ANaMob::GetAllRelatives(TArray<AActor*>& Out) {
 		for (int j = 0; j < Cols.Num(); ++j) {
 			if (!IsValid(Cols[j]))
 				continue;
-			Out.Emplace(Cols[j]->GetDetector()); // Add collision hit detector
+			Out.Emplace(Cols[j]->GetDetector()); // Add collision hit detectors
 		}
 	}
 }

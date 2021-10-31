@@ -21,6 +21,15 @@ TArray<ANaMobSkill*> UNaMobSkillManager::GetAllSkills() {
 	return Out;
 }
 
+TArray<FName> UNaMobSkillManager::GetAllRegisterNames() {
+	TArray<FName> Out;
+	Out.Empty();
+	for (auto& Elem : SkillRegistry) {
+		Out.Emplace(Elem.Key);
+	}
+	return Out;
+}
+
 bool UNaMobSkillManager::ContainsRegisterName(FName InName) {
 	return SkillRegistry.Contains(InName);
 }
