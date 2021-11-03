@@ -8,6 +8,8 @@
 #include "../Component/NaMobSkillManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+FMobSkillUsageOptions FMobSkillUsageOptions::Default = FMobSkillUsageOptions();
+
 ANaMobSkill::ANaMobSkill(){
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -41,10 +43,10 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	TSubclassOf<ANaMobSkill> SkillClass, 
 	const FTransform & InTransform, 
 	FName InRegisterName,
+	const FMobSkillUsageOptions & Options,
 	bool ForceSpawn,
 	USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
+	FName SocketName
 ) {
 	// If SourceMob is invalid, stop spawning
 	if (!IsValid(SourceMob)) {
@@ -62,6 +64,14 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 		LogWarningContext("Use Skill Failed: Register name is occupied. If you need to spawn anyway, set ForceSpawn true.", SourceMob);
 		return nullptr;
 	}
+	else if (ForceSpawn) {
+		FName OldRegName = InRegisterName;
+		InRegisterName = UNaStringLibrary::MakeUniqueName(InRegisterName, SourceMob->GetSkillManager()->GetAllRegisterNames());
+		if (OldRegName != InRegisterName)
+			UE_LOG(LogNaPack, Log, TEXT("%s: Use skill: Skill register name is occupied. A derivative name \"%s\" is applied instead of \"%s\"."), *LNaDebugUtility::DisplayName(SourceMob), *InRegisterName.ToString(), *OldRegName.ToString());
+	}
+
+
 
 	/* Check if the mob's state allows to use this skill */
 
@@ -106,7 +116,7 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	}
 
 	/* Make final transform */
-	FTransform FinalTransform = DoAttachment ? AttachToComponent->GetComponentTransform() * InTransform : InTransform; 
+	FTransform FinalTransform = !Options.bSkillNoAttachment ? AttachToComponent->GetComponentTransform() * InTransform : InTransform; 
 
 
 	// Spawn skill
@@ -119,9 +129,11 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 		LogErrorContext("Use skill failed: skill actor is not correctly spawned. Maybe it is destroyed on begin play.", SourceMob);
 		return nullptr;
 	}
+	else LogWriteContext("Skill used.", OutSkill);
+
 	
 	// If use world transform, simply return without attachment
-	if (!DoAttachment) {
+	if (Options.bSkillNoAttachment) {
 		return OutSkill;
 	}
 
@@ -133,6 +145,8 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	OutSkill->Socket = SocketName;
 	OutSkill->RegisterName = InRegisterName;
 	OutSkill->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepWorldTransform, SocketName);
+	OutSkill->EndSwitchName = Options.EndAnimSwitch;
+	OutSkill->EndSwitchTime = Options.EndSwitchTime;
 	SourceMob->GetSkillManager()->RegisterSkill(InRegisterName, OutSkill);
 
 	if (OutSkill->bLockMovement) {
@@ -141,6 +155,9 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 	if (OutSkill->bLockJump) {
 		SourceMob->GetBasicStateManager()->JumpType = ENaMobJumpType::MJT_NoJump;
 	}
+	if (Options.StartAnimSwitch != NAME_None)
+		SourceMob->OpenAnimStateSwitch(Options.StartAnimSwitch, Options.StartSwitchTime);
+	
 	return OutSkill;
 }
 
@@ -193,6 +210,9 @@ void ANaMobSkill::Destroyed() {
 		/* Unregister self */
 		Source->GetSkillManager()->UnregisterSkill(RegisterName);
 	}
+	if (EndSwitchName != NAME_None)
+		Source->OpenAnimStateSwitch(EndSwitchName, EndSwitchTime);
+	
 	Super::Destroyed();
 }
 

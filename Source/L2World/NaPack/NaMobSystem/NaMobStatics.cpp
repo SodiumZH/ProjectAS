@@ -202,12 +202,12 @@ void UNaMobStatics::UseSkillByClass_BP(
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
 	FName RegisterName,
+	const FMobSkillUsageOptions & Options,
 	bool ForceSpawn,
 	USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
+	FName SocketName
 ) {
-	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, ForceSpawn, AttachToComponent, SocketName, DoAttachment);
+	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, Options, ForceSpawn, AttachToComponent, SocketName);
 }
 
 void UNaMobStatics::GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill) {

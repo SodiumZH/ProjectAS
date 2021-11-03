@@ -136,10 +136,10 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
 	FName RegisterName,
+	const FMobSkillUsageOptions & Options,
 	bool Force,
 	USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
+	FName SocketName
 ) {
 	if (!this || !GetOwner())
 		return nullptr;
@@ -155,9 +155,9 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 		SkillClass,
 		InTransform,
 		RegisterName,
+		Options,
 		Force,
 		AttachToComponent,
-		SocketName,
-		DoAttachment
+		SocketName
 	);
 }

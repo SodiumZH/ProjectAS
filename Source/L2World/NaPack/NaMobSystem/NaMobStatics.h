@@ -179,10 +179,11 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName RegisterName,
+		const FMobSkillUsageOptions & Options,
 		bool Force = false,
 		USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
+		FName SocketName = NAME_None
+		
 	);
 
 	/* Get skill from mob by register name. */

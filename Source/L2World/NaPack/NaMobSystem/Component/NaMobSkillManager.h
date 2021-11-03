@@ -60,10 +60,10 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
+		const FMobSkillUsageOptions & Options,
 		bool Force = false,
 		class USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
+		FName SocketName = NAME_None
 	);
 
 	

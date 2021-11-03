@@ -31,6 +31,43 @@ enum class ESkillCollisionLocationType :uint8 {
 	SCLT_World			UMETA(DisplayName = "World")
 };
 
+USTRUCT(BlueprintType)
+struct FMobSkillUsageOptions {
+	
+	GENERATED_BODY()
+
+public:
+	
+	// Keep default
+	FMobSkillUsageOptions() {};
+
+	// Initialize only from names. Switch times are 0.1s 
+	FMobSkillUsageOptions(FName StartSwitch, FName EndSwitch) { StartAnimSwitch = StartSwitch; EndAnimSwitch = EndSwitch; };
+
+	// Anim switch to open when using skill. "None" => don't open.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName StartAnimSwitch = NAME_None;
+
+	// Time seconds to keep start anim switch on. Non-positive => always on. 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float StartSwitchTime = 0.1f;
+
+	// Anim switch to open when skill finished (destroyed). "None" => don't open.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName EndAnimSwitch = NAME_None;
+
+	// Time seconds to keep end anim switch on. Non-positive => always on. 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float EndSwitchTime = 0.1f;
+
+	// If true, the skill will not attach to anything and will use the input transform as world transform.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bSkillNoAttachment = false;
+
+	static FMobSkillUsageOptions Default;
+
+};
+
 
 
 UCLASS(BlueprintType)
@@ -107,10 +144,10 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
-		bool Force = false,
+		const FMobSkillUsageOptions & Options,
+		bool ForceSpawn = false,
 		USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
+		FName SocketName = NAME_None
 	);
 
 	// If true, this skill can be used when moving. You must correctly set the behavior when skill is used when moving to avoid errors. 
@@ -177,6 +214,14 @@ public:
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "OnSkillHit"), Category = "NaPack|MobSystem")
 	void ReceiveCollisionHit(ANaMobSkillCollision* SourceCollision, const FHitResult & HitData);
 	virtual void ReceiveCollisionHit_Implementation(ANaMobSkillCollision* SourceCollision, const FHitResult & HitData) {};
+
+	// Switch name to open when the skill is destroyed. None = no open.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName EndSwitchName = NAME_None;
+
+	// Switch time seconds when the skill is destroyed. non-positive = infinity.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float EndSwitchTime = 0.1f;
 
 	void Destroyed() override;
 
