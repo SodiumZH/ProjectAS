@@ -12,4 +12,8 @@ class NAPACK_API ANaMobEnemyController : public AAIController {
 
 public:
 
+	//UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|Enemy")
+
+
+
 };

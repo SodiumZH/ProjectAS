@@ -23,6 +23,9 @@ class NAPACK_API UNaWorldEnemyControllerManager : public UActorComponent {
 
 public:
 
+	/* Allocation */
+
+	// All enemy controllers in the world.
 	UPROPERTY(BlueprintReadOnly)
 	TArray<ANaMobEnemyController*> ActiveControllers;
 
