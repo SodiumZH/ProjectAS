@@ -9,7 +9,7 @@
 DECLARE_DELEGATE_OneParam(FMobTargetResetSignature, AActor*);
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, CannotImplementInterfaceInBlueprint)
 class UNaMobControllerInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -26,6 +26,7 @@ protected:
 
 	AActor* Target = nullptr;
 
+	FMobTargetResetSignature OnTargetReset;
 
 public:
 
@@ -35,7 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Controller")
 	virtual AActor* SetTarget(AActor* NewTarget);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|Controller")
-	void OnTargetReset(AActor* NewActor);
-	virtual void OnTargetReset_Implementation(AActor* NewActor) {};
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Controller")
+	void BindToOnTargetReset(FMobTargetResetSignature)
+
 };
