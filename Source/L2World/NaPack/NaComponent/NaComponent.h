@@ -8,4 +8,5 @@
 
 #pragma once
 #include "FreeLookSpringArmComponent.h"
+#include "TimeControlComponent.h"
 #include "../NaUtility/NaUtility.h"

@@ -329,4 +329,14 @@
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterface.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterface.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
