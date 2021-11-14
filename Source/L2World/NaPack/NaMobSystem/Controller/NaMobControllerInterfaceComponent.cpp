@@ -1,10 +1,11 @@
 #include "NaMobControllerInterface.h"
+#include "NaMobControllerInterfaceComponent.h"
 
-AActor* INaMobControllerInterface::GetTarget() {
-	return Target;
-}
+ANaMobPlayerController::ANaMobPlayerController() {
+	
+	PrimaryActorTick.bCanEverTick = true;
 
-AActor* INaMobControllerInterface::SetTarget(AActor* NewTarget) {
-	Target = NewTarget;
-	return Target;
+	ControllerInterface = CreateDefaultSubobject<UNaMobControllerInterfaceComponent>(TEXT("ControllerInterface"));
+
+
 }

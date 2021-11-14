@@ -301,9 +301,7 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUtility\ObjectRotatorLibrary.h">
       <Filter>Source\L2World\NaPack\NaUtility</Filter>
     </ClInclude>
-    <None Include="..\..\NaMobSystem Instruction.docx" />
-    <None Include="..\..\~$MobSystem Instruction.docx" />
-    <None Include="..\..\~$Pack API.docx" />
+    <None Include="..\..\~$Pack Blueprint API SimplifiedChinese.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobEnemyController.cpp">
@@ -312,11 +310,12 @@
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobPlayerController.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaGameMode.cpp" />
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterfaceComponent.cpp" />
-    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\WorldManager\NaWorldEnemyControllerManager.cpp" />
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterface.cpp" />
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUISystem\NaControllerUIInterfaceComponent.cpp">
       <Filter>Source\L2World\NaPack\NaUISystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterfaceComponent.cpp">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,11 +325,12 @@
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobPlayerController.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaGameMode.h" />
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterfaceComponent.h" />
-    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\WorldManager\NaWorldEnemyControllerManager.h" />
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterface.h" />
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUISystem\NaControllerUIInterfaceComponent.h">
       <Filter>Source\L2World\NaPack\NaUISystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterfaceComponent.h">
+      <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class AActor* TargetActor = nullptr;
 
+	
+
 
 };
 ;

@@ -6,6 +6,8 @@
 #include "../../NaGlobalHeader.h"
 #include "NaMobPlayerController.generated.h"
 
+class UNaMobControllerInterfaceComponent;
+
 UCLASS(Blueprintable)
 class NAPACK_API ANaMobPlayerController :public APlayerController {
 
@@ -13,11 +15,16 @@ class NAPACK_API ANaMobPlayerController :public APlayerController {
 
 public:
 
+	ANaMobPlayerController();
+
 	virtual void OnConstruction(const FTransform & Transform) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/* Input */
+	/* Components */
+
+	UFUNCTION(BlueprintReadOnly, EditAnywhere)
+	UNaMobControllerInterfaceComponent* ControllerInterface;
 
 	/* Mouse actions */
 
@@ -28,6 +35,14 @@ public:
 	void OnSwitchShowMouseCursor();
 	virtual void OnSwitchShowMouseCursor_Implementation() {};
 
+	/* Mouse pointing actors */
 
+	// Trace the actor at which the mouse cursor is pointing
+	void Tick_TraceMousePointed();
 
+	// Max distance the actor at which the mouse cursor can point
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MobPlayerController|Mouse")
+	float MaxPointDistance = 10000.0;
+
+	void SelectActor();
 };
