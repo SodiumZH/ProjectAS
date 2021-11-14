@@ -11,7 +11,7 @@ class NAPACK_API UNaControllerUIInterfaceComponent : public UActorComponent {
 
 public:
 
-	class APlayerController* GetOwnerController();
+	//class APlayerController* GetOwnerController();
 
 
 

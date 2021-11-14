@@ -369,7 +369,5 @@ public:
 	void CloseAnimStateSwitch(FName Key);
 
 
-	/* Weapon related */
-
 
 };
