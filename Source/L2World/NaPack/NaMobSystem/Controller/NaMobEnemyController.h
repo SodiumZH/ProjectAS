@@ -12,7 +12,7 @@ class UPawnSensingComponent;
 
 
 UCLASS(Blueprintable)
-class NAPACK_API ANaMobEnemyController : public AAIController , public INaMobControllerInterface {
+class NAPACK_API ANaMobEnemyController : public AAIController {
 	
 	GENERATED_BODY()
 
@@ -24,17 +24,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UPawnSensingComponent* PawnSensing;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	class UNaMobControllerInterfaceComponent* MobControllerInterface;
+	
 	/* Controller interface */
 
-	UFUNCTION()
-	virtual AActor* GetTarget() override { return Target; };
-
-	UFUNCTION()
-	virtual AActor* SetTarget(AActor* NewTarget) override;
-
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|AI")
-	void OnTargetReset(AActor* NewTarget);
-	void OnTargetReset_Implementation(AActor* NewTarget) {};
+	
 
 	/* AI */
 	
@@ -42,6 +37,6 @@ public:
 	class UBehaviorTree* BehaviorTree;
 
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|AI")
-	void SetBehaviorTree(UBehaviorTree* NewTree) {};	// NOT IMPLEMENTED!!!
+	void SetBehaviorTree(UBehaviorTree* NewBehaviorTree) {};	// NOT IMPLEMENTED!!!
 
 };
