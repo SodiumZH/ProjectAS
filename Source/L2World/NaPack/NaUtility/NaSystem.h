@@ -28,4 +28,7 @@ class NAPACK_API UNaSystem : public UBlueprintFunctionLibrary {
 public:
 
 	//static int GetDataSize_BP(int Data);
+
+
+
 };

@@ -50,23 +50,55 @@ public:
 
 	/*** Component ***/
 
-	//UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "", Keywords = ""), Category = "NaPack|MobSystem|Mob")
-	// Return whether the mob is set as a player mob. It will not check if it is really controlled by a player.
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Player Mob", Keywords = "controlled"), Category = "NaPack|MobSystem|Mob|Components")
-	static bool IsPlayerMob_BP(ANaMob* Target);
-	
-	// Get player component of a mob. If the mob is not a player mob, return null.
-	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Player Component (Mob)", Keywords = "player controller free look spring arm camera"), Category = "NaPack|MobSystem|Mob|Components")
-	static void GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent);
-
 	// Get time control component of a mob
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Time Control (Mob)", Keywords = "timeline time line time controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl);
 
 	// Get skill manager component of a mob
-	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill controller"), Category = "NaPack|MobSystem|Mob|Components")
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Skill Manager (Mob)", Keywords = "skill action controller"), Category = "NaPack|MobSystem|Mob|Components")
 	static void GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& SkillManager);
 
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Weapon Manager (Mob)", Keywords = "equipment arms controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetWeaponManager_BP(ANaMob* Target, UNaMobWeaponManager*& WeaponManager);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get Basic State Manager (Mob)", Keywords = "status movement die death alive invincible controller"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateManager*& BasicStateManager);
+
+	// Get all related actors of a mob, including weapons, skills, skill collisions, and skill collision hti detectors
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast, DefaultToSelf, DisplayName = "Get All Related Actors (Mob)", Keywords = "relative accessory accessories attached bound bind"), Category = "NaPack|MobSystem|Mob|Components")
+	static void GetAllRelatives_BP(ANaMob* Target, TArray<AActor*>& RelatedActors);
+
+	/*** Type ***/
+
+	/* Return if this mob is a player mob i.e. contains a player component. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Player Mob"), Category = "NaPack|MobSystem|Mob|Type")
+	static bool IsPlayerMob_BP(ANaMob* Target);
+
+	/* Return the mob's player component. If there isn't one, return null. */
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get Mob Player Component"), Category = "NaPack|MobSystem|Mob|Type")
+	static UNaMobPlayerComponent* GetPlayerComponent_BP(ANaMob* Target);
+
+	/* Return if this mob is an enemy mob i.e. contains an enemy component. */
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Is Enemy Mob"), Category = "NaPack|MobSystem|Mob|Type")
+	static bool IsEnemyMob_BP(ANaMob* Target);
+
+	/* Return the mob's enemy component. If there isn't one, return null. */
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get Mob Enemy Component"), Category = "NaPack|MobSystem|Mob|Type")
+	static UNaMobEnemyComponent* GetEnemyComponent_BP(ANaMob* Target);
+
+	/*** Skill & weapon possessions ***/
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Skill Names"), Category = "NaPack|MobSystem|Skill")
+	static void GetAllSkillNames_BP(ANaMob* Target, TArray<FName>& SkillNames);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Skills"), Category = "NaPack|MobSystem|Skill")
+	static void GetAllSkills_BP(ANaMob* Target, TArray<ANaMobSkill*>& Skills);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Weapon Names"), Category = "NaPack|MobSystem|Weapon")
+	static void GetAllWeaponNames_BP(ANaMob* Target, TArray<FName>& WeaponNames);
+
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutoCast, DefaultToSelf, DisplayName = "Get All Weapons"), Category = "NaPack|MobSystem|Weapon")
+	static void GetAllWeapons_BP(ANaMob* Target, TArray<ANaMobWeapon*>& Weapons);
 
 	/*** Animation Switch ***/
 	
@@ -147,10 +179,11 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName RegisterName,
+		const FMobSkillUsageOptions & Options,
 		bool Force = false,
 		USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
+		FName SocketName = NAME_None
+		
 	);
 
 	/* Get skill from mob by register name. */
@@ -158,7 +191,7 @@ public:
 	static void GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill);
 
 	/* Get skill's source mob and register name. */
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill Registeration", Keywords = "register name reg name"), Category = "NaPack|MobSystem|Skill")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "Get Skill Registeration", Keywords = "source register name reg name"), Category = "NaPack|MobSystem|Skill")
 	static void GetSkillRegisteration_BP(ANaMobSkill* InSkill, ANaMob*& SourceMob, FName& RegisterName);
 
 	/* Get collision set of mob skill. Collision set is the set of existing collisions of the skill.

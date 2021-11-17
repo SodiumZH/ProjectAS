@@ -9,7 +9,7 @@
 class ANaMob;
 class ANaMobWeapon;
 
-UCLASS(BlueprintType)
+UCLASS(ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
 class NAPACK_API UNaMobWeaponManager : public UActorComponent {
 
 	GENERATED_BODY()
@@ -24,12 +24,16 @@ protected:
 
 public:
 
+	TArray<ANaMobWeapon*> GetAllWeapons();
+
+	TArray<FName> GetAllRegisterNames();
+
 	ANaMobWeapon* GetWeaponFromRegisterName(FName Name);
 
-	/* Get register name of a weapon. Please note that empty name ("") is a null return. If empty name is returned, it means the weapon is not registered. */
+	/* Get register name of a weapon. Please note that name "none" is a null return. If empty name is returned, it means the weapon is not registered. */
 	FName GetRegisterName(ANaMobWeapon* Weapon);
 
-	// Register a weapon to a mob. Please note that the empty name ("") cannot be a register name.
+	// Register a weapon to a mob. Please note that the name "none" cannot be a register name.
 	// WARNING: this action will NOT attach the weapon or setup any ownership!!!
 	// WARNING: If the same name is existing, this action will replace the old weapon and print warning to log.
 	// @Param ReplacementNoWarning If true, warning will not be printed when replacement happens. For cases when replacement is intended.

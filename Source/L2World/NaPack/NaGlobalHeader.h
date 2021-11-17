@@ -10,3 +10,11 @@
 // Match NaPack-API to the project's API.
 #define NAPACK_API L2WORLD_API
 #define NAPACK_ENABLE_DEBUG true
+
+// Module config. If a module is not loaded, set the corresponding value false.
+#define NAPACK_MOB_SYSTEM true
+#define NAPACK_ITEM_SYSTEM true
+#define NAPACK_UI_SYSTEM true
+
+// Debug settings
+#define SAFE_ASSERT_ON true	// If true, the assertion macros "checks" "checksf" will work.

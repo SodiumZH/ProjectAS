@@ -12,6 +12,24 @@ UNaMobSkillManager::UNaMobSkillManager() {
 
 }
 
+TArray<ANaMobSkill*> UNaMobSkillManager::GetAllSkills() {
+	TArray<ANaMobSkill*> Out;
+	Out.Empty();
+	for (auto& Elem : SkillRegistry) {
+		Out.Emplace(Elem.Value);
+	}
+	return Out;
+}
+
+TArray<FName> UNaMobSkillManager::GetAllRegisterNames() {
+	TArray<FName> Out;
+	Out.Empty();
+	for (auto& Elem : SkillRegistry) {
+		Out.Emplace(Elem.Key);
+	}
+	return Out;
+}
+
 bool UNaMobSkillManager::ContainsRegisterName(FName InName) {
 	return SkillRegistry.Contains(InName);
 }
@@ -118,10 +136,10 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
 	FName RegisterName,
+	const FMobSkillUsageOptions & Options,
 	bool Force,
 	USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
+	FName SocketName
 ) {
 	if (!this || !GetOwner())
 		return nullptr;
@@ -137,9 +155,9 @@ ANaMobSkill* UNaMobSkillManager::UseSkill(
 		SkillClass,
 		InTransform,
 		RegisterName,
+		Options,
 		Force,
 		AttachToComponent,
-		SocketName,
-		DoAttachment
+		SocketName
 	);
 }

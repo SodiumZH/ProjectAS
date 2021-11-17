@@ -74,7 +74,7 @@ void UNaMobPlayerComponent::MoveForward(float val) {
 		return;
 
 	// Do only when enable movement
-	if (!Mob->GetStateManager()->CanMove())
+	if (!Mob->GetBasicStateManager()->CanMove())
 		val = 0.f;
 
 	if ((Mob->Controller != nullptr) && (val != 0.0f))
@@ -92,7 +92,7 @@ void UNaMobPlayerComponent::MoveRight(float val) {
 		return;
 
 	// Do only when enable movement
-	if (!Mob->GetStateManager()->CanMove())
+	if (!Mob->GetBasicStateManager()->CanMove())
 		val = 0.f;
 
 	if ((Mob->Controller != nullptr) && (val != 0.0f))
@@ -109,7 +109,7 @@ void UNaMobPlayerComponent::Tick_PlayerRotation() {
 	if (!Mob)
 		return;
 	// Do only when enable movement
-	if (!Mob->GetStateManager()->CanMove())
+	if (!Mob->GetBasicStateManager()->CanMove())
 		return;
 	// When falling no rotation
 	if (Mob->GetCharacterMovement()->IsFalling())

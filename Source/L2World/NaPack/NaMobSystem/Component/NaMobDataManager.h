@@ -12,7 +12,7 @@
 * For "static" properties (e.g. name, gender) the values can be directly called by other modules (e.g. UI). 
 */
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
 class NAPACK_API UNaMobDataManager :public UActorComponent {
 
 	GENERATED_BODY()
@@ -29,5 +29,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobData|Info")
 	FString DisplayName = TEXT("Mob");
 
-	
 };

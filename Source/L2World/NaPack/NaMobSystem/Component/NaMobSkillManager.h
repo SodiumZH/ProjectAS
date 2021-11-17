@@ -34,6 +34,10 @@ public:
 
 	/* Skill Registry R&W */
 
+	TArray<ANaMobSkill*> GetAllSkills();
+
+	TArray<FName> GetAllRegisterNames();
+
 	// Return if a register name exists
 	bool ContainsRegisterName(FName InName);
 
@@ -56,10 +60,10 @@ public:
 		TSubclassOf<ANaMobSkill> SkillClass,
 		const FTransform & InTransform,
 		FName InRegisterName,
+		const FMobSkillUsageOptions & Options,
 		bool Force = false,
 		class USceneComponent* AttachToComponent = nullptr,
-		FName SocketName = NAME_None,
-		bool DoAttachment = true
+		FName SocketName = NAME_None
 	);
 
 	

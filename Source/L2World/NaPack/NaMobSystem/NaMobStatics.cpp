@@ -13,43 +13,6 @@
 /* Mob */
 
 /* Components */
-bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
-
-	if (!IsValid(Target)) {
-		return false;
-	}
-
-#if WITH_EDITOR
-	TArray<UNaMobPlayerComponent*> PlayerComps;
-	Target->GetComponents<UNaMobPlayerComponent>(PlayerComps);
-	if (PlayerComps.Num() >= 2)
-		LogErrorContext("Multiple player components detect: only one player component is allowed on a mob.", Target);
-	return PlayerComps.Num() > 0;
-#else
-	UNaMobPlayerComponent* PlayerComp = Target->GetComponentByClass(UNaMobPlayerComponent::StaticClass());
-	return PlayerComp;
-#endif
-}
-
-void UNaMobStatics::GetPlayerComponent_BP(ANaMob* Target, UNaMobPlayerComponent*& PlayerComponent) {
-
-	if (!IsValid(Target)) {
-		PlayerComponent = nullptr;
-		return;
-	}
-
-#if WITH_EDITOR
-	TArray<UNaMobPlayerComponent*> PlayerComps;
-	Target->GetComponents<UNaMobPlayerComponent>(PlayerComps);
-	if (PlayerComps.Num() >= 2)
-		LogErrorContext("Multiple player components detect: only one player component is allowed on a mob.", Target);
-	PlayerComponent = PlayerComps.Num() > 0 ? PlayerComps[0] : nullptr;
-#else
-	UNaMobPlayerComponent* PlayerComp = Target->GetComponentByClass(UNaMobPlayerComponent::StaticClass());
-	PlayerComponent = PlayerComp ? PlayerComp : nullptr;
-#endif
-
-}
 
 void UNaMobStatics::GetTimeControl_BP(ANaMob* Target, UTimeControlComponent*& TimeControl) {
 	
@@ -69,6 +32,90 @@ void UNaMobStatics::GetSkillManager_BP(ANaMob* Target, UNaMobSkillManager*& Skil
 	SkillManager = Target->GetSkillManager();
 }
 
+void UNaMobStatics::GetWeaponManager_BP(ANaMob* Target, UNaMobWeaponManager*& WeaponManager) {
+	if (!IsValid(Target)) {
+		WeaponManager = nullptr;
+		return;
+	}
+	WeaponManager = Target->GetWeaponManager();
+}
+
+void UNaMobStatics::GetBasicStateManager_BP(ANaMob* Target, UNaMobBasicStateManager*& BasicStateManager) {
+	if (!IsValid(Target)) {
+		BasicStateManager = nullptr;
+		return;
+	}
+	BasicStateManager = Target->GetBasicStateManager();
+}
+
+void UNaMobStatics::GetAllRelatives_BP(ANaMob* Target, TArray<AActor*>& RelatedActors) {
+	if (!IsValid(Target)) {
+		RelatedActors.Empty();
+		return;
+	}
+	Target->GetAllRelatives(RelatedActors);
+}
+
+/* Skill & Weapon possessions */
+
+void UNaMobStatics::GetAllSkillNames_BP(ANaMob* Target, TArray<FName>& SkillNames) {
+	if (!IsValid(Target)) {
+		SkillNames.Empty();
+		return;
+	}
+	SkillNames = Target->GetSkillManager()->GetAllRegisterNames();
+}
+
+void UNaMobStatics::GetAllSkills_BP(ANaMob* Target, TArray<ANaMobSkill*>& Skills) {
+	if (!IsValid(Target)) {
+		Skills.Empty();
+		return;
+	}
+	Skills = Target->GetSkillManager()->GetAllSkills();
+}
+
+void UNaMobStatics::GetAllWeaponNames_BP(ANaMob* Target, TArray<FName>& WeaponNames) {
+	if (!IsValid(Target)) {
+		WeaponNames.Empty();
+		return;
+	}
+	WeaponNames = Target->GetWeaponManager()->GetAllRegisterNames();
+}
+
+void UNaMobStatics::GetAllWeapons_BP(ANaMob* Target, TArray<ANaMobWeapon*>& Weapons) {
+	if (!IsValid(Target)) {
+		Weapons.Empty();
+		return;
+	}
+	Weapons = Target->GetWeaponManager()->GetAllWeapons();
+}
+
+
+/* Type */
+
+bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->IsPlayerMob();
+}
+
+UNaMobPlayerComponent* UNaMobStatics::GetPlayerComponent_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->GetPlayerComponent();
+}
+
+bool UNaMobStatics::IsEnemyMob_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->IsEnemyMob();
+}
+
+UNaMobEnemyComponent* UNaMobStatics::GetEnemyComponent_BP(ANaMob* Target) {
+	if (!IsValid(Target))
+		return false;
+	return Target->GetEnemyComponent();
+}
 
 
 /* Anim Switch */
@@ -155,12 +202,12 @@ void UNaMobStatics::UseSkillByClass_BP(
 	TSubclassOf<ANaMobSkill> SkillClass,
 	const FTransform & InTransform,
 	FName RegisterName,
+	const FMobSkillUsageOptions & Options,
 	bool ForceSpawn,
 	USceneComponent* AttachToComponent,
-	FName SocketName,
-	bool DoAttachment
+	FName SocketName
 ) {
-	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, ForceSpawn, AttachToComponent, SocketName, DoAttachment);
+	OutSkill = ANaMobSkill::UseSkillByClass(SourceMob, SkillClass, InTransform, RegisterName, Options, ForceSpawn, AttachToComponent, SocketName);
 }
 
 void UNaMobStatics::GetSkillByRegisterName_BP(ANaMob* SourceMob, FName InRegisterName, ANaMobSkill*& Skill) {

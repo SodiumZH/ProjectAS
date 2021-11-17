@@ -6,6 +6,7 @@
 #include "../NaMob.h"
 #include "NaMobSkill.h"
 #include "../../NaUtility/NaDebugUtility.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
@@ -26,10 +27,22 @@ void ANaMobSkillCollision::BeginPlay() {
 
 	Super::BeginPlay();
 	
+	/* Check hit detector child actor class */
+	if (!UKismetMathLibrary::ClassIsChildOf(HitDetectorSpawner->GetChildActorClass().Get(), AHitDetectorInterface::StaticClass())) {
+		LogError("Mob skill collision config error: hit detector doesn't inherit Hit Detector Interface class. The spawn class of hit detector child actor component should be set a subclass of Hit Detector Interface. This skill collision will be destroyed for safety.");
+		if (IsValid(HitDetectorSpawner->GetChildActor()))
+			HitDetectorSpawner->GetChildActor()->Destroy();
+		Destroy();
+		return;
+	}
+
 	FTimerHandle InitHandle;
 	GetWorldTimerManager().SetTimer(InitHandle, this, &ANaMobSkillCollision::Initialized, 1e-5f);
 	GetWorldTimerManager().SetTimer(InitHandle, this, &ANaMobSkillCollision::SetupSendHitDelegate, 1e-5f);
 	
+	
+	
+
 }
 
 void ANaMobSkillCollision::SetupSendHitDelegate() {
@@ -51,10 +64,16 @@ AHitDetectorInterface* ANaMobSkillCollision::GetDetector() {
 
 void ANaMobSkillCollision::SendSkillHit(const FHitResult& HitResult) {
 	// Check validity
-	if (!IsValid(SourceSkill)) {
-		GetDetector()->ResumeIgnored(HitResult.Actor.Get());
+	AActor* HitActor = HitResult.Actor.Get();
+	if (!IsValid(SourceSkill) || !IsValid(SourceSkill->GetSource())) {
+		GetDetector()->ResumeIgnored(HitActor);	// Should not send hit but has added ignored. Resume it.
 		return;
 	}
+
+	if (HitActor == static_cast<AActor*>(GetSourceSkill()->GetSource())	// Source Mob
+		|| GetSourceSkill()->GetSource()->GetWeaponManager()->GetAllWeapons().Contains(HitActor)	// Weapon of source mob
+		)
+		return;
 
 	SourceSkill->ReceiveCollisionHit(this, HitResult);
 
@@ -74,15 +93,6 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 		return nullptr;
 	}
 
-	// Spawn col
-	AActor* OutColActor = InSourceSkill->GetWorld()->SpawnActor(Class.Get(), &InTransform);
-	ANaMobSkillCollision* OutCol = static_cast<ANaMobSkillCollision*>(OutColActor);
-	check(OutCol);
-
-	if (!DoAttachment) {
-		return OutCol;
-	}
-
 	/* Set up attachment */
 
 	// If remains null, attach to source
@@ -92,12 +102,26 @@ ANaMobSkillCollision* ANaMobSkillCollision::MakeCollisionByClass(
 		AttachToComponent = InSourceSkill->GetRootComponent();
 	}
 
+	// Calculate the spawn transform
+
+	// Spawn col
+	FTransform Trans = DoAttachment ? (AttachToComponent->GetComponentTransform() * InTransform) : InTransform;
+	AActor* OutColActor = InSourceSkill->GetWorld()->SpawnActor(Class.Get(), &Trans);
+	ANaMobSkillCollision* OutCol = static_cast<ANaMobSkillCollision*>(OutColActor);
+	check(OutCol);
+
+	if (!DoAttachment) {
+		return OutCol;
+	}
+
+
+
 	/* Attach */
 
 	OutCol->SourceSkill = InSourceSkill;
 	OutCol->SocketName = InSocketName;
 	InSourceSkill->AddCollision(OutCol);
 
-	OutCol->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepRelativeTransform, InSocketName);
+	OutCol->AttachToComponent(AttachToComponent, FAttachmentTransformRules::KeepWorldTransform, InSocketName);
 	return OutCol;
 }

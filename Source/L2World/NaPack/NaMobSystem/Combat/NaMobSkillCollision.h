@@ -71,8 +71,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobSkillCollision")
 	FName SocketName;
-	
-	TSubclassOf<AHitDetectorInterface> DetectorClass;
+
 
 public:
 
@@ -110,6 +109,8 @@ public:
 	// If true, the collision will not detect collision to the mob owning it (i.e. source mob of the source mob skill)
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MobSkillCollision")
 	bool bIgnoreSourceMob = true;
+
+
 
 
 	/* Notify */

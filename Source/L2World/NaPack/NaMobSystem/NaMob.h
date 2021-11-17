@@ -10,6 +10,8 @@
 #define MOB_DEFAULT_HEIGHT 180.f
 #define MOB_DEFAULT_DIAMETER 60.f
 
+static_assert(NAPACK_MOB_SYSTEM, TEXT("To enable NaMobSystem, the option \"NAPACK_MOB_SYSTEM\" in NaGlobalHeader.h must be true."));
+
 /**
 
 Content
@@ -35,6 +37,7 @@ class ANaMobSkill;
 class UNaMobWeaponManager;
 class UNaMobStateManager;
 class UNaMobDataManager;
+class UNaMobBasicStateManager;
 
 UCLASS(BlueprintType)
 class NAPACK_API ANaMob : public ACharacter, public INaMobBase
@@ -76,18 +79,45 @@ protected:
 	UNaMobWeaponManager* WeaponManager;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UNaMobStateManager* StateManager;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UNaMobDataManager* DataManager;
+	UNaMobBasicStateManager* BasicStateManager;
+	UNaMobBasicStateManager* BasicStateManager_0;	// For unknown nullization
 
 public:
 
 	UTimeControlComponent * GetTimeControl() { return TimeControl; };
 	UNaMobSkillManager* GetSkillManager() { return SkillManager; };
 	UNaMobWeaponManager* GetWeaponManager() { return WeaponManager; };
-	UNaMobStateManager* GetStateManager() { return StateManager; };
-	UNaMobDataManager* GetDataManager() { return DataManager; };
+	UNaMobBasicStateManager* GetBasicStateManager() { return BasicStateManager; };
+
+	// Get all actors related to this mob, including itself, skills, skill collisions, weapons
+	void GetAllRelatives(TArray<AActor*>& Out);
+
+
+	/* Types */
+
+	/* Check if there's any type conflict in the mob. 
+	* Return true if everything is right. Return false if type conflict exists, and also print error information to log.
+	* A type conflict is a case in which mob type components (e.g. player component, enemy component) are not correctly configured, mostly when there's multiple in one mob.
+	*/
+	bool CheckTypeConflict();
+
+	/* Assert when type conflict exists in a mob. Return true if everything is right.
+	* Warning: This function may cause CRASH! For the no-crash version, use CheckTypeConflict().
+	*/
+	bool AssertNoTypeConflict();
+
+	// Return if this mob is a player mob i.e. contains a player component.
+	bool IsPlayerMob();
+
+	// Return the mob's player component. If there isn't one, return null.
+	class UNaMobPlayerComponent* GetPlayerComponent();
+
+	// Return if this mob is an enemy mob i.e. contains an enemy component.
+	bool IsEnemyMob();
+
+	// Return the mob's enemy component. If there isn't one, return null.
+	class UNaMobEnemyComponent* GetEnemyComponent();
+
 
 	/*==========================================================================*/
 	////////////
@@ -338,8 +368,6 @@ public:
 	*/
 	void CloseAnimStateSwitch(FName Key);
 
-
-	/* Weapon related */
 
 
 };

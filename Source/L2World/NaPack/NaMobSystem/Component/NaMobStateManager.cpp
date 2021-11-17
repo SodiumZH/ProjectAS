@@ -4,6 +4,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../NaMob.h"
 
+UNaMobStateManager::UNaMobStateManager() {
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UNaMobStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (bDoTickSync)
@@ -11,8 +15,22 @@ void UNaMobStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 }
 
 void UNaMobStateManager::StateSync() {
+	OnStateSync();
+}
+
+
+void UNaMobBasicStateManager::BeginPlay() {
+	Super::BeginPlay();
+	bRunWalkSetting = (MovementType != ENaMobMovementType::MMT_Walk);
+}
+
+void UNaMobBasicStateManager::StateSync() {
 
 	ANaMob* Mob = dynamic_cast<ANaMob*>(GetOwner());
+	if (!Mob) {
+		LogError("Mob Basic Static Manager is only valid for NaMob.")
+		return;
+	}
 	UCharacterMovementComponent* CharMove = Mob->GetCharacterMovement();
 
 	/* Set movement speed */
@@ -57,6 +75,50 @@ void UNaMobStateManager::StateSync() {
 	CharMove->MaxAcceleration = MOB_BASIC_ACCEL * MaxAccel;
 	CharMove->JumpZVelocity = MOB_BASIC_JUMP_Z_VELOCITY * RealtimeJumpHeightScale;
 
-	OnStateSync();
-	
+	Super::StateSync();
+
+}
+
+ENaMobMovementType UNaMobBasicStateManager::SetMovementType(ENaMobMovementType NewType) {
+
+	ENaMobMovementType OldType = MovementType;
+
+	switch (NewType) {
+	case ENaMobMovementType::MMT_Run: {
+		if (!bRunWalkSetting)
+			bRunWalkSetting = true;
+		break;
+	}
+	case ENaMobMovementType::MMT_Walk:{
+		if (bRunWalkSetting)
+			bRunWalkSetting = false;
+		break;
+		}
+	default: {
+		break;
+	}
+	}
+
+	MovementType = NewType;
+	OnSetMovementType(OldType, NewType);
+	return NewType;
+}
+
+void UNaMobBasicStateManager::SetCanMove(bool CanMove) {
+	if (CanMove)
+		MovementType = bRunWalkSetting ? ENaMobMovementType::MMT_Run : ENaMobMovementType::MMT_Walk;
+	else
+		MovementType = ENaMobMovementType::MMT_NoMove;
+}
+
+void UNaMobBasicStateManager::SetRunWalk(bool NewRunWalk) {
+
+	bRunWalkSetting = NewRunWalk;
+
+	if (MovementType == ENaMobMovementType::MMT_Run || MovementType == ENaMobMovementType::MMT_Walk) {
+		MovementType = NewRunWalk ? ENaMobMovementType::MMT_Run : ENaMobMovementType::MMT_Walk;
+	}
+
+	return;
+
 }

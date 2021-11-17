@@ -11,6 +11,7 @@
 #include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobStateManager.h"
 #include "Component/NaMobDataManager.h"
+#include "Component/NaMobEnemyComponent.h"
 
 
 
@@ -27,9 +28,8 @@ ANaMob::ANaMob()
 	TimeControl = CreateDefaultSubobject<UTimeControlComponent>(TEXT("TimeControl"));
 	SkillManager = CreateDefaultSubobject<UNaMobSkillManager>(TEXT("SkillManager"));
 	WeaponManager = CreateDefaultSubobject<UNaMobWeaponManager>(TEXT("WeaponManager"));
-	StateManager = CreateDefaultSubobject<UNaMobStateManager>(TEXT("StateManager"));
-	DataManager = CreateDefaultSubobject<UNaMobDataManager>(TEXT("DataManager"));
-
+	BasicStateManager = CreateDefaultSubobject<UNaMobBasicStateManager>(TEXT("BasicStateManager"));
+	BasicStateManager_0 = BasicStateManager;
 }
 
 // Called to bind functionality to input
@@ -56,6 +56,7 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 	Super::OnConstruction(trans);
 	
 	UpdateSkeletalMesh();
+	BasicStateManager = BasicStateManager_0;
 	InitCapsuleMeshSize();
 	UpdateAnimClass();
 }
@@ -72,6 +73,106 @@ void ANaMob::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	Tick_CloseAnimSwitch();
+}
+
+
+/* Type check & get */
+
+bool ANaMob::CheckTypeConflict() {
+	TArray<UNaMobPlayerComponent*> PlayerComps;
+	TArray<UNaMobEnemyComponent*> EnemyComps;
+	GetComponents<UNaMobPlayerComponent>(PlayerComps);
+	GetComponents<UNaMobEnemyComponent>(EnemyComps);
+
+	if (PlayerComps.Num() > 1) {
+		LogError("Mob type conflict: containing multiple player components.");
+		return false;
+	}
+	else if (EnemyComps.Num() > 1) {
+		LogError("Mob type conflict: containing multiple enemy components.");
+		return false;
+	}
+	else if (PlayerComps.Num() + EnemyComps.Num() > 1) {
+		LogError("Mob type conflict: containing conflicting type components.");
+		return false;
+	}
+
+	return true;
+}
+
+bool ANaMob::AssertNoTypeConflict() {
+	bool val = CheckTypeConflict();
+	checkf(val, TEXT("Mob type conflict detected. See log for detail."));
+	return val;
+}
+
+void ANaMob::GetAllRelatives(TArray<AActor*>& Out) {
+	Out.Empty();
+	Out.Emplace(this);
+	TArray<ANaMobSkill*> Skills = SkillManager->GetAllSkills();
+	Out.Append(Skills);		// Skill Actors
+	Out.Append(WeaponManager->GetAllWeapons());		// Weapons
+
+	TArray<ANaMobSkillCollision*> Cols;
+	for (int i = 0; i < Skills.Num(); ++i) { // For all skills
+		if (!IsValid(Skills[i]))
+			continue;
+		Cols = Skills[i]->GetCollisionSet_Safe().Array();	// Add collisions
+		Out.Append(Cols);
+		for (int j = 0; j < Cols.Num(); ++j) {
+			if (!IsValid(Cols[j]))
+				continue;
+			Out.Emplace(Cols[j]->GetDetector()); // Add collision hit detectors
+		}
+	}
+}
+
+bool ANaMob::IsPlayerMob() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobPlayerComponent*> CompArray;
+	GetComponents<UNaMobPlayerComponent>(CompArray);
+	return CompArray.Num() == 1;
+
+}
+
+UNaMobPlayerComponent* ANaMob::GetPlayerComponent() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobPlayerComponent*> CompArray;
+	GetComponents<UNaMobPlayerComponent>(CompArray);
+	return (CompArray.Num() == 1) ? CompArray[0] : nullptr;
+
+}
+
+bool ANaMob::IsEnemyMob() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobEnemyComponent*> CompArray;
+	GetComponents<UNaMobEnemyComponent>(CompArray);
+	return CompArray.Num() == 1;
+
+}
+
+UNaMobEnemyComponent* ANaMob::GetEnemyComponent() {
+
+#if WITH_EDITOR
+	CheckTypeConflict();
+#endif
+
+	TArray<UNaMobEnemyComponent*> CompArray;
+	GetComponents<UNaMobEnemyComponent>(CompArray);
+	return (CompArray.Num() == 1) ? CompArray[0] : nullptr;
+
 }
 
 
@@ -298,35 +399,35 @@ void ANaMob::InitCapsuleMeshSize() {
 
 void ANaMob::MobDie() {
 	
-	StateManager->CurrentHP = 0;
-	StateManager->MovementType = ENaMobMovementType::MMT_NoMove;
-	StateManager->JumpType = ENaMobJumpType::MJT_NoJump;
-	StateManager->bIsDead = true;
+	BasicStateManager->CurrentHP = 0;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_NoMove);
+	BasicStateManager->JumpType = ENaMobJumpType::MJT_NoJump;
+	BasicStateManager->bIsDead = true;
 	OnMobDying();
 
 }
 void ANaMob::DefaultMobResume() {
-	StateManager->CurrentHP = StateManager->MaxHP;
-	StateManager->CurrentMP = StateManager->MaxMP;
-	StateManager->MovementType = ENaMobMovementType::MMT_Run;
-	StateManager->JumpType = ENaMobJumpType::MJT_Default;
-	StateManager->bIsDead = false;
+	BasicStateManager->CurrentHP = BasicStateManager->MaxHP;
+	BasicStateManager->CurrentMP = BasicStateManager->MaxMP;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_Run);
+	BasicStateManager->JumpType = ENaMobJumpType::MJT_Default;
+	BasicStateManager->bIsDead = false;
 	OnMobResuming();
 }
 
 void ANaMob::CustomMobResume(int64 NewHP) {
-	StateManager->CurrentHP = NewHP;
-	StateManager->MovementType = ENaMobMovementType::MMT_Run;
-	StateManager->JumpType = ENaMobJumpType::MJT_Default;
-	StateManager->bIsDead = false;
+	BasicStateManager->CurrentHP = NewHP;
+	BasicStateManager->SetMovementType(ENaMobMovementType::MMT_Run);
+	BasicStateManager->JumpType = ENaMobJumpType::MJT_Default;
+	BasicStateManager->bIsDead = false;
 	OnMobResuming();
 	OnCustomMobResuming(NewHP);
 }
 
 void ANaMob::MobTakeDamage(int64 Damage) {
-	StateManager->CurrentHP -= Damage;
+	BasicStateManager->CurrentHP -= Damage;
 
-	if (StateManager->CurrentHP <= 0)
+	if (BasicStateManager->CurrentHP <= 0)
 		MobDie();
 
 	OnMobTakingDamage(Damage);

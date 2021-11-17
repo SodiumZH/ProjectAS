@@ -7,7 +7,12 @@
 */
 
 #pragma once
-#include "NaPlayerMob.h"
 #include "NaMobData.h"
-#include "../NaUtility/NaUtility.h"
-#include "../NaComponent/NaComponent.h"
+#include "NaMobStatics.h"
+#include "Component/NaMobComponent.h"
+#include "Combat/NaMobSkill.h"
+#include "Combat/NaMobSkillCollision.h"
+#include "Combat/NaMobWeapon.h"
+#include "Controller/NaMobEnemyController.h"
+#include "Controller/NaMobPlayerController.h"
+#include "WorldManager/NaWorldEnemyControllerManager.h"
