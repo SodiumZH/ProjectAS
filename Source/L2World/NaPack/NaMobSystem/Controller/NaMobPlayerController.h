@@ -6,7 +6,6 @@
 #include "../../NaGlobalHeader.h"
 #include "NaMobPlayerController.generated.h"
 
-class UNaMobControllerInterfaceComponent;
 
 UCLASS(Blueprintable)
 class NAPACK_API ANaMobPlayerController :public APlayerController {
@@ -23,30 +22,42 @@ public:
 
 	/* Components */
 
-	UFUNCTION(BlueprintReadOnly, EditAnywhere)
-	UNaMobControllerInterfaceComponent* ControllerInterface;
+	/* Public interface component of player and enemy controller. */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	class UNaMobControllerInterfaceComponent* ControllerInterface;
+
+#if NAPACK_UI_SYSTEM
+
+	/* Interface component to Na UI System. Any interaction with UI system should be handled in this component. */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	class UNaControllerUIInterfaceComponent* UIInterface;
+
+#endif
 
 	/* Mouse actions */
 
+	/* Switch if show default mouse cursor. 
+	This doesn't affect the UI Mouse Cursor (In-game mouse cursor). 
+	@ReturnValue value of bShowMouseCursor after switching.
+	*/
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Mouse")
-	void SwitchShowMouseCursor();
+	bool SwitchShowMouseCursor();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|Control|Mouse")
-	void OnSwitchShowMouseCursor();
-	virtual void OnSwitchShowMouseCursor_Implementation() {};
 
+<<<<<<< HEAD
 
 	/* Mouse pointing actors */
 	/* This module */
 
+=======
+	/* Selecting actors */
 
-	// Trace the actor at which the mouse cursor is pointing
-	void Tick_TraceMousePointed();
+	void SelectActor();
+>>>>>>> 9c940f9911bd2f3dd4575b044f6fe81c791f9dee
 
-	// Max distance the actor at which the mouse cursor can point
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MobPlayerController|Mouse")
-	float MaxPointDistance = 10000.0;
 
+
+<<<<<<< HEAD
 	void SelectActor();
 
 	/* Classes of actors(including subclasses) which can be selected with mouse. If not set, the mouse will be unable to select anything.
@@ -77,4 +88,6 @@ public:
 	/* If true, the filter will add NaMob by default. */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobPlayerController|Mouse|Selection")
 	bool bDefaultCanSelectMob = true;
+=======
+>>>>>>> 9c940f9911bd2f3dd4575b044f6fe81c791f9dee
 };

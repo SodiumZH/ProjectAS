@@ -14,3 +14,4 @@
 // Module config. If a module is not loaded, set the corresponding value false.
 #define NAPACK_MOB_SYSTEM true
 #define NAPACK_ITEM_SYSTEM true
+#define NAPACK_UI_SYSTEM true
