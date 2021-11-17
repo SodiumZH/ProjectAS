@@ -11,9 +11,9 @@ class NAPACK_API UNaControllerUIInterfaceComponent : public UActorComponent {
 
 public:
 
-	class APlayerController* GetOwnerController();
-
-
+	// Set if the UI-implemented mouse cursor(using a custom image) is shown.
+	// NOT IMPLEMENTED
+	void SetShowUIMouseCursor(bool Value) {};
 
 
 
