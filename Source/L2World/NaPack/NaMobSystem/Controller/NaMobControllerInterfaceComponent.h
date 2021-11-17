@@ -15,14 +15,18 @@ class UNaMobControllerInterfaceComponent : public UActorComponent
 
 public:
 
+	virtual void BeginPlay() override;
+
 	UNaMobControllerInterfaceComponent();
 
-
+	UPROPERTY(BlueprintReadOnly)
+	AActor* ActorSelected = nullptr;
 
 	/* Selecting actors */
 
+	/* Select an actor. If the actor is not selectable (defined in class filter), no action. If null is input, it will be set null (i.e. unselect).*/
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
-		void SelectActor() {};
+	void SelectActor(AActor* InActor);
 
 	/* Classes of actors(including subclasses) which can be selected with mouse. If not set, the mouse will be unable to select anything.
 	When determining if an actor can be selected, it will read filter first, then exclusions, lastly inclusions.
@@ -48,12 +52,15 @@ public:
 	TArray<TSubclassOf<AActor>> SelectActorClassIncludedSpecific;
 
 	// Check if an actor can be selected
-	// NOT IMPLEMENTED
 	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
-	bool CanSelect(AActor* InActor);
+	bool CanSelectActor(AActor* InActor);
+
+	// Check if a class can be selected
+	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
+	bool CanSelectClass(TSubclassOf<AActor> InClass);
 
 	/* If true, the filter will add NaMob by default. */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MobPlayerController|Selection")
+	UPROPERTY(EditAnywhere, Category = "MobPlayerController|Selection")
 	bool bDefaultCanSelectMob = true;
 	
 
