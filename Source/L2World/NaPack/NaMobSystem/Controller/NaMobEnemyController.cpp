@@ -1,9 +1,11 @@
 #include "NaMobEnemyController.h"
+#include "Perception/PawnSensingComponent.h"
+#include "NaMobControllerInterfaceComponent.h"
 
-AActor* ANaMobEnemyController:GetTarget() { return Target; };
+ANaMobEnemyController::ANaMobEnemyController() {
 
+	PrimaryActorTick.bCanEverTick = true;
 
-AActor* ANaMobEnemyController::SetTarget(AActor* NewTarget) {
-	Target = NewTarget;
-	return Target;
+	ControllerInterface = CreateDefaultSubobject<UNaMobControllerInterfaceComponent>(TEXT("ControllerInterface"));
+	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 }

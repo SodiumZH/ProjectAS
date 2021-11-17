@@ -1,11 +1,8 @@
-#include "NaMobControllerInterface.h"
 #include "NaMobControllerInterfaceComponent.h"
 
-ANaMobPlayerController::ANaMobPlayerController() {
+UNaMobControllerInterfaceComponent::UNaMobControllerInterfaceComponent() {
 	
-	PrimaryActorTick.bCanEverTick = true;
-
-	ControllerInterface = CreateDefaultSubobject<UNaMobControllerInterfaceComponent>(TEXT("ControllerInterface"));
+	PrimaryComponentTick.bCanEverTick = false;
 
 
 }

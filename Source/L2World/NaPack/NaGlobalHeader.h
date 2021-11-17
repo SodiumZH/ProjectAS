@@ -15,3 +15,6 @@
 #define NAPACK_MOB_SYSTEM true
 #define NAPACK_ITEM_SYSTEM true
 #define NAPACK_UI_SYSTEM true
+
+// Debug settings
+#define SAFE_ASSERT_ON true	// If true, the assertion macros "checks" "checksf" will work.

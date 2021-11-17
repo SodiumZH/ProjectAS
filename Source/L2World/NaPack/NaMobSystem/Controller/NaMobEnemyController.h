@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "NaMobControllerInterface.h"
 #include "../../NaGlobalHeader.h"
 #include "NaMobEnemyController.generated.h"
 
@@ -25,7 +24,7 @@ public:
 	UPawnSensingComponent* PawnSensing;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	class UNaMobControllerInterfaceComponent* MobControllerInterface;
+	class UNaMobControllerInterfaceComponent* ControllerInterface;
 	
 	/* Controller interface */
 

@@ -38,6 +38,15 @@ DECLARE_LOG_CATEGORY_EXTERN(LogNaPack, Log, All);
 #define PrintToScreen(text) 0
 #endif
 
+#if SAFE_ASSERT_ON
+// Safe assertion. You can use this version instead of check macro so that when the crash prevents you from repairing it in the editor, you can temporarily disable it by setting "SAFE_ASSERT_ON" false (in NaGlobalHeader.h) for repairing.
+#define checks check
+// Safe assertion. You can use this version instead of check macro so that when the crash prevents you from repairing it in the editor, you can temporarily disable it by setting "SAFE_ASSERT_ON" false (in NaGlobalHeader.h) for repairing.
+#define checksf checkf
+#else
+#define checks 0
+#define checksf 0
+#endif
 
 
 namespace LNaDebugUtility {
@@ -47,6 +56,8 @@ namespace LNaDebugUtility {
 
 	// Get display name
 	FString DisplayName(UObject* InObj);
+
+
 
 }
 

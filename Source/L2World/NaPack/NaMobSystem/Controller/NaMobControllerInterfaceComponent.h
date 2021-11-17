@@ -15,6 +15,8 @@ class UNaMobControllerInterfaceComponent : public UActorComponent
 
 public:
 
+	UNaMobControllerInterfaceComponent();
+
 	// The actor as target of controlled mob.
 	UPROPERTY(BlueprintReadWrite)
 	class AActor* TargetActor = nullptr;
@@ -23,4 +25,3 @@ public:
 
 
 };
-;
