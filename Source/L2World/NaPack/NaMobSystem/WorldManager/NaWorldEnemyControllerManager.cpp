@@ -3,7 +3,7 @@
 #include "NaWorldEnemyControllerManager.h"
 #include "../Controller/NaMobEnemyController.h"
 #include "../NaMob.h"
-#include "../../NaGlobalHeader.h"
+#include "../Component/NaMobEnemyComponent.h"
 
 ANaMobEnemyController* UNaWorldEnemyControllerManager::FindExistingFreeController(TSubclassOf<ANaMobEnemyController> InClass) {
 

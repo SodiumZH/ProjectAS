@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../../NaGlobalHeader.h"
 #include "Components/SceneComponent.h"
 #include "../Controller/NaMobEnemyController.h"
 #include "NaMobEnemyComponent.generated.h"
@@ -17,7 +16,7 @@ class USceneComponent;
 
 
 UCLASS(ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
-class NAPACK_API UNaMobEnemyComponent : public USceneComponent {
+class UNaMobEnemyComponent : public USceneComponent {
 
 	GENERATED_BODY()
 

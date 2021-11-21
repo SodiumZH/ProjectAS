@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "NaMobSkillManager.generated.h"
 
 /* NaMob Skill Manager is an interface component attached only to NaMob for handling skills (based on class ANaMobSkill). 
@@ -18,9 +17,10 @@
 */
 
 class ANaMobSkill;
+struct FMobSkillUsageOptions;
 
 UCLASS(BlueprintType)
-class NAPACK_API UNaMobSkillManager : public UActorComponent {
+class UNaMobSkillManager : public UActorComponent {
 	
 	GENERATED_BODY()
 

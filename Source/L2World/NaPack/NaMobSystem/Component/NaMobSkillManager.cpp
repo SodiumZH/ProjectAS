@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NaMobSkillManager.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "../NaMob.h"
 #include "../Combat/NaMobSkill.h"
 

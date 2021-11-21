@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
-#include "../../NaGlobalHeader.h"
 #include "../NaMob.h"
 #include "../NaMobData.h"
-#include "../../NaComponent/FreeLookSpringArmComponent.h"
+#include "Components/FreeLookSpringArmComponent.h"
 #include "NaMobPlayerComponent.generated.h"
 
 /*
@@ -17,7 +16,7 @@
 */
 
 UCLASS( ClassGroup=(NaMobSystem), meta=(BlueprintSpawnableComponent) )
-class NAPACK_API UNaMobPlayerComponent : public UFreeLookSpringArmComponent
+class UNaMobPlayerComponent : public UFreeLookSpringArmComponent
 {
 	GENERATED_BODY()
 

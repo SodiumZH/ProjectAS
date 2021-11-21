@@ -4,9 +4,10 @@
 #include "../NaMob.h"
 #include "Components/SceneComponent.h"
 #include "NaMobSkillCollision.h"
-#include "../../NaComponent/TimeControlComponent.h"
+#include "Components/TimeControlComponent.h"
 #include "../Component/NaMobSkillManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "../Component/NaMobStateManager.h"
 
 FMobSkillUsageOptions FMobSkillUsageOptions::Default = FMobSkillUsageOptions();
 
@@ -68,7 +69,7 @@ ANaMobSkill* ANaMobSkill::UseSkillByClass(
 		FName OldRegName = InRegisterName;
 		InRegisterName = UNaStringLibrary::MakeUniqueName(InRegisterName, SourceMob->GetSkillManager()->GetAllRegisterNames());
 		if (OldRegName != InRegisterName)
-			UE_LOG(LogNaPack, Log, TEXT("%s: Use skill: Skill register name is occupied. A derivative name \"%s\" is applied instead of \"%s\"."), *LNaDebugUtility::DisplayName(SourceMob), *InRegisterName.ToString(), *OldRegName.ToString());
+			UE_LOG(LogTemp, Log, TEXT("%s: Use skill: Skill register name is occupied. A derivative name \"%s\" is applied instead of \"%s\"."), *UNaDebugUtility::DisplayName(SourceMob), *InRegisterName.ToString(), *OldRegName.ToString());
 	}
 
 

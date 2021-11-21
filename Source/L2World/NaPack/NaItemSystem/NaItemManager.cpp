@@ -1,5 +1,6 @@
 #include "NaItemManager.h"
-#include "../NaUtility/NaUtility.h"
+#include "NaUtility.h"
+
 
 FNaItemSocketData::FNaItemSocketData(bool InIsEmpty, int InItemTypeID, FString InDisplayName, int InAmount, int64 InUniqueItemID, FName InUniqueItemDatabaseName) {
 	bIsEmpty = InIsEmpty;

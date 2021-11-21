@@ -9,7 +9,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../../NaGlobalHeader.h"
 #include "NaMobSkillCollision.h"
 #include "NaMobWeapon.generated.h"
 
@@ -44,7 +43,7 @@ public:
 };
 
 UCLASS(BlueprintType)
-class NAPACK_API ANaMobWeapon : public AActor {
+class ANaMobWeapon : public AActor {
 
 	GENERATED_BODY()
 

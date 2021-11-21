@@ -2,11 +2,13 @@
 
 #include "NaMobSkillCollision.h"
 #include "Components/ChildActorComponent.h"
-#include "../../NaActor/HitDetector.h"
+#include "Actors/HitDetector.h"
 #include "../NaMob.h"
 #include "NaMobSkill.h"
-#include "../../NaUtility/NaDebugUtility.h"
+#include "Utility/DebugUtil/NaDebugUtility.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../Component/NaMobWeaponManager.h"
+#include "NaMobWeapon.h"
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
@@ -69,11 +71,12 @@ void ANaMobSkillCollision::SendSkillHit(const FHitResult& HitResult) {
 		GetDetector()->ResumeIgnored(HitActor);	// Should not send hit but has added ignored. Resume it.
 		return;
 	}
-
-	if (HitActor == static_cast<AActor*>(GetSourceSkill()->GetSource())	// Source Mob
-		|| GetSourceSkill()->GetSource()->GetWeaponManager()->GetAllWeapons().Contains(HitActor)	// Weapon of source mob
-		)
-		return;
+	if (ANaMobWeapon* HitWeapon = dynamic_cast<ANaMobWeapon*>(HitActor)) {
+		if (HitActor == static_cast<AActor*>(GetSourceSkill()->GetSource())	// Source Mob
+			|| GetSourceSkill()->GetSource()->GetWeaponManager()->GetAllWeapons().Contains(dynamic_cast<ANaMobWeapon*>(HitWeapon))	// Weapon of source mob
+			)
+			return;
+	}
 
 	SourceSkill->ReceiveCollisionHit(this, HitResult);
 

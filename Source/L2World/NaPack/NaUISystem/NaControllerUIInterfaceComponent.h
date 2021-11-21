@@ -2,11 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../NaGlobalHeader.h"
 #include "NaControllerUIInterfaceComponent.generated.h"
 
 UCLASS(Blueprintable)
-class NAPACK_API UNaControllerUIInterfaceComponent : public UActorComponent {
+class UNaControllerUIInterfaceComponent : public UActorComponent {
 
 	GENERATED_BODY()
 

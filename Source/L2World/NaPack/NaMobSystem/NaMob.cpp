@@ -3,7 +3,7 @@
 #include "NaMob.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "../NaComponent/TimeControlComponent.h"
+#include "Components/TimeControlComponent.h"
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobWeapon.h"
 #include "Component/NaMobPlayerComponent.h"

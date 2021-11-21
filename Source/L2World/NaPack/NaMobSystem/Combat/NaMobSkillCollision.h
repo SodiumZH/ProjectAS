@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../../NaGlobalHeader.h"
 #include "NaMobSkillCollision.generated.h"
 
 /* Mob Skill Collision is an interface of hit detector applied on skills. */
@@ -29,7 +28,7 @@ enum class ESkillCollisionShape :uint8 {
 };
 
 UCLASS(BlueprintType)
-class NAPACK_API ANaMobSkillCollision :public AActor {
+class ANaMobSkillCollision :public AActor {
 
 	GENERATED_BODY()
 

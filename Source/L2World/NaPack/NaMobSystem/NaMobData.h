@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "../NaGlobalHeader.h"
 #include "NaMobData.generated.h"
 
 #define MOB_BASIC_WALK_SPEED 200.f

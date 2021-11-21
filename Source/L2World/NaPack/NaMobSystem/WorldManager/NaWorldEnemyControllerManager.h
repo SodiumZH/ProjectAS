@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
 #include "NaWorldEnemyControllerManager.generated.h"
 
 /* World manager module for enemy controllers. 
@@ -17,7 +16,7 @@ class ANaMobEnemyController;
 class ANaMobPlayerController;
 
 UCLASS(Blueprintable)
-class NAPACK_API UNaWorldEnemyControllerManager : public UActorComponent {
+class UNaWorldEnemyControllerManager : public UActorComponent {
 
 	GENERATED_BODY()
 

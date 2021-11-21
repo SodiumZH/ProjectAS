@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "NaMob.h"
+#include "Combat/NaMobSkill.h"
 #include "NaMobStatics.generated.h"
+
 
 class ANaMobSkill;
 class ANaMobSkillCollision;
@@ -14,7 +16,7 @@ class UNaMobPlayerComponent;
 class AHitDetectorInterface;
 
 UCLASS()
-class NAPACK_API UNaMobStatics : public UBlueprintFunctionLibrary
+class UNaMobStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

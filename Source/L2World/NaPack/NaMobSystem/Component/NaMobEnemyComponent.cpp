@@ -1,9 +1,9 @@
 
 #include "NaMobEnemyComponent.h"
 #include "../NaMob.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "../WorldManager/NaWorldEnemyControllerManager.h"
-#include "../../NaGameMode.h"
+#include "NaGameMode.h"
 
 void UNaMobEnemyComponent::BeginPlay() {
 

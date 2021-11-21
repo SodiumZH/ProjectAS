@@ -91,7 +91,7 @@ void UNaMobControllerInterfaceComponent::SelectActor(AActor* InActor) {
 		return;
 	}
 
-	else if (CanSelect(InActor)) {
+	else if (CanSelectActor(InActor)) {
 		ActorSelected = InActor;
 		return;
 	}

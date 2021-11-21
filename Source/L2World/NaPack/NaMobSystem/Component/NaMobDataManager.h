@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
 #include "NaMobDataManager.generated.h"
 
 /* Mob Data Manager is intended to store data of a mob that are not needed to be tickly updated.
@@ -13,7 +12,7 @@
 */
 
 UCLASS(Blueprintable, ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
-class NAPACK_API UNaMobDataManager :public UActorComponent {
+class UNaMobDataManager :public UActorComponent {
 
 	GENERATED_BODY()
 

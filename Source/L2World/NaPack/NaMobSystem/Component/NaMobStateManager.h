@@ -2,8 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "NaMobStateManager.generated.h"
 
 class ANaMob;
@@ -33,7 +32,7 @@ Data directly imported or calculated from save data should be stored in Mob Data
 Only valid for mobs.
 */
 UCLASS(Blueprintable, ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
-class NAPACK_API UNaMobStateManager : public UActorComponent {
+class UNaMobStateManager : public UActorComponent {
 
 	GENERATED_BODY()
 
@@ -66,7 +65,7 @@ public:
 
 /* Default state component for mob's basic data, including movement, jump and dead/alive. */
 UCLASS(ClassGroup = (NaMobSystem), Blueprintable)
-class NAPACK_API UNaMobBasicStateManager :public UNaMobStateManager {
+class UNaMobBasicStateManager :public UNaMobStateManager {
 	
 	GENERATED_BODY()
 

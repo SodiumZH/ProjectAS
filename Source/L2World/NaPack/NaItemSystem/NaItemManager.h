@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../NaGlobalHeader.h"
 #include "NaItemManager.generated.h"
 
 // This value is intendend to avoid integer overflow.
@@ -50,7 +49,7 @@ public:
 
 public:
 
-	static NAPACK_API const FNaItemSocketData EmptySocket;
+	static const FNaItemSocketData EmptySocket;
 
 	// Check if an item socket struct is valid. Currently it's always true. Code in NaItemSystem/NaItemManager.h or *.cpp to reset.
 //	UFUNCTION(BlueprintPure, DisplayName = "Is Valid (Item Socket)", Category = "NaPack|NaItemSystem")
@@ -71,7 +70,7 @@ enum class ENaItemContainerBrowseResult :uint8 {
 };
 
 UCLASS(Blueprintable)
-class NAPACK_API UNaItemContainerComponent : public UActorComponent{
+class UNaItemContainerComponent : public UActorComponent{
 
 	GENERATED_BODY()
 

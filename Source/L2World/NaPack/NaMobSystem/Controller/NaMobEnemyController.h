@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "../../NaGlobalHeader.h"
 #include "NaMobEnemyController.generated.h"
 
 class AActor;
@@ -11,7 +10,7 @@ class UPawnSensingComponent;
 
 
 UCLASS(Blueprintable)
-class NAPACK_API ANaMobEnemyController : public AAIController {
+class ANaMobEnemyController : public AAIController {
 	
 	GENERATED_BODY()
 

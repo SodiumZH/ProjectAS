@@ -2,8 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "NaMobControllerInterfaceComponent.generated.h"
 
 

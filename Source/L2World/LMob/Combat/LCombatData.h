@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../../NaPack/NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "LCombatData.generated.h"
 
 /* Basic */

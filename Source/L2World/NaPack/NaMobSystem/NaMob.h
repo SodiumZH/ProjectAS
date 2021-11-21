@@ -4,13 +4,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "NaMobBase.h"
-#include "../NaGlobalHeader.h"
 #include "NaMob.generated.h"
 
+#define NAPACK_MOB_SYSTEM
 #define MOB_DEFAULT_HEIGHT 180.f
 #define MOB_DEFAULT_DIAMETER 60.f
 
-static_assert(NAPACK_MOB_SYSTEM, TEXT("To enable NaMobSystem, the option \"NAPACK_MOB_SYSTEM\" in NaGlobalHeader.h must be true."));
 
 /**
 
@@ -40,7 +39,7 @@ class UNaMobDataManager;
 class UNaMobBasicStateManager;
 
 UCLASS(BlueprintType)
-class NAPACK_API ANaMob : public ACharacter, public INaMobBase
+class ANaMob : public ACharacter, public INaMobBase
 {
 	GENERATED_BODY()
 

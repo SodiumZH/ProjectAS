@@ -3,7 +3,7 @@
 
 #include "NaMobPlayerComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "NaMobStateManager.h"
 
 // Sets default values for this component's properties
@@ -119,7 +119,7 @@ void UNaMobPlayerComponent::Tick_PlayerRotation() {
 	FVector InputDirection_Local = GetForward()*ForwardAxisValue + GetRight()*RightAxisValue;
 
 	// Don't rotate if no input
-	if (NaMath::NearlyEqual(InputDirection_Local.Size(), 0.f)) {
+	if (UNaMath::NearlyEqual(InputDirection_Local.Size(), 0.f)) {
 		InputDirection = FVector();
 		return;
 	}
@@ -133,7 +133,7 @@ void UNaMobPlayerComponent::Tick_PlayerRotation() {
 
 	// Get old rotation and delta rotation
 	FRotator CurrentRot = Mob->GetActorRotation();
-	float TargetYaw = NaMath::AngularMoveTo_Deg(CurrentRot.Yaw, InputRot.Yaw, PlayerRotationMaxSpeed);
+	float TargetYaw = UNaMath::AngularMoveTo_Deg(CurrentRot.Yaw, InputRot.Yaw, PlayerRotationMaxSpeed);
 
 	// Set rotation and set back the camera
 	Mob->SetActorRotation(FRotator(CurrentRot.Pitch, TargetYaw, CurrentRot.Roll));

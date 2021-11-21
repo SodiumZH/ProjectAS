@@ -2,15 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../NaGlobalHeader.h"
-#include "../../NaUtility/NaUtility.h"
+#include "NaUtility.h"
 #include "NaMobWeaponManager.generated.h"
 
 class ANaMob;
 class ANaMobWeapon;
 
 UCLASS(ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
-class NAPACK_API UNaMobWeaponManager : public UActorComponent {
+class UNaMobWeaponManager : public UActorComponent {
 
 	GENERATED_BODY()
 
