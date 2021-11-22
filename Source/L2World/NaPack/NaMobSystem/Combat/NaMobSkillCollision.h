@@ -76,7 +76,7 @@ public:
 
 	/************** Get functions *****************/
 
-	FORCEINLINE AHitDetectorInterface* GetDetector();
+	AHitDetectorInterface* GetDetector();
 	FORCEINLINE ANaMobSkill* GetSourceSkill() { return SourceSkill; };
 	FORCEINLINE FName GetSocketName() { return SocketName; };
 

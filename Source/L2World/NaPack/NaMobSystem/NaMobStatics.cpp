@@ -9,6 +9,7 @@
 #include "Component/NaMobWeaponManager.h"
 #include "Component/NaMobPlayerComponent.h"
 #include "Component/NaMobSkillManager.h"
+#include "Actors/HitDetector.h"
 
 /* Mob */
 

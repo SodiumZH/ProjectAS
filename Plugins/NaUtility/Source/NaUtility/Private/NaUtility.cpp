@@ -20,3 +20,5 @@ void FNaUtilityModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FNaUtilityModule, NaUtility)
+
+#define NAPACK_MOB_SYSTEM

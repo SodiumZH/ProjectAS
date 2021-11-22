@@ -16,17 +16,15 @@ public:
 	ANaGameMode();
 
 /* Mob system interface */
-#ifdef NAPACK_MOB_SYSTEM
 
 protected:
 
-	class UNaWorldEnemyControllerManager* EnemyControllerManager;
+	class UNaWorldEnemyControllerManager* EnemyControllerManager = nullptr;
 
 public: 
 
 	UNaWorldEnemyControllerManager* GetEnemyControllerManager() { return EnemyControllerManager; };
 
-#endif
 
 };
 

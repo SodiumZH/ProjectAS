@@ -12,6 +12,8 @@
 #include "Component/NaMobStateManager.h"
 #include "Component/NaMobDataManager.h"
 #include "Component/NaMobEnemyComponent.h"
+#include "Combat/NaMobSkillCollision.h"
+#include "Actors/HitDetector.h"
 
 
 
