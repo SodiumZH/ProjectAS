@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class NaUtility : ModuleRules
+public class NaWidgets : ModuleRules
 {
-	public NaUtility(ReadOnlyTargetRules Target) : base(Target)
+	public NaWidgets(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -26,6 +26,7 @@ public class NaUtility : ModuleRules
 			new string[]
 			{
 				"Core",
+                "NaUtility"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -37,8 +38,8 @@ public class NaUtility : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore",
-                // ... add private dependencies that you statically link with here ...	
+				"SlateCore"
+				// ... add private dependencies that you statically link with here ...	
 			}
 			);
 		
