@@ -12,7 +12,11 @@ void SNaFramedImage::Construct(const FArguments& InArgs)
 	/*
 	ChildSlot
 	[
-	
+		SAssignNew(Subwidgets.GridPanel, SGridPanel)
+		[
+			SAssignNew(Subwidgets.ImageCornerUpLeft, SImage)
+			.
+		]
 	];
 	*/
 }
