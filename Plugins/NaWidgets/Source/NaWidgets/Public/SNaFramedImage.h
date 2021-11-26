@@ -128,6 +128,10 @@ public:
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
+	SNaFramedImage(FNaFramedImageParameters InParams) :
+		Params(InParams)
+	{};
+
 	FNaFramedImageParameters Params;
 
 	FNaFramedImageSubwidgets Subwidgets;
