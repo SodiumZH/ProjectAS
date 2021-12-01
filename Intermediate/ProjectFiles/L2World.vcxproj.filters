@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\L2World.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{64ECB9F8-4134-4B59-8E34-949A366F7317}</UniqueIdentifier>
+      <UniqueIdentifier>{4590CA2C-2987-42B2-A933-AF2C99337C86}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\L2World.Target.cs">
       <Filter>Source</Filter>
@@ -18,7 +18,7 @@
     <None Include="..\..\README.md" />
     <None Include="..\..\Regenerate sln.txt" />
     <Filter Include="Config">
-      <UniqueIdentifier>{C8C57864-541A-4436-87C9-E782AB2B48FB}</UniqueIdentifier>
+      <UniqueIdentifier>{B5C59027-AAC8-4347-B3E8-02ADFF52E197}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -39,22 +39,22 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Plugins">
-      <UniqueIdentifier>{1DA84B0C-F7F1-40B4-B47B-A68B903AB4DD}</UniqueIdentifier>
+      <UniqueIdentifier>{2685E417-42B1-4919-9EB4-E3766E789122}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\NaUtility">
-      <UniqueIdentifier>{316C3EEF-A7DA-42E4-BC9D-A8A921967B3F}</UniqueIdentifier>
+      <UniqueIdentifier>{F4B4465E-6024-4FCA-878B-A421B374BEFE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\NaUtility\Source">
-      <UniqueIdentifier>{2E0534B8-6814-44DC-A501-CAE951B04518}</UniqueIdentifier>
+      <UniqueIdentifier>{669CA8E5-CAA2-4689-B101-DC4062FB602D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\NaUtility\Source\NaUtility">
-      <UniqueIdentifier>{D9C17EEE-59FA-40CF-B65C-8EB0875F1F4E}</UniqueIdentifier>
+      <UniqueIdentifier>{C66E4AE9-1492-4AB0-83F5-A6CEA6B212E2}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\NaUtility\Source\NaUtility\NaUtility.Build.cs">
       <Filter>Plugins\NaUtility\Source\NaUtility</Filter>
     </None>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private">
-      <UniqueIdentifier>{ACFE5549-7306-4F2D-847A-7CDCD3EF663B}</UniqueIdentifier>
+      <UniqueIdentifier>{FBD10FEA-0721-4B08-A6FE-7AE9BB4700A9}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\NaGameMode.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private</Filter>
@@ -63,13 +63,13 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Private</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Actors">
-      <UniqueIdentifier>{C239DCB0-3521-411C-B333-87D279966E49}</UniqueIdentifier>
+      <UniqueIdentifier>{4DD69BD6-5174-4DD5-A311-F16902E343E7}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Actors\HitDetector.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Actors</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Components">
-      <UniqueIdentifier>{829564AB-6D81-4C08-A871-2DBAF19EFD66}</UniqueIdentifier>
+      <UniqueIdentifier>{714C5743-FFC5-4526-A82E-4A7CB4C5D3AE}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Components\FreeLookSpringArmComponent.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Components</Filter>
@@ -78,10 +78,10 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Components</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Utility">
-      <UniqueIdentifier>{02192D0D-2EEB-4B1E-B0BA-68F3A7DE0576}</UniqueIdentifier>
+      <UniqueIdentifier>{EDA52190-4EB0-45F5-B11B-34D0BFE62C04}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Utility\BPLibraries">
-      <UniqueIdentifier>{C055EB37-7221-4795-A98E-4BAEB26118CE}</UniqueIdentifier>
+      <UniqueIdentifier>{2C7093BF-2853-4C70-8D42-95E3DC9C6282}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Utility\BPLibraries\NaContainerUtility.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\BPLibraries</Filter>
@@ -99,19 +99,19 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\BPLibraries</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Utility\Containers">
-      <UniqueIdentifier>{FA0808B4-5BB3-4CDC-91B8-E5725EF7DDFB}</UniqueIdentifier>
+      <UniqueIdentifier>{1BACD333-44EE-4238-A0AC-A751B879DD4C}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Utility\Containers\Stack.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\Containers</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Utility\DebugUtil">
-      <UniqueIdentifier>{76B2DB0A-67CA-4EBD-A782-72CFA35B0258}</UniqueIdentifier>
+      <UniqueIdentifier>{32032AD0-6EFB-4A51-AA25-5B35713252A9}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Utility\DebugUtil\NaDebugUtility.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\DebugUtil</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Private\Utility\Maths">
-      <UniqueIdentifier>{5337F6FA-D329-4D01-A790-AA051130C410}</UniqueIdentifier>
+      <UniqueIdentifier>{998CC8B3-EC38-47DC-92F0-2B1ED56126BE}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaUtility\Source\NaUtility\Private\Utility\Maths\ObjectRotator.cpp">
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\Maths</Filter>
@@ -120,7 +120,7 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Private\Utility\Maths</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public">
-      <UniqueIdentifier>{5398B01E-72CE-4607-A6B0-5A002D33E1B9}</UniqueIdentifier>
+      <UniqueIdentifier>{D65C3A85-82B2-4B53-9EE4-A8E4111A1F86}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\NaGameMode.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public</Filter>
@@ -129,7 +129,7 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Public</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Actors">
-      <UniqueIdentifier>{72A50189-2D83-41A6-903B-BED4E4EC307B}</UniqueIdentifier>
+      <UniqueIdentifier>{2E2A045D-D9A2-434B-9A9F-F30DE8DA6836}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Actors\Actors.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Actors</Filter>
@@ -138,7 +138,7 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Actors</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Components">
-      <UniqueIdentifier>{0D67EAB7-1175-4D0C-BC42-653FD0D4C9E8}</UniqueIdentifier>
+      <UniqueIdentifier>{3C0D093F-49EF-4E55-9690-A2AE115EDF27}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Components\Components.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Components</Filter>
@@ -150,13 +150,13 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Components</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Utility">
-      <UniqueIdentifier>{13829A93-84B4-4CD1-B25E-54F4860D50F8}</UniqueIdentifier>
+      <UniqueIdentifier>{C3D9F40C-F12A-414D-8DF7-20D035920F5D}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\Utility.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Utility\BPLibraries">
-      <UniqueIdentifier>{7561EA64-D068-44B9-8324-818ADF262554}</UniqueIdentifier>
+      <UniqueIdentifier>{E4645A2B-435E-4539-A728-78640303232B}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\BPLibraries\NaContainerUtility.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\BPLibraries</Filter>
@@ -174,55 +174,52 @@
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\BPLibraries</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Utility\Containers">
-      <UniqueIdentifier>{F72D6D14-AE04-4737-9E7D-CEBBAAF7502E}</UniqueIdentifier>
+      <UniqueIdentifier>{7F4B7379-734C-4215-B89A-67F055A0F9FC}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\Containers\Stack.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\Containers</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Utility\DebugUtil">
-      <UniqueIdentifier>{BF2B4131-EF01-446F-88C8-4E18A18AE43D}</UniqueIdentifier>
+      <UniqueIdentifier>{8F95CC75-BA61-43D7-8A48-4764A8878F24}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\DebugUtil\NaDebugUtility.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\DebugUtil</Filter>
     </ClInclude>
     <Filter Include="Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths">
-      <UniqueIdentifier>{C764D17B-BE63-4B38-9E3A-E18BA2A10B16}</UniqueIdentifier>
+      <UniqueIdentifier>{FF3AD7BE-E4E8-4427-94BE-005BF10B0CBF}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths\ObjectRotator.h">
-      <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths\ObjectRotatorLibrary.h">
       <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths</Filter>
     </ClInclude>
     <None Include="..\..\Plugins\NaUtility\NaUtility.uplugin">
       <Filter>Plugins\NaUtility</Filter>
     </None>
     <Filter Include="Plugins\NaUtility\Resources">
-      <UniqueIdentifier>{07EC72C6-3F7B-4084-B9A4-0947D6696240}</UniqueIdentifier>
+      <UniqueIdentifier>{31D009CB-24BF-433F-A8CA-4B771439C061}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\NaUtility\Resources\Icon128.png">
       <Filter>Plugins\NaUtility\Resources</Filter>
     </None>
     <Filter Include="Plugins\NaWidgets">
-      <UniqueIdentifier>{F08332C7-ADE8-4BDD-8386-9146713154D4}</UniqueIdentifier>
+      <UniqueIdentifier>{CAA3D4C3-7775-40BC-AB49-FFAA35392440}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\NaWidgets\NaWidgets.uplugin">
       <Filter>Plugins\NaWidgets</Filter>
     </None>
     <Filter Include="Plugins\NaWidgets\Resources">
-      <UniqueIdentifier>{DF8C0C20-887B-446E-92BA-F30D8CC36824}</UniqueIdentifier>
+      <UniqueIdentifier>{7F10A6E5-A58F-4FA0-984A-F776B0BBC8D7}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\NaWidgets\Resources\Icon128.png">
       <Filter>Plugins\NaWidgets\Resources</Filter>
     </None>
     <Filter Include="Plugins\Test">
-      <UniqueIdentifier>{1247BB90-2043-42AD-A0D4-395366413D07}</UniqueIdentifier>
+      <UniqueIdentifier>{585F06F4-1C3F-480C-A3CF-318D5337A832}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\Test\Test.uplugin">
       <Filter>Plugins\Test</Filter>
     </None>
     <Filter Include="Plugins\Test\Resources">
-      <UniqueIdentifier>{5CABF81E-4F72-49E6-85C8-091A632D883C}</UniqueIdentifier>
+      <UniqueIdentifier>{245FAC28-A18A-4EDC-A33E-7597C885AD6B}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\Test\Resources\ButtonIcon_40x.png">
       <Filter>Plugins\Test\Resources</Filter>
@@ -231,16 +228,16 @@
       <Filter>Plugins\Test\Resources</Filter>
     </None>
     <Filter Include="Plugins\NaWidgets\Source">
-      <UniqueIdentifier>{31B9AC16-8B77-4D2E-8AA6-3B6F7DE23BC3}</UniqueIdentifier>
+      <UniqueIdentifier>{B8955D91-4EF5-4310-A795-686C72772705}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\NaWidgets\Source\NaWidgets">
-      <UniqueIdentifier>{3EA9FB79-8908-4E5C-B02C-FC237F6ED519}</UniqueIdentifier>
+      <UniqueIdentifier>{0C221FAC-8C32-4887-8D15-01E4AF08091C}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\NaWidgets\Source\NaWidgets\NaWidgets.Build.cs">
       <Filter>Plugins\NaWidgets\Source\NaWidgets</Filter>
     </None>
     <Filter Include="Plugins\NaWidgets\Source\NaWidgets\Private">
-      <UniqueIdentifier>{11312D06-D33F-4784-96D9-A84A296721E9}</UniqueIdentifier>
+      <UniqueIdentifier>{890B0405-FE80-49B3-A7FF-C38552516A21}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\NaWidgets\Source\NaWidgets\Private\NaWidgets.cpp">
       <Filter>Plugins\NaWidgets\Source\NaWidgets\Private</Filter>
@@ -249,7 +246,7 @@
       <Filter>Plugins\NaWidgets\Source\NaWidgets\Private</Filter>
     </ClCompile>
     <Filter Include="Plugins\NaWidgets\Source\NaWidgets\Public">
-      <UniqueIdentifier>{A27AE47D-B8AC-45A0-B2A1-24CEDA9923BC}</UniqueIdentifier>
+      <UniqueIdentifier>{60A85128-FD69-48D6-94C2-38FB9D83E6EB}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\NaWidgets\Source\NaWidgets\Public\NaWidgets.h">
       <Filter>Plugins\NaWidgets\Source\NaWidgets\Public</Filter>
@@ -258,16 +255,16 @@
       <Filter>Plugins\NaWidgets\Source\NaWidgets\Public</Filter>
     </ClInclude>
     <Filter Include="Plugins\Test\Source">
-      <UniqueIdentifier>{82A83E27-5D8F-4DAF-AEAE-64D5505E635F}</UniqueIdentifier>
+      <UniqueIdentifier>{E16D623E-CF12-4F83-8ECE-1CC45230C5CD}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\Test\Source\Test">
-      <UniqueIdentifier>{2E4E30C7-2B43-4E8F-B5A3-7FC216269C7C}</UniqueIdentifier>
+      <UniqueIdentifier>{A1068B76-94C6-440A-8B27-058510529496}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\Test\Source\Test\Test.Build.cs">
       <Filter>Plugins\Test\Source\Test</Filter>
     </None>
     <Filter Include="Plugins\Test\Source\Test\Private">
-      <UniqueIdentifier>{F6A89B18-E6CC-4E8D-84BE-E6BE7F0DB6F9}</UniqueIdentifier>
+      <UniqueIdentifier>{46CBBDE4-0631-4073-A0B8-8A8FEF47054E}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\Test\Source\Test\Private\Test.cpp">
       <Filter>Plugins\Test\Source\Test\Private</Filter>
@@ -279,7 +276,7 @@
       <Filter>Plugins\Test\Source\Test\Private</Filter>
     </ClCompile>
     <Filter Include="Plugins\Test\Source\Test\Public">
-      <UniqueIdentifier>{7E33EE85-B75A-469F-84F8-0969CBAEDC1D}</UniqueIdentifier>
+      <UniqueIdentifier>{D390D482-397F-4DEB-9C17-0D0F4D444B3E}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\Test\Source\Test\Public\Test.h">
       <Filter>Plugins\Test\Source\Test\Public</Filter>
@@ -291,7 +288,7 @@
       <Filter>Plugins\Test\Source\Test\Public</Filter>
     </ClInclude>
     <Filter Include="Source\L2World">
-      <UniqueIdentifier>{73DD25C3-9256-430B-B439-FF2B7915DD9E}</UniqueIdentifier>
+      <UniqueIdentifier>{B4D1B80F-EEF0-4E14-9E80-86FA8728CDED}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\L2World\L2World.Build.cs">
       <Filter>Source\L2World</Filter>
@@ -303,10 +300,10 @@
       <Filter>Source\L2World</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack">
-      <UniqueIdentifier>{F5A68471-508D-461B-A349-873CF0891AB8}</UniqueIdentifier>
+      <UniqueIdentifier>{FE846F1B-AAD9-4069-91AD-DDF1052DBB84}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\L2World\NaPack\NaItemSystem">
-      <UniqueIdentifier>{C0A521C6-3BA5-4182-9A23-6BF3B1B6F3EF}</UniqueIdentifier>
+      <UniqueIdentifier>{EFE992BD-3717-459E-BFD1-2F800984A7A0}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaItemSystem\NaItemManager.cpp">
       <Filter>Source\L2World\NaPack\NaItemSystem</Filter>
@@ -315,7 +312,7 @@
       <Filter>Source\L2World\NaPack\NaItemSystem</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem">
-      <UniqueIdentifier>{DF1999DE-A836-4575-9A69-96799A6657FB}</UniqueIdentifier>
+      <UniqueIdentifier>{55D4D9C1-2677-4DC2-94F3-8F517540878C}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\NaMob.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
@@ -345,7 +342,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Combat">
-      <UniqueIdentifier>{D1EF0E36-ABA0-4241-9247-FD2DDB129556}</UniqueIdentifier>
+      <UniqueIdentifier>{044D2018-9C47-4992-8447-C11D90EA5451}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Combat\MobDamage.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
@@ -369,7 +366,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\Combat</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Component">
-      <UniqueIdentifier>{18D5896F-42F8-4E33-B3DD-87BB45582216}</UniqueIdentifier>
+      <UniqueIdentifier>{DD2331CA-A064-4098-88DF-9C65B28F74A1}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaMobSystem\Component\NaMobComponent.h">
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
@@ -411,7 +408,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\Component</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\Controller">
-      <UniqueIdentifier>{3A6A1EC2-5045-49DD-83AF-29E40F291EA2}</UniqueIdentifier>
+      <UniqueIdentifier>{C45F7EF7-A373-4C1C-9A48-6B5CA179C862}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\Controller\NaMobControllerInterfaceComponent.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
@@ -432,7 +429,7 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\Controller</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaMobSystem\WorldManager">
-      <UniqueIdentifier>{9EE6AEBA-8F39-4724-B55C-DAA7562DCFAC}</UniqueIdentifier>
+      <UniqueIdentifier>{E03F33A5-3F22-4CA1-B3D8-5A5E992D3957}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaMobSystem\WorldManager\NaWorldEnemyControllerManager.cpp">
       <Filter>Source\L2World\NaPack\NaMobSystem\WorldManager</Filter>
@@ -447,13 +444,18 @@
       <Filter>Source\L2World\NaPack\NaMobSystem\WorldManager</Filter>
     </ClInclude>
     <Filter Include="Source\L2World\NaPack\NaUISystem">
-      <UniqueIdentifier>{51AF90D7-F071-429F-A3B7-F59E3F8BF7A2}</UniqueIdentifier>
+      <UniqueIdentifier>{124638FB-E06A-412B-B5A8-664D836AC78C}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\L2World\NaPack\NaUISystem\NaControllerUIInterfaceComponent.cpp">
       <Filter>Source\L2World\NaPack\NaUISystem</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\L2World\NaPack\NaUISystem\NaControllerUIInterfaceComponent.h">
       <Filter>Source\L2World\NaPack\NaUISystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Plugins\NaUtility\Source\NaUtility\Public\Utility\Maths\ObjectRotatorLibrary.h">
+      <Filter>Plugins\NaUtility\Source\NaUtility\Public\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
