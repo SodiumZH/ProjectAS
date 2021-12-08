@@ -124,4 +124,8 @@ public:
 	FNaBarParams Params;
 
 	FNaHoriontalBarSubwidgets Subwidgets;
+
+	FSlateBrush BrushRight = *FCoreStyle::Get().GetDefaultBrush();
+	FSlateBrush BrushMain = *FCoreStyle::Get().GetDefaultBrush();
+	FSlateBrush BrushLeft = *FCoreStyle::Get().GetDefaultBrush();
 };

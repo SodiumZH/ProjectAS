@@ -75,6 +75,7 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 				.ImageBar(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Center.Gauge_DF_Large_HP_Center")))
 				.ImageLeftEnd(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Left.Gauge_DF_Large_HP_Left")))
 				.ImageRightEnd(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Right.Gauge_DF_Large_HP_Right")))
+				.LengthLeftEnd(16.0)
 			]
 		];
 }
