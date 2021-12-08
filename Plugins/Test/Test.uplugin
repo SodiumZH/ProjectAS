@@ -5,7 +5,7 @@
 	"FriendlyName": "Test",
 	"Description": "",
 	"Category": "Other",
-	"CreatedBy": "Sodium",
+	"CreatedBy": "",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
@@ -19,6 +19,16 @@
 			"Name": "Test",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "NaUtility",
+			"Enabled": true
+		},
+		{
+			"Name": "NaWidgets",
+			"Enabled": true
 		}
 	]
 }

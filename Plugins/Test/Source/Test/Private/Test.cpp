@@ -3,7 +3,11 @@
 #include "Test.h"
 #include "TestStyle.h"
 #include "TestCommands.h"
-#include "Misc/MessageDialog.h"
+#include "LevelEditor.h"
+#include "Widgets/Docking/SDockTab.h"
+#include "Widgets/Layout/SBox.h"
+#include "Widgets/Text/STextBlock.h"
+#include "Widgets/SNaHorizontalBar.h"
 #include "ToolMenus.h"
 
 static const FName TestTabName("Test");
@@ -22,11 +26,15 @@ void FTestModule::StartupModule()
 	PluginCommands = MakeShareable(new FUICommandList);
 
 	PluginCommands->MapAction(
-		FTestCommands::Get().PluginAction,
+		FTestCommands::Get().OpenPluginWindow,
 		FExecuteAction::CreateRaw(this, &FTestModule::PluginButtonClicked),
 		FCanExecuteAction());
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FTestModule::RegisterMenus));
+	
+	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(TestTabName, FOnSpawnTab::CreateRaw(this, &FTestModule::OnSpawnPluginTab))
+		.SetDisplayName(LOCTEXT("FTestTabTitle", "Test"))
+		.SetMenuType(ETabSpawnerMenuType::Hidden);
 }
 
 void FTestModule::ShutdownModule()
@@ -41,17 +49,39 @@ void FTestModule::ShutdownModule()
 	FTestStyle::Shutdown();
 
 	FTestCommands::Unregister();
+
+	FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(TestTabName);
+}
+
+TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
+{
+	FText WidgetText = FText::Format(
+		LOCTEXT("WindowWidgetText", "Add code to {0} in {1} to override this window's contents"),
+		FText::FromString(TEXT("FTestModule::OnSpawnPluginTab")),
+		FText::FromString(TEXT("Test.cpp"))
+		);
+
+	return SNew(SDockTab)
+		.TabRole(ETabRole::NomadTab)
+		[
+			// Put your tab content here!
+			SNew(SBox)
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Center)
+			[
+				//SNew(STextBlock)
+				//.Text(WidgetText)
+				SNew(SNaHorizontalBar)
+				.ImageBar(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Center.Gauge_DF_Large_HP_Center")))
+				.ImageLeftEnd(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Left.Gauge_DF_Large_HP_Left")))
+				.ImageRightEnd(LoadObject<UTexture2D>(nullptr, TEXT("/NaWidgets/UI/Gauge_DF_Large_HP_Right.Gauge_DF_Large_HP_Right")))
+			]
+		];
 }
 
 void FTestModule::PluginButtonClicked()
 {
-	// Put your "OnButtonClicked" stuff here
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FTestModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("Test.cpp"))
-					   );
-	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
+	FGlobalTabmanager::Get()->TryInvokeTab(TestTabName);
 }
 
 void FTestModule::RegisterMenus()
@@ -63,7 +93,7 @@ void FTestModule::RegisterMenus()
 		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
 		{
 			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FTestCommands::Get().PluginAction, PluginCommands);
+			Section.AddMenuEntryWithCommandList(FTestCommands::Get().OpenPluginWindow, PluginCommands);
 		}
 	}
 
@@ -72,7 +102,7 @@ void FTestModule::RegisterMenus()
 		{
 			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
 			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FTestCommands::Get().PluginAction));
+				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FTestCommands::Get().OpenPluginWindow));
 				Entry.SetCommandList(PluginCommands);
 			}
 		}

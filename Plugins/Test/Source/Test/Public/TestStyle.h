@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Styling/SlateStyle.h"
 
+/**  */
 class FTestStyle
 {
 public:

@@ -1,9 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TestStyle.h"
-#include "Test.h"
-#include "Framework/Application/SlateApplication.h"
 #include "Styling/SlateStyleRegistry.h"
+#include "Framework/Application/SlateApplication.h"
 #include "Slate/SlateGameResources.h"
 #include "Interfaces/IPluginManager.h"
 
@@ -46,7 +45,7 @@ TSharedRef< FSlateStyleSet > FTestStyle::Create()
 	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("TestStyle"));
 	Style->SetContentRoot(IPluginManager::Get().FindPlugin("Test")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("Test.PluginAction", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
+	Style->Set("Test.OpenPluginWindow", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
 
 	return Style;
 }

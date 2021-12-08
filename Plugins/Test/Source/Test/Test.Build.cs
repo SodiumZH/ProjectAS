@@ -42,6 +42,8 @@ public class Test : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+                "NaUtility",
+                "NaWidgets"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

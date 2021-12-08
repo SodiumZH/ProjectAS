@@ -6,7 +6,7 @@
 
 void FTestCommands::RegisterCommands()
 {
-	UI_COMMAND(PluginAction, "Test", "Execute Test action", EUserInterfaceActionType::Button, FInputGesture());
+	UI_COMMAND(OpenPluginWindow, "Test", "Bring up Test window", EUserInterfaceActionType::Button, FInputGesture());
 }
 
 #undef LOCTEXT_NAMESPACE
