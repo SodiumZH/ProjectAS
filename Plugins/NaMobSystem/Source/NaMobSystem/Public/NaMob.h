@@ -328,7 +328,7 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "AnimationClass"), category = "Mob|Mesh|Animation")
-	TSubclassOf<UAnimInstance> AnimClass;
+	TSubclassOf<class UAnimInstance> AnimClass;
 
 	// Apply anim class settings to sk-meshes
 	void UpdateAnimClass();

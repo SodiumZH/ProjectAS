@@ -14,6 +14,7 @@
 #include "Components/NaMobEnemyComponent.h"
 #include "Combat/NaMobSkillCollision.h"
 #include "Actors/HitDetector.h"
+#include "Animation/AnimInstance.h"
 
 
 

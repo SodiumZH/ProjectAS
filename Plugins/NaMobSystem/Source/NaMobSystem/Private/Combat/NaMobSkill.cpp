@@ -2,7 +2,7 @@
 
 #include "Combat/NaMobSkill.h"
 #include "NaMob.h"
-#include "Combat/Components/SceneComponent.h"
+#include "Components/SceneComponent.h"
 #include "Combat/NaMobSkillCollision.h"
 #include "Components/TimeControlComponent.h"
 #include "Components/NaMobSkillManager.h"

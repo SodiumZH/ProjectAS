@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NaMobSkillCollision.h"
+#include "Combat/NaMobSkillCollision.h"
 #include "Components/ChildActorComponent.h"
 #include "Actors/HitDetector.h"
 #include "NaMob.h"
@@ -8,7 +8,7 @@
 #include "Utility/DebugUtil/NaDebugUtility.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/NaMobWeaponManager.h"
-#include "NaMobWeapon.h"
+#include "Combat/NaMobWeapon.h"
 
 ANaMobSkillCollision::ANaMobSkillCollision() {
 
