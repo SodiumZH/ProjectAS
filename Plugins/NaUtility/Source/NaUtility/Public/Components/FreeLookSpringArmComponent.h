@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "../Utility/Utility.h"
+#include "Utility/Utility.h"
 #include "FreeLookSpringArmComponent.generated.h"
 
 /**
