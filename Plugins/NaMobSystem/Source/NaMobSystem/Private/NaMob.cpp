@@ -33,6 +33,7 @@ ANaMob::ANaMob()
 	WeaponManager = CreateDefaultSubobject<UNaMobWeaponManager>(TEXT("WeaponManager"));
 	BasicStateManager = CreateDefaultSubobject<UNaMobBasicStateManager>(TEXT("BasicStateManager"));
 	BasicStateManager_0 = BasicStateManager;
+	TimeControl_0 = TimeControl;
 }
 
 // Called to bind functionality to input
@@ -59,6 +60,8 @@ void ANaMob::OnConstruction(const FTransform & trans) {
 	Super::OnConstruction(trans);
 	
 	UpdateSkeletalMesh();
+
+	TimeControl = TimeControl_0;
 	BasicStateManager = BasicStateManager_0;
 	InitCapsuleMeshSize();
 	UpdateAnimClass();

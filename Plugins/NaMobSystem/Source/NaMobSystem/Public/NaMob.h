@@ -70,6 +70,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UTimeControlComponent* TimeControl;
+	UTimeControlComponent* TimeControl_0;	// For unknown nullization
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UNaMobSkillManager* SkillManager;

@@ -1,6 +1,6 @@
 #include "Controllers/NaMobPlayerController.h"
 #include "Controllers/NaMobControllerInterfaceComponent.h"
-//#include "NaUISystem/NaControllerUIInterfaceComponent.h"
+#include "Controllers/NaControllerUIInterfaceComponent.h"
 
 ANaMobPlayerController::ANaMobPlayerController(){
 

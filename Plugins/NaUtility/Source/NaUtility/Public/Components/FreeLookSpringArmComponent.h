@@ -11,7 +11,7 @@
  * Designed for character control in third-person game. 
  */
 
-UCLASS(BlueprintType)
+UCLASS(ClassGroup = (NaUtility), meta = (BlueprintSpawnableComponent))
 class NAUTILITY_API UFreeLookSpringArmComponent : public USpringArmComponent
 {
 	GENERATED_BODY()
