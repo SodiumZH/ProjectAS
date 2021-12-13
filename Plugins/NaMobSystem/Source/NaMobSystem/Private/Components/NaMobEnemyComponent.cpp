@@ -3,7 +3,7 @@
 #include "NaMob.h"
 #include "NaUtility.h"
 #include "WorldManagers/NaWorldEnemyControllerManager.h"
-#include "NaGameMode.h"
+#include "NaPublicDependencies/NaGameModeBaseComponent.h"
 
 void UNaMobEnemyComponent::BeginPlay() {
 

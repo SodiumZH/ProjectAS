@@ -8,6 +8,7 @@
 #include "Actors/Actors.h"
 #include "Components/Components.h"
 
+#define NAUTILITY_ENABLED
 
 //DECLARE_LOG_CATEGORY_EXTERN(LogTemp, Log, All);
 

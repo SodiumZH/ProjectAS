@@ -75,10 +75,10 @@ public:
 public:
 	/* Rotate */
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Mouse Rotation Sensitivity"), category = "FreeLook|Rotation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Mouse Rotation Sensitivity"), category = "NaUtility|FreeLookSpringArm")
 	float YawSens_M = 1.f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Mouse Pitching Sensitivity"), category = "FreeLook|Rotation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Mouse Pitching Sensitivity"), category = "NaUtility|FreeLookSpringArm")
 	float PitchSens_M = 1.f;
 /*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Keyboard Rotation Sensitivity"), category = "FreeLook|Rotation")
@@ -87,11 +87,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Keyboard Pitching Sensitivity"), category = "FreeLook|Rotation")
 	float PitchSens_K = 1.f;
 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "Smooth Rotation"), category = "FreeLook|Rotation")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "Smooth Rotation"), category = "NaUtility|FreeLookSpringArm")
 	bool bEnableSmoothRotate = false;
 
 	// Max rotation speed when smooth rotation enabled
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Smooth Rotation Rate"), category = "FreeLook|Rotation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (DisplayName = "Smooth Rotation Rate"), category = "NaUtility|FreeLookSpringArm")
 	float SmoothRotateRate = 1.f;
 
 
@@ -170,15 +170,15 @@ public:
 	FVector GetUp() { return (FVector::UpVector * (InitRot + FObjectRotator(FRotator(0.f, RelRot.Yaw, 0.f)))); };
 
 	// Get the vector toward the CHARACTER forward according to camera
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Forward Vector (Free Look)"), Category = SpringArm)
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Forward Vector (Free Look)"), Category = "NaUtility|FreeLookSpringArm")
 	static FVector StaticGetForward(UFreeLookSpringArmComponent* Target) { return Target->GetForward(); };
 
 	// Get the vector toward the CHARACTER right according to camera
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Right Vector (Free Look)"), Category = SpringArm)
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Right Vector (Free Look)"), Category = "NaUtility|FreeLookSpringArm")
 	static FVector StaticGetRight(UFreeLookSpringArmComponent* Target) { return Target->GetRight(); };
 
 	// Get the vector toward the CHARACTER up according to camera
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Up Vector (Free Look)"), Category = SpringArm)
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Camera Up Vector (Free Look)"), Category = "NaUtility|FreeLookSpringArm")
 	static FVector StaticGetUp(UFreeLookSpringArmComponent* Target) { return Target->GetUp(); };
 
 

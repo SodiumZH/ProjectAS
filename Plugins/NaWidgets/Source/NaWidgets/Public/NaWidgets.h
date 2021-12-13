@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+#define NAWIDGETS_ENABLED
+
 class FNaWidgetsModule : public IModuleInterface
 {
 public:
