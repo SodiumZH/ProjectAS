@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Components/SceneComponent.h"
 #include "NaObjectStatics.generated.h"
 
 
@@ -83,17 +84,26 @@ public:
 
 public:
 
+
+	/** Class related **/
+
 	/* Test if the input object is subject of one of the classes in array. */
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Is Subclass Of (Class Array)", Keywords = "child inherit parent"), Category = "NaPack|Utility")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Is Subclass Of (Class Array)", Keywords = "child inherit parent"), Category = "NaUtility|Objects")
 	static bool IsSubclassOf_InArray(UObject* TestObject, const TArray<TSubclassOf<UObject>>& ClassArray);
 	
 	/* Test if the input object array contains at least one element which is subclass of specified class. */
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Contains Specified Class", Keywords = "have subclass class object"), Category = "NaPack|Utility")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Contains Class", Keywords = "have subclass class object"), Category = "NaUtility|Objects")
 	static bool ContainsSubclassObject(const TArray<UObject*> TestObjectArray, TSubclassOf<UObject> InClass);
 
 	/* Test if the input object array contains at least one element which is right the specified class (excluding subclasses). */
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Contains Specified Class", Keywords = "have class object"), Category = "NaPack|Utility")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Contains Specified Class", Keywords = "have class object"), Category = "NaUtility|Objects")
 	static bool ContainsSpecifiedClassObject(const TArray<UObject*> TestObjectArray, TSubclassOf<UObject> InClass);
 
+
+	/** Object Search **/
+
+	/* Get a copy of attached components of a component. */
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All Attached Components", Keywords = "subobject children attached component"), Category = "NaUtility|Objects")
+	static void GetAllAttachedComponents(TArray<USceneComponent*>& OutComponents, USceneComponent* Target, TSubclassOf<USceneComponent> FilterClass, bool bIncludeGrandchildren = false);
 
 };

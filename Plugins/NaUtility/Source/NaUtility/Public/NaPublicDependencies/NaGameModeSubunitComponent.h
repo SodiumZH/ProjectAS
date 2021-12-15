@@ -25,8 +25,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	bool bAllowDuplication = false;
+
+
 	// Get game mode base component.
-	UNaGameModeBaseComponent* GetBase();
+	// Assert if it is not correctly attached to a NaGameModeBaseComponent.
+	//UNaGameModeBaseComponent* GetBase();
 
 
 

@@ -39,6 +39,16 @@ public:
 
 class UNaGameModeSubunitComponent;
 
+enum class ENaGameModeComponentErrorType : uint8 {
+	GMCET_Correct,	// Everything is right
+	GMCET_InvalidGameMode,	// Owner actor is not a game mode
+	GMCET_BaseDuplicate,	// Base appeared twice
+	GMCET_BaseNotAttachedToRoot,	// Base is not attached to root
+	GMCET_NonSubunitAttachedToBase,		// A non-subunit component is attached to base
+	GMCET_SubunitNotAttachedToBase,		// A subunit component is not attached to base
+	GMCET_SubunitDuplicate	// A subunit disabling duplication appeared twice
+};
+
 UCLASS(BlueprintType, ClassGroup = (NaPublicDependencies), meta = (BlueprintSpawnableComponent))
 class NAUTILITY_API UNaGameModeBaseComponent : public USceneComponent {
 
@@ -47,6 +57,15 @@ class NAUTILITY_API UNaGameModeBaseComponent : public USceneComponent {
 public:
 
 	UNaGameModeBaseComponent() {};
+
+	/* Check if NaGameModeBaseComponent and subunits have correct hierarchy.
+	* Correct hierarchy: NaGameModeBaseComponent attached to root; all subunits attach to base component. No other components should be attached to NaGameModeBaseComponent.
+	* Also check: Game mode base component not duplicated.
+	* @Param bAssertWhenFailed If true, it will CRASH when check failed.
+	* @ReturnValue Whether check succeeded.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "NaPublicDependencies")
+	bool CheckGameModeHierarchy(bool bAssertWhenFailed = false);
 
 	/** 
 	* Get NaGameModeBase from gamemode.

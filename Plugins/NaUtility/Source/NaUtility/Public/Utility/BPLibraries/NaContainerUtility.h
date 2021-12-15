@@ -68,7 +68,6 @@ public:
 	};
 
 
-	template<typename T, typename S>
-	static 
+
 
 };
