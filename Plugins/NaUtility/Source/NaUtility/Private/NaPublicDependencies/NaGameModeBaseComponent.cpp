@@ -7,28 +7,14 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Utility/DebugUtil/NaDebugUtility.h"
 
-ANaGameMode::ANaGameMode()
-{
-	
 
+ENaGameModeComponentErrorType UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 
-}
-
-UNaGameModeBaseComponent* UNaGameModeBaseComponent::GetNaGameModeBase(AGameModeBase* GameMode) {
-	TArray<UNaGameModeBaseComponent*> Res;
-	GameMode->GetComponents<UNaGameModeBaseComponent>(Res);
-	checkf(Res.Num() <= 1, TEXT("Error: Duplicated NaGameModeBase component detected."));
-	if (Res.Num())
-		return Cast<UNaGameModeBaseComponent>(Res[0]);
-	else return nullptr;
-}
-
-bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
-
+#if WITH_EDITOR
 	ENaGameModeComponentErrorType ErrorType = ENaGameModeComponentErrorType::GMCET_Correct;
 
 	if (!GetOwner())	// Default object, no owner
-		return true;
+		return ENaGameModeComponentErrorType::GMCET_Correct;
 
 	AGameModeBase* OwnerGameMode = dynamic_cast<AGameModeBase*>(GetOwner());	// Owner; null if invalid
 
@@ -126,28 +112,81 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 			switch (ErrorType) {
 			case ENaGameModeComponentErrorType::GMCET_InvalidGameMode: {
 				LogError("NaGameModeComponents hierarchy error: invalid game mode. Maybe the NaGameModeBaseComponent is attached to a non-gamemode actor, or running on a client.");
+				break;
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseDuplicate: {
 				LogError("NaGameModeComponents hierarchy error: base component duplicated. Only one NaGameModeBaseComponent is allowed.");
+				break;
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseNotAttachedToRoot: {
 				LogError("NaGameModeComponents hierarchy error: base component is not attached to the root of game mode.");
+				break;
 			}
 			case ENaGameModeComponentErrorType::GMCET_NonSubunitAttachedToBase: {
 				LogError("NaGameModeComponents hierarchy error: a non-subunit component is directly attached to the base component.");
+				break;
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitNotAttachedToBase: {
 				LogError("NaGameModeComponents hierarchy error: a subunit component is not directly attached to the base component.");
+				break;
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitDuplicate: {
 				LogError("NaGameModeComponents hierarchy error: a subunit not allowing duplication appeared twice.");
+				break;
 			}
 			default: {
 				checkNoEntry();
 			}
 			}
 		}
-		return false;
 	}
-	return true;
+	return ErrorType;
+
+#else
+	// On runtime always return correct to save resource
+	return ENaGameModeComponentErrorType::GMCET_Correct;
+#endif
+}
+
+void UNaGameModeBaseComponent::BeginPlay() {
+	Super::BeginPlay();
+	CheckGameModeHierarchy(true);
+}
+
+UNaGameModeSubunitComponent* UNaGameModeBaseComponent::GetSubunit(TSubclassOf<UNaGameModeSubunitComponent> Class) {
+	const TArray<USceneComponent*> Children = GetAttachChildren();
+	for (auto & elem : Children) {
+		if (UKismetMathLibrary::ClassIsChildOf(elem->GetClass(), Class))
+			return static_cast<UNaGameModeSubunitComponent*> (elem);
+	}
+	return nullptr;
+}
+
+UNaGameModeSubunitComponent* UNaGameModeBaseComponent::GetSubunitSpecificClass(TSubclassOf<UNaGameModeSubunitComponent> Class) {
+	const TArray<USceneComponent*> Children = GetAttachChildren();
+	for (auto & elem : Children) {
+		if (elem->GetClass()== Class)
+			return static_cast<UNaGameModeSubunitComponent*> (elem);
+	}
+	return nullptr;
+}
+
+
+void UNaGameModeBaseComponent::GetAllSubunits(TArray<UNaGameModeSubunitComponent*>& Out, TSubclassOf<UNaGameModeSubunitComponent> Class) {
+	const TArray<USceneComponent*> Children = GetAttachChildren();
+	Out.Empty();
+	for (auto& elem : Children) {
+		if (UKismetMathLibrary::ClassIsChildOf(elem->GetClass(), Class))
+			Out.Emplace(static_cast<UNaGameModeSubunitComponent*> (elem));
+	}
+	return;
+}
+void UNaGameModeBaseComponent::GetAllSubunitsSpecificClass(TArray<UNaGameModeSubunitComponent*>& Out, TSubclassOf<UNaGameModeSubunitComponent> Class){
+	const TArray<USceneComponent*> Children = GetAttachChildren();
+	Out.Empty();
+	for (auto& elem : Children) {
+		if (elem->GetClass() == Class)
+			Out.Emplace(static_cast<UNaGameModeSubunitComponent*> (elem));
+	}
+	return;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "NaPublicDependencies/NaGameModeSubunitComponent.h"
 #include "NaWorldEnemyControllerManager.generated.h"
 
 /* World manager module for enemy controllers. 
@@ -16,7 +16,7 @@ class ANaMobEnemyController;
 class ANaMobPlayerController;
 
 UCLASS(Blueprintable)
-class UNaWorldEnemyControllerManager : public UActorComponent {
+class UNaWorldEnemyControllerManager : public UNaGameModeSubunitComponent {
 
 	GENERATED_BODY()
 

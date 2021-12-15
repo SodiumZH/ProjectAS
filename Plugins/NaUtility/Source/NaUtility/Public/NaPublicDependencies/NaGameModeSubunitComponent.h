@@ -25,12 +25,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// If true, this component class(including subclasses) allow to appear twice or more. 
+	// Else this component can appear only once or ASSERT. 
+	UPROPERTY(EditDefaultsOnly, Category = "GameModeSubunit")
 	bool bAllowDuplication = false;
 
 
 	// Get game mode base component.
 	// Assert if it is not correctly attached to a NaGameModeBaseComponent.
-	//UNaGameModeBaseComponent* GetBase();
+	UNaGameModeBaseComponent* GetBase();
 
 
 

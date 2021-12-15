@@ -2,6 +2,7 @@
 
 
 #include "NaPublicDependencies/NaGameModeSubunitComponent.h"
+#include "NaPublicDependencies/NaGameModeBaseComponent.h"
 
 // Sets default values for this component's properties
 UNaGameModeSubunitComponent::UNaGameModeSubunitComponent()
@@ -31,4 +32,11 @@ void UNaGameModeSubunitComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 	// ...
 }
+
+UNaGameModeBaseComponent* UNaGameModeSubunitComponent::GetBase() {
+	UNaGameModeBaseComponent* Res = dynamic_cast<UNaGameModeBaseComponent*>(GetAttachParent());
+	checkf((!GetAttachParent())||Res, TEXT("NaGameModeSubunitComponent is not correctly attached to a NaGameModeBaseComponent."));
+	return Res;
+}
+
 

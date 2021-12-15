@@ -21,17 +21,12 @@ ANaMobEnemyController* UNaMobEnemyComponent::AddController(bool ForceAdd) {
 		return nullptr;
 	}
 	else {
-		AGameModeBase* GamemodeBase = Owner->GetWorld()->GetAuthGameMode();
-		if (!IsValid(GamemodeBase)) {
-			LogError("Mob Enemy Component - Add Controller failed: Game mode isn't valid. Maybe executing on client.");
+		UNaWorldEnemyControllerManager* CtrlMgr = Cast<UNaWorldEnemyControllerManager>(UNaPublicDependencyStatics::GetNaGameModeSubunit(Owner, UNaWorldEnemyControllerManager::StaticClass()));
+		if (!IsValid(CtrlMgr)) {
+			LogError("Mob Enemy Component: World Enemy Controller Manager on GameMode is invalid.");
 			return nullptr;
 		}
-		ANaGameMode* Gamemode = dynamic_cast<ANaGameMode*>(GamemodeBase);
-		if (!IsValid(Gamemode)) {
-			LogError("Mob Enemy Component - Add Controller failed: To enable NaMobSystem, the game mode must inherit ANaGameMode.");
-			return nullptr;
-		}
-		ANaMobEnemyController* Ctrler = Gamemode->GetEnemyControllerManager()->AllocateController(Owner, ForceAdd);
-		return Ctrler;
+		return CtrlMgr->AllocateController(Owner, ForceAdd);
+		
 	}
 }
