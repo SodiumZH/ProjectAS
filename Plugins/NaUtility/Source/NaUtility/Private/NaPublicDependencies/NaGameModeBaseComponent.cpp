@@ -40,12 +40,13 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 
 	/* Check base duplication */
 	if (ErrorType == ENaGameModeComponentErrorType::GMCET_Correct) {
-		const TArray<UNaGameModeBaseComponent*> & AttachedToRoot = OwnerGameMode->GetRootComponent()->GetAttachChildren();	// All components attached to root; for checking duplication 
-		for (int i = 0, int dup = 0; i < AttachedToRoot.Num(); ++i) {
+		const TArray<USceneComponent*> & AttachedToRoot = OwnerGameMode->GetRootComponent()->GetAttachChildren();	// All components attached to root; for checking duplication 
+		int i = 0; int dup = 0;
+		for (1; i < AttachedToRoot.Num(); ++i) {
 			if (dynamic_cast<UNaGameModeBaseComponent*>(AttachedToRoot[i])) {
 				++dup;
 				if (dup > 1) {
-					ErrorType = ENaGameModeComponentErrorType::GMCET_BaseDuplicate();
+					ErrorType = ENaGameModeComponentErrorType::GMCET_BaseDuplicate;
 					break;
 				}
 			}
@@ -63,7 +64,7 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 
 		const TArray<USceneComponent*> & AttachedToThis = GetAttachChildren();
 		for (auto & obj : AttachedToThis) {
-			if (UKismetMathLibrary::ClassIsChildOf(obj->GetClass(), UNaGameModeSubunitComponent::StaticClass()) {
+			if (UKismetMathLibrary::ClassIsChildOf(obj->GetClass(), UNaGameModeSubunitComponent::StaticClass())) {
 				ErrorType = ENaGameModeComponentErrorType::GMCET_NonSubunitAttachedToBase;
 					break;
 			}
@@ -87,8 +88,8 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 		TSet<UClass*> ExistingClasses;
 		for (auto & obj : AllSubunits) {
 			if (ExistingClasses.Contains(obj->GetClass())) {
-				if (dynamic_cast<UNaGameModeSubunitComponent>(obj)->bAllowDuplication == false)) {
-					ErrorType = ENaGameModeComponentErrorType::SubunitDuplicate;
+				if (dynamic_cast<UNaGameModeSubunitComponent*>(obj)->bAllowDuplication == false) {
+					ErrorType = ENaGameModeComponentErrorType::GMCET_SubunitDuplicate;
 					break;
 				}
 			}
@@ -99,22 +100,22 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 		if (bAssertWhenFailed) {
 			switch (ErrorType) {
 			case ENaGameModeComponentErrorType::GMCET_InvalidGameMode: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: invalid game mode. Maybe the NaGameModeBaseComponent is attached to a non-gamemode actor, or running on a client."));
+				checkf(false, TEXT("NaGameModeComponents hierarchy error: invalid game mode. Maybe the NaGameModeBaseComponent is attached to a non-gamemode actor, or running on a client."));
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseDuplicate: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: base component duplicated. Only one NaGameModeBaseComponent is allowed."));
+				checkf(false, TEXT("NaGameModeComponents hierarchy error: base component duplicated. Only one NaGameModeBaseComponent is allowed."));
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseNotAttachedToRoot: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: base component is not attached to the root of game mode."));
+				checkf(false, TEXT("NaGameModeComponentst hierarchy error: base component is not attached to the root of game mode."));
 			}
 			case ENaGameModeComponentErrorType::GMCET_NonSubunitAttachedToBase: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: a non-subunit component is directly attached to the base component."));
+				checkf(false, TEXT("NaGameModeComponents hierarchy error: a non-subunit component is directly attached to the base component."));
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitNotAttachedToBase: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: a subunit component is not directly attached to the base component."));
+				checkf(false, TEXT("NaGameModeComponents hierarchy error: a subunit component is not directly attached to the base component."));
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitDuplicate: {
-				checkf(false, TEXT("Na Game Mode Component hierarchy error: a subunit not allowing duplication appeared twice."));
+				checkf(false, TEXT("NaGameModeComponents hierarchy error: a subunit not allowing duplication appeared twice."));
 			}
 			default: {
 				checkNoEntry();
@@ -124,22 +125,22 @@ bool UNaGameModeBaseComponent::CheckGameModeHierarchy(bool bAssertWhenFailed) {
 		else {
 			switch (ErrorType) {
 			case ENaGameModeComponentErrorType::GMCET_InvalidGameMode: {
-				LogError(TEXT("Na Game Mode Component hierarchy error: invalid game mode. Maybe the NaGameModeBaseComponent is attached to a non-gamemode actor, or running on a client."));
+				LogError("NaGameModeComponents hierarchy error: invalid game mode. Maybe the NaGameModeBaseComponent is attached to a non-gamemode actor, or running on a client.");
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseDuplicate: {
-				LogError(TEXT("Na Game Mode Component hierarchy error: base component duplicated. Only one NaGameModeBaseComponent is allowed."));
+				LogError("NaGameModeComponents hierarchy error: base component duplicated. Only one NaGameModeBaseComponent is allowed.");
 			}
 			case ENaGameModeComponentErrorType::GMCET_BaseNotAttachedToRoot: {
-				LogError(TEXT("Na Game Mode Component hierarchy error: base component is not attached to the root of game mode."));
+				LogError("NaGameModeComponents hierarchy error: base component is not attached to the root of game mode.");
 			}
 			case ENaGameModeComponentErrorType::GMCET_NonSubunitAttachedToBase: {
-				LogError(TEXT("Na Game Mode Component hierarchy error: a non-subunit component is directly attached to the base component."));
+				LogError("NaGameModeComponents hierarchy error: a non-subunit component is directly attached to the base component.");
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitNotAttachedToBase: {
-				LogError( TEXT("Na Game Mode Component hierarchy error: a subunit component is not directly attached to the base component."));
+				LogError("NaGameModeComponents hierarchy error: a subunit component is not directly attached to the base component.");
 			}
 			case ENaGameModeComponentErrorType::GMCET_SubunitDuplicate: {
-				LogError(TEXT("Na Game Mode Component hierarchy error: a subunit not allowing duplication appeared twice."));
+				LogError("NaGameModeComponents hierarchy error: a subunit not allowing duplication appeared twice.");
 			}
 			default: {
 				checkNoEntry();

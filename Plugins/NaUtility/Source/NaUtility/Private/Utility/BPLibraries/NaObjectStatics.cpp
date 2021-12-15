@@ -54,7 +54,7 @@ void UNaObjectStatics::GetAllAttachedComponents(TArray<USceneComponent*>& OutCom
 				OutComponents.Add(obj);		// Get direct children
 		}
 		if (bIncludeGrandchildren) {
-			for (obj : Children) {
+			for (auto & obj : Children) {
 				GetAllAttachedComponents(Temp, obj, FilterClass, true);		// Recursively get grandchildren
 				OutComponents.Append(Temp);
 			}
@@ -67,7 +67,7 @@ void UNaObjectStatics::GetAllAttachedComponents(TArray<USceneComponent*>& OutCom
 			OutComponents.Add(obj);		// Get direct children
 		}
 		if (bIncludeGrandchildren) {
-			for (obj : Children) {
+			for (auto & obj : Children) {
 				GetAllAttachedComponents(Temp, obj, USceneComponent::StaticClass(), true);		// Recursively get grandchildren
 				OutComponents.Append(Temp);
 			}
