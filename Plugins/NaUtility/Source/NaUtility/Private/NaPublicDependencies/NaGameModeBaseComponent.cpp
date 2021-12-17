@@ -50,7 +50,7 @@ ENaGameModeComponentErrorType UNaGameModeBaseComponent::CheckGameModeHierarchy(b
 
 		const TArray<USceneComponent*> & AttachedToThis = GetAttachChildren();
 		for (auto & obj : AttachedToThis) {
-			if (UKismetMathLibrary::ClassIsChildOf(obj->GetClass(), UNaGameModeSubunitComponent::StaticClass())) {
+			if (!UKismetMathLibrary::ClassIsChildOf(obj->GetClass(), UNaGameModeSubunitComponent::StaticClass())) {
 				ErrorType = ENaGameModeComponentErrorType::GMCET_NonSubunitAttachedToBase;
 					break;
 			}

@@ -15,7 +15,7 @@ class ANaMob;
 class ANaMobEnemyController;
 class ANaMobPlayerController;
 
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, ClassGroup = (NaMobSystem), meta = (BlueprintSpawnableComponent))
 class UNaWorldEnemyControllerManager : public UNaGameModeSubunitComponent {
 
 	GENERATED_BODY()

@@ -8,11 +8,6 @@
 #include "NaGameModeBaseComponent.generated.h"
 
 
-/**
-* NaGameModeBaseComponent is a container component for GameMode as all NaPack GameMode dependencies.
-* This component should be attached only to the root component of GameMode.
-* All other NaPack GameMode components should be directly attached to this component.
-*/
 
 class UNaGameModeSubunitComponent;
 
@@ -27,6 +22,12 @@ enum class ENaGameModeComponentErrorType : uint8 {
 	GMCET_SubunitNotAttachedToBase	UMETA(DisplayName = "Subunit Not Attached to Base"),		// A subunit component is not attached to base
 	GMCET_SubunitDuplicate	UMETA(DisplayName = "Unduplicatable Subunit Duplicated")	// A subunit disabling duplication appeared twice
 };
+
+/**
+* NaGameModeBaseComponent is a container component for GameMode as all NaPack GameMode dependencies.
+* This component should be attached only to the root component of GameMode.
+* All other NaPack GameMode components should be directly attached to this component.
+*/
 
 UCLASS(BlueprintType, ClassGroup = (NaPublicDependencies), meta = (BlueprintSpawnableComponent))
 class NAUTILITY_API UNaGameModeBaseComponent : public USceneComponent {
