@@ -1,6 +1,10 @@
 #include "Utility/BPLibraries/NaObjectStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
+/* For SpawnActorWithInit()*/
+
+
+
 bool UNaObjectStatics::IsSubclassOf_InArray(UObject* TestObject, const TArray<TSubclassOf<UObject>>& ClassArray) {
 	TSubclassOf<UObject> InClass = TestObject->GetClass();
 	if (!InClass)
@@ -37,7 +41,6 @@ bool UNaObjectStatics::ContainsSpecifiedClassObject(const TArray<UObject*> TestO
 	return false;
 
 }
-
 
 void UNaObjectStatics::GetAllAttachedComponents(TArray<USceneComponent*>& OutComponents, USceneComponent* Target, TSubclassOf<USceneComponent> FilterClass, bool bIncludeGrandchildren) {
 	OutComponents.Empty();
@@ -76,3 +79,5 @@ void UNaObjectStatics::GetAllAttachedComponents(TArray<USceneComponent*>& OutCom
 
 	return;
 }
+
+AActor* UNaObjectStatics::SpawnActorWithInit(UClass* Class, FTransform const* Transform, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters())

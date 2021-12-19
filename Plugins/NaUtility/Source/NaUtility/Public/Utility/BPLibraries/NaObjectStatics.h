@@ -3,8 +3,11 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Components/SceneComponent.h"
+#include "GameFramework/Actor.h"
 #include "NaObjectStatics.generated.h"
 
+
+DECLARE_DELEGATE_OneParam(FNaActorInitFunction, AActor*, Target);
 
 UCLASS()
 class NAUTILITY_API UNaObjectStatics : public UBlueprintFunctionLibrary {
@@ -105,5 +108,14 @@ public:
 	/* Get a copy of attached components of a component. */
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All Attached Components", Keywords = "subobject children attached component"), Category = "NaUtility|Objects")
 	static void GetAllAttachedComponents(TArray<USceneComponent*>& OutComponents, USceneComponent* Target, TSubclassOf<USceneComponent> FilterClass, bool bIncludeGrandchildren = false);
+
+
+	/** Spawn Actor **/
+
+	/* Spawn Actor with an initializing action executing right after the actor object is created
+	* Warning: as the actor hasn't finished initializing, be very careful on the input function!!!!
+	*/
+	AActor* SpawnActorWithInit(UObject* WorldContext, UClass* Class, FTransform const* Transform, FNaActorInitFunction InitFunction, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters())
+
 
 };

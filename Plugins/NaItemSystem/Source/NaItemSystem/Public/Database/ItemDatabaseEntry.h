@@ -13,7 +13,7 @@ struct FNaItemTypeDatabaseEntry {
 public:
 
 	// Unique ID for the item. DO NOT DUPLICATE!!
-	int ID = TEXT("00000");
+	int ID = 0;
 
 	// Default name for this item.
 	FString Name = TEXT("Item");
@@ -27,4 +27,6 @@ public:
 	// name for identification of this unique item struct.
 	class UDataTable* UniqueDataTable = nullptr;
 
+	// Effect class when using the item
+	TSubclassOf<class AItemEffect> EffectClass;
 };
