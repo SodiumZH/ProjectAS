@@ -69,7 +69,7 @@ ENaGameModeComponentErrorType UNaGameModeBaseComponent::CheckGameModeHierarchy(b
 		}
 	}
 
-	/* Check if any subunit not allow duplication duplicated */
+	/* Check if any subunit not allowing duplication duplicated */
 	if (ErrorType == ENaGameModeComponentErrorType::GMCET_Correct) {
 		TSet<UClass*> ExistingClasses;
 		for (auto & obj : AllSubunits) {
