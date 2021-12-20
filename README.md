@@ -4,6 +4,8 @@ By Sodium
 
 L2World (*Lineage 2: World*) is an Lineage2-based fan game project remaking L2 into an open-world game with better scenes and more various gameplays, jumping out of traditional MMO patterns.
 
+Currently the aim of this project has temporarily transferred to a system of characters, creatures, actions and combats named NaMobSystem.
+
 ### Progress
 
 2021-5-27 Just started. Some features has been partly implemented previously with BP and now I will refactor them into C++. 
