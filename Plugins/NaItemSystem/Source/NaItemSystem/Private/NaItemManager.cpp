@@ -1,5 +1,50 @@
+
 #include "NaItemManager.h"
 #include "NaUtility.h"
+#include "Engine/DataTable.h"
+
+
+bool FNaItemDescriptor::IsEqual(const FNaItemDescriptor & Other) {
+
+	bool ThisIsUnique = (UniqueItemID >= 0 && IsValid(UniqueItemDatabase));
+	bool OtherIsUnique = (Other.UniqueItemID >= 0 && IsValid(Other.UniqueItemDatabase));
+
+	// Compare basic type
+	if (ItemTypeID != Other.ItemTypeID)
+		return false;
+
+	// Compare unique items
+	if (ThisIsUnique != OtherIsUnique)
+		return false;
+	if (ThisIsUnique)
+		if ((UniqueItemID != Other.UniqueItemID) || (UniqueItemDatabase != Other.UniqueItemDatabase))
+			return false;
+
+	// Compare uniqufications
+	if (bIsUniquified != Other.bIsUniquified)
+		return false;
+	if (bIsUniquified)
+		if (UniqueName != Other.UniqueName)
+			return false;
+
+	return true;
+
+}
+
+bool FNaItemDescriptor::operator==(const FNaItemDescriptor & Other) {
+	
+	return IsEqual(Other);
+
+}
+
+bool FNaItemDescriptor::operator!=(const FNaItemDescriptor & Other) {
+
+	return !IsEqual(Other);
+
+}
+
+
+
 
 const FNaItemEntry FNaItemEntry::EmptySocket(true, 0, TEXT("Empty"), 1, -1, NAME_None, false, TEXT(""));
 
@@ -59,4 +104,18 @@ FNaItemContainerFindingReturn FNaItemContainer::Find(int Index) {
 	
 	// Succeeded
 	return FNaItemContainerFindingReturn(ValPtr);
+}
+
+bool FNaItemContainer::FindItem(int TypeIndex, TArray<int>& Positions, bool bIncludeUniquified) {
+	
+	Positions.Empty();
+
+	for (auto & elem : Content) {
+		if (elem.Value.TypeDescriptor.ItemTypeID == TypeIndex)
+			if (bIncludeUniquified || (!elem.Value.TypeDescriptor.bIsUniquified))
+				Positions.Add(elem.Key);
+	}
+
+	return Positions.Num() != 0;
+
 }

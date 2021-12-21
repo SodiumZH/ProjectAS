@@ -16,6 +16,8 @@ struct FNaItemDescriptor {
 
 public:
 
+	/********* Properties ********/
+
 	/* Index in item type database. Negative => invalid ID. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int ItemTypeID = 0;
@@ -38,6 +40,15 @@ public:
 
 	// If the item is uniquified, its name.
 	FString UniqueName = TEXT("");
+
+public:
+
+	/* Functions */
+
+	// True if the two descriptors are exactly equal (same type, same uniquification)
+	bool IsEqual(const FNaItemDescriptor & Other) const;
+	bool operator==(const FNaItemDescriptor & Other) const;
+	bool operator!=(const FNaItemDescriptor & Other) const;
 
 };
 
@@ -64,8 +75,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsEmpty = false;
 
-
-
+	/* Descriptor of the type */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FNaItemDescriptor TypeDescriptor;
 
 	/* Amount of the item in socket */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -147,9 +159,6 @@ protected:
 public:
 
 
-
-
-
 	/** Get functions **/
 
 	const int GetSize() { return Size; } const;
@@ -162,7 +171,7 @@ public:
 
 	// Get all positions that contains item in given type
 	// Return if there is any.
-	bool FindItem(int TypeIndex, TArray<int>& Positions);
+	bool FindItem(int TypeIndex, TArray<int>& Positions, bool bIncludeUniquified = false);
 
 
 
