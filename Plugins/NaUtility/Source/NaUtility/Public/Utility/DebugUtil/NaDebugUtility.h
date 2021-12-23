@@ -2,14 +2,21 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Logging/LogMacros.h"
 #include "NaDebugUtility.generated.h"
+
+/* NaPack logs */
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaUtil, Log, All);
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaItem, Log, All);
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaMob, Log, All);
+
 
 // This is a function library for C++ debugging
 
-
-
+#define UE_LOG_UOBJECT(SourceUObject, Category, Verbosity, Info) UE_LOG(Category, Verbosity, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(SourceUObject), TEXT(Info))
 
 /* Debug Macros */
+/* Deprecated, should be replaced by UE_LOG_UOBJECT */
 #define LogWarning(text) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
 #define LogError(text) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
 #define LogWrite(text) UE_LOG(LogTemp, Log, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))

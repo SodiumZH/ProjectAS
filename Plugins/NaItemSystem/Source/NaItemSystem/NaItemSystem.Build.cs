@@ -26,6 +26,7 @@ public class NaItemSystem : ModuleRules
 			new string[]
 			{
 				"Core",
+                "NaUtility",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

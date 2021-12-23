@@ -79,5 +79,3 @@ void UNaObjectStatics::GetAllAttachedComponents(TArray<USceneComponent*>& OutCom
 
 	return;
 }
-
-AActor* UNaObjectStatics::SpawnActorWithInit(UClass* Class, FTransform const* Transform, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters())

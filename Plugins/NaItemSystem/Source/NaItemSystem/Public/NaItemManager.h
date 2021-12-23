@@ -1,14 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
 #include "NaItemManager.generated.h"
 
-// This value is intendend to avoid integer overflow.
+// This value is intended to avoid integer overflow.
 #define ITEM_CONTAINER_MAX_SIZE 10000
 
 
-// Struct to discribe an item type.
+// Struct to describe an item type.
 USTRUCT(BlueprintType)
 struct FNaItemDescriptor {
 
@@ -66,20 +65,19 @@ public:
 	/* Default constructor */
 	FNaItemEntry() {};
 
-
+	// Const version of copy constructor
+	FNaItemEntry(const FNaItemEntry & CopyFrom);
 
 
 	/*** Properties***/
-
-	/* If true, it means this item socket is empty, ignoring any other properties in this struct. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsEmpty = false;
 
 	/* Descriptor of the type */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FNaItemDescriptor TypeDescriptor;
 
-	/* Amount of the item in socket */
+	/* Amount of the item in socket .
+	* It should never be zero. When it turns zero the entry should be deleted.
+	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Amount = 1;
 
@@ -88,9 +86,10 @@ public:
 
 public:
 
+
+
 	// Check if this entry is valid (no error.)
-	// NOT IMPLEMENTED. Now always true.
-	bool IsValid() { return true; }
+	bool IsValid();
 
 
 
@@ -121,9 +120,10 @@ enum class ENaItemContainerFindingResult :uint8 {
 
 
 /* Return values for finding in a container */
+
 struct FNaItemContainerFindingReturn {
 	// Values
-	TWeakPtr<FNaItemEntry> EntryPtr;
+	TSharedPtr<FNaItemEntry> EntryPtr;
 	ENaItemContainerFindingResult Result;
 
 	// Initializer when not found
@@ -132,18 +132,18 @@ struct FNaItemContainerFindingReturn {
 	};
 
 	// Found item successfully
-	FNaItemContainerFindingReturn(TWeakPtr<FNaItemEntry> InEntryPtr);
+	FNaItemContainerFindingReturn(TSharedPtr<FNaItemEntry> InEntryPtr);
 
 	// Not found
-	FNaItemContainerFindingReturn(NotFoundType)
+	FNaItemContainerFindingReturn(NotFoundType);
 
 };
 
-typedef TMap<unsigned int, FNaItemEntry> FNaItemContainerContent;
+typedef TMap<int, TSharedPtr<FNaItemEntry>> FNaItemContainerContent;
 struct FNaItemTypeDatabaseEntry;
 
 /* Structure that contains a series of items */
-UCLASS()
+USTRUCT(BlueprintType)
 struct FNaItemContainer{
 
 	GENERATED_BODY()
@@ -161,26 +161,48 @@ public:
 
 	/** Get functions **/
 
-	const int GetSize() { return Size; } const;
+	// Get the size.
+	FORCEINLINE int GetSize() const { return Size; };
 
-	// Give a direct reference to the container content 
-	const FNaItemContainerContent & Get() { return Content; } const;
+	// Check if a position is in size. Please note that the valid values is [0,Size) just like an array.
+	FORCEINLINE bool IsInSize(int Position) const { return Position >= 0 && Position < Size; };
 
 	// Get entry from index
 	FNaItemContainerFindingReturn Find(int Index);
 
-	// Get all positions that contains item in given type
-	// Return if there is any.
+	/** Get all positions that contains item in given type
+	* Return whether there are any.
+	* @Param TypeIndex The index in item type datatable of the item type.
+	* @Param Positions Return positions containing the item of given type.
+	* @Param bIncludeUniquified If true, the search result will include uniquified items.
+	*/
 	bool FindItem(int TypeIndex, TArray<int>& Positions, bool bIncludeUniquified = false);
 
+	/** Get all positions that is identical to the item, including unique item information and uniquification.
+	* Return whether there are any.
+	*/
+	bool FindItemExplicit(const FNaItemDescriptor & Type, TArray<int>& Positions);
 
 
 	/** Operations **/
 
-	/** Add entry. It will copy the entry to container. 
-	* If the container position is filled (exists and not labelled empty), the values will not be added unless bForce == true.
+	/** Add entry. 
+	* If the container position is occupied, the values will not be added unless bForce == true.
+	* Return whether succeeded.
 	*/
-	void AddEntry(int Position, const FNaItemEntry & Entry, bForce = false);
+	bool AddEntry(int Position, const FNaItemEntry & Entry, bool bForce = false);
+
+	/* Remove an item from position. */
+	void RemoveEntry(int Position);
+
+	/* Move an item entry to another position.
+	* @Param bForce If true, the "from" entry will overwrite the "to" entry if the latter is occupied.
+	* @ReturnValue Whether moved successfully. Fail if moving from an empty position or to an occupied position without bForce == true. 
+	*/
+	bool MoveEntry(int From, int To, bool bForce = false);
+
+	/* Swap two entries. This action will not fail if no OOS. */
+	void SwapEntry(int P1, int P2);
 
 	/** Add a batch of a certain type of item to the container.
 	* It will firstly find positions that can stack onto, then empty positions.
@@ -191,7 +213,7 @@ public:
 	* @Param UniqName Name if the items are uniquified.
 	* @ReturnValue Amount of item that cannot be added to the container.
 	*/
-	int AddItemFromType(const FNaItemTypeDatabaseEntry & Type, int Amount, int PivotPosition = 0, bool bIsUniquified = false, FString UniqName = TEXT(""));
+	//int AddItemFromType(const FNaItemTypeDatabaseEntry & Type, int Amount, int PivotPosition = 0, bool bIsUniquified = false, FString UniqName = TEXT(""));
 
 
 
