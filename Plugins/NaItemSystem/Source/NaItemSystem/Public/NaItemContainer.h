@@ -1,107 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NaItemManager.generated.h"
+#include "NaItemContainer.generated.h"
 
 // This value is intended to avoid integer overflow.
 #define ITEM_CONTAINER_MAX_SIZE 10000
 
-
-// Struct to describe an item type.
-USTRUCT(BlueprintType)
-struct FNaItemDescriptor {
-
-	GENERATED_BODY()
-
-public:
-
-	/********* Properties ********/
-
-	/* Index in item type database. Negative => invalid ID. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int ItemTypeID = 0;
-
-	/* ID in the unique item database. Only unique items (e.g. equipment with random/custom properties) have this ID.
-	* For non-unique items, this value is -1, representing it is not recorded in the unique item database.
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 UniqueItemID = -1;
-
-	/* Specify which unique item database it is recorded in. For non-unique item it can be nullptr. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UDataTable* UniqueItemDatabase = nullptr;
-
-	/* Whether this item is uniquified. If a non-unique item is uniquified, it will be unable to stack with non-uniquified same items.
-	* Uniquification of items is identified by name.
-	* An example: renamed items in Minecraft.
-	*/
-	bool bIsUniquified = false;
-
-	// If the item is uniquified, its name.
-	FString UniqueName = TEXT("");
-
-public:
-
-	/* Functions */
-
-	// True if the two descriptors are exactly equal (same type, same uniquification)
-	bool IsEqual(const FNaItemDescriptor & Other) const;
-	bool operator==(const FNaItemDescriptor & Other) const;
-	bool operator!=(const FNaItemDescriptor & Other) const;
-
-};
-
-
-/* Struct that represents an entry of an item container */
-USTRUCT(BlueprintType)
-struct FNaItemEntry{
-
-	GENERATED_USTRUCT_BODY()
-
-public:
-
-	/* Constructors */
-
-	/* Default constructor */
-	FNaItemEntry() {};
-
-	// Const version of copy constructor
-	FNaItemEntry(const FNaItemEntry & CopyFrom);
-
-
-	/*** Properties***/
-
-	/* Descriptor of the type */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FNaItemDescriptor TypeDescriptor;
-
-	/* Amount of the item in socket .
-	* It should never be zero. When it turns zero the entry should be deleted.
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int Amount = 1;
-
-
-
-
-public:
-
-
-
-	// Check if this entry is valid (no error.)
-	bool IsValid();
-
-
-
-};
-
-
-
-
-
-
-
-
+struct FNaItemType;
+struct FNaItemDescriptor;
+struct FNaItemEntry;
 
 
 
@@ -119,8 +26,7 @@ enum class ENaItemContainerFindingResult :uint8 {
 };
 
 
-/* Return values for finding in a container */
-
+/* Return values for Searching in a container */
 struct FNaItemContainerFindingReturn {
 	// Values
 	TSharedPtr<FNaItemEntry> EntryPtr;
@@ -139,26 +45,50 @@ struct FNaItemContainerFindingReturn {
 
 };
 
-typedef TMap<int, TSharedPtr<FNaItemEntry>> FNaItemContainerContent;
-struct FNaItemTypeDatabaseEntry;
-
-/* Structure that contains a series of items */
-USTRUCT(BlueprintType)
-struct FNaItemContainer{
+/* Structure that contains a series of items.
+* It can be used to describe a bag, shop, etc.
+*/
+USTRUCT(Blueprintable)
+struct NAITEMSYSTEM_API FNaItemContainer {
 
 	GENERATED_BODY()
 
 protected:
 
-	/* Content as a hash table */
-	FNaItemContainerContent Content;
+	/* Content as an array */
+	TArray<TSharedPtr<FNaItemEntry>> Content;
 
 	/* Max size */
 	int Size = 64;
 
+
+
+// Check if Content.Num() == Size. CRASH when failed.
+#if WITH_EDITOR
+#define CheckSize() checkf(Content.Num() == Size, TEXT("NaItemContainer Error: Container size != Content array actual size."))
+#else
+#define CheckSize() 0
+#endif
+
 public:
 
+	/***** Constructors *****/
 
+	// Make an empty container. Default size is 64.
+	FNaItemContainer();
+
+	// Make empty container with givin size.
+	FNaItemContainer(int InSize);
+
+	// Copy from other. 
+	FNaItemContainer(const FNaItemContainer & CopyFrom);
+
+	/** Resize the container.
+	* @Param bForce If true, when shrinked area contains items, it will ignore them (causing the items lost!). Or it will fail if shrinked area contains items.
+	*/
+	bool Resize(int NewSize, bool bForce = false);
+
+	/*----------------------------------------------------*/
 	/** Get functions **/
 
 	// Get the size.
@@ -192,6 +122,12 @@ public:
 	*/
 	bool AddEntry(int Position, const FNaItemEntry & Entry, bool bForce = false);
 
+	/** Add or stack items to a position.
+	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
+	* @ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
+	*/
+	int AddOrStack(int Position, const FNaItemEntry & Entry);
+
 	/* Remove an item from position. */
 	void RemoveEntry(int Position);
 
@@ -201,31 +137,20 @@ public:
 	*/
 	bool MoveEntry(int From, int To, bool bForce = false);
 
-	/* Swap two entries. This action will not fail if no OOS. */
+	/* Swap two entries. This action will not fail if no Out Of Size. */
 	void SwapEntry(int P1, int P2);
 
-	/** Add a batch of a certain type of item to the container.
-	* It will firstly find positions that can stack onto, then empty positions.
+	/** Add a batch of a certain type of items to the container.
 	* @Param Type Type of items to add.
 	* @Param Amount Total amount of items.
-	* @Param PivotPosition Start position for finding empty positions.
+	* @Param bSearchStackable If true, it will firstly search if there are any same item entries to be stacked on. Or it will add to empty positions only.
+	* @Param StartPosition Start position for finding empty positions.
 	* @Param bIsUniquified If the items to add are uniquified.
 	* @Param UniqName Name if the items are uniquified.
 	* @ReturnValue Amount of item that cannot be added to the container.
 	*/
-	//int AddItemFromType(const FNaItemTypeDatabaseEntry & Type, int Amount, int PivotPosition = 0, bool bIsUniquified = false, FString UniqName = TEXT(""));
-
-
-
+	
 };
 
-UCLASS(Blueprintable)
-class UNaItemContainerComponent : public UActorComponent{
-
-	GENERATED_BODY()
-
-	/* Container */
 
 
-
-};

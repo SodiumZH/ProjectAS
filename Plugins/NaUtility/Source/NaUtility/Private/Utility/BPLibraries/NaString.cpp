@@ -81,3 +81,30 @@ FName UNaStringLibrary::FindRawName(FName Test) {
 	else return Test;
 
 }
+
+FString UNaStringLibrary::Int2StrFixedLen(int InInt, int Len) {
+	if (Len <= 0)
+		return FString();
+	int IsNeg = 0;
+	if (InInt < 0) {
+		IsNeg = 1;
+		InInt = -InInt;
+		Len++;	// Add an extra position for '-'
+	}
+
+	TCHAR* Str = new TCHAR[Len + 1];
+	Str[Len] = '\0';
+	Len--; // Now Len is for position of the C-string
+	
+	while (Len >= IsNeg) {
+		Str[Len] = InInt % 10 + '0';
+		Len--;
+		InInt /= 10;
+	}
+	if (IsNeg)
+		Str[0] = '-';
+	FString Out = FString(Str);
+	delete Str;
+	return Out;
+}
+
