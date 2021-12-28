@@ -39,16 +39,18 @@ public:
 	* Uniquification of items is identified by name.
 	* An example: renamed items in Minecraft.
 	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsUniquified = false;
 
 	// If the item is uniquified, its name.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString UniqueName = TEXT("");
 
 public:
 
 	/* Functions */
 
-	// True if the two descriptors are exactly equal (same type, same uniquification)
+	// True if the two descriptors are absolutely identical (same type, same unique ID, same uniquification)
 	bool IsEqual(const FNaItemDescriptor & Other) const;
 	bool operator==(const FNaItemDescriptor & Other) const;
 	bool operator!=(const FNaItemDescriptor & Other) const;

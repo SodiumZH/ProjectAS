@@ -64,11 +64,8 @@ protected:
 
 
 // Check if Content.Num() == Size. CRASH when failed.
-#if WITH_EDITOR
 #define CheckSize() checkf(Content.Num() == Size, TEXT("NaItemContainer Error: Container size != Content array actual size."))
-#else
-#define CheckSize() 0
-#endif
+
 
 public:
 
