@@ -16,7 +16,7 @@ bool FNaItemDescriptor::IsEqual(const FNaItemDescriptor & Other) const {
 	if (ThisIsUnique != OtherIsUnique)
 		return false;
 	if (ThisIsUnique)
-		if ((UniqueItemID != Other.UniqueItemID) || (UniqueItemDatabase != Other.UniqueItemDatabase))
+		if (UniqueItemID != Other.UniqueItemID)
 			return false;
 
 	// Compare uniqufications

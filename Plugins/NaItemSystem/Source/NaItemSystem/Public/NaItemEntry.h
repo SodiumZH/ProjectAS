@@ -31,10 +31,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int64 UniqueItemID = -1;
 
-	/* Specify which unique item database it is recorded in. For non-unique item it can be nullptr. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UDataTable* UniqueItemDatabase = nullptr;
-
 	/* Whether this item is uniquified. If a non-unique item is uniquified, it will be unable to stack with non-uniquified same items.
 	* Uniquification of items is identified by name.
 	* An example: renamed items in Minecraft.
@@ -90,7 +86,6 @@ public:
 
 	// Const version of copy constructor
 	FNaItemEntry(const FNaItemEntry & CopyFrom);
-
 	
 	// Check if this entry is valid (no error.)
 	bool IsValid();
