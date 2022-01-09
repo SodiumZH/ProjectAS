@@ -75,7 +75,38 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
 	static bool ResizeContainer(TSharedPtr<FNaItemContainer> Target, int NewSize, bool bForce);
 
+	/**
+	* Add item entry to container.
+	* @Param bForce If true, it will replace the existing entry if position to add is occupied. Or it will fail.
+	* @ReturnValue Whether adding succeeded.
+	*/
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	static bool AddItemEntry(TSharedPtr<FNaItemContainer> Target, int Position, const FNaItemEntry & Entry, bool bForce = false);
+
+	/**
+	* Add item entry or stack onto the same entry.
+	* If the position is empty, add into it; if the position is occupied with absolutely same item (checked from NaItemDescriptor identity), stack on it.
+	* @ReturnValue Amount of items remained not added.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	static int AddOrStackItemEntry(TSharedPtr<FNaItemContainer> Target, int Position, const FNaItemEntry & Entry);
+
+	/**
+	* Remove an entry of given position in a container.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	void RemoveItemEntry(TSharedPtr<FNaItemContainer> Target, int Position);
+
+	/**
+	* Move an item entry to another position.
+	* @Param bForce If true,
+	*/
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	bool MoveItemEntry(TSharedPtr<FNaItemContainer> Target, int From, int To, bool bForce = false);
+
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	/* Swap two entries. This action will not fail if no Out Of Size. */
+	void SwapItemEntry(TSharedPtr<FNaItemContainer> Target, int P1, int P2);
 
 
 

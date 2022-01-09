@@ -34,7 +34,7 @@ public:
 
 	// Effect class when using the item
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class AItemEffect> EffectClass;
+	TSubclassOf<class ANaItemEffect> EffectClass;
 
 public:
 

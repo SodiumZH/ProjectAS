@@ -20,14 +20,20 @@ class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 public:
 
-	/* Item type */
+	/*- Item type -*/
 
 	/* Break item type structure and get data */
-	UFUNCTION(BlueprintPure, Category = "NaItemSystem|ItemType")
-	void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & IsUnique, UDataTable*& UniqueDataTable, TSubclassOf<class AItemEffect>& EffectClass);
+	UFUNCTION(BlueprintPure, meta = (Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
+	static void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, TSubclassOf<class ANaItemEffect>& EffectClass);
 
 	/* Get item type from database from ID. */
-	UFUNCTION(BlueprintPure, Category = "NaItemSystem|ItemType")
-	FNaItemType GetItemTypeFromID(int ID);
+	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")
+	static FNaItemType GetItemTypeFromID(int ID);
+
+	/*- Item descriptor -*/
+
+	/* Make default item descriptor from ID */
+	UFUNCTION(BlueprintPure, meta = (Keywords = "make na item descriptor"), Category = "NaItemSystem|ItemType")
+	static FNaItemDescriptor MakeDefaultDescriptor(int ID);
 
 };

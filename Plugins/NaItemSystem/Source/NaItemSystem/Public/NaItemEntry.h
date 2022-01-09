@@ -51,6 +51,15 @@ public:
 	bool operator==(const FNaItemDescriptor & Other) const;
 	bool operator!=(const FNaItemDescriptor & Other) const;
 
+	/* Constructors */
+	FNaItemDescriptor(int InTypeID = 0, int InUniqueItemID = -1, bool InIsUniquified = false, FString InUniqueName = TEXT("")) :
+		ItemTypeID(TypeID),
+		UniqueItemID(InUniqueItemID),
+		bIsUniquified(InIsUniquified),
+		UniqueName(InUniqueName)
+	{};
+
+
 };
 
 
