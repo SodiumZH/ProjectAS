@@ -4,10 +4,15 @@
 
 UDataTable * const FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/NaItemSystem/ItemType/ItemTypeDataTable.ItemTypeDataTable'"));
 
+static FNaItemType DefaultType = FNaItemType();
+
 bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 	FString InStr = InRowName.ToString();
 	if (InStr.Len() != 7)
 		return false;
+	if (InStr == TEXT("0000000"))
+		return false;
+
 	int i = 0;
 	for (i = 0; i < 7; ++i) {
 		if (((*InStr)[i] < (TCHAR)('0')) || ((*InStr)[i] > (TCHAR)('9')))
@@ -45,5 +50,9 @@ int FNaItemTypeDatabaseEntry::RowNameToInt(FName InRowName) {
 
 FNaItemType::FNaItemType(int ItemID) {
 	ID = ItemID;
+	if (!IsValidID(ItemID)) {
+		ID = 0;
+		ItemID = 0;
+	}
 	TypeData = TSharedPtr<FNaItemTypeDatabaseEntry>(ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ItemID), TEXT("NaItemType")));
 }
