@@ -2,6 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "../Database/NaItemType.h"
+#include "../NaItemContainer.h"
+#include "../NaItemEntry.h"
 #include "NaItemDataStatics.generated.h"
 
 
@@ -11,13 +14,14 @@
 */
 
 struct FNaItemDescriptor;
-struct FNaItemType;
 struct FTableRowBase;
 
 
 UCLASS()
 class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
+
 	GENERATED_BODY()
+
 public:
 
 	/*- Item type -*/

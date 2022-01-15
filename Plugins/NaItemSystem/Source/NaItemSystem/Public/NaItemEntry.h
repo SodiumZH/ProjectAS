@@ -52,11 +52,19 @@ public:
 	bool operator!=(const FNaItemDescriptor & Other) const;
 
 	/* Constructors */
+	
 	FNaItemDescriptor(int InTypeID = 0, int InUniqueItemID = -1, bool InIsUniquified = false, FString InUniqueName = TEXT("")) :
-		ItemTypeID(TypeID),
+		ItemTypeID(InTypeID),
 		UniqueItemID(InUniqueItemID),
 		bIsUniquified(InIsUniquified),
 		UniqueName(InUniqueName)
+	{};
+
+	FNaItemDescriptor(const FNaItemDescriptor & CopyFrom) :
+		ItemTypeID(CopyFrom.ItemTypeID),
+		UniqueItemID(CopyFrom.UniqueItemID),
+		bIsUniquified(CopyFrom.bIsUniquified),
+		UniqueName(CopyFrom.UniqueName)
 	{};
 
 
@@ -97,7 +105,9 @@ public:
 	FNaItemEntry(const FNaItemEntry & CopyFrom);
 	
 	// Check if this entry is valid (no error.)
-	bool IsValid();
+	bool IsValid() const;
+
+
 
 };
 

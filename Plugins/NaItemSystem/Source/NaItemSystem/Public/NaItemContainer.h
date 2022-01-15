@@ -43,13 +43,18 @@ struct FNaItemContainerFindingReturn {
 	// Not found
 	FNaItemContainerFindingReturn(NotFoundType);
 
+	// Copy
+	FNaItemContainerFindingReturn(const FNaItemContainerFindingReturn & Copy) :
+		EntryPtr(Copy.EntryPtr),
+		Result(Copy.Result)
+	{};
 };
 
 /* Structure that contains a series of items.
 * It can be used to describe a bag, shop, etc.
 */
 USTRUCT(Blueprintable)
-struct NAITEMSYSTEM_API FNaItemContainer {
+struct /*NAITEMSYSTEM_API*/ FNaItemContainer {
 
 	GENERATED_BODY()
 
@@ -95,7 +100,7 @@ public:
 	FORCEINLINE bool IsInSize(int Position) const { return Position >= 0 && Position < Size; };
 
 	// Get entry from index
-	FNaItemContainerFindingReturn Find(int Index);
+	FNaItemContainerFindingReturn Find(int Index) const;
 
 	/** Get all positions that contains item in given type
 	* Return whether there are any.

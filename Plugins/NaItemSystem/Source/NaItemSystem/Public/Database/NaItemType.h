@@ -10,7 +10,7 @@
 * Use function RowNameToInt() to transform the 7-digit number to integer.
 */
 USTRUCT(BlueprintType)
-struct FNaItemTypeDatabaseEntry : public FTableRowBase {
+struct NAITEMSYSTEM_API FNaItemTypeDatabaseEntry : public FTableRowBase {
 
 	GENERATED_BODY()
 
@@ -58,7 +58,7 @@ public:
 * Always use this struct to interact with other classes/structs.
 */
 USTRUCT(BlueprintType)
-struct FNaItemType {
+struct NAITEMSYSTEM_API FNaItemType {
 
 	GENERATED_BODY();
 
@@ -84,7 +84,7 @@ public:
 
 	FORCEINLINE int GetID() const { return ID; };
 
-	static bool IsValidID(int ID) const { return ID >= 0 && ID <= 9999999; };
+	static bool IsValidID(int ID) { return ID >= 0 && ID <= 9999999; };
 
 	FORCEINLINE const FNaItemTypeDatabaseEntry & GetTypeData() const { return *TypeData; };
 

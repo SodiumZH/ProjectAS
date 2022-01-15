@@ -3,11 +3,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ItemEffect.generated.h"
+#include "NaItemEffect.generated.h"
 
 
 UCLASS()
-class NAITEMSYSTEM_API AItemEffect :public AActor {
+class NAITEMSYSTEM_API ANaItemEffect :public AActor {
 
 	GENERATED_BODY()
 

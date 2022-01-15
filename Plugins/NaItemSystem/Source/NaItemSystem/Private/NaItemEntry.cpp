@@ -5,8 +5,8 @@
 
 bool FNaItemDescriptor::IsEqual(const FNaItemDescriptor & Other) const {
 
-	bool ThisIsUnique = (UniqueItemID >= 0 && IsValid(UniqueItemDatabase));
-	bool OtherIsUnique = (Other.UniqueItemID >= 0 && IsValid(Other.UniqueItemDatabase));
+	bool ThisIsUnique = (UniqueItemID >= 0);
+	bool OtherIsUnique = (Other.UniqueItemID >= 0);
 
 	// Compare basic type
 	if (ItemTypeID != Other.ItemTypeID)
@@ -44,6 +44,8 @@ bool FNaItemDescriptor::operator!=(const FNaItemDescriptor & Other) const {
 
 /**** FNaItemEntry ****/
 
+
+
 FNaItemEntry::FNaItemEntry(const FNaItemEntry & CopyFrom) {
 
 	TypeDescriptor = CopyFrom.TypeDescriptor;
@@ -51,7 +53,7 @@ FNaItemEntry::FNaItemEntry(const FNaItemEntry & CopyFrom) {
 
 }
 
-bool FNaItemEntry::IsValid() {
+bool FNaItemEntry::IsValid() const {
 	if (Amount <= 0) {
 		UE_LOG(LogNaItem, Warning, TEXT("Invalid item entry: amount <= 0."));
 		return false;

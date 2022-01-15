@@ -98,7 +98,7 @@ bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 	}
 }
 
-FNaItemContainerFindingReturn FNaItemContainer::Find(int Index) {
+FNaItemContainerFindingReturn FNaItemContainer::Find(int Index) const {
 	
 	/* Out of size check */
 	if (Index < 0 || Index > ITEM_CONTAINER_MAX_SIZE)
