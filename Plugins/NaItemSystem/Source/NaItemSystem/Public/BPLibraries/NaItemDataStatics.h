@@ -15,12 +15,18 @@
 
 struct FNaItemDescriptor;
 struct FTableRowBase;
-
+class UDataTable;
+class ANaItemEffect;
 
 UCLASS()
 class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
 
 	GENERATED_BODY()
+
+public:
+
+
+
 
 public:
 

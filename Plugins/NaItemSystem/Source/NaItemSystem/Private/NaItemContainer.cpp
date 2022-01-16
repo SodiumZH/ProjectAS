@@ -45,15 +45,17 @@ FNaItemContainerFindingReturn::FNaItemContainerFindingReturn(NotFoundType Type) 
 /**** FNaItemContainer ****/
 
 FNaItemContainer::FNaItemContainer() {
-	const TSharedPtr<FNaItemEntry> Null = TSharedPtr<FNaItemEntry>(nullptr);
 	Size = 64;
-	Content = TArray<TSharedPtr<FNaItemEntry>>(&Null, 64);
+	int i = 0;
+	for (i = 0; i < 64; ++i)
+		Content.Emplace(TSharedPtr<FNaItemEntry>(nullptr));
 }
 
 FNaItemContainer::FNaItemContainer(int InSize) {
-	const TSharedPtr<FNaItemEntry> Null = TSharedPtr<FNaItemEntry>(nullptr);
 	Size = InSize;
-	Content = TArray<TSharedPtr<FNaItemEntry>>(&Null, InSize);
+	int i = 0;
+	for (i = 0; i < Size; ++i)
+		Content.Emplace(TSharedPtr<FNaItemEntry>(nullptr));
 }
 
 FNaItemContainer::FNaItemContainer(const FNaItemContainer & CopyFrom) {
@@ -61,7 +63,9 @@ FNaItemContainer::FNaItemContainer(const FNaItemContainer & CopyFrom) {
 	Size = CopyFrom.GetSize();
 	int i = 0;
 	for (i = 0; i < Size; ++i) {
-		Content.Emplace(TSharedPtr<FNaItemEntry>(new FNaItemEntry(*(CopyFrom.Content[i].Get()))));
+		if (CopyFrom.Find(i).Result == ENaItemContainerFindingResult::ICFR_Filled) 
+			Content.Emplace(TSharedPtr<FNaItemEntry>(new FNaItemEntry(*(CopyFrom.Find(i).EntryPtr.Get()))));
+		else Content.Emplace(TSharedPtr<FNaItemEntry>(nullptr));
 	}
 }
 

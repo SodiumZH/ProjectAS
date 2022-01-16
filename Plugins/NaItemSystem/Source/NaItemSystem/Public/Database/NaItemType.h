@@ -17,23 +17,23 @@ struct NAITEMSYSTEM_API FNaItemTypeDatabaseEntry : public FTableRowBase {
 public:
 
 	// Default name for this item.
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString Name = TEXT("Item");
 	
 	// Max stacking amount
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int MaxStackingAmount = 64;
 
 	// Whether this item is described by a unique item struct.
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsUnique = false;
 
 	// If this item is described by a unique item struct, the data table for its unique data.
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UDataTable* UniqueDataTable = nullptr;
 
 	// Effect class when using the item
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class ANaItemEffect> EffectClass;
 
 public:

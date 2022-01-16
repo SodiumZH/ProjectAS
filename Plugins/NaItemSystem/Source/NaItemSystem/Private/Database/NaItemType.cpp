@@ -10,8 +10,7 @@ bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 	FString InStr = InRowName.ToString();
 	if (InStr.Len() != 7)
 		return false;
-	if (InStr == TEXT("0000000"))
-		return false;
+
 
 	int i = 0;
 	for (i = 0; i < 7; ++i) {
@@ -21,6 +20,7 @@ bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 	return true;
 }
 
+#pragma optimize("" , off)
 FName FNaItemTypeDatabaseEntry::IntToRowName(int ID) {
 
 	if (ID < 0 || ID > 9999999) {
@@ -30,14 +30,17 @@ FName FNaItemTypeDatabaseEntry::IntToRowName(int ID) {
 
 	TCHAR Str[8];
 	Str[7] = '\0';
-	for (int i = 6; i >= 0 ; --i) {
+	int i = 6;
+
+	for (i = 6; i >= 0 ; --i) {
 		Str[i] = ID % 10 + '0';
 		ID /= 10;
 	}
+
 	ensureAlwaysMsgf(IsValidRowName(FName(Str)), TEXT("NaItemTypeDatabaseEntry::ToRowName Error: An invalid RowName is created."));
 	return FName(Str);
 }
-
+#pragma optimize("" , on)
 
 int FNaItemTypeDatabaseEntry::RowNameToInt(FName InRowName) {
 
