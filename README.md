@@ -3,7 +3,7 @@ By Sodium
 ### Overview
 
 NaPackTP (Na Pack Third Person) is an integrated series of modules for variable types of third-person RPG games for UE4.
-Now it contains Utility (basic dependent), ItemSystem (for item management) and MobSystem (for creatures, players, monsters, NPCs, etc.).
+Now it contains Utility (basic dependency), ItemSystem (for item management) and MobSystem (for creatures, players, monsters, NPCs, etc.).
 
 ### Progress
 
