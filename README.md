@@ -2,17 +2,15 @@ By Sodium
 
 ### Overview
 
-L2World (*Lineage 2: World*) is an Lineage2-based fan game project remaking L2 into an open-world game with better scenes and more various gameplays, jumping out of traditional MMO patterns.
+NaPackTP (Na Pack Third Person) is an integrated series of modules for variable types of third-person RPG games for UE4.
+Now it contains Utility (basic dependent), ItemSystem (for item management) and MobSystem (for creatures, players, monsters, NPCs, etc.).
 
 ### Progress
 
-2021-5-27 Just started. Some features has been partly implemented previously with BP and now I  will refactor them into C++. 
-
-### Copyright Issues
-
-All resources (figures, game-original texts, *etc.*) related to original L2 game belong to *NCSoft*. Temporarily L2 resources (from Internet) have to be used in development for testing, but I will not commercially publish any releases using L2 resource without license of *NCSoft*.
-
-All other original contents (*e.g.* C++ codes and blueprints) which I created independently belong to *Sodium3D (SodiumStudio)*.  
+Utility is expanding while other modules are developed.
+MobSystem's basic movement and combat has been finished. For character management (player controller) item system is needed, so it's paused now.
+ItemSystem is in development currently.
+2022/01/19
 
 ### About
 
