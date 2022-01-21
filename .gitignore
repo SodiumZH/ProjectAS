@@ -75,8 +75,14 @@ Plugins/*/Intermediate/*
 !Intermediate/ProjectFiles/*.vcxproj.user
 Intermediate/ProjectFiles/UE4.*
 
+Intermediate/ProjectFiles/UE4.*
+
+*.sln
+
 # Cache files for the editor
 DerivedDataCache/*
 
 # Remove VS Code configuration
 .vscode/
+
+

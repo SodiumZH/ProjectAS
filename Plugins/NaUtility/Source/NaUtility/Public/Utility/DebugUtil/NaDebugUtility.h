@@ -1,0 +1,50 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Logging/LogMacros.h"
+#include "NaDebugUtility.generated.h"
+
+/* NaPack logs */
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaUtil, Log, All);
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaItem, Log, All);
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaMob, Log, All);
+
+
+// This is a function library for C++ debugging
+
+#define UE_LOG_UOBJECT(SourceUObject, Category, Verbosity, Info) UE_LOG(Category, Verbosity, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(SourceUObject), TEXT(Info))
+
+/* Debug Macros */
+/* Deprecated, should be replaced by UE_LOG_UOBJECT */
+#define LogWarning(text) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+#define LogError(text) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+#define LogWrite(text) UE_LOG(LogTemp, Log, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+
+#define LogWarningContext(text, context) UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+#define LogErrorContext(text, context) UE_LOG(LogTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+#define LogWriteContext(text, context) UE_LOG(LogTemp, Log, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+
+#define LogWarningNoContext(text) UE_LOG(LogTemp, Warning, TEXT(text))
+#define LogErrorNoContext(text) UE_LOG(LogTemp, Error, TEXT(text))
+#define LogWriteNoContext(text) UE_LOG(LogTemp, Log, TEXT(text))
+
+#define PrintToScreen(text) UNaDebugUtility::DebugInfo(this, TEXT(text))
+
+UCLASS()
+class NAUTILITY_API UNaDebugUtility: public UBlueprintFunctionLibrary {
+
+	GENERATED_BODY()
+public:
+
+
+	// Print debug information with a specific object source
+	static void DebugInfo(UObject* Source, FString Info, float Time = 2.0f, bool bShowSource = true, bool bPrintToScreen = true, bool bPrintToLog = true, FLinearColor Color = FLinearColor(0.f, 0.66f, 1.f));
+
+	// Get display name
+	static FString DisplayName(UObject* InObj);
+
+
+
+};
+
