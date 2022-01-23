@@ -18,23 +18,19 @@ struct FTableRowBase;
 class UDataTable;
 class ANaItemEffect;
 
-UCLASS()
+UCLASS(Config=Game)
 class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
 
 	GENERATED_BODY()
 
 public:
 
-
-
-
-public:
-
 	/*- Item type -*/
 
+
 	/* Break item type structure and get data */
-	UFUNCTION(BlueprintPure, meta = (Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
-	static void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, TSubclassOf<class ANaItemEffect>& EffectClass);
+	UFUNCTION(BlueprintPure, meta = (AdvancedDisplay = 7, Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
+	static void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, TSubclassOf<class ANaItemEffect>& EffectClass, FName & RowName);
 
 	/* Get item type from database from ID. */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")

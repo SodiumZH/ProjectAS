@@ -2,7 +2,7 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "NaUtility.h"
 
-UDataTable * const FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/NaItemSystem/ItemType/ItemTypeDataTable.ItemTypeDataTable'"));
+UDataTable * const FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Item/ItemTypeDataTable.ItemTypeDataTable'"));
 
 static FNaItemType DefaultType = FNaItemType();
 
@@ -10,7 +10,6 @@ bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 	FString InStr = InRowName.ToString();
 	if (InStr.Len() != 7)
 		return false;
-
 
 	int i = 0;
 	for (i = 0; i < 7; ++i) {
@@ -53,9 +52,24 @@ int FNaItemTypeDatabaseEntry::RowNameToInt(FName InRowName) {
 
 FNaItemType::FNaItemType(int ItemID) {
 	ID = ItemID;
+	// Invalid ID: return default (ID==0)
 	if (!IsValidID(ItemID)) {
 		ID = 0;
 		ItemID = 0;
 	}
-	TypeData = TSharedPtr<FNaItemTypeDatabaseEntry>(ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ItemID), TEXT("NaItemType")));
+
+	// If data table is not correctly loaded, try reloading 
+	if (!IsValid(ItemTypeDataTable)) {
+		ReloadTypeDataTable();
+	}
+	// Both cases when initially correctly loaded or reloaded successfully
+	if(IsValid(ItemTypeDataTable))
+		TypeData = TSharedPtr<FNaItemTypeDatabaseEntry>(ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ItemID), TEXT("NaItemType")));
+	// If reloaded but still failed, return null
+	else {
+		
+		ID = 0;
+		ItemID = 0;
+		TypeData = nullptr;
+	}
 }

@@ -73,20 +73,29 @@ protected:
 public:
 
 	// Data table reference for searching type data
-	static UDataTable * const ItemTypeDataTable;
+	static UDataTable * ItemTypeDataTable;
 
 	// Static item type representing invalid data.
 	static FNaItemType DefaultType;
 
+	// Get from ID
 	FNaItemType(int ItemID);
 
+	// Get default from ID == 0
 	FNaItemType() :FNaItemType(0) {};
 
+	// Get ID as int
 	FORCEINLINE int GetID() const { return ID; };
 
+	// Check if an int ID is available for an ID
 	static bool IsValidID(int ID) { return ID >= 0 && ID <= 9999999; };
 
+	// Get a ref of type data
 	FORCEINLINE const FNaItemTypeDatabaseEntry & GetTypeData() const { return *TypeData; };
 
+	// Check if a type is valid (default type is not valid.)
 	FORCEINLINE bool IsValidType() const { return TypeData.IsValid(); };
+
+	// Reload item data table
+	static void ReloadTypeDataTable() { ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Item/ItemTypeDataTable.ItemTypeDataTable'")); };
 };
