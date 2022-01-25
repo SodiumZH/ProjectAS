@@ -2,7 +2,9 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "NaUtility.h"
 
-UDataTable * const FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Item/ItemTypeDataTable.ItemTypeDataTable'"));
+FString FNaItemType::ItemTypeDataTablePath = TEXT("/NaItemSystem/ItemType/ItemTypeDataTable.ItemTypeDataTable");
+
+UDataTable * FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, *(TEXT("DataTable'") + FNaItemType::ItemTypeDataTablePath + TEXT("'")));
 
 static FNaItemType DefaultType = FNaItemType();
 
@@ -67,7 +69,7 @@ FNaItemType::FNaItemType(int ItemID) {
 		TypeData = TSharedPtr<FNaItemTypeDatabaseEntry>(ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ItemID), TEXT("NaItemType")));
 	// If reloaded but still failed, return null
 	else {
-		
+		UE_LOG(LogNaItem, Error, TEXT("Item type data table not found. The data table directory should be \"%s\"."), *FNaItemType::ItemTypeDataTablePath);
 		ID = 0;
 		ItemID = 0;
 		TypeData = nullptr;

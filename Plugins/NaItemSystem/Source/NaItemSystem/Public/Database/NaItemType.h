@@ -72,6 +72,9 @@ protected:
 
 public:
 
+	// Directory for searching item type data table
+	static FString ItemTypeDataTablePath;
+
 	// Data table reference for searching type data
 	static UDataTable * ItemTypeDataTable;
 

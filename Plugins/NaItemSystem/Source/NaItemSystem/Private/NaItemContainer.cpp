@@ -79,6 +79,7 @@ bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 		for (i = Size; i < NewSize; ++i) {
 			Content.Emplace(TSharedPtr<FNaItemEntry>(nullptr));
 		}
+		Size = NewSize;
 		return true;
 	}
 	else {
@@ -98,6 +99,7 @@ bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 			while (Content.Num() > NewSize)
 				Content.RemoveAt(Content.Num() - 1);
 		}
+		Size = NewSize;
 		return true;
 	}
 }

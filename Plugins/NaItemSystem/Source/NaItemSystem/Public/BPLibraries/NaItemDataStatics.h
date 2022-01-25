@@ -27,6 +27,10 @@ public:
 
 	/*- Item type -*/
 
+	static FNaItemTypeDatabaseEntry DefaultTypeEntry;
+
+	
+
 
 	/* Break item type structure and get data */
 	UFUNCTION(BlueprintPure, meta = (AdvancedDisplay = 7, Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
