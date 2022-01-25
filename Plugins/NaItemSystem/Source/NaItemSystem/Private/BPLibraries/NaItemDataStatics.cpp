@@ -6,10 +6,10 @@
 
 FNaItemTypeDatabaseEntry UNaItemDataStatics::DefaultTypeEntry:FNaItemTypeDatabaseEntry() {};
 
-void UNaItemDataStatics::UNaItemDataStatics():UBlueprintFunctionLibrary() {
-	UDataTable * TypeTable = FItemType::ItemTypeDataTable;
+UNaItemDataStatics::UNaItemDataStatics():UBlueprintFunctionLibrary() {
+	UDataTable * TypeTable = FNaItemType::ItemTypeDataTable;
 	if (IsValid(TypeTable)) {
-		FNaItemTypeDatabaseEntry ZeroRow = TypeTable->FindRow<FNaItemTypeDatabaseEntry>(TEXT("0000000"), TEXT(""), false);
+		FNaItemTypeDatabaseEntry * ZeroRow = TypeTable->FindRow<FNaItemTypeDatabaseEntry>(TEXT("0000000"), TEXT(""), false);
 		if (!ZeroRow) {
 			UE_LOG(LogNaItem, Display, TEXT("Item type data table missing default (zero) row. Has been automatically added."));
 			TypeTable->AddRow(TEXT("0000000"), DefaultTypeEntry);
