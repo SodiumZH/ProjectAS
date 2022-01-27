@@ -79,9 +79,6 @@ struct NAITEMSYSTEM_API FNaItemEntry {
 
 public:
 
-
-
-
 	/*** Properties***/
 
 	/* Descriptor of the type */

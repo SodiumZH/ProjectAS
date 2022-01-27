@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Effect/NaItemEffect.h"
 #include "NaItemType.generated.h"
 
 /* Struct for the item type database.
@@ -17,26 +18,32 @@ struct NAITEMSYSTEM_API FNaItemTypeDatabaseEntry : public FTableRowBase {
 public:
 
 	// Default name for this item.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Name = TEXT("Item");
 	
 	// Max stacking amount
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int MaxStackingAmount = 64;
 
 	// Whether this item is described by a unique item struct.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bIsUnique = false;
 
 	// If this item is described by a unique item struct, the data table for its unique data.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UDataTable* UniqueDataTable = nullptr;
 
 	// Effect class when using the item
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class ANaItemEffect> EffectClass;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<ANaItemEffect> EffectClass;
 
 public:
+
+	// From variables
+	FNaItemTypeDatabaseEntry(FString InName = TEXT("Item"), int InStackingAmount = 64, bool bInIsUnique = false, UDataTable* InUniqueDataTable = nullptr, TSubclassOf<ANaItemEffect> InEffectClass = ANaItemEffect::StaticClass());
+
+	// Copy from other
+	FNaItemTypeDatabaseEntry(const FNaItemTypeDatabaseEntry & CopyFrom);
 
 	/* Functions for transformation between integers and 7-digit numerical row names */
 
@@ -72,20 +79,11 @@ protected:
 
 public:
 
-	// Directory for searching item type data table
-	static FString ItemTypeDataTablePath;
+	// Make from ID and data ptr
+	FNaItemType(int InID, TSharedPtr<FNaItemTypeDatabaseEntry> InData);
 
-	// Data table reference for searching type data
-	static UDataTable * ItemTypeDataTable;
-
-	// Static item type representing invalid data.
-	static FNaItemType DefaultType;
-
-	// Get from ID
-	FNaItemType(int ItemID);
-
-	// Get default from ID == 0
-	FNaItemType() :FNaItemType(0) {};
+	// Make an invalid default type
+	FNaItemType() :FNaItemType(0, nullptr) {};
 
 	// Get ID as int
 	FORCEINLINE int GetID() const { return ID; };
@@ -93,12 +91,18 @@ public:
 	// Check if an int ID is available for an ID
 	static bool IsValidID(int ID) { return ID >= 0 && ID <= 9999999; };
 
+	// Check if type data is valid
+	FORCEINLINE bool IsValid() const { return TypeData.IsValid(); };
+
 	// Get a ref of type data
 	FORCEINLINE const FNaItemTypeDatabaseEntry & GetTypeData() const { return *TypeData; };
 
-	// Check if a type is valid (default type is not valid.)
+	// Get a copy of type data
+	void CopyTypeData(FNaItemTypeDatabaseEntry & OutData) const;
+
+	TSharedPtr<FNaItemTypeDatabaseEntry> CopyTypeData() const;
+
+	// Check if a type is valid
 	FORCEINLINE bool IsValidType() const { return TypeData.IsValid(); };
 
-	// Reload item data table
-	static void ReloadTypeDataTable() { ItemTypeDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Item/ItemTypeDataTable.ItemTypeDataTable'")); };
 };

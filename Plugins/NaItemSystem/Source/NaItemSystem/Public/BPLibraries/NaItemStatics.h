@@ -15,6 +15,7 @@ struct FNaItemDescriptor;
 struct FNaItemType;
 struct FTableRowBase;
 struct FNaItemEntry;
+class UNaGameModeItemSystemComponent;
 
 UCLASS()
 class NAITEMSYSTEM_API UNaItemStatics :public UBlueprintFunctionLibrary {
@@ -112,11 +113,12 @@ public:
 	/**
 	* Add item entry or stack onto the same entry.
 	* If the position is empty, add into it; if the position is occupied with absolutely same item (checked from NaItemDescriptor identity), stack on it.
+	* This operation is data-dependent, so a world context is needed.
 	* Warning: If the target container is not valid, return -1.
 	* @ReturnValue Amount of items remained not added.
 	*/
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
-	static int AddOrStackItemEntry(UPARAM(ref) FNaItemContainer & Target, int Position, const FNaItemEntry & Entry);
+	static int AddOrStackItemEntry(UPARAM(ref) FNaItemContainer & Target, UObject* WorldContext, int Position, const FNaItemEntry & Entry);
 
 	/**
 	* Remove an entry of given position in a container.
@@ -135,6 +137,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
 	static void SwapItemEntry(UPARAM(ref) FNaItemContainer & Target, int P1, int P2);
 
-
-
+	/*- Item System game mode component related 0-*/
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|GameMode")
+	static UNaGameModeItemSystemComponent * GetGameModeItemSystemComponent(UObject* WorldContext);
 };

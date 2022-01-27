@@ -2,11 +2,22 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "NaUtility.h"
 
-FString FNaItemType::ItemTypeDataTablePath = TEXT("/NaItemSystem/ItemType/ItemTypeDataTable.ItemTypeDataTable");
 
-UDataTable * FNaItemType::ItemTypeDataTable = LoadObject<UDataTable>(nullptr, *(TEXT("DataTable'") + FNaItemType::ItemTypeDataTablePath + TEXT("'")));
+FNaItemTypeDatabaseEntry::FNaItemTypeDatabaseEntry(FString InName, int InStackingAmount, bool bInIsUnique, UDataTable* InUniqueDataTable, TSubclassOf<ANaItemEffect> InEffectClass) {
+	Name = InName;
+	MaxStackingAmount = InStackingAmount;
+	bIsUnique = bInIsUnique;
+	UniqueDataTable = InUniqueDataTable;
+	EffectClass = InEffectClass;
+}
 
-static FNaItemType DefaultType = FNaItemType();
+FNaItemTypeDatabaseEntry::FNaItemTypeDatabaseEntry(const FNaItemTypeDatabaseEntry & CopyFrom){
+	Name = CopyFrom.Name;
+	MaxStackingAmount = CopyFrom.MaxStackingAmount;
+	bIsUnique = CopyFrom.bIsUnique;
+	UniqueDataTable = CopyFrom.UniqueDataTable;
+	EffectClass = CopyFrom.EffectClass;
+}
 
 bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 	FString InStr = InRowName.ToString();
@@ -52,26 +63,36 @@ int FNaItemTypeDatabaseEntry::RowNameToInt(FName InRowName) {
 	return UKismetStringLibrary::Conv_StringToInt(InRowName.ToString());
 }
 
-FNaItemType::FNaItemType(int ItemID) {
-	ID = ItemID;
-	// Invalid ID: return default (ID==0)
-	if (!IsValidID(ItemID)) {
+FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeDatabaseEntry> InData) {
+	if (!IsValidID(InID)) {
+		UE_LOG(LogNaItem, Warning, TEXT("Making NaItemType: invalid ID."));
 		ID = 0;
-		ItemID = 0;
-	}
-
-	// If data table is not correctly loaded, try reloading 
-	if (!IsValid(ItemTypeDataTable)) {
-		ReloadTypeDataTable();
-	}
-	// Both cases when initially correctly loaded or reloaded successfully
-	if(IsValid(ItemTypeDataTable))
-		TypeData = TSharedPtr<FNaItemTypeDatabaseEntry>(ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ItemID), TEXT("NaItemType")));
-	// If reloaded but still failed, return null
-	else {
-		UE_LOG(LogNaItem, Error, TEXT("Item type data table not found. The data table directory should be \"%s\"."), *FNaItemType::ItemTypeDataTablePath);
-		ID = 0;
-		ItemID = 0;
 		TypeData = nullptr;
 	}
+	else if (!InData.IsValid()) {
+		UE_LOG(LogNaItem, Warning, TEXT("Making NaItemType: Making from an invalid type data."));
+		ID = InID;
+		TypeData = nullptr;
+	}
+	else {
+		ID = InID;
+		TypeData = InData;
+	}
+}
+
+void FNaItemType::CopyTypeData(FNaItemTypeDatabaseEntry & OutData) const {
+	if (!TypeData.IsValid()) {
+		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
+		OutData = FNaItemTypeDatabaseEntry();
+		return;
+	}
+	OutData = *TypeData;
+}
+
+TSharedPtr<FNaItemTypeDatabaseEntry> FNaItemType::CopyTypeData() const {
+	if (!TypeData.IsValid()) {
+		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
+		return TSharedPtr<FNaItemTypeDatabaseEntry>(new FNaItemTypeDatabaseEntry());
+	}
+	return TSharedPtr<FNaItemTypeDatabaseEntry>(new FNaItemTypeDatabaseEntry(*TypeData));
 }

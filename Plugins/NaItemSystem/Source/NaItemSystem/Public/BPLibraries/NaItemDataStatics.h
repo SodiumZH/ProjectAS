@@ -25,12 +25,11 @@ class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
 
 public:
 
+	/*- Item type data table -*/
+
 	/*- Item type -*/
 
 	static FNaItemTypeDatabaseEntry DefaultTypeEntry;
-
-	
-
 
 	/* Break item type structure and get data */
 	UFUNCTION(BlueprintPure, meta = (AdvancedDisplay = 7, Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
@@ -38,7 +37,7 @@ public:
 
 	/* Get item type from database from ID. */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")
-	static FNaItemType GetItemTypeFromID(int ID);
+	static FNaItemType GetItemTypeFromID(UObject* WorldContext, int ID);
 
 	/*- Item descriptor -*/
 

@@ -9,7 +9,7 @@
 struct FNaItemType;
 struct FNaItemDescriptor;
 struct FNaItemEntry;
-
+class UNaGameModeItemSystemComponent;
 
 
 /* Result types for browsing an item container */
@@ -124,11 +124,6 @@ public:
 	*/
 	bool AddEntry(int Position, const FNaItemEntry & Entry, bool bForce = false);
 
-	/** Add or stack items to a position.
-	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
-	* @ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
-	*/
-	int AddOrStack(int Position, const FNaItemEntry & Entry);
 
 	/* Remove an item from position. */
 	void RemoveEntry(int Position);
@@ -141,6 +136,23 @@ public:
 
 	/* Swap two entries. This action will not fail if no Out Of Size. */
 	void SwapEntry(int P1, int P2);
+	
+
+
+
+	/*----- Data-dependent Operations ------*/
+	
+	/* Data-dependent operations need to read the data table(configured in game mode), 
+	* So a world context object is required for getting world
+	*/
+
+
+	/** Add or stack items to a position.
+	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
+	* This operation is data-dependent, so a world context is needed.
+	* @ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
+	*/
+	int AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry);
 
 	/** Add a batch of a certain type of items to the container.
 	* @Param Type Type of items to add.

@@ -4,6 +4,9 @@
 #include "NaItemEntry.h"
 #include "Database/NaItemType.h"
 #include "Engine/DataTable.h"
+#include "Components/NaGameModeItemSystemComponent.h"
+#include "BPLibraries/NaItemStatics.h"
+#include "BPLibraries/NaItemDataStatics.h"
 
 
 // Found item successfully
@@ -275,25 +278,31 @@ void FNaItemContainer::SwapEntry(int P1, int P2) {
 
 }
 
-int FNaItemContainer::AddOrStack(int Position, const FNaItemEntry & Entry) {
+/*- Data-dependent Operations Below -*/
+
+
+int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry) {
 
 	CheckSize();
 
+	// OOS case
 	if (!IsInSize(Position)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Add or Stack: index out of size."));
 		return Entry.Amount;
 	}
 
+	// Empty, add
 	if (!Content[Position].IsValid()) {
 		AddEntry(Position, Entry);
 		return 0;
 	}
 
-	else if (Content[Position]->TypeDescriptor == Entry.TypeDescriptor) {
-		FNaItemType Type = FNaItemType(Entry.TypeDescriptor.ItemTypeID);
+	// Containing the same item, stack
+	if (Content[Position]->TypeDescriptor == Entry.TypeDescriptor) {
+		FNaItemType Type = UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID);
 		
-		// If type is invalid, report error and abort. This case should never happen. 
-		if (!Type.IsValidType()) {
+		// If type is invalid, report error and abort. This case should not happen. 
+		if (!Type.IsValid()) {
 			UE_LOG(LogNaItem, Error, TEXT("NaItemContainer Error: type of item entry on position &d is invalid."), Position);
 			return Entry.Amount;
 		}

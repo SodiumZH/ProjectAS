@@ -27,7 +27,7 @@ public:
 	* @ReturnValue Whether check succeeded.
 	*/
 	UFUNCTION(BlueprintCallable, Category = "NaPublicDependencies")
-	ENaGameModeComponentErrorType CheckGameModeHierarchy(AActor* WorldContext, bool bAssertWhenFailed = false);
+	static ENaGameModeComponentErrorType CheckGameModeHierarchy(UObject* WorldContext, bool bAssertWhenFailed = false);
 
 	/**
 	* Get NaGameModeBase.
@@ -36,7 +36,7 @@ public:
 	* @Param WorldContext Any actor that can get world.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get NaGameModeBase"), Category = "NaPublicDependencies")
-	static UNaGameModeBaseComponent* GetNaGameModeBase(AActor* WorldContext);
+	static UNaGameModeBaseComponent* GetNaGameModeBase(UObject* WorldContext);
 
 
 	/**
@@ -47,7 +47,7 @@ public:
 	* @Param Class Subunit class. Subclasses are included.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get NaGameMode Subunit"), Category = "NaPublicDependencies")
-	static UNaGameModeSubunitComponent* GetNaGameModeSubunit(AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class);
+	static UNaGameModeSubunitComponent* GetNaGameModeSubunit(UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class);
 
 	/**
 	* Get NaGameMode subunit from class. NOT including subclasses.
@@ -57,7 +57,7 @@ public:
 	* @Param Class Subunit class. Subclasses are NOT included.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get NaGameMode Subunit(Specific Class)"), Category = "NaPublicDependencies")
-	static UNaGameModeSubunitComponent* GetNaGameModeSubunitSpecific(AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass);
+	static UNaGameModeSubunitComponent* GetNaGameModeSubunitSpecific(UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass);
 
 	/**
 	* Get all NaGameMode subunits from class.
@@ -65,7 +65,7 @@ public:
 	* @Param Class Subunit class. Subclasses are included.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All NaGameMode Subunits"), Category = "NaPublicDependencies")
-	static void GetAllNaGameModeSubunits(TArray<UNaGameModeSubunitComponent*>& Out, AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class);
+	static void GetAllNaGameModeSubunits(TArray<UNaGameModeSubunitComponent*>& Out, UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class);
 
 	/**
 	* Get all NaGameMode subunits from class. NOT including subclasses.
@@ -73,6 +73,6 @@ public:
 	* @Param Class Subunit class. Subclasses are NOT included.
 	*/
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get All NaGameMode Subunits(Specific Class)"), Category = "NaPublicDependencies")
-	static void GetAllNaGameModeSubunitsSpecific(TArray<UNaGameModeSubunitComponent*>& Out, AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass);
+	static void GetAllNaGameModeSubunitsSpecific(TArray<UNaGameModeSubunitComponent*>& Out, UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass);
 
 };
