@@ -2,7 +2,7 @@
 #include "NaItemContainer.h"
 #include "NaUtility.h"
 #include "NaItemEntry.h"
-#include "Database/NaItemType.h"
+#include "Data/NaItemType.h"
 #include "Engine/DataTable.h"
 #include "Components/NaGameModeItemSystemComponent.h"
 #include "BPLibraries/NaItemStatics.h"

@@ -1,7 +1,7 @@
 
 #include "BPLibraries/NaItemStatics.h"
 #include "NaItemEntry.h"
-#include "Database/NaItemType.h"
+#include "Data/NaItemType.h"
 #include "NaItemContainer.h"
 #include "NaPublicDependencies/NaPublicDependencies.h"
 #include "Components/NaGameModeItemSystemComponent.h"

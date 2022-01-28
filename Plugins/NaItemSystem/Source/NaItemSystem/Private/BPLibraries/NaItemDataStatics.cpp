@@ -1,7 +1,7 @@
 #include "BPLibraries/NaItemDataStatics.h"
 #include "NaItemEntry.h"
 #include "NaUtility.h"
-#include "Database/NaItemType.h"
+#include "Data/NaItemType.h"
 #include "Effect/NaItemEffect.h"
 #include "Engine/DataTable.h"
 #include "NaPublicDependencies/NaPublicDependencies.h"

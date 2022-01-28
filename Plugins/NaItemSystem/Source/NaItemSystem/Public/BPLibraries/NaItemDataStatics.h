@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "../Database/NaItemType.h"
+#include "../Data/NaItemType.h"
 #include "../NaItemContainer.h"
 #include "../NaItemEntry.h"
 #include "NaItemDataStatics.generated.h"

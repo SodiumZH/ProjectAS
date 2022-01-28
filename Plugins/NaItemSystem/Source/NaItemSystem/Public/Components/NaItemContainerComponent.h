@@ -10,7 +10,7 @@ struct FNaItemContainer;
 
 /** NaItemContainerComponent is a component bringing an item container for attachment to actors.
 */
-UCLASS( ClassGroup=(NaItemSystem), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(NaItemSystem), meta=(BlueprintSpawnableComponent), Blueprintable )
 class NAITEMSYSTEM_API UNaItemContainerComponent : public UActorComponent
 {
 	GENERATED_BODY()

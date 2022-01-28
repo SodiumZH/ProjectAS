@@ -11,7 +11,7 @@ class UDataTable;
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (NaItemSystem), meta = (BlueprintSpawnableComponent))
 class NAITEMSYSTEM_API UNaGameModeItemSystemComponent : public UNaGameModeSubunitComponent
 {
 	GENERATED_BODY()
