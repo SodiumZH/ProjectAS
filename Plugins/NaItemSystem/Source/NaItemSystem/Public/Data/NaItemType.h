@@ -2,16 +2,17 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "Effect/NaItemEffect.h"
+#include "Actors/NaItemEffect.h"
 #include "NaItemType.generated.h"
 
-/* Struct for the item type database.
-* The item type data table uses a 7-digit number as row name. 
-* Use function IntToRowName() to transform integer to row name.
-* Use function RowNameToInt() to transform the 7-digit number to integer.
+/* Struct for the item type database. This is the item for distinction of items.
+* This struct is directly applied by the item container for its behaviors.
+* The item data table uses a 7-digit number as row name. E.g. "0012345"
+* Use function IntToRowName() to transform integer to row name. E.g. 123 => "0000123"
+* Use function RowNameToInt() to transform the 7-digit number to integer. E.g. "0054321" => 54321 
 */
 USTRUCT(BlueprintType)
-struct NAITEMSYSTEM_API FNaItemTypeDatabaseEntry : public FTableRowBase {
+struct NAITEMSYSTEM_API FNaItemTypeData : public FTableRowBase {
 
 	GENERATED_BODY()
 
@@ -33,17 +34,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UDataTable* UniqueDataTable = nullptr;
 
-	// Effect class when using the item
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TSubclassOf<ANaItemEffect> EffectClass;
-
 public:
 
 	// From variables
-	FNaItemTypeDatabaseEntry(FString InName = TEXT("Item"), int InStackingAmount = 64, bool bInIsUnique = false, UDataTable* InUniqueDataTable = nullptr, TSubclassOf<ANaItemEffect> InEffectClass = ANaItemEffect::StaticClass());
+	FNaItemTypeData(FString InName = TEXT("Item"), int InStackingAmount = 64, bool bInIsUnique = false, UDataTable* InUniqueDataTable = nullptr);
 
 	// Copy from other
-	FNaItemTypeDatabaseEntry(const FNaItemTypeDatabaseEntry & CopyFrom);
+	FNaItemTypeData(const FNaItemTypeData & CopyFrom);
 
 	/* Functions for transformation between integers and 7-digit numerical row names */
 
@@ -75,12 +72,12 @@ protected:
 	int ID;
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TSharedPtr<FNaItemTypeDatabaseEntry> TypeData;
+	TSharedPtr<FNaItemTypeData> TypeData;
 
 public:
 
 	// Make from ID and data ptr
-	FNaItemType(int InID, TSharedPtr<FNaItemTypeDatabaseEntry> InData);
+	FNaItemType(int InID, TSharedPtr<FNaItemTypeData> InData);
 
 	// Make an invalid default type
 	FNaItemType() :FNaItemType(0, nullptr) {};
@@ -95,12 +92,12 @@ public:
 	FORCEINLINE bool IsValid() const { return TypeData.IsValid(); };
 
 	// Get a ref of type data
-	FORCEINLINE const FNaItemTypeDatabaseEntry & GetTypeData() const { return *TypeData; };
+	FORCEINLINE const FNaItemTypeData & GetTypeData() const { return *TypeData; };
 
 	// Get a copy of type data
-	void CopyTypeData(FNaItemTypeDatabaseEntry & OutData) const;
+	void CopyTypeData(FNaItemTypeData & OutData) const;
 
-	TSharedPtr<FNaItemTypeDatabaseEntry> CopyTypeData() const;
+	TSharedPtr<FNaItemTypeData> CopyTypeData() const;
 
 	// Check if a type is valid
 	FORCEINLINE bool IsValidType() const { return TypeData.IsValid(); };

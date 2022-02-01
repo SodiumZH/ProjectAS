@@ -3,23 +3,21 @@
 #include "NaUtility.h"
 
 
-FNaItemTypeDatabaseEntry::FNaItemTypeDatabaseEntry(FString InName, int InStackingAmount, bool bInIsUnique, UDataTable* InUniqueDataTable, TSubclassOf<ANaItemEffect> InEffectClass) {
+FNaItemTypeData::FNaItemTypeData(FString InName, int InStackingAmount, bool bInIsUnique, UDataTable* InUniqueDataTable) {
 	Name = InName;
 	MaxStackingAmount = InStackingAmount;
 	bIsUnique = bInIsUnique;
 	UniqueDataTable = InUniqueDataTable;
-	EffectClass = InEffectClass;
 }
 
-FNaItemTypeDatabaseEntry::FNaItemTypeDatabaseEntry(const FNaItemTypeDatabaseEntry & CopyFrom){
+FNaItemTypeData::FNaItemTypeData(const FNaItemTypeData & CopyFrom){
 	Name = CopyFrom.Name;
 	MaxStackingAmount = CopyFrom.MaxStackingAmount;
 	bIsUnique = CopyFrom.bIsUnique;
 	UniqueDataTable = CopyFrom.UniqueDataTable;
-	EffectClass = CopyFrom.EffectClass;
 }
 
-bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
+bool FNaItemTypeData::IsValidRowName(FName InRowName) {
 	FString InStr = InRowName.ToString();
 	if (InStr.Len() != 7)
 		return false;
@@ -33,10 +31,10 @@ bool FNaItemTypeDatabaseEntry::IsValidRowName(FName InRowName) {
 }
 
 #pragma optimize("" , off)
-FName FNaItemTypeDatabaseEntry::IntToRowName(int ID) {
+FName FNaItemTypeData::IntToRowName(int ID) {
 
 	if (ID < 0 || ID > 9999999) {
-		UE_LOG(LogNaItem, Warning, TEXT("NaItemTypeDatabaseEntry::ToRowName : invalid ID."));
+		UE_LOG(LogNaItem, Warning, TEXT("NaItemTypeData::ToRowName : invalid ID."));
 		return TEXT("0000000");
 	}
 
@@ -49,21 +47,21 @@ FName FNaItemTypeDatabaseEntry::IntToRowName(int ID) {
 		ID /= 10;
 	}
 
-	ensureAlwaysMsgf(IsValidRowName(FName(Str)), TEXT("NaItemTypeDatabaseEntry::ToRowName Error: An invalid RowName is created."));
+	ensureAlwaysMsgf(IsValidRowName(FName(Str)), TEXT("NaItemTypeData::ToRowName Error: An invalid RowName is created."));
 	return FName(Str);
 }
 #pragma optimize("" , on)
 
-int FNaItemTypeDatabaseEntry::RowNameToInt(FName InRowName) {
+int FNaItemTypeData::RowNameToInt(FName InRowName) {
 
 	if (!IsValidRowName(InRowName)) {
-		UE_LOG(LogNaItem, Warning, TEXT("NaItemTypeDatabaseEntry::ToInt : invalid row name."));
+		UE_LOG(LogNaItem, Warning, TEXT("NaItemTypeData::ToInt : invalid row name."));
 		return 0;
 	}
 	return UKismetStringLibrary::Conv_StringToInt(InRowName.ToString());
 }
 
-FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeDatabaseEntry> InData) {
+FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeData> InData) {
 	if (!IsValidID(InID)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Making NaItemType: invalid ID."));
 		ID = 0;
@@ -80,19 +78,19 @@ FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeDatabaseEntry> InData) 
 	}
 }
 
-void FNaItemType::CopyTypeData(FNaItemTypeDatabaseEntry & OutData) const {
+void FNaItemType::CopyTypeData(FNaItemTypeData & OutData) const {
 	if (!TypeData.IsValid()) {
 		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
-		OutData = FNaItemTypeDatabaseEntry();
+		OutData = FNaItemTypeData();
 		return;
 	}
 	OutData = *TypeData;
 }
 
-TSharedPtr<FNaItemTypeDatabaseEntry> FNaItemType::CopyTypeData() const {
+TSharedPtr<FNaItemTypeData> FNaItemType::CopyTypeData() const {
 	if (!TypeData.IsValid()) {
 		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
-		return TSharedPtr<FNaItemTypeDatabaseEntry>(new FNaItemTypeDatabaseEntry());
+		return TSharedPtr<FNaItemTypeData>(new FNaItemTypeData());
 	}
-	return TSharedPtr<FNaItemTypeDatabaseEntry>(new FNaItemTypeDatabaseEntry(*TypeData));
+	return TSharedPtr<FNaItemTypeData>(new FNaItemTypeData(*TypeData));
 }

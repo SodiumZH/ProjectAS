@@ -2,16 +2,22 @@
 #include "NaItemEntry.h"
 #include "NaUtility.h"
 #include "Data/NaItemType.h"
-#include "Effect/NaItemEffect.h"
+#include "Actors/NaItemEffect.h"
 #include "Engine/DataTable.h"
 #include "NaPublicDependencies/NaPublicDependencies.h"
 #include "Components/NaGameModeItemSystemComponent.h"
 #include "BPLibraries/NaItemStatics.h"
 
+FName UNaItemDataStatics::ToItemRowName(int InIndex) {
+	return FNaItemTypeData::IntToRowName(InIndex);
+}
+
+int UNaItemDataStatics::ToIndex(FName InItemRowName) {
+	return FNaItemTypeData::RowNameToInt(InItemRowName);
+}
 
 
-
-void UNaItemDataStatics::BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, TSubclassOf<ANaItemEffect>& EffectClass, FName & RowName) {
+void UNaItemDataStatics::BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, FName & RowName) {
 	if (!InType.IsValid()) {
 		UE_LOG(LogNaItem, Error, TEXT("Break Item Type: invalid input."));
 		return;
@@ -22,8 +28,7 @@ void UNaItemDataStatics::BreakItemType(const FNaItemType & InType, int & ID, FSt
 	MaxStackingAmount = Data.MaxStackingAmount;
 	bIsUnique = Data.bIsUnique;
 	UniqueDataTable = Data.UniqueDataTable;
-	EffectClass = Data.EffectClass;
-	RowName = FNaItemTypeDatabaseEntry::IntToRowName(ID);
+	RowName = FNaItemTypeData::IntToRowName(ID);
 }
 
 FNaItemType UNaItemDataStatics::GetItemTypeFromID(UObject* WorldContext, int ID) {
@@ -36,11 +41,11 @@ FNaItemType UNaItemDataStatics::GetItemTypeFromID(UObject* WorldContext, int ID)
 		UE_LOG(LogNaItem, Warning, TEXT("Get item type failed: item type data table is invalid. Set in GameModeItemSystemComponent."));
 		return FNaItemType();
 	}
-	if (GMComp->ItemTypeDataTable->RowStruct != FNaItemTypeDatabaseEntry::StaticStruct()) {
-		UE_LOG(LogNaItem, Warning, TEXT("Get item type failed: item type data table row struct must be FNaItemTypeDatabaseEntry."));
+	if (GMComp->ItemTypeDataTable->RowStruct != FNaItemTypeData::StaticStruct()) {
+		UE_LOG(LogNaItem, Warning, TEXT("Get item type failed: item type data table row struct must be FNaItemTypeData."));
 		return FNaItemType();
 	}
-	return FNaItemType(ID, TSharedPtr<FNaItemTypeDatabaseEntry>(GMComp->ItemTypeDataTable->FindRow<FNaItemTypeDatabaseEntry>(FNaItemTypeDatabaseEntry::IntToRowName(ID), TEXT("ItemTypeDataTable"))));
+	return FNaItemType(ID, TSharedPtr<FNaItemTypeData>(GMComp->ItemTypeDataTable->FindRow<FNaItemTypeData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemTypeDataTable"))));
 }
 
 FNaItemDescriptor UNaItemDataStatics::MakeDefaultDescriptor(int ID) {

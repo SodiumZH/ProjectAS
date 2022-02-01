@@ -25,15 +25,21 @@ class NAITEMSYSTEM_API UNaItemDataStatics :public UBlueprintFunctionLibrary {
 
 public:
 
+	/* Row name related */
+
+	/* Make item row name (7-digit numerical string) from integer ID. */
+	UFUNCTION(BlueprintPure, meta = (Keywords = "row name id index"), Category = "NaItemSystem|Data")
+	static FName ToItemRowName(int InIndex);
+
+	/* Get integer ID from item row name (7-digit numerical string). */
+	UFUNCTION(BlueprintPure, meta = (Keywords = "row name id index"), Category = "NaItemSystem|Data")
+	static int ToIndex(FName InItemRowName);
+
 	/*- Item type data table -*/
 
-	/*- Item type -*/
-
-	static FNaItemTypeDatabaseEntry DefaultTypeEntry;
-
 	/* Break item type structure and get data */
-	UFUNCTION(BlueprintPure, meta = (AdvancedDisplay = 7, Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
-	static void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, TSubclassOf<class ANaItemEffect>& EffectClass, FName & RowName);
+	UFUNCTION(BlueprintPure, meta = (AdvancedDisplay = 6, Keywords = "break na item type"), Category = "NaItemSystem|ItemType")
+	static void BreakItemType(const FNaItemType & InType, int & ID, FString & StrName, int & MaxStackingAmount, bool & bIsUnique, UDataTable*& UniqueDataTable, FName & RowName);
 
 	/* Get item type from database from ID. */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")
