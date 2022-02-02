@@ -6,7 +6,7 @@
 /**
 * NaItemEntry is a struct for describing a socket content
 * Including the full item data and the amount.
-* Some item properties needs to be referred to the item type database. (see /Database/ItemTypeDatabaseEntry.h)
+* Some item properties needs to be referred to the item type database. (see /Data/ItemTypeData.h)
 **/
 
 

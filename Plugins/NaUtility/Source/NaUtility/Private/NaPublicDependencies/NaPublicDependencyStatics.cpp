@@ -11,7 +11,7 @@
 #include "GameFramework/GameModeBase.h"
 
 ENaGameModeComponentErrorType UNaPublicDependencyStatics::CheckGameModeHierarchy(UObject* WorldContext, bool bAssertWhenFailed) {
-	if (!IsValid(WorldContext->GetWorld())) {
+	if (!IsValid(WorldContext) || !IsValid(WorldContext->GetWorld())) {
 		UE_LOG(LogNaUtil, Warning, TEXT("NaPublicDependencies: Invalid world context object."));
 		return ENaGameModeComponentErrorType::GMCET_NoBase;
 	}
@@ -34,7 +34,7 @@ ENaGameModeComponentErrorType UNaPublicDependencyStatics::CheckGameModeHierarchy
 }
 
 UNaGameModeBaseComponent* UNaPublicDependencyStatics::GetNaGameModeBase(UObject* WorldContext) {
-	if (!IsValid(WorldContext->GetWorld())) {
+	if (!IsValid(WorldContext) || !IsValid(WorldContext->GetWorld())) {
 		UE_LOG(LogNaUtil, Warning, TEXT("NaPublicDependencies: Invalid world context object."));
 		return nullptr;
 	}

@@ -72,6 +72,14 @@ FNaItemContainer::FNaItemContainer(const FNaItemContainer & CopyFrom) {
 	}
 }
 
+FNaItemContainer::FNaItemContainer(int InSize, const TMap<int, FNaItemEntry> & InitialContent ) : FNaItemContainer(InSize){
+	for (auto & Elem : InitialContent) {
+		if (IsInSize(Elem.Key)) {
+			Content[Elem.Key] = TSharedPtr<FNaItemEntry>(new FNaItemEntry(Elem.Value));
+		}
+	}
+}
+
 bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 	
 	check(Content.Num() == Size);

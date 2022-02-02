@@ -15,7 +15,7 @@ public:
 
 	/* Default slot size (in pixel). */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FVector2D SlotSize = FVector2D(32.f, 32.f);
+	FVector2D SlotSize = FVector2D(64.f, 64.f);
 
 	/* Base icon for empty slots */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -65,8 +65,8 @@ struct NAITEMSYSTEM_API FNaItemDisplayData : public FTableRowBase {
 public:
 
 	/* Image applied to display an item in container UI. */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UObject * BrushImage = nullptr;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UObject* BrushImage = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString DefaultDescription = TEXT("This is an item.");

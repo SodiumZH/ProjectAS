@@ -54,7 +54,7 @@ struct FNaItemContainerFindingReturn {
 * It can be used to describe a bag, shop, etc.
 */
 USTRUCT(Blueprintable)
-struct /*NAITEMSYSTEM_API*/ FNaItemContainer {
+struct NAITEMSYSTEM_API FNaItemContainer {
 
 	GENERATED_BODY()
 
@@ -84,6 +84,9 @@ public:
 
 	// Copy from other. 
 	FNaItemContainer(const FNaItemContainer & CopyFrom);
+
+	// Make from initial content map and size
+	FNaItemContainer(int InSize, const TMap<int, FNaItemEntry> & InitialContent);
 
 	/** Resize the container.
 	* @Param bForce If true, when shrinked area contains items, it will ignore them (causing the items lost!). Or it will fail if shrinked area contains items.
