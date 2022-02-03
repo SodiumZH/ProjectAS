@@ -1,14 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-/*
-#include "NaMobSystemStyle.h"
+
+#include "TestStyle.h"
 #include "Styling/SlateStyleRegistry.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Slate/SlateGameResources.h"
 #include "Interfaces/IPluginManager.h"
 
-TSharedPtr< FSlateStyleSet > FNaMobSystemStyle::StyleInstance = NULL;
+TSharedPtr< FSlateStyleSet > FTestStyle::StyleInstance = NULL;
 
-void FNaMobSystemStyle::Initialize()
+void FTestStyle::Initialize()
 {
 	if (!StyleInstance.IsValid())
 	{
@@ -17,16 +17,16 @@ void FNaMobSystemStyle::Initialize()
 	}
 }
 
-void FNaMobSystemStyle::Shutdown()
+void FTestStyle::Shutdown()
 {
 	FSlateStyleRegistry::UnRegisterSlateStyle(*StyleInstance);
 	ensure(StyleInstance.IsUnique());
 	StyleInstance.Reset();
 }
 
-FName FNaMobSystemStyle::GetStyleSetName()
+FName FTestStyle::GetStyleSetName()
 {
-	static FName StyleSetName(TEXT("NaMobSystemStyle"));
+	static FName StyleSetName(TEXT("TestStyle"));
 	return StyleSetName;
 }
 
@@ -40,12 +40,12 @@ const FVector2D Icon16x16(16.0f, 16.0f);
 const FVector2D Icon20x20(20.0f, 20.0f);
 const FVector2D Icon40x40(40.0f, 40.0f);
 
-TSharedRef< FSlateStyleSet > FNaMobSystemStyle::Create()
+TSharedRef< FSlateStyleSet > FTestStyle::Create()
 {
-	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("NaMobSystemStyle"));
-	Style->SetContentRoot(IPluginManager::Get().FindPlugin("NaMobSystem")->GetBaseDir() / TEXT("Resources"));
+	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("TestStyle"));
+	Style->SetContentRoot(IPluginManager::Get().FindPlugin("Test")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("NaMobSystem.OpenPluginWindow", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
+	Style->Set("Test.OpenPluginWindow", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
 
 	return Style;
 }
@@ -56,7 +56,7 @@ TSharedRef< FSlateStyleSet > FNaMobSystemStyle::Create()
 #undef TTF_FONT
 #undef OTF_FONT
 
-void FNaMobSystemStyle::ReloadTextures()
+void FTestStyle::ReloadTextures()
 {
 	if (FSlateApplication::IsInitialized())
 	{
@@ -64,8 +64,7 @@ void FNaMobSystemStyle::ReloadTextures()
 	}
 }
 
-const ISlateStyle& FNaMobSystemStyle::Get()
+const ISlateStyle& FTestStyle::Get()
 {
 	return *StyleInstance;
 }
-*/

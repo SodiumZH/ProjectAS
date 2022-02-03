@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
+/*
 #include "NaMobSystemCommands.h"
 
 #define LOCTEXT_NAMESPACE "FNaMobSystemModule"
@@ -10,3 +10,4 @@ void FNaMobSystemCommands::RegisterCommands()
 }
 
 #undef LOCTEXT_NAMESPACE
+*/

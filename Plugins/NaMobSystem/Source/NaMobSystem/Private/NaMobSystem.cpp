@@ -16,7 +16,7 @@ static const FName NaMobSystemTabName("NaMobSystem");
 void FNaMobSystemModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
+	/*
 	FNaMobSystemStyle::Initialize();
 	FNaMobSystemStyle::ReloadTextures();
 
@@ -34,13 +34,14 @@ void FNaMobSystemModule::StartupModule()
 	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(NaMobSystemTabName, FOnSpawnTab::CreateRaw(this, &FNaMobSystemModule::OnSpawnPluginTab))
 		.SetDisplayName(LOCTEXT("FNaMobSystemTabTitle", "NaMobSystem"))
 		.SetMenuType(ETabSpawnerMenuType::Hidden);
+		*/
 }
 
 void FNaMobSystemModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
-
+	/*
 	UToolMenus::UnRegisterStartupCallback(this);
 
 	UToolMenus::UnregisterOwner(this);
@@ -50,8 +51,9 @@ void FNaMobSystemModule::ShutdownModule()
 	FNaMobSystemCommands::Unregister();
 
 	FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(NaMobSystemTabName);
+	*/
 }
-
+/*
 TSharedRef<SDockTab> FNaMobSystemModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
 {
 	FText WidgetText = FText::Format(
@@ -103,7 +105,7 @@ void FNaMobSystemModule::RegisterMenus()
 		}
 	}
 }
-
+*/
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FNaMobSystemModule, NaMobSystem)

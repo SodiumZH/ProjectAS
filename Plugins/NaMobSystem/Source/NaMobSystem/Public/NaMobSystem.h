@@ -30,6 +30,7 @@ public:
 	virtual void ShutdownModule() override;
 	
 	/** This function will be bound to Command (by default it will bring up plugin window) */
+	/*
 	void PluginButtonClicked();
 	
 private:
@@ -40,4 +41,5 @@ private:
 
 private:
 	TSharedPtr<class FUICommandList> PluginCommands;
+	*/
 };
