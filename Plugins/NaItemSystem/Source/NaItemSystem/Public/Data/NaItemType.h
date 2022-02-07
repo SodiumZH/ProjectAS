@@ -74,7 +74,6 @@ protected:
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TSharedPtr<FNaItemTypeData> TypeData;
 
-<<<<<<< Updated upstream:Plugins/NaItemSystem/Source/NaItemSystem/Public/Data/NaItemType.h
 public:
 
 	// Make from ID and data ptr
@@ -82,33 +81,6 @@ public:
 
 	// Make an invalid default type
 	FNaItemType() :FNaItemType(0, nullptr) {};
-=======
-	// Directory for searching item type data table
-	static FString ItemTypeDataTablePath;
-
-public:
-
-	// Data table reference for searching type data
-	static UDataTable * ItemTypeDataTable;
-
-	// Static item type representing invalid data.
-	static FNaItemType DefaultType;
-
-	// Try refinding type data table if missing. Return if found.
-	static bool RefindDataTable();
-
-	// Get type data table path
-	FORCEINLINE static FString GetDataTablePath() const { return ItemTypeDataTablePath; };
-
-	// Reset type data table path
-	FORCEINLINE static void ResetDataTablePath(FString NewPath = TEXT("/NaItemSystem/ItemType/ItemTypeDataTable.ItemTypeDataTable")) { ItemTypeDataTablePath = NewPath; };
-
-	// Get from ID
-	FNaItemType(int ItemID);
-
-	// Get default from ID == 0
-	FNaItemType() :FNaItemType(0) {};
->>>>>>> Stashed changes:Plugins/NaItemSystem/Source/NaItemSystem/Public/Database/NaItemType.h
 
 	// Get ID as int
 	FORCEINLINE int GetID() const { return ID; };
