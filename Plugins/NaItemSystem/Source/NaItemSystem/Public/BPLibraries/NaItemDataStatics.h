@@ -51,4 +51,13 @@ public:
 	UFUNCTION(BlueprintPure, meta = (Keywords = "make na item descriptor"), Category = "NaItemSystem|ItemType")
 	static FNaItemDescriptor MakeDefaultDescriptor(int ID);
 
+
+	/* Item type data table operations */
+
+	/* Add a record to item type data table */
+	UFUNCTION(BlueprintPure, meta = (Keywords = "add type"), Category = "NaItemSystem|ItemType")
+	static bool AddItemType(int ID, const FNaItemTypeDatabaseEntry & Data, bool bAllowOverwrite = true);
+	
+	
+
 };

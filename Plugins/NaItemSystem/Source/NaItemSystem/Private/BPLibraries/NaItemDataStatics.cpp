@@ -51,3 +51,16 @@ FNaItemType UNaItemDataStatics::GetItemTypeFromID(UObject* WorldContext, int ID)
 FNaItemDescriptor UNaItemDataStatics::MakeDefaultDescriptor(int ID) {
 	return FNaItemDescriptor(ID);
 }
+
+bool UNaItemDataStatics::AddItemType(int ID, const FNaItemTypeDatabaseEntry & Data, bool bAllowOverwrite = true) {
+	FName RowName = FNaItemTypeDatabaseEntry::IntToRowName(ID);
+	if (bAllowOverwrite && FNaItemType::ItemTypeDataTable->FindRow(RowName, TEXT(""), false) == nullptr) {
+		FNaItemType::ItemTypeDataTable->AddRow(RowName, Data);
+		return true;
+	}
+	else {
+		UE_LOG(LogNaItem, Display, TEXT("Add item type failed: row ID is existing."));
+		return false;
+	}
+
+}
