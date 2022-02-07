@@ -4,6 +4,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogNaUtil);
+DEFINE_LOG_CATEGORY(LogNaWidgets);
 DEFINE_LOG_CATEGORY(LogNaItem);
 DEFINE_LOG_CATEGORY(LogNaMob);
 DEFINE_LOG_CATEGORY(LogNaPackTemp);

@@ -10,6 +10,9 @@ class SOverlay;
 class SLayeredImage;
 class STextBlock;
 
+/**
+* Params to initialize and construct FNaBoxSlot
+*/
 USTRUCT(BlueprintType)
 struct FNaBoxSlotParams {
 
@@ -45,11 +48,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams")
 	FText SubscriptText = FText::FromString(TEXT(""));
 
-	/* Default */
+	/* Defaults */
 	FNaBoxSlotParams() {};
+	static FNaBoxSlotParams DefaultParams;
 
-	
 };
+
+UENUM(BlueprintType)
+enum class ENaBoxSlotImageLayer :uint8 {
+	BSIL_Base	UMETA(DisplayName = "Base"),
+	BSIL_Frame	UMETA(DisplayName = "Frame"),
+	BSIL_Pointed	UMETA(DisplayName = "ImagePointed"),
+	BSIL_Selected	UMETA(DisplayName = "ImageSelected")
+};
+
 
 /**
  * SNaBoxSlot is a box for displaying items, shops, skills, etc.
@@ -62,10 +74,11 @@ public:
 	
 	SLATE_BEGIN_ARGS(SNaBoxSlot)
 	{
-		_Params = FNaBoxSlotParams();
+		_Params = nullptr;
 	}
 
-	SLATE_ATTRIBUTE(FNaBoxSlotParams, Params)
+	SLATE_ATTRIBUTE(const FNaBoxSlotParams*, Params) /* Only for initialization. After initialization this pointer will be no longer valid. */
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -76,11 +89,13 @@ public:
 	/* Params */
 	FNaBoxSlotParams Params;
 
+	/* Ptrs of brushes for each laer */
 	TSharedPtr<FSlateBrush> BrushBase;
 	TSharedPtr<FSlateBrush> BrushFrame;
 	TSharedPtr<FSlateBrush> BrushPointed;
 	TSharedPtr<FSlateBrush> BrushSelected;
 
+	/* Ptrs of subwidgets */
 	TSharedPtr<SOverlay> Overlay;
 	TSharedPtr<SLayeredImage> Images;
 	TSharedPtr<STextBlock> Subscript;
@@ -89,13 +104,34 @@ public:
 protected:
 
 	bool bIsSelected = false;
+
 	bool bIsPointed = false;
+
 public:
 
 	FORCEINLINE bool IsSelected() { return bIsSelected; };
 	FORCEINLINE bool IsPointed() { return bIsPointed; };
 
+	/* Set selected state */
 	void SetSelected(bool NewSelectedState);
+
+	/* Set pointed state */
 	void SetPointed(bool NewPointedState);
+
+	/* Set image of a specified layer */
+	void SetImage(ENaBoxSlotImageLayer Layer, UObject* NewImage);
+
+	/* Reset all params */
+	//void Reset(const FNaBoxSlotParams & NewParams);
+
+	/* Set text.
+	* @Param bSetSuperscript If true, it will set superscript. Or it will set subscript.
+	*/
+	//void SetText(bool bSetSuperscript, FText InText);
+
+	/* Set font.
+	* @Param bSetSuperscript If true, it will set superscript. Or it will set subscript.
+	*/
+	//void SetFont(bool bSetSuperscript, struct FSlateFontInfo NewFont);
 
 };

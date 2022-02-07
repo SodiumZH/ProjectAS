@@ -86,7 +86,7 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 			]
 			*/
 			SAssignNew(BoxSlot, SNaBoxSlot)
-			.Params(Params)
+			.Params(&Params)
 		];
 	BoxSlot->SetSelected(true);
 	return ReturnWidget;
