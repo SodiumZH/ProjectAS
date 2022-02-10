@@ -162,9 +162,22 @@ void SNaSlotList::Construct(const FArguments& InArgs)
 				SAssignNew(BoxSlots[i], SNaBoxSlot)
 				.Params(TAttribute<const FNaBoxSlotParams *>(&TempSlotParams))
 			];
-	}
-	
-	
-	
+	}	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+
+void SNaSlotList::SetSlot(int Position, const FNaBoxSlotParams & Params) {
+
+}
+
+void SetSlotBaseImage(int Position, UObject* NewImage) {
+
+}
+
+void SetSlotFrameImage(int Position, UObject* NewImage) {
+
+}
+
+void SetSlotText(int Position, FText NewText, bool bSetSuperscript) {
+
+}

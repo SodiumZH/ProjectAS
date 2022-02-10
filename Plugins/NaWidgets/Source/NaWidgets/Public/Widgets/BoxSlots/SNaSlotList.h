@@ -135,4 +135,22 @@ public:
 
 	TArray<TSharedPtr<SNaBoxSlot>> BoxSlots;
 
+public:
+
+	/* Dynamic actions of slots */
+
+	/* Set all params of a slot.
+	* This will not set non-variable params e.g. pointed and selected image.
+	*/
+	void SetSlot(int Position, const FNaBoxSlotParams & Params);
+
+	void SetSlotBaseImage(int Position, UObject* NewImage);
+
+	void SetSlotFrameImage(int Position, UObject* NewImage);
+
+	/* Set text.
+	* @Param bSetSuperscript True = SetSuperscript. False = SetSubscript.
+	*/
+	void SetSlotText(int Position, FText NewText, bool bSetSuperscript);
+
 };
