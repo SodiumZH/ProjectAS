@@ -7,7 +7,6 @@
 #include "Widgets/Text/STextBlock.h"
 #include "SlateOptMacros.h"
 #include "Styling/SlateBrush.h"
-#include "Fonts/SlateFontInfo.h"
 
 
 FNaBoxSlotParams FNaBoxSlotParams::DefaultParams = FNaBoxSlotParams();
@@ -41,6 +40,9 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 	BrushSelected->SetResourceObject(Params.ImageSelected);
 	BrushSelected->Tiling = TEnumAsByte<ESlateBrushTileType::Type>(ESlateBrushTileType::Type::NoTile);
 
+	SubscriptFont = InArgs._SubscriptFont.Get();
+	SuperscriptFont = InArgs._SuperscriptFont.Get();
+
 	ChildSlot
 	[
 		SAssignNew(Overlay, SOverlay)
@@ -57,6 +59,7 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 			[
 				SAssignNew(Subscript, STextBlock)
 				.Text(TAttribute<FText>(Params.SubscriptText))
+				.Font(TAttribute<FSlateFontInfo>(SubscriptFont))
 			]
 		+ SOverlay::Slot()
 			.HAlign(HAlign_Right)
@@ -64,9 +67,9 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 			[
 				SAssignNew(Superscript, STextBlock)
 				.Text(TAttribute<FText>(Params.SuperscriptText))
+				.Font(TAttribute<FSlateFontInfo>(SuperscriptFont))
 			]
 	];
-	//Images->AddLayer(TAttribute<const FSlateBrush*>(BrushBase.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 1.0))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushFrame.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 1.0))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushPointed.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 0.0 /* Hidden by default */ ))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushSelected.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 0.0 /* Hidden by default */ ))));
@@ -115,8 +118,39 @@ void SNaBoxSlot::SetImage(ENaBoxSlotImageLayer Layer, UObject* NewImage) {
 	}
 }
 
-//void SNaBoxSlot::Reset(const FNaBoxSlotParams & NewParams)
+void SNaBoxSlot::Reset(const FNaBoxSlotParams & NewParams) {
 
-//void SNaBoxSlot::SetText(bool bSetSuperscript, FText InText)
+	BrushBase->SetImageSize(NewParams.Size);
+	BrushBase->SetResourceObject(NewParams.ImageBase);
+	Images->SetImage(TAttribute<const FSlateBrush*>(BrushBase.Get()));
 
-//void SNaBoxSlot::SetFont(bool bSetSuperscript, struct FSlateFontInfo NewFont)
+	BrushFrame->SetImageSize(NewParams.Size);
+	BrushFrame->SetResourceObject(NewParams.ImageFrame);
+	Images->SetLayerBrush(0, TAttribute<const FSlateBrush*>(BrushFrame.Get()));
+
+	BrushPointed->SetImageSize(NewParams.Size);
+	BrushPointed->SetResourceObject(NewParams.ImagePointed);
+	Images->SetLayerBrush(1, TAttribute<const FSlateBrush*>(BrushFrame.Get()));
+
+	BrushSelected->SetImageSize(NewParams.Size);
+	BrushSelected->SetResourceObject(NewParams.ImageSelected);
+	Images->SetLayerBrush(2, TAttribute<const FSlateBrush*>(BrushFrame.Get()));
+
+}
+
+void SNaBoxSlot::SetText(bool bSetSuperscript, const FText & InText) {
+	if (bSetSuperscript)
+		Superscript->SetText(InText);
+	else
+		Subscript->SetText(InText);
+}
+
+void SNaBoxSlot::SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont) {
+	if (bSetSuperscript)
+		Superscript->SetFont(NewFont);
+	else Subscript->SetFont(NewFont);
+}
+
+FSlateFontInfo SNaBoxSlot::GetFont(bool bGetSuperscriptFont) {
+	return bGetSuperscriptFont ? SuperscriptFont : SubscriptFont;
+}

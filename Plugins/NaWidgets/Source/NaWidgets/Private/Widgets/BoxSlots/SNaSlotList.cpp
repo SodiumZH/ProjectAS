@@ -2,8 +2,7 @@
 
 
 #include "Widgets/BoxSlots/SNaSlotList.h"
-#include "SlateOptMacros.h"
-#include "Utility/Utility.h"
+#include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 
@@ -94,11 +93,14 @@ bool FNaSlotListDisplayInfo::AreArraysFixed(bool bDoAssert) {
 }
 
 void FNaSlotListDisplayInfo::GetSlotParams(FNaBoxSlotParams & Out, int Position, bool bNeedInit) {
+	
+#if NAPACK_DO_VERBOSE_CHECK
 	if (Position >= Length || Position < 0) {
 		UE_LOG(LogNaWidgets, Warning, TEXT("FNaSlotListDisplayInfo::GetSlotParams: invalid position."));
 		return;
 	}
 	AreArraysFixed(true);	// Assert arrays fixed
+#endif
 	Out.ImageBase = ImageBaseArray[Position];
 	Out.ImageFrame = ImageFrameArray[Position];
 	Out.SuperscriptText = SuperscriptTextArray[Position];
@@ -141,6 +143,8 @@ void SNaSlotList::Construct(const FArguments& InArgs)
 	RowLength = InArgs._RowLength.Get();
 	DisplayInfo = InArgs._DisplayInfo.Get() ? (*(InArgs._DisplayInfo.Get())) : FNaSlotListDisplayInfo::Defaults;
 	check(RowLength > 0);
+	SuperscriptFont = InArgs._SuperscriptFont.Get();
+	SubscriptFont = InArgs._SubscriptFont.Get();
 
 	/* Init slot array */
 	BoxSlots.Init(TSharedPtr<SNaBoxSlot>(nullptr), DisplayInfo.Length);
@@ -161,23 +165,149 @@ void SNaSlotList::Construct(const FArguments& InArgs)
 			[
 				SAssignNew(BoxSlots[i], SNaBoxSlot)
 				.Params(TAttribute<const FNaBoxSlotParams *>(&TempSlotParams))
+				.SuperscriptFont(SuperscriptFont)
+				.SubscriptFont(SubscriptFont)
 			];
 	}	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
+bool SNaSlotList::IsSlotArrayLengthRight() {
+	if (BoxSlots.Num() != DisplayInfo.Length) {
+		UE_LOG(LogNaWidgets, Error, TEXT("SNaSlotArray error: child box array length doesn't match length in params."));
+		return false;
+	}
+	else return true;
+}
+
 void SNaSlotList::SetSlot(int Position, const FNaBoxSlotParams & Params) {
 
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())
+		return;
+
+	if (Position >= DisplayInfo.Length || Position < 0) {
+		UE_LOG(LogNaWidgets, Warning, TEXT("SNaSlotList::SetSlot: invalid position."));
+		return;
+	}
+
+#endif
+
+	// Set slot
+	BoxSlots[Position]->SetImage(ENaBoxSlotImageLayer::BSIL_Base, Params.ImageBase);
+	BoxSlots[Position]->SetImage(ENaBoxSlotImageLayer::BSIL_Frame, Params.ImageFrame);
+	BoxSlots[Position]->SetText(true, Params.SuperscriptText);
+	BoxSlots[Position]->SetText(false, Params.SubscriptText);
+
+	// Update param struct
+	DisplayInfo.ImageBaseArray[Position] = Params.ImageBase;
+	DisplayInfo.ImageFrameArray[Position] = Params.ImageFrame;
+	DisplayInfo.SuperscriptTextArray[Position] = Params.SuperscriptText;
+	DisplayInfo.SubscriptTextArray[Position] = Params.SubscriptText;
+
 }
 
-void SetSlotBaseImage(int Position, UObject* NewImage) {
+void SNaSlotList::SetSlotBaseImage(int Position, UObject* NewImage) {
+
+#if NAPACK_DO_VERBOSE_CHECK
+	if (!IsSlotArrayLengthRight())return;
+
+	if (Position >= DisplayInfo.Length || Position < 0) {
+		UE_LOG(LogNaWidgets, Warning, TEXT("SNaSlotList::SetSlot: invalid position."));
+		return;
+	}
+
+#endif
+
+	BoxSlots[Position]->SetImage(ENaBoxSlotImageLayer::BSIL_Base, NewImage);
+	DisplayInfo.ImageBaseArray[Position] = NewImage;
+}
+
+void SNaSlotList::SetSlotFrameImage(int Position, UObject* NewImage) {
+
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())return;
+
+	if (Position >= DisplayInfo.Length || Position < 0) {
+		UE_LOG(LogNaWidgets, Warning, TEXT("SNaSlotList::SetSlot: invalid position."));
+		return;
+	}
+
+#endif
+
+	BoxSlots[Position]->SetImage(ENaBoxSlotImageLayer::BSIL_Frame, NewImage);
+	DisplayInfo.ImageFrameArray[Position] = NewImage;
+}
+
+void SNaSlotList::SetSlotText(int Position, const FText & NewText, bool bSetSuperscript) {
+
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())return;
+
+	if (Position >= DisplayInfo.Length || Position < 0) {
+		UE_LOG(LogNaWidgets, Warning, TEXT("SNaSlotList::SetSlot: invalid position."));
+		return;
+	}
+
+#endif
+
+	BoxSlots[Position]->SetText(bSetSuperscript, NewText);
+
+	if (bSetSuperscript)
+		DisplayInfo.SuperscriptTextArray[Position] = NewText;
+	else
+		DisplayInfo.SubscriptTextArray[Position] = NewText;
 
 }
 
-void SetSlotFrameImage(int Position, UObject* NewImage) {
 
+
+
+void SNaSlotList::SetSlotPointedImage(UObject* NewImage) {
+
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())return;
+
+#endif
+
+	for (auto & Slot : BoxSlots) {
+		Slot->SetImage(ENaBoxSlotImageLayer::BSIL_Pointed, NewImage);
+	}
+	DisplayInfo.ImagePointed = NewImage;
 }
 
-void SetSlotText(int Position, FText NewText, bool bSetSuperscript) {
+void SNaSlotList::SetSlotSelectedImage(UObject* NewImage) {
+
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())return;
+
+#endif
+
+	for (auto & Slot : BoxSlots) {
+		Slot->SetImage(ENaBoxSlotImageLayer::BSIL_Selected, NewImage);
+	}
+	DisplayInfo.ImageSelected = NewImage;
+}
+
+void SNaSlotList::SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont) {
+	
+#if NAPACK_DO_VERBOSE_CHECK
+
+	if (!IsSlotArrayLengthRight())return;
+
+#endif
+
+	for (auto & Slot : BoxSlots) {
+		Slot->SetFont(bSetSuperscript, NewFont);
+	}
+	if (bSetSuperscript)
+		SuperscriptFont = NewFont;
+	else
+		SubscriptFont = NewFont;
 
 }

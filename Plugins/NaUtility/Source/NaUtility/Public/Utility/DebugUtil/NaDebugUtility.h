@@ -13,6 +13,21 @@ NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaMob, Log, All);
 NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaPackTemp, Log, All);
 
 
+/* Input checking verbosity */
+
+/* If true, functions will do many extra checks of inputs and object states to ensure robustness.
+* Setting this value false may improve performance, but may increase hazards if unexpected cases occur.
+* For example, checking codes under this macro may catch an input error and only print to log, or it will cause a crash.
+* When disabled, some necessary checks may appear as asserts which crashes the program without enough information.
+*/
+#define NAPACK_DO_VERBOSE_CHECK true
+
+/* If true, functions will do common checks to prevent serious problems like overflows and undefined actions.
+* Setting this value false may improve performance but is very unsafe, so not recommended.
+*/
+#define NAPACK_DO_COMMON_CHECK true
+
+
 // This is a function library for C++ debugging
 
 #define UE_LOG_UOBJECT(SourceUObject, Category, Verbosity, Info) UE_LOG(Category, Verbosity, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(SourceUObject), TEXT(Info))

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
+#include "Fonts/SlateFontInfo.h"
 #include "SNaSlotList.generated.h"
 
 /* Max length of slot list. If length is longer than this, slot list will not work correctly and an error message will be printed. */
@@ -17,6 +18,7 @@
 struct FNaBoxSlotParams;
 class SWrapBox;
 class SNaBoxSlot;
+
 
 USTRUCT(BlueprintType)
 struct NAWIDGETS_API FNaSlotListDisplayInfo {
@@ -59,6 +61,9 @@ public:
 
 	/* Defaults */
 	FNaSlotListDisplayInfo() { Length = 1; FixArrays(); };
+
+	FNaSlotListDisplayInfo(int InLength) { check(InLength > 0); Length = InLength; FixArrays(); };
+
 	static FNaSlotListDisplayInfo Defaults;
 
 	/* Fit array length to suit the list length
@@ -103,10 +108,14 @@ public:
 	{
 		_RowLength = 8;
 		_DisplayInfo = &FNaSlotListDisplayInfo::Defaults;
+		_SubscriptFont = FSlateFontInfo();
+		_SuperscriptFont = FSlateFontInfo();
 	}
 	
 	SLATE_ATTRIBUTE(int, RowLength) /* Count of boxes for each row */
 	SLATE_ATTRIBUTE(const FNaSlotListDisplayInfo* , DisplayInfo)	/* Display data, including length, images and texts */
+	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)	/* Font for subscript */
+	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)	/* Font for subscript */
 
 	SLATE_END_ARGS()
 
@@ -119,6 +128,10 @@ public:
 
 	FNaSlotListDisplayInfo DisplayInfo;
 
+	FSlateFontInfo SuperscriptFont;
+
+	FSlateFontInfo SubscriptFont;
+
 protected:
 
 	/* Temp params for initializing or reset slots. 
@@ -127,7 +140,7 @@ protected:
 	*/
 	FNaBoxSlotParams TempSlotParams;
 	
-public:
+protected:
 
 	/* Object ptrs */
 
@@ -135,9 +148,20 @@ public:
 
 	TArray<TSharedPtr<SNaBoxSlot>> BoxSlots;
 
+protected:
+
+	/*  */
+
+	/* Check if length of the slot ptr array matches the length indicated in params. 
+	* If failed, an error information will be printed.
+	*/
+	bool IsSlotArrayLengthRight();
+
 public:
 
-	/* Dynamic actions of slots */
+	/** Dynamic actions of slots **/
+
+	/*-- Set params for single slot --*/
 
 	/* Set all params of a slot.
 	* This will not set non-variable params e.g. pointed and selected image.
@@ -151,6 +175,17 @@ public:
 	/* Set text.
 	* @Param bSetSuperscript True = SetSuperscript. False = SetSubscript.
 	*/
-	void SetSlotText(int Position, FText NewText, bool bSetSuperscript);
+	void SetSlotText(int Position, const FText & NewText, bool bSetSuperscript);
+
+
+	/*-- Set params for all slots --*/
+
+	void SetSlotPointedImage(UObject* NewImage);
+
+	void SetSlotSelectedImage(UObject* NewImage);
+
+	void SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont);
+
+
 
 };

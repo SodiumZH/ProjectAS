@@ -9,6 +9,7 @@
 #include "Widgets/Text/STextBlock.h"
 #include "ToolMenus.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
+#include "Widgets/BoxSlots/SNaSlotList.h"
 
 static const FName TestTabName("Test");
 
@@ -62,7 +63,7 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 		FText::FromString(TEXT("Test.cpp"))
 		);
 	*/
-
+	/*
 	FNaBoxSlotParams Params = FNaBoxSlotParams();
 	Params.SubscriptText = FText::FromString(TEXT("123"));
 	Params.SuperscriptText = FText::FromString(TEXT("abc"));
@@ -70,8 +71,23 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 	Params.ImageFrame = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/BoxSlotFrame.BoxSlotFrame'"));
 	Params.ImagePointed = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/itembox_pointed.itembox_pointed'"));
 	Params.ImageSelected = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/itemslot_selected.itemslot_selected'"));
+	*/
 
-	TSharedPtr<SNaBoxSlot> BoxSlot;
+	FNaSlotListDisplayInfo ListInfo = FNaSlotListDisplayInfo();
+	ListInfo.SubscriptTextArray[0] = FText::FromString(TEXT("123"));
+	ListInfo.SuperscriptTextArray[0] = FText::FromString(TEXT("abc"));
+	ListInfo.ImageBaseArray[0] = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/ItemSlot_Disabled.ItemSlot_Disabled'"));
+	ListInfo.ImageFrameArray[0] = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/BoxSlotFrame.BoxSlotFrame'"));
+	ListInfo.ImagePointed = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/itembox_pointed.itembox_pointed'"));
+	ListInfo.ImageSelected = LoadObject<UTexture2D>(nullptr, TEXT("Texture2D'/NaItemSystem/UI/Resource/Image/itemslot_selected.itemslot_selected'"));
+	ListInfo.Length = 32;
+	ListInfo.BoxSize = FVector2D(64, 64);
+	ListInfo.FixArrays();
+
+
+	TSharedPtr<SNaSlotList> SlotList;
+
+
 	TSharedRef<SDockTab> ReturnWidget = SNew(SDockTab)
 		.TabRole(ETabRole::NomadTab)
 		[
@@ -85,10 +101,10 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 				.Text(WidgetText)
 			]
 			*/
-			SAssignNew(BoxSlot, SNaBoxSlot)
-			.Params(&Params)
+			SAssignNew(SlotList, SNaSlotList)
+			.DisplayInfo(&ListInfo)
 		];
-	BoxSlot->SetSelected(true);
+	//BoxSlot->SetSelected(true);
 	return ReturnWidget;
 }
 

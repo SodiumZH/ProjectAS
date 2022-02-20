@@ -9,7 +9,6 @@ DEFINE_LOG_CATEGORY(LogNaItem);
 DEFINE_LOG_CATEGORY(LogNaMob);
 DEFINE_LOG_CATEGORY(LogNaPackTemp);
 
-
 void UNaDebugUtility::DebugInfo(UObject* Source, FString Info, float Time, bool bShowSource, bool bPrintToScreen, bool bPrintToLog, FLinearColor Color) {
 
 	if (bShowSource)

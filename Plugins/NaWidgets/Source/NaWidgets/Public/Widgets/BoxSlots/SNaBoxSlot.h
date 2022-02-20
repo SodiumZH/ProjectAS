@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Fonts/SlateFontInfo.h"
 #include "Widgets/SCompoundWidget.h"
 #include "SNaBoxSlot.generated.h"
 
 class SOverlay;
 class SLayeredImage;
 class STextBlock;
+struct FSlateFontInfo;
 
 /**
 * Params to initialize and construct FNaBoxSlot
@@ -75,19 +77,26 @@ public:
 	SLATE_BEGIN_ARGS(SNaBoxSlot)
 	{
 		_Params = nullptr;
+		_SubscriptFont = FSlateFontInfo();
+		_SuperscriptFont = FSlateFontInfo();
 	}
 
 	SLATE_ATTRIBUTE(const FNaBoxSlotParams*, Params) /* Only for initialization. After initialization this pointer will be no longer valid. */
-
+	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)
+	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)
+		
+		
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
-public:
+protected:
 
 	/* Params */
 	FNaBoxSlotParams Params;
+	FSlateFontInfo SubscriptFont;
+	FSlateFontInfo SuperscriptFont;
 
 	/* Ptrs of brushes for each laer */
 	TSharedPtr<FSlateBrush> BrushBase;
@@ -122,16 +131,17 @@ public:
 	void SetImage(ENaBoxSlotImageLayer Layer, UObject* NewImage);
 
 	/* Reset all params */
-	//void Reset(const FNaBoxSlotParams & NewParams);
+	void Reset(const FNaBoxSlotParams & NewParams);
 
 	/* Set text.
 	* @Param bSetSuperscript If true, it will set superscript. Or it will set subscript.
 	*/
-	//void SetText(bool bSetSuperscript, FText InText);
+	void SetText(bool bSetSuperscript, const FText & InText);
 
 	/* Set font.
 	* @Param bSetSuperscript If true, it will set superscript. Or it will set subscript.
 	*/
-	//void SetFont(bool bSetSuperscript, struct FSlateFontInfo NewFont);
-
+	void SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont);
+	
+	FSlateFontInfo GetFont(bool bGetSuperscriptFont);
 };
