@@ -16,6 +16,8 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaBoxSlot::Construct(const FArguments& InArgs)
 {
 
+	bShowPointedWhenSelected = InArgs._bShowPointedWhenSelected.Get();
+
 	// If _Params attribute is not set, initialize with default params
 	// Initial pointer's value will be copied, then the pointer can be safely changed
 	Params = (InArgs._Params.Get()) ? (*(InArgs._Params.Get())) : (FNaBoxSlotParams());
@@ -77,14 +79,46 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
+void SNaBoxSlot::SetShowPointedImage(bool Val) {
+	Images->SetLayerColor(2, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, Val ? 1.0 : 0.0))));
+}
+
+void SNaBoxSlot::SetShowSelectedImage(bool Val) {
+	Images->SetLayerColor(3, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, Val ? 1.0 : 0.0))));
+}
+
 void SNaBoxSlot::SetSelected(bool NewSelectedState) {
+
 	bIsSelected = NewSelectedState;
-	Images->SetLayerColor(3, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewSelectedState ? 1.0 : 0.0))));
+	SetShowSelectedImage(NewSelectedState);
+
+	if (!bShowPointedWhenSelected) {
+		if (NewSelectedState && bIsPointed)
+			SetShowPointedImage(false);
+		else if (!NewSelectedState && bIsPointed)
+			SetShowPointedImage(true);
+	}
+
+	if (NewSelectedState) 
+		OnSelected.ExecuteIfBound();
+	
+	else
+		OnUnselected.ExecuteIfBound();
+
 }
 
 void SNaBoxSlot::SetPointed(bool NewPointedState) {
 	bIsPointed = NewPointedState;
-	Images->SetLayerColor(2, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewPointedState ? 1.0 : 0.0))));
+	if (bIsSelected) {
+		SetShowPointedImage(false);
+	}
+	else
+		SetShowPointedImage(NewPointedState);
+
+	if (NewPointedState)
+		OnPointed.ExecuteIfBound();
+	else
+		OnUnpointed.ExecuteIfBound();
 }
 
 void SNaBoxSlot::SetImage(ENaBoxSlotImageLayer Layer, UObject* NewImage) {

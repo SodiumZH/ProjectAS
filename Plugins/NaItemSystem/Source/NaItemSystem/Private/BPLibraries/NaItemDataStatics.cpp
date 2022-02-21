@@ -48,6 +48,24 @@ FNaItemType UNaItemDataStatics::GetItemTypeFromID(UObject* WorldContext, int ID)
 	return FNaItemType(ID, TSharedPtr<FNaItemTypeData>(GMComp->ItemTypeDataTable->FindRow<FNaItemTypeData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemTypeDataTable"))));
 }
 
+FNaItemDisplayData UNaItemDataStatics::GetItemDisplayDataFromID(UObject* WorldContext, int ID){
+	UNaGameModeItemSystemComponent * GMComp = UNaItemStatics::GetGameModeItemSystemComponent(WorldContext);
+	if (!IsValid(GMComp)) {
+		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: GameModeItemSystemComponent isn't correctly loaded to game mode."));
+		return FNaItemDisplayData();
+	}
+	if (!IsValid(GMComp->ItemTypeDataTable)) {
+		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: item display data table is invalid. Set in GameModeItemSystemComponent."));
+		return FNaItemDisplayData();
+	}
+	if (GMComp->ItemTypeDataTable->RowStruct != FNaItemDisplayData::StaticStruct()) {
+		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: item display data table row struct must be FNaItemDisplayData."));
+		return FNaItemDisplayData();
+	}
+	FNaItemDisplayData* RetValPtr = GMComp->ItemDisplayDataTable->FindRow<FNaItemDisplayData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemDisplayDataTable"));
+	return RetValPtr ? (*RetValPtr) : FNaItemDisplayData();
+}
+
 FNaItemDescriptor UNaItemDataStatics::MakeDefaultDescriptor(int ID) {
 	return FNaItemDescriptor(ID);
 }

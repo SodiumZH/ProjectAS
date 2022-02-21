@@ -134,7 +134,7 @@ public:
 
 protected:
 
-	/* Temp params for initializing or reset slots. 
+	/* Temp params for initializing or resetting slots. 
 	* During initing or resetting multiple slots this value will change dynamically
 	* So don't depend on it under any other situations.
 	*/
@@ -185,6 +185,7 @@ public:
 	void SetSlotSelectedImage(UObject* NewImage);
 
 	void SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont);
+
 
 
 

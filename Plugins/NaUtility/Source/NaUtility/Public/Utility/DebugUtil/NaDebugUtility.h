@@ -15,15 +15,16 @@ NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaPackTemp, Log, All);
 
 /* Input checking verbosity */
 
-/* If true, functions will do many extra checks of inputs and object states to ensure robustness.
+/* If true, functions will do many extra checks for inputs and object states to ensure robustness.
 * Setting this value false may improve performance, but may increase hazards if unexpected cases occur.
 * For example, checking codes under this macro may catch an input error and only print to log, or it will cause a crash.
-* When disabled, some necessary checks may appear as asserts which crashes the program without enough information.
+* When disabled, some errors may appear as asserts which crashes the program without enough information, instead of a handled actions with a single error information.
 */
 #define NAPACK_DO_VERBOSE_CHECK true
 
 /* If true, functions will do common checks to prevent serious problems like overflows and undefined actions.
 * Setting this value false may improve performance but is very unsafe, so not recommended.
+* It's recommended to keep this value true in the published version.
 */
 #define NAPACK_DO_COMMON_CHECK true
 

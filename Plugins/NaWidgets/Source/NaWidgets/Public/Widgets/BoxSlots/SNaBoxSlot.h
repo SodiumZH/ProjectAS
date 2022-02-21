@@ -80,12 +80,13 @@ public:
 		_Params = nullptr;
 		_SubscriptFont = FTextBlockStyle::GetDefault().Font;
 		_SuperscriptFont = FTextBlockStyle::GetDefault().Font;
+		_bShowPointedWhenSelected = true;
 	}
 
 	SLATE_ATTRIBUTE(const FNaBoxSlotParams*, Params) /* Only for initialization. After initialization this pointer will be no longer valid. */
 	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)
 	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)
-		
+	SLATE_ATTRIBUTE(bool, bShowPointedWhenSelected)	/* If true, when the slot is both selected and pointed, the pointed image will still be shown. */
 		
 	SLATE_END_ARGS()
 
@@ -116,6 +117,12 @@ protected:
 	bool bIsSelected = false;
 
 	bool bIsPointed = false;
+
+	bool bShowPointedWhenSelected;
+
+	void SetShowPointedImage(bool Val);
+
+	void SetShowSelectedImage(bool Val);
 
 public:
 
@@ -153,6 +160,17 @@ public:
 	virtual void OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
 
 	virtual void OnMouseLeave(const FPointerEvent& MouseEvent) override;
+
+	DECLARE_DELEGATE(FNaBoxSlotSelectionEvent);
+
+	FNaBoxSlotSelectionEvent OnPointed;
+
+	FNaBoxSlotSelectionEvent OnUnpointed;
+
+	FNaBoxSlotSelectionEvent OnSelected;
+
+	FNaBoxSlotSelectionEvent OnUnselected;
+	
 
 
 };

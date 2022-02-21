@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "../Data/NaItemType.h"
+#include "../Data/NaItemDisplaydata.h"
 #include "../NaItemContainer.h"
 #include "../NaItemEntry.h"
 #include "NaItemDataStatics.generated.h"
@@ -44,6 +45,10 @@ public:
 	/* Get item type from database from ID. */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")
 	static FNaItemType GetItemTypeFromID(UObject* WorldContext, int ID);
+
+	/* Get item display data from ID */
+	UFUNCTION(BlueprintPure, meta = (Keywords = "get display data"), Category = "NaItemSystem|ItemType")
+	static FNaItemDisplayData GetItemDisplayDataFromID(UObject* WorldContext, int ID);
 
 	/*- Item descriptor -*/
 
