@@ -54,6 +54,7 @@ public:
 	FNaBoxSlotParams() {};
 	static FNaBoxSlotParams DefaultParams;
 
+
 };
 
 UENUM(BlueprintType)
@@ -77,8 +78,8 @@ public:
 	SLATE_BEGIN_ARGS(SNaBoxSlot)
 	{
 		_Params = nullptr;
-		_SubscriptFont = FSlateFontInfo();
-		_SuperscriptFont = FSlateFontInfo();
+		_SubscriptFont = FTextBlockStyle::GetDefault().Font;
+		_SuperscriptFont = FTextBlockStyle::GetDefault().Font;
 	}
 
 	SLATE_ATTRIBUTE(const FNaBoxSlotParams*, Params) /* Only for initialization. After initialization this pointer will be no longer valid. */
@@ -144,4 +145,14 @@ public:
 	void SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont);
 	
 	FSlateFontInfo GetFont(bool bGetSuperscriptFont);
+
+public:
+
+	/* Events */
+
+	virtual void OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
+	virtual void OnMouseLeave(const FPointerEvent& MouseEvent) override;
+
+
 };

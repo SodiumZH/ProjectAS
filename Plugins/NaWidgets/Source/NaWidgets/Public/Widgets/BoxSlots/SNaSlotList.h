@@ -108,8 +108,8 @@ public:
 	{
 		_RowLength = 8;
 		_DisplayInfo = &FNaSlotListDisplayInfo::Defaults;
-		_SubscriptFont = FSlateFontInfo();
-		_SuperscriptFont = FSlateFontInfo();
+		_SubscriptFont = FTextBlockStyle::GetDefault().Font;
+		_SuperscriptFont = FTextBlockStyle::GetDefault().Font;
 	}
 	
 	SLATE_ATTRIBUTE(int, RowLength) /* Count of boxes for each row */

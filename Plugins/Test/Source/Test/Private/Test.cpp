@@ -83,6 +83,11 @@ TSharedRef<SDockTab> FTestModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTab
 	ListInfo.Length = 32;
 	ListInfo.BoxSize = FVector2D(64, 64);
 	ListInfo.FixArrays();
+	int i = 0;
+	for (i = 0; i < 32; ++i) {
+		ListInfo.SubscriptTextArray[i] = FText::FromString(FString::FromInt(i));
+		ListInfo.SuperscriptTextArray[i] = FText::FromString(FString::FromInt(i));
+	}
 
 
 	TSharedPtr<SNaSlotList> SlotList;

@@ -79,12 +79,12 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void SNaBoxSlot::SetSelected(bool NewSelectedState) {
 	bIsSelected = NewSelectedState;
-	Images->SetLayerColor(2, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewSelectedState ? 1.0 : 0.0))));
+	Images->SetLayerColor(3, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewSelectedState ? 1.0 : 0.0))));
 }
 
 void SNaBoxSlot::SetPointed(bool NewPointedState) {
 	bIsPointed = NewPointedState;
-	Images->SetLayerColor(1, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewPointedState ? 1.0 : 0.0))));
+	Images->SetLayerColor(2, TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, NewPointedState ? 1.0 : 0.0))));
 }
 
 void SNaBoxSlot::SetImage(ENaBoxSlotImageLayer Layer, UObject* NewImage) {
@@ -153,4 +153,15 @@ void SNaBoxSlot::SetFont(bool bSetSuperscript, const FSlateFontInfo & NewFont) {
 
 FSlateFontInfo SNaBoxSlot::GetFont(bool bGetSuperscriptFont) {
 	return bGetSuperscriptFont ? SuperscriptFont : SubscriptFont;
+}
+
+/* Events override */
+void SNaBoxSlot::OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	SWidget::OnMouseEnter(MyGeometry, MouseEvent);
+	SetPointed(true);
+}
+
+void SNaBoxSlot::OnMouseLeave(const FPointerEvent& MouseEvent) {
+	SWidget::OnMouseLeave(MouseEvent);
+	SetPointed(false);
 }

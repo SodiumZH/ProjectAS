@@ -27,6 +27,7 @@ public class NaItemSystem : ModuleRules
 			{
 				"Core",
                 "NaUtility",
+                "NaWidgets",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
