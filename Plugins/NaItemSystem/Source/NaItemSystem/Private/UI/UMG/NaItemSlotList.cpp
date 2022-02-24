@@ -15,16 +15,19 @@ const FText UNaItemSlotList::GetPaletteCategory() {
 
 TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 	
-	TSharedPtr<FNaItemContainer> Container;
-	if (!Container.IsValid()) {
+	if (!IsValid(ContainerComponent)) {
 		UE_LOG(LogNaItem, Display, TEXT("UNaItemSlotList: invalid container reference."));
 		return SNew(SNaItemSlotList);
 	}
 
 	List = SNew(SNaItemSlotList)
-		.WorldContext(this)
-		.ContainerPtr(Container);
+		.Container(ContainerComponent);
 
 	return List.ToSharedRef();
 	
+}
+
+void UNaItemSlotList::SetContainerComponent(UNaItemContainerComponent* NewComponent) {
+	ContainerComponent = NewComponent;
+	RebuildWidget();
 }

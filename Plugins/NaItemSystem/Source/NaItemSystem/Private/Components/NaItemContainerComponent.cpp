@@ -3,6 +3,7 @@
 #include "Components/NaItemContainerComponent.h"
 #include "NaItemEntry.h"
 #include "NaItemContainer.h"
+#include "UI/Widgets/SNaItemSlotList.h"
 
 // Sets default values for this component's properties
 UNaItemContainerComponent::UNaItemContainerComponent()

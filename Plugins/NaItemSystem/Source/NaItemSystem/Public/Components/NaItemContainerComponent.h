@@ -45,13 +45,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FNaItemContainer Container;
 
-private:
-
-	// A shared ptr to the container, preventing it from being destroyed by
-	// Shared ptrs, mainly from UI widgets
-	const TSharedPtr<FNaItemContainer> ContainerPtr = TSharedPtr<FNaItemContainer>(&Container);
-
 public:
-
 
 };

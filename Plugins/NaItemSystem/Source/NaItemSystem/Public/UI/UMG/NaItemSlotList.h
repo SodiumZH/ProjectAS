@@ -39,4 +39,6 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	UNaItemContainerComponent* ContainerComponent = nullptr;
 
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
+	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
 };

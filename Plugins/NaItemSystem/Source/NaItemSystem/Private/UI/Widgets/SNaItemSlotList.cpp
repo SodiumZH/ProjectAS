@@ -7,16 +7,23 @@
 #include "BPLibraries/NaItemDataStatics.h"
 #include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
+#include "Components/NaItemContainerComponent.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaItemSlotList::Construct(const FArguments& InArgs)
 {
 
+	Container = InArgs._Container.Get();
 
+	// When container is invalid, this widget is invalid
+	if (!IsValid(Container)) {
+		UE_LOG(LogNaItem, Error, TEXT("NaItemSlotList: invalid item container."));
+		bIsInvalid = true;
+	}
 
 	/* Get context and container information */
 
-	GMComponent = UNaItemStatics::GetGameModeItemSystemComponent(InArgs._WorldContext.Get());
+	GMComponent = UNaItemStatics::GetGameModeItemSystemComponent(InArgs._Container.Get());
 
 	// When game mode component is invalid, this widget is invalid
 	if (!IsValid(GMComponent)) {
@@ -24,13 +31,7 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 		bIsInvalid = true;
 	}
 
-	ContainerPtr = InArgs._ContainerPtr.Get();
 
-	// When container is invalid, this widget is invalid
-	if (!ContainerPtr.IsValid()) {
-		UE_LOG(LogNaItem, Error, TEXT("NaItemSlotList: invalid item container."));
-		bIsInvalid = true;
-	}
 
 	// For valid case
 	if (!bIsInvalid) {
@@ -40,8 +41,9 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 		bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
 		Font = InArgs._Font.Get();
 		bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
+		RowLength = InArgs._RowLength.Get();
 
-		ActualLength = (!bFillDisabledToCompleteRectangle || ContainerPtr->GetSize() % RowLength == 0) ? ContainerPtr->GetSize() : (ContainerPtr->GetSize() / RowLength * RowLength) + 1;
+		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() / RowLength * RowLength) + 1;
 
 
 		ChildSlot
@@ -52,11 +54,11 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 
 		int i = 0;
 		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
-		for (i = 0; i < ContainerPtr->GetSize(); ++i) {
+		for (i = 0; i < Container->Container.GetSize(); ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
 					.WorldContext(GMComponent)
-					.EntryPtr(ContainerPtr->Find(i).EntryPtr)
+					.EntryPtr(Container->Container.Find(i).EntryPtr)
 					.Size(BoxSize)
 					.bHideAmountWhenOne(bHideAmountWhenOne)
 					.Font(Font)

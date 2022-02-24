@@ -7,9 +7,10 @@
 #include "NaItemContainer.h"
 #include "Widgets/BoxSlots/SNaSlotList.h"
 #include "UI/Widgets/SNaItemSlot.h"
+#include "../../Components/NaItemContainerComponent.h"
 
 class UNaGameModeItemSystemComponent;
-
+class UNaItemContainerComponent;
 /**
  * 
  */
@@ -18,16 +19,15 @@ class NAITEMSYSTEM_API SNaItemSlotList : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SNaItemSlotList)
 	{
-		_WorldContext = nullptr;
-		_ContainerPtr = nullptr;
+		_Container = nullptr;
 		_BoxSize = FVector2D(64.0, 64.0);
 		_bHideAmountWhenOne = true;
 		_Font = FTextBlockStyle::GetDefault().Font;
 		_bFillDisabledToCompleteRectangle = true;
 		_RowLength = 8;
 	}
-	SLATE_ATTRIBUTE(UObject*, WorldContext)
-	SLATE_ATTRIBUTE(TSharedPtr<FNaItemContainer>, ContainerPtr)
+
+	SLATE_ATTRIBUTE(UNaItemContainerComponent*, Container)
 	SLATE_ATTRIBUTE(FVector2D, BoxSize)
 	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
 	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
@@ -45,7 +45,7 @@ protected:
 	/* Input copies */
 
 	UNaGameModeItemSystemComponent* GMComponent;
-	TSharedPtr<FNaItemContainer> ContainerPtr;
+	UNaItemContainerComponent* Container;
 	FVector2D BoxSize;
 	bool bHideAmountWhenOne;
 	FSlateFontInfo Font;
