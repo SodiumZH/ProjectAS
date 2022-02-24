@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Fonts/SlateFontInfo.h"
+#include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "SNaSlotList.generated.h"
 
 /* Max length of slot list. If length is longer than this, slot list will not work correctly and an error message will be printed. */

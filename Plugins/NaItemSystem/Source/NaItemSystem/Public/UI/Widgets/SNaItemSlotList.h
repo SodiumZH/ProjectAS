@@ -20,7 +20,7 @@ public:
 	{
 		_WorldContext = nullptr;
 		_ContainerPtr = nullptr;
-		_BoxSize = FVector2D;
+		_BoxSize = FVector2D(64.0, 64.0);
 		_bHideAmountWhenOne = true;
 		_Font = FTextBlockStyle::GetDefault().Font;
 		_bFillDisabledToCompleteRectangle = true;
@@ -44,7 +44,7 @@ protected:
 
 	/* Input copies */
 
-	UNaGameModeItemSystemComponent GMComponent;
+	UNaGameModeItemSystemComponent* GMComponent;
 	TSharedPtr<FNaItemContainer> ContainerPtr;
 	FVector2D BoxSize;
 	bool bHideAmountWhenOne;
@@ -52,11 +52,20 @@ protected:
 	bool bFillDisabledToCompleteRectangle;
 	int RowLength;
 
-	/**/
+	// Actual length including disabled slots in the end 
 	int ActualLength;
+
+	// If true, this widget will not contain anything. For cases in which world context or container is invalid.
+	bool bIsInvalid = false;
+
 
 	/* Subwidgets */
 	TSharedPtr<SWrapBox> WrapBox;
 	TArray<TSharedPtr<SNaItemSlot>> Slots;
+
+public:
+
+	bool IsInvalid() { return bIsInvalid; };
+
 
 };
