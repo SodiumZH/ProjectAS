@@ -10,7 +10,6 @@
 class SOverlay;
 class SLayeredImage;
 class STextBlock;
-struct FSlateFontInfo;
 
 /**
 * Params to initialize and construct FNaBoxSlot
@@ -161,16 +160,37 @@ public:
 
 	virtual void OnMouseLeave(const FPointerEvent& MouseEvent) override;
 
+	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
+	virtual FReply OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
+	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
+	virtual FReply OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent) override;
+
+	
 	DECLARE_DELEGATE(FNaBoxSlotSelectionEvent);
 
+	/* Actions on pointed to this slot */
 	FNaBoxSlotSelectionEvent OnPointed;
 
+	/* Actions on stop pointing to this slot */
 	FNaBoxSlotSelectionEvent OnUnpointed;
 
+	/* Actions on selecting this slot. */
 	FNaBoxSlotSelectionEvent OnSelected;
 
+	/* Actions on this slot unselected. */
 	FNaBoxSlotSelectionEvent OnUnselected;
 	
+	DECLARE_DELEGATE_TwoParams(FNaBoxSlotMouseEvent, const FGeometry&, const FPointerEvent&);
 
+	FNaBoxSlotMouseEvent EventMouseButtonDown;
+
+	FNaBoxSlotMouseEvent EventMouseButtonUp;
+
+	FNaBoxSlotMouseEvent EventMouseMove;
+
+	FNaBoxSlotMouseEvent EventMouseButtonDoubleClick;
 
 };

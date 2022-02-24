@@ -199,3 +199,27 @@ void SNaBoxSlot::OnMouseLeave(const FPointerEvent& MouseEvent) {
 	SWidget::OnMouseLeave(MouseEvent);
 	SetPointed(false);
 }
+
+FReply SNaBoxSlot::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	SWidget::OnMouseButtonDown(MyGeometry, MouseEvent);
+	EventMouseButtonDown.ExecuteIfBound(MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+
+FReply SNaBoxSlot::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	SWidget::OnMouseButtonUp(MyGeometry, MouseEvent);
+	EventMouseButtonUp.ExecuteIfBound(MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+
+FReply SNaBoxSlot::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	SWidget::OnMouseMove(MyGeometry, MouseEvent);
+	EventMouseMove.ExecuteIfBound(MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+
+FReply SNaBoxSlot::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent) {
+	SWidget::OnMouseButtonDoubleClick(InMyGeometry, InMouseEvent);
+	EventMouseButtonDoubleClick.ExecuteIfBound(InMyGeometry, InMouseEvent);
+	return FReply::Handled();
+}
