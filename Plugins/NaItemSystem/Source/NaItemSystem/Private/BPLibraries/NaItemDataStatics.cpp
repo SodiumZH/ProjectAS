@@ -54,11 +54,11 @@ FNaItemDisplayData UNaItemDataStatics::GetItemDisplayDataFromID(UObject* WorldCo
 		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: GameModeItemSystemComponent isn't correctly loaded to game mode."));
 		return FNaItemDisplayData();
 	}
-	if (!IsValid(GMComp->ItemTypeDataTable)) {
+	if (!IsValid(GMComp->ItemDisplayDataTable)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: item display data table is invalid. Set in GameModeItemSystemComponent."));
 		return FNaItemDisplayData();
 	}
-	if (GMComp->ItemTypeDataTable->RowStruct != FNaItemDisplayData::StaticStruct()) {
+	if (GMComp->ItemDisplayDataTable->RowStruct != FNaItemDisplayData::StaticStruct()) {
 		UE_LOG(LogNaItem, Warning, TEXT("Get item display data failed: item display data table row struct must be FNaItemDisplayData."));
 		return FNaItemDisplayData();
 	}

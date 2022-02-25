@@ -69,9 +69,16 @@ protected:
 
 public:
 
+	// Check if it's an empty slot
 	bool IsEmpty() { return !ItemEntryPtr.IsValid(); };
 
 public:
+
+	// Get item entry ptr
+	TSharedPtr<FNaItemEntry> GetEntryPtr() { return ItemEntryPtr; };
+
+	// Get child as box slot
+	TSharedPtr<SNaBoxSlot> GetBoxSlot() { return BoxSlot; };
 
 	// Get a new item entry ptr and reset the slot from it
 	void ResetItemEntry(TSharedPtr<FNaItemEntry> NewEntryPtr);

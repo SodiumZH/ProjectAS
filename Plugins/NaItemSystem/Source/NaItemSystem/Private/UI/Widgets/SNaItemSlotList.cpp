@@ -17,41 +17,137 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 
 	// When container is invalid, this widget is invalid
 	if (!IsValid(Container)) {
-		UE_LOG(LogNaItem, Error, TEXT("NaItemSlotList: invalid item container."));
+		UE_LOG(LogNaItem, Display, TEXT("NaItemSlotList: invalid item container."));
 		bIsInvalid = true;
 	}
 
 	/* Get context and container information */
 
-	GMComponent = UNaItemStatics::GetGameModeItemSystemComponent(InArgs._Container.Get());
+	GMComponent = bIsInvalid ? nullptr : UNaItemStatics::GetGameModeItemSystemComponent(InArgs._Container.Get());
 
 	// When game mode component is invalid, this widget is invalid
 	if (!IsValid(GMComponent)) {
-		UE_LOG(LogNaItem, Error, TEXT("NaItemSlotList: invalid game mode component."));
+		if (!bIsInvalid)
+			UE_LOG(LogNaItem, Warning, TEXT("NaItemSlotList: invalid game mode component."));
 		bIsInvalid = true;
 	}
 
 
 
-	// For valid case
+
+	/* Copy inputs */
+	BoxSize = InArgs._BoxSize.Get();
+	bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
+	Font = InArgs._Font.Get();
+	bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
+	RowLength = InArgs._RowLength.Get();
+
+
+
+	ChildSlot
+		[
+			SAssignNew(WrapBox, SWrapBox)
+			.PreferredSize(BoxSize.X * (RowLength + 0.5))
+		];
+
+
+	// For valid case, add slots
 	if (!bIsInvalid) {
-
-		/* Copy inputs */
-		BoxSize = InArgs._BoxSize.Get();
-		bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
-		Font = InArgs._Font.Get();
-		bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
-		RowLength = InArgs._RowLength.Get();
-
 		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() / RowLength * RowLength) + 1;
-
-
-		ChildSlot
-			[
-				SAssignNew(WrapBox, SWrapBox)
-				.PreferredSize(BoxSize.X * (RowLength + 0.5))
+		int i = 0;
+		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
+		for (i = 0; i < Container->Container.GetSize(); ++i) {
+			WrapBox->AddSlot()[
+				SAssignNew(Slots[i], SNaItemSlot)
+					.WorldContext(GMComponent)
+					.EntryPtr(Container->Container.Find(i).EntryPtr)
+					.Size(BoxSize)
+					.bHideAmountWhenOne(bHideAmountWhenOne)
+					.Font(Font)
+			];
+		}
+		for (1; i < ActualLength; ++i) {
+			WrapBox->AddSlot()[
+				SAssignNew(Slots[i], SNaItemSlot)
+					.WorldContext(GMComponent)
+					.Size(BoxSize)
+					.bHideAmountWhenOne(bHideAmountWhenOne)
+					.Font(Font)
+					.bIsDisabled(true)
 			];
 
+		}
+	}
+
+	return;
+}
+END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+
+bool SNaItemSlotList::IsUpdated(bool bDisplay) {
+	
+	bool Res = true;
+	int i = 0;
+
+	// When invalid, just skip
+	if (!IsValid(Container) || (!IsValid(GMComponent))) {
+		if(!IsInvalid())
+			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, while not invalidated."));
+		return true;
+	}
+	// Case when references are correct but widget is invalid
+	else if (IsInvalid()) {
+		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: invalid widget when container and game mode component are correct."));
+		return false;
+	}
+
+	// Check size
+	if (Slots.Num() != Container->Container.GetSize()) {
+		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: incorrect size."));
+		return false;
+	}
+
+	// Check each slots
+	for (i = 0; i < Slots.Num(); ++i) {
+		if (Slots[i]->GetEntryPtr() != Container->Container.Find(i).EntryPtr) {
+			if(bDisplay)
+				UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: position %d is not updated."), i);
+			Res = false;
+		}
+	}
+	return Res;
+}
+
+void SNaItemSlotList::Reconstruct() {
+	
+	// Clear all old slots
+	Slots.Empty();
+	WrapBox->ClearChildren();
+
+	// When container is invalid, this widget is invalid
+	if (!IsValid(Container)) {
+		UE_LOG(LogNaItem, Display, TEXT("NaItemSlotList: invalid item container."));
+		bIsInvalid = true;
+	}
+
+	// Re-get game mode component from container *
+	GMComponent = IsValid(Container) ? UNaItemStatics::GetGameModeItemSystemComponent(Container) : nullptr;
+
+	// When game mode component is invalid, this widget is invalid
+	if (!IsValid(Container) || !IsValid(GMComponent)) {
+		if (!bIsInvalid)
+			UE_LOG(LogNaItem, Warning, TEXT("NaItemSlotList: invalid game mode component."));
+		bIsInvalid = true;
+	}
+	else bIsInvalid = false;
+
+
+	// Start rebuild
+	if (!bIsInvalid) {
+
+		// Actual length needs to be re-calculated
+		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() / RowLength * RowLength) + 1;
+
+		// Re-add child slots
 		int i = 0;
 		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
 		for (i = 0; i < Container->Container.GetSize(); ++i) {
@@ -77,6 +173,53 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 	}
 
 	return;
-}
-END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
+}
+
+void SNaItemSlotList::ResetSlot(int Position) {
+
+	if (IsInvalid())
+		return;
+
+#if NAPACK_DO_VERBOSE_CHECK
+	if (Container->Container.IsInSize(Position)) {
+		UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList::ResetSlot() failed: position out of range."));
+		return;
+	}
+#else
+#if NAPACK_DO_COMMON_CHECK
+	check(Container->Container.IsInSize(Position));
+#endif
+#endif
+
+	Slots[Position]->ResetItemEntry(Container->Container.Find(Position).EntryPtr);
+
+}
+
+void SNaItemSlotList::ResetAllSlots() {
+	int i = 0;
+	for (i = 0; i < Slots.Num(); ++i) {
+		Slots[i]->ResetItemEntry(Container->Container.Find(i).EntryPtr);
+	}
+}
+
+void SNaItemSlotList::ResetContainer(UNaItemContainerComponent* NewContainer) {
+	Container = NewContainer;
+	Reconstruct();
+}
+
+void SNaItemSlotList::SelectSlot(int Position) {
+	check(Container->Container.IsInSize(Position));
+	if (SelectedPosition >= 0) {
+		Slots[SelectedPosition]->GetBoxSlot()->SetSelected(false);
+	}
+	SelectedPosition = Position;
+	Slots[SelectedPosition]->GetBoxSlot()->SetSelected(true);
+}
+
+void SNaItemSlotList::UnselectAll() {
+	if (SelectedPosition >= 0) {
+		Slots[SelectedPosition]->GetBoxSlot()->SetSelected(false);
+	}
+	SelectedPosition = -1;
+}

@@ -41,4 +41,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
 	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
+
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
+	void Refresh();
 };

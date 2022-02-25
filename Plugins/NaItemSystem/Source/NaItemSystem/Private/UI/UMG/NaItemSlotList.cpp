@@ -17,7 +17,8 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 	
 	if (!IsValid(ContainerComponent)) {
 		UE_LOG(LogNaItem, Display, TEXT("UNaItemSlotList: invalid container reference."));
-		return SNew(SNaItemSlotList);
+		List = SNew(SNaItemSlotList);
+		return List.ToSharedRef();
 	}
 
 	List = SNew(SNaItemSlotList)
@@ -29,5 +30,11 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 
 void UNaItemSlotList::SetContainerComponent(UNaItemContainerComponent* NewComponent) {
 	ContainerComponent = NewComponent;
-	RebuildWidget();
+	if (List.IsValid())
+		List->ResetContainer(NewComponent);
+}
+
+void UNaItemSlotList::Refresh() {
+	if (List.IsValid())
+		List->ResetAllSlots();
 }
