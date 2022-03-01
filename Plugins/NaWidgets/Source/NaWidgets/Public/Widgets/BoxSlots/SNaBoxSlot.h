@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Fonts/SlateFontInfo.h"
-#include "Widgets/SCompoundWidget.h"
+#include "Widgets/SButton.h"
 #include "SNaBoxSlot.generated.h"
 
+class SButton;
 class SOverlay;
 class SLayeredImage;
 class STextBlock;
@@ -86,6 +87,18 @@ public:
 	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)
 	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)
 	SLATE_ATTRIBUTE(bool, bShowPointedWhenSelected)	/* If true, when the slot is both selected and pointed, the pointed image will still be shown. */
+
+	/* Called when pointed i.e. mouse hovered */
+	SLATE_EVENT(FSimpleDelegate, OnPointed)	
+
+	/* Called when unpointed i.e. mouse unhovered */
+	SLATE_EVENT(FSimpleDelegate, OnUnpointed) 
+
+	/* Called when selected. Conditions of selection is custom-defined by calling SetSelected(true). */
+	SLATE_EVENT(FSimpleDelegate, OnSelected)
+
+	/* Called when unselected. Conditions of unselection is custom-defined by calling SetSelected(false). */
+	SLATE_EVENT(FSimpleDelegate, OnUnselected)
 		
 	SLATE_END_ARGS()
 
@@ -106,11 +119,12 @@ protected:
 	TSharedPtr<FSlateBrush> BrushSelected;
 
 	/* Ptrs of subwidgets */
+	TSharedPtr<SButton> Button;
 	TSharedPtr<SOverlay> Overlay;
 	TSharedPtr<SLayeredImage> Images;
 	TSharedPtr<STextBlock> Subscript;
 	TSharedPtr<STextBlock> Superscript;
-
+	
 protected:
 
 	bool bIsSelected = false;
@@ -122,6 +136,13 @@ protected:
 	void SetShowPointedImage(bool Val);
 
 	void SetShowSelectedImage(bool Val);
+
+public:
+
+	/* Get functions of subwidgets */
+
+	TSharedPtr<SButton> GetButton() { return Button; };
+
 
 public:
 
@@ -154,43 +175,25 @@ public:
 
 public:
 
-	/* Events */
 
-	virtual void OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
 
-	virtual void OnMouseLeave(const FPointerEvent& MouseEvent) override;
+public:
 
-	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	/* Actions on pointed to this slot. Executed when calling SetPointed(true) */
+	FSimpleDelegate OnPointed;
+	void ExecOnPointed() { SetPointed(true); };
 
-	virtual FReply OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	/* Actions on stop pointing to this slot. Executed when calling SetPointed(false) */
+	FSimpleDelegate OnUnpointed;
+	void ExecOnUnpointed() { SetPointed(false); };
 
-	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	/* Actions on selecting this slot. Executed when calling SetSelected(true) */
+	FSimpleDelegate OnSelected;
+	void ExecOnSelected() { SetSelected(true); };
 
-	virtual FReply OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent) override;
+	/* Actions on this slot unselected. Executed when calling SetSelected(false) */
+	FSimpleDelegate OnUnselected;
+	void ExecOnUnselected() { SetSelected(false); };
 
-	
-	DECLARE_DELEGATE(FNaBoxSlotSelectionEvent);
-
-	/* Actions on pointed to this slot */
-	FNaBoxSlotSelectionEvent OnPointed;
-
-	/* Actions on stop pointing to this slot */
-	FNaBoxSlotSelectionEvent OnUnpointed;
-
-	/* Actions on selecting this slot. */
-	FNaBoxSlotSelectionEvent OnSelected;
-
-	/* Actions on this slot unselected. */
-	FNaBoxSlotSelectionEvent OnUnselected;
-	
-	DECLARE_DELEGATE_TwoParams(FNaBoxSlotMouseEvent, const FGeometry&, const FPointerEvent&);
-
-	FNaBoxSlotMouseEvent EventMouseButtonDown;
-
-	FNaBoxSlotMouseEvent EventMouseButtonUp;
-
-	FNaBoxSlotMouseEvent EventMouseMove;
-
-	FNaBoxSlotMouseEvent EventMouseButtonDoubleClick;
 
 };

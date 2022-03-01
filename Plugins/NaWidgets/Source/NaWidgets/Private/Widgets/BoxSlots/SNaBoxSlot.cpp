@@ -15,12 +15,20 @@ FNaBoxSlotParams FNaBoxSlotParams::DefaultParams = FNaBoxSlotParams();
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaBoxSlot::Construct(const FArguments& InArgs)
 {
-
+	/* Copy properties & events */
 	bShowPointedWhenSelected = InArgs._bShowPointedWhenSelected.Get();
+	OnPointed = InArgs._OnPointed;
+	OnUnpointed = InArgs._OnUnpointed;
+	OnSelected = InArgs._OnSelected;
+	OnUnselected = InArgs._OnUnselected;
+
 
 	// If _Params attribute is not set, initialize with default params
 	// Initial pointer's value will be copied, then the pointer can be safely changed
 	Params = (InArgs._Params.Get()) ? (*(InArgs._Params.Get())) : (FNaBoxSlotParams());
+
+
+
 
 	BrushBase = TSharedPtr<FSlateBrush>(new FSlateBrush(*FCoreStyle::Get().GetDefaultBrush()));
 	BrushBase->SetImageSize(Params.Size);
@@ -47,30 +55,35 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 
 	ChildSlot
 	[
-		SAssignNew(Overlay, SOverlay)
-		+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				SAssignNew(Images, SLayeredImage)
-				.Image(TAttribute<const FSlateBrush*>(BrushBase.Get()))
-			]
-		+ SOverlay::Slot()
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Bottom)
-			[
-				SAssignNew(Subscript, STextBlock)
-				.Text(TAttribute<FText>(Params.SubscriptText))
-				.Font(TAttribute<FSlateFontInfo>(SubscriptFont))
-			]
-		+ SOverlay::Slot()
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Top)
-			[
-				SAssignNew(Superscript, STextBlock)
-				.Text(TAttribute<FText>(Params.SuperscriptText))
-				.Font(TAttribute<FSlateFontInfo>(SuperscriptFont))
-			]
+		SAssignNew(Button, SButton)
+		.OnHovered(FSimpleDelegate::CreateSP(this, &SNaBoxSlot::ExecOnPointed))
+		.OnUnhovered(FSimpleDelegate::CreateSP(this, &SNaBoxSlot::ExecOnUnpointed))
+		.Content()[
+			SAssignNew(Overlay, SOverlay)
+			+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					SAssignNew(Images, SLayeredImage)
+					.Image(TAttribute<const FSlateBrush*>(BrushBase.Get()))
+				]
+			+ SOverlay::Slot()
+				.HAlign(HAlign_Right)
+				.VAlign(VAlign_Bottom)
+				[
+					SAssignNew(Subscript, STextBlock)
+					.Text(TAttribute<FText>(Params.SubscriptText))
+					.Font(TAttribute<FSlateFontInfo>(SubscriptFont))
+				]
+			+ SOverlay::Slot()
+				.HAlign(HAlign_Right)
+				.VAlign(VAlign_Top)
+				[
+					SAssignNew(Superscript, STextBlock)
+					.Text(TAttribute<FText>(Params.SuperscriptText))
+					.Font(TAttribute<FSlateFontInfo>(SuperscriptFont))
+				]
+		]
 	];
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushFrame.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 1.0))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushPointed.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 0.0 /* Hidden by default */ ))));
@@ -198,28 +211,4 @@ void SNaBoxSlot::OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& 
 void SNaBoxSlot::OnMouseLeave(const FPointerEvent& MouseEvent) {
 	SWidget::OnMouseLeave(MouseEvent);
 	SetPointed(false);
-}
-
-FReply SNaBoxSlot::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	SWidget::OnMouseButtonDown(MyGeometry, MouseEvent);
-	EventMouseButtonDown.ExecuteIfBound(MyGeometry, MouseEvent);
-	return FReply::Handled();
-}
-
-FReply SNaBoxSlot::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	SWidget::OnMouseButtonUp(MyGeometry, MouseEvent);
-	EventMouseButtonUp.ExecuteIfBound(MyGeometry, MouseEvent);
-	return FReply::Handled();
-}
-
-FReply SNaBoxSlot::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	SWidget::OnMouseMove(MyGeometry, MouseEvent);
-	EventMouseMove.ExecuteIfBound(MyGeometry, MouseEvent);
-	return FReply::Handled();
-}
-
-FReply SNaBoxSlot::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent) {
-	SWidget::OnMouseButtonDoubleClick(InMyGeometry, InMouseEvent);
-	EventMouseButtonDoubleClick.ExecuteIfBound(InMyGeometry, InMouseEvent);
-	return FReply::Handled();
 }

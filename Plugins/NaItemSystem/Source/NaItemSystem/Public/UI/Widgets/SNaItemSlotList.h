@@ -65,6 +65,12 @@ protected:
 
 public:
 
+	/* Get functions */
+	UNaItemContainerComponent* GetContainer{ return Container; };
+
+
+public:
+
 	/* Widget state related */
 
 	bool IsInvalid() { return bIsInvalid; };
@@ -123,6 +129,19 @@ protected:
 
 public:
 
-	/* Item operation related */
+	/* Child slot events */
+
+	// Event when a child slot is selected of pointed. Input is slot position in the list.
+	DECLARE_DELEGATE_OneParam(FNaItemSlotListSelectionEvent, int);
+
+	FNaItemSlotListSelectionEvent OnSlotPointed;
+
+	FNaItemSlotListSelectionEvent OnSlotUnpointed;
+
+	FNaItemSlotListSelectionEvent OnSlotSelected;
+
+	FNaItemSlotListSelectionEvent OnSlotUnselected;
+
+
 
 };

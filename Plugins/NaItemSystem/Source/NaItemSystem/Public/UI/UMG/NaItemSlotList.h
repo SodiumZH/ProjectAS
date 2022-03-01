@@ -42,6 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
 	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
 
-	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI")
 	void Refresh();
+
+public:
+
+	
+	
 };

@@ -6,6 +6,8 @@
 #include "BPLibraries/NaItemStatics.h"
 #include "BPLibraries/NaItemDataStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
+#include "UI/Widgets/SNaItemSlotList.h"
+#include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaUtilityMinimal.h"
 
 
@@ -22,12 +24,18 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 	}
 #endif
 
-	/*  */
+	/* Copy properties */
 	ItemEntryPtr = InArgs._EntryPtr.Get() ;
 	bIsDisabled = InArgs._bIsDisabled.Get();
 	bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
 	Font = InArgs._Font.Get();
 	Size = InArgs._Size.Get();
+
+	/* Start NaItemSlotList part */
+	SlotListRef = InArgs.InSlotList.Get();
+	PositionInSlotList = InArgs.PositionInSlotList.Get();
+	BindItemSlotListEvents();	// This function contains validity check, so no extra check
+	/* End NaItemSlotList part */
 
 	ParamsFromEntry(TempParams);
 
@@ -88,4 +96,31 @@ void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 	bIsDisabled = NewDisabledState;
 	ParamsFromEntry(TempParams);
 	BoxSlot->Reset(TempParams);
+}
+
+void SNaItemSlot::BindItemSlotListEvents() {
+
+	if (ItemSlotList.IsValid() && !ItemSlotList.Pin()->IsInvalid() && ItemSlotList.Pin()->GetContainer()->Container.IsInSize(PositionInSlotList)) {
+		BoxSlot->OnPointed.BindSP(this, &SlotPointedToList);
+		BoxSlot->OnUnpointed.BindSP(this, &SlotUnpointedToList);
+		BoxSlot->OnSelected.BindSP(this, &SlotSelectedToList);
+		BoxSlot->OnUnselected.BindSP(this, &SlotUnselectedToList);
+	}
+
+}
+
+void SNaItemSlot::SlotPointedToList() {
+	ItemSlotList.Pin()->OnSlotPointed.ExecuteIfBound(PositionInSlotList);
+}
+
+void SNaItemSlot::SlotUnpointedToList() {
+	ItemSlotList.Pin()->OnSlotUnpointed.ExecuteIfBound(PositionInSlotList);
+};
+
+void SNaItemSlot::SlotSelectedToList() {
+	ItemSlotList.Pin()->OnSlotSelected.ExecuteIfBound(PositionInSlotList);
+}
+
+void SNaItemSlot::SlotUnselectedToList() {
+	ItemSlotList.Pin()->OnSlotUnselected.ExecuteIfBound(PositionInSlotList);
 }

@@ -8,6 +8,8 @@
 #include "NaItemEntry.h"
 
 class UNaGameModeItemSystemComponent;
+class SNaItemSlotList;
+
 
 /**
  * 
@@ -23,19 +25,32 @@ public:
 		_bHideAmountWhenOne = true;
 		_bIsDisabled = false;
 		_Font = FTextBlockStyle::GetDefault().Font;
+
+		_InItemSlotList = nullptr;
+		_PositionInItemSlotList = -1;
 	}
 
 	SLATE_ATTRIBUTE(UObject*, WorldContext)
-	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Null ptr means empty */
-	SLATE_ATTRIBUTE(FVector2D, Size)
-	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
-	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty */
-	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
+		SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Null ptr means empty */
+		SLATE_ATTRIBUTE(FVector2D, Size)
+		SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
+		SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty */
+		SLATE_ATTRIBUTE(FSlateFontInfo, Font)
 
-	SLATE_END_ARGS()
+		/* SNaItemSlotList interaction params start */
 
-	/** Constructs this widget with InArgs */
-	void Construct(const FArguments& InArgs);
+		/* If not in ItemSlotList, keep this default (nullptr). */
+		SLATE_ATTRIBUTE(TWeakPtr<SNaItemSlotList>, InItemSlotList)
+
+		/* If not in ItemSlotList, keep this default (-1). */
+		SLATE_ATTRIBUTE(int, PositionInItemSlotList)
+
+		/* SNaItemSlotList interaction params end */
+
+		SLATE_END_ARGS()
+
+		/** Constructs this widget with InArgs */
+		void Construct(const FArguments& InArgs);
 
 	/* Make slot params from item entry using this item slot's context */
 	void ParamsFromEntry(FNaBoxSlotParams& OutParams);
@@ -58,7 +73,7 @@ protected:
 	bool bHideAmountWhenOne;
 
 	FSlateFontInfo Font;
-	
+
 	FVector2D Size;
 
 	/* Properties for getting item information */
@@ -85,4 +100,30 @@ public:
 
 	// Set if the slot is disabled
 	void SetDisabled(bool NewDisabledState);
+
+protected:
+
+	/**************************************************/
+	/* Functions for interaction with SNaItemSlotList */
+
+	/* If this ptr is null, this slot is not in an SNaItemSlotList
+	*/
+	TWeakPtr<SNaItemSlotList> ItemSlotList = nullptr;
+
+	int PositionInSlotList = -1;
+
+	/* Bind this slot's pointing and selecting state to item slot list */
+	void BindItemSlotListEvents();
+
+	/* Functions for executing SNaItemSlotList::OnSlotPointed/Unpointed/Selected/UnSelected.
+	* Warning: no validity check inside. Check validity before calling.
+	*/
+	void SlotPointedToList();
+	void SlotUnpointedToList();
+	void SlotSelectedToList();
+	void SlotUnselectedToList();
+
+	/* SNaItemSlotList end */
+	/***********************/
+
 };

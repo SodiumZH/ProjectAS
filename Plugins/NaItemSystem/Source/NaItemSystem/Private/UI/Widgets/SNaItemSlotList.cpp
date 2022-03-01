@@ -43,42 +43,16 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 	RowLength = InArgs._RowLength.Get();
 
 
-
+	/* Add panel */
 	ChildSlot
 		[
 			SAssignNew(WrapBox, SWrapBox)
 			.PreferredSize(BoxSize.X * (RowLength + 0.5))
 		];
 
-
-	// For valid case, add slots
-	if (!bIsInvalid) {
-		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() / RowLength * RowLength) + 1;
-		int i = 0;
-		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
-		for (i = 0; i < Container->Container.GetSize(); ++i) {
-			WrapBox->AddSlot()[
-				SAssignNew(Slots[i], SNaItemSlot)
-					.WorldContext(GMComponent)
-					.EntryPtr(Container->Container.Find(i).EntryPtr)
-					.Size(BoxSize)
-					.bHideAmountWhenOne(bHideAmountWhenOne)
-					.Font(Font)
-			];
-		}
-		for (1; i < ActualLength; ++i) {
-			WrapBox->AddSlot()[
-				SAssignNew(Slots[i], SNaItemSlot)
-					.WorldContext(GMComponent)
-					.Size(BoxSize)
-					.bHideAmountWhenOne(bHideAmountWhenOne)
-					.Font(Font)
-					.bIsDisabled(true)
-			];
-
-		}
-	}
-
+	/* Reconstruct can do the rest */
+	Reconstruct();
+		
 	return;
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -158,6 +132,8 @@ void SNaItemSlotList::Reconstruct() {
 					.Size(BoxSize)
 					.bHideAmountWhenOne(bHideAmountWhenOne)
 					.Font(Font)
+					.InSlotList(this)
+					.PositionInSlotList(i)
 			];
 		}
 		for (1; i < ActualLength; ++i) {
@@ -168,13 +144,13 @@ void SNaItemSlotList::Reconstruct() {
 					.bHideAmountWhenOne(bHideAmountWhenOne)
 					.Font(Font)
 					.bIsDisabled(true)
+					.InSlotList(this)
+					.PositionInSlotList(i)
 			];
 		}
 	}
-
-	return;
-
 }
+
 
 void SNaItemSlotList::ResetSlot(int Position) {
 
