@@ -31,11 +31,6 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 	Font = InArgs._Font.Get();
 	Size = InArgs._Size.Get();
 
-	/* Start NaItemSlotList part */
-	SlotListRef = InArgs.InSlotList.Get();
-	PositionInSlotList = InArgs.PositionInSlotList.Get();
-	BindItemSlotListEvents();	// This function contains validity check, so no extra check
-	/* End NaItemSlotList part */
 
 	ParamsFromEntry(TempParams);
 
@@ -100,27 +95,71 @@ void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 
 void SNaItemSlot::BindItemSlotListEvents() {
 
-	if (ItemSlotList.IsValid() && !ItemSlotList.Pin()->IsInvalid() && ItemSlotList.Pin()->GetContainer()->Container.IsInSize(PositionInSlotList)) {
-		BoxSlot->OnPointed.BindSP(this, &SlotPointedToList);
-		BoxSlot->OnUnpointed.BindSP(this, &SlotUnpointedToList);
-		BoxSlot->OnSelected.BindSP(this, &SlotSelectedToList);
-		BoxSlot->OnUnselected.BindSP(this, &SlotUnselectedToList);
+	if (ItemSlotList.IsValid() && !ItemSlotList.Pin()->IsInvalid() && ItemSlotList.Pin()->GetContainer()->Container.IsInSize(PositionInSlotList) && BoxSlot.IsValid()) {
+		BoxSlot->OnPointed.BindRaw(this, &SNaItemSlot::SlotPointedToList);
+		BoxSlot->OnUnpointed.BindRaw(this, &SNaItemSlot::SlotUnpointedToList);
+		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::SlotSelectedToList);
+		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::SlotUnselectedToList);
+		BoxSlot->GetButton()->SetOnClicked(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotClickedToList));
+		BoxSlot->GetButton()->SetOnHovered()
+		//BoxSlot->OnUnhovered.BindRaw(this, &SNaItemSlot::SlotUnhoveredToList);
+		//BoxSlot->
 	}
-
+	else {
+		BoxSlot->OnPointed.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnUnpointed.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::ExecNoList);
+	}
 }
+
+/* Events */
 
 void SNaItemSlot::SlotPointedToList() {
 	ItemSlotList.Pin()->OnSlotPointed.ExecuteIfBound(PositionInSlotList);
 }
-
 void SNaItemSlot::SlotUnpointedToList() {
 	ItemSlotList.Pin()->OnSlotUnpointed.ExecuteIfBound(PositionInSlotList);
-};
-
+}
 void SNaItemSlot::SlotSelectedToList() {
 	ItemSlotList.Pin()->OnSlotSelected.ExecuteIfBound(PositionInSlotList);
 }
-
 void SNaItemSlot::SlotUnselectedToList() {
 	ItemSlotList.Pin()->OnSlotUnselected.ExecuteIfBound(PositionInSlotList);
+}
+void SNaItemSlot::SlotClickedToList() {
+	ItemSlotList.Pin()->OnSlotClicked.ExecuteIfBound(PositionInSlotList);
+}
+void SNaItemSlot::SlotHoveredToList() {
+	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
+	BoxSlot->SetPointed(true);
+	ItemSlotList.Pin()->OnSlotHovered.ExecuteIfBound(PositionInSlotList);
+}
+void SNaItemSlot::SlotUnhoveredToList() {
+	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
+	BoxSlot->SetPointed(false);
+	ItemSlotList.Pin()->OnSlotUnhovered.ExecuteIfBound(PositionInSlotList);
+}
+FReply SNaItemSlot::SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	ItemSlotList.Pin()->OnSlotMouseButtonDown.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+FReply SNaItemSlot::SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	ItemSlotList.Pin()->OnSlotMouseButtonUp.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+FReply SNaItemSlot::SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	ItemSlotList.Pin()->OnSlotMouseMove.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
+
+
+
+/* Events end */
+
+void SNaItemSlot::SetItemSlotList(TSharedPtr<SNaItemSlotList> List, int Position) {
+	ItemSlotList = List;
+	PositionInSlotList = Position;
+	BindItemSlotListEvents();
+
 }

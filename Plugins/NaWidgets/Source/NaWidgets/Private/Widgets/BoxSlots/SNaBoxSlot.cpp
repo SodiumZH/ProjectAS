@@ -56,8 +56,10 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 	ChildSlot
 	[
 		SAssignNew(Button, SButton)
-		.OnHovered(FSimpleDelegate::CreateSP(this, &SNaBoxSlot::ExecOnPointed))
-		.OnUnhovered(FSimpleDelegate::CreateSP(this, &SNaBoxSlot::ExecOnUnpointed))
+		.OnHovered(FSimpleDelegate::CreateRaw(this, &SNaBoxSlot::ExecOnPointed))
+		.OnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaBoxSlot::ExecOnUnpointed))
+		.ContentPadding(FMargin(0))
+		.ButtonColorAndOpacity(FLinearColor(0, 0, 0, 0))
 		.Content()[
 			SAssignNew(Overlay, SOverlay)
 			+ SOverlay::Slot()
@@ -85,6 +87,7 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 				]
 		]
 	];
+	Button->SetPadding(TAttribute<FMargin>(FMargin(0)));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushFrame.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 1.0))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushPointed.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 0.0 /* Hidden by default */ ))));
 	Images->AddLayer(TAttribute<const FSlateBrush*>(BrushSelected.Get()), TAttribute<FSlateColor>(FSlateColor(FLinearColor(1.0, 1.0, 1.0, 0.0 /* Hidden by default */ ))));
@@ -202,13 +205,3 @@ FSlateFontInfo SNaBoxSlot::GetFont(bool bGetSuperscriptFont) {
 	return bGetSuperscriptFont ? SuperscriptFont : SubscriptFont;
 }
 
-/* Events override */
-void SNaBoxSlot::OnMouseEnter(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	SWidget::OnMouseEnter(MyGeometry, MouseEvent);
-	SetPointed(true);
-}
-
-void SNaBoxSlot::OnMouseLeave(const FPointerEvent& MouseEvent) {
-	SWidget::OnMouseLeave(MouseEvent);
-	SetPointed(false);
-}

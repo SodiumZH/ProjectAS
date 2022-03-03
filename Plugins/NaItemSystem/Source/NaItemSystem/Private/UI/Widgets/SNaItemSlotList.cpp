@@ -55,44 +55,8 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 		
 	return;
 }
-END_SLATE_FUNCTION_BUILD_OPTIMIZATION
-
-bool SNaItemSlotList::IsUpdated(bool bDisplay) {
-	
-	bool Res = true;
-	int i = 0;
-
-	// When invalid, just skip
-	if (!IsValid(Container) || (!IsValid(GMComponent))) {
-		if(!IsInvalid())
-			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, while not invalidated."));
-		return true;
-	}
-	// Case when references are correct but widget is invalid
-	else if (IsInvalid()) {
-		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: invalid widget when container and game mode component are correct."));
-		return false;
-	}
-
-	// Check size
-	if (Slots.Num() != Container->Container.GetSize()) {
-		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: incorrect size."));
-		return false;
-	}
-
-	// Check each slots
-	for (i = 0; i < Slots.Num(); ++i) {
-		if (Slots[i]->GetEntryPtr() != Container->Container.Find(i).EntryPtr) {
-			if(bDisplay)
-				UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: position %d is not updated."), i);
-			Res = false;
-		}
-	}
-	return Res;
-}
-
 void SNaItemSlotList::Reconstruct() {
-	
+
 	// Clear all old slots
 	Slots.Empty();
 	WrapBox->ClearChildren();
@@ -132,8 +96,6 @@ void SNaItemSlotList::Reconstruct() {
 					.Size(BoxSize)
 					.bHideAmountWhenOne(bHideAmountWhenOne)
 					.Font(Font)
-					.InSlotList(this)
-					.PositionInSlotList(i)
 			];
 		}
 		for (1; i < ActualLength; ++i) {
@@ -144,12 +106,63 @@ void SNaItemSlotList::Reconstruct() {
 					.bHideAmountWhenOne(bHideAmountWhenOne)
 					.Font(Font)
 					.bIsDisabled(true)
-					.InSlotList(this)
-					.PositionInSlotList(i)
 			];
 		}
 	}
+	if (bIsConstructed) {
+		PostConstructionInit();
+	}
 }
+
+void SNaItemSlotList::PostConstructionInit() {
+
+	// Setup item slot list for each slots 
+	// to allow them to apply changes from list
+	int i;
+	for (i = 0; i < ActualLength; ++i) {
+		Slots[i]->SetItemSlotList(TSharedPtr<SNaItemSlotList>(this), i);
+	}
+
+	OnPostConstructionInit.ExecuteIfBound();
+}
+
+END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+
+bool SNaItemSlotList::IsUpdated(bool bDisplay) {
+	
+	bool Res = true;
+	int i = 0;
+
+	// When invalid, just skip
+	if (!IsValid(Container) || (!IsValid(GMComponent))) {
+		if(!IsInvalid())
+			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, while not invalidated."));
+		return true;
+	}
+	// Case when references are correct but widget is invalid
+	else if (IsInvalid()) {
+		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: invalid widget when container and game mode component are correct."));
+		return false;
+	}
+
+	// Check size
+	if (Slots.Num() != Container->Container.GetSize()) {
+		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: incorrect size."));
+		return false;
+	}
+
+	// Check each slots
+	for (i = 0; i < Slots.Num(); ++i) {
+		if (Slots[i]->GetEntryPtr() != Container->Container.Find(i).EntryPtr) {
+			if(bDisplay)
+				UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: position %d is not updated."), i);
+			Res = false;
+		}
+	}
+	return Res;
+}
+
+
 
 
 void SNaItemSlotList::ResetSlot(int Position) {

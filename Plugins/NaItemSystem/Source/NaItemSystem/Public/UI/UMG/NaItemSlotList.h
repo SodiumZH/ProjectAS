@@ -39,14 +39,16 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	UNaItemContainerComponent* ContainerComponent = nullptr;
 
-	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI")
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
 	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI|ItemSlotList")
 	void Refresh();
 
 public:
 
-	
-	
+	/* Input settings */
+
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
+	void SelectSlot();
 };

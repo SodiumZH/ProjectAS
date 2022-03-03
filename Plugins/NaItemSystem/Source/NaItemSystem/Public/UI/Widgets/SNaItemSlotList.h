@@ -34,13 +34,23 @@ public:
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
 
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
+	/* Initialization after construction. Should be called manually after Construct().
+	* When reconstructing after constructed, this function will be automatically called.
+	*/
+	void PostConstructionInit();
+	FSimpleDelegate OnPostConstructionInit;
+
 protected:
 
+	// A tag indicating if this widget is already constructed.
+	// Mainly for avoiding Reconstruction() call PostConstructionInit() on construction, which cause "this" pointer error.
+	bool bIsConstructed = false;
 
 	/* Input copies */
 
@@ -66,8 +76,9 @@ protected:
 public:
 
 	/* Get functions */
-	UNaItemContainerComponent* GetContainer{ return Container; };
+	UNaItemContainerComponent* GetContainer(){ return Container; };
 
+	TSharedPtr<SWrapBox> GetWrapBox() {	return WrapBox; };
 
 public:
 
@@ -132,16 +143,23 @@ public:
 	/* Child slot events */
 
 	// Event when a child slot is selected of pointed. Input is slot position in the list.
-	DECLARE_DELEGATE_OneParam(FNaItemSlotListSelectionEvent, int);
 
-	FNaItemSlotListSelectionEvent OnSlotPointed;
+	// Event from a specific slot of the list, with index of the source slot
+	DECLARE_DELEGATE_OneParam(FNaListSlotEvent, int);
 
-	FNaItemSlotListSelectionEvent OnSlotUnpointed;
+	// List slot event for pointer events, with geometry and pointer event input
+	DECLARE_DELEGATE_OneParam(FNaListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
 
-	FNaItemSlotListSelectionEvent OnSlotSelected;
+	FNaListSlotEvent OnSlotPointed;
+	FNaListSlotEvent OnSlotUnpointed;
+	FNaListSlotEvent OnSlotSelected;
+	FNaListSlotEvent OnSlotUnselected;
+	FNaListSlotEvent OnSlotClicked;
+	FNaListSlotEvent OnSlotHovered;
+	FNaListSlotEvent OnSlotUnhovered;
 
-	FNaItemSlotListSelectionEvent OnSlotUnselected;
-
-
+	FNaListSlotPointerEvent OnSlotMouseButtonDown;
+	FNaListSlotPointerEvent OnSlotMouseButtonUp;
+	FNaListSlotPointerEvent OnSlotMouseMove;
 
 };

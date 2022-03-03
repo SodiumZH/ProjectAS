@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Fonts/SlateFontInfo.h"
-#include "Widgets/SButton.h"
+#include "Widgets/Input/SButton.h"
 #include "SNaBoxSlot.generated.h"
 
 class SButton;
@@ -87,6 +87,7 @@ public:
 	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)
 	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)
 	SLATE_ATTRIBUTE(bool, bShowPointedWhenSelected)	/* If true, when the slot is both selected and pointed, the pointed image will still be shown. */
+
 
 	/* Called when pointed i.e. mouse hovered */
 	SLATE_EVENT(FSimpleDelegate, OnPointed)	
@@ -173,11 +174,7 @@ public:
 	
 	FSlateFontInfo GetFont(bool bGetSuperscriptFont);
 
-public:
-
-
-
-public:
+protected:
 
 	/* Actions on pointed to this slot. Executed when calling SetPointed(true) */
 	FSimpleDelegate OnPointed;

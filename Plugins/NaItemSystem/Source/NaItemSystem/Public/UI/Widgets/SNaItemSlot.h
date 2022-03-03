@@ -25,32 +25,19 @@ public:
 		_bHideAmountWhenOne = true;
 		_bIsDisabled = false;
 		_Font = FTextBlockStyle::GetDefault().Font;
-
-		_InItemSlotList = nullptr;
-		_PositionInItemSlotList = -1;
 	}
 
 	SLATE_ATTRIBUTE(UObject*, WorldContext)
-		SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Null ptr means empty */
-		SLATE_ATTRIBUTE(FVector2D, Size)
-		SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
-		SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty */
-		SLATE_ATTRIBUTE(FSlateFontInfo, Font)
+	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Null ptr means empty */
+	SLATE_ATTRIBUTE(FVector2D, Size)
+	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
+	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
+	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
 
-		/* SNaItemSlotList interaction params start */
+	SLATE_END_ARGS()
 
-		/* If not in ItemSlotList, keep this default (nullptr). */
-		SLATE_ATTRIBUTE(TWeakPtr<SNaItemSlotList>, InItemSlotList)
-
-		/* If not in ItemSlotList, keep this default (-1). */
-		SLATE_ATTRIBUTE(int, PositionInItemSlotList)
-
-		/* SNaItemSlotList interaction params end */
-
-		SLATE_END_ARGS()
-
-		/** Constructs this widget with InArgs */
-		void Construct(const FArguments& InArgs);
+	/** Constructs this widget with InArgs */
+	void Construct(const FArguments& InArgs);
 
 	/* Make slot params from item entry using this item slot's context */
 	void ParamsFromEntry(FNaBoxSlotParams& OutParams);
@@ -115,13 +102,28 @@ protected:
 	/* Bind this slot's pointing and selecting state to item slot list */
 	void BindItemSlotListEvents();
 
-	/* Functions for executing SNaItemSlotList::OnSlotPointed/Unpointed/Selected/UnSelected.
+	/* Functions for transfer events to ItemSlotList.
 	* Warning: no validity check inside. Check validity before calling.
 	*/
 	void SlotPointedToList();
 	void SlotUnpointedToList();
 	void SlotSelectedToList();
 	void SlotUnselectedToList();
+	void SlotClickedToList();
+	void SlotHoveredToList();
+	void SlotUnhoveredToList();
+
+	void SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	void SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	void SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+
+	// Empty function when no item slot list.
+	void ExecNoList() { return; };
+
+public:
+
+	// Call this function ONLY when constructing slots in item slot list.
+	void SetItemSlotList(TSharedPtr<SNaItemSlotList> List, int Position);
 
 	/* SNaItemSlotList end */
 	/***********************/
