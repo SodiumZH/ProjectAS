@@ -113,12 +113,13 @@ protected:
 	void SlotHoveredToList();
 	void SlotUnhoveredToList();
 
-	void SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	FReply SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	FReply SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	FReply SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
 	// Empty function when no item slot list.
 	void ExecNoList() { return; };
+	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Unhandled(); };
 
 public:
 

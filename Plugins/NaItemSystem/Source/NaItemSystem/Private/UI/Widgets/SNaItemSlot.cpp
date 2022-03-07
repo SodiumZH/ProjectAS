@@ -140,6 +140,7 @@ void SNaItemSlot::SlotUnhoveredToList() {
 	BoxSlot->SetPointed(false);
 	ItemSlotList.Pin()->OnSlotUnhovered.ExecuteIfBound(PositionInSlotList);
 }
+
 FReply SNaItemSlot::SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
 	ItemSlotList.Pin()->OnSlotMouseButtonDown.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
