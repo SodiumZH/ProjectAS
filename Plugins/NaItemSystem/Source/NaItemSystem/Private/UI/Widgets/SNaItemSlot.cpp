@@ -101,15 +101,25 @@ void SNaItemSlot::BindItemSlotListEvents() {
 		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::SlotSelectedToList);
 		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::SlotUnselectedToList);
 		BoxSlot->GetButton()->SetOnClicked(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotClickedToList));
-		BoxSlot->GetButton()->SetOnHovered()
-		//BoxSlot->OnUnhovered.BindRaw(this, &SNaItemSlot::SlotUnhoveredToList);
-		//BoxSlot->
+		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotHoveredToList));
+		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotUnhoveredToList));
+
+		BoxSlot->GetButton()->SetOnMouseButtonDown(SNaItemSlot::SlotMouseButtonDownToList);
+		BoxSlot->GetButton()->SetOnMouseButtonUp(SNaItemSlot::SlotMouseButtonUpToList);
+		BoxSlot->GetButton()->SetOnMouseMove(SNaItemSlot::SlotMouseMoveToList);
 	}
 	else {
 		BoxSlot->OnPointed.BindRaw(this, &SNaItemSlot::ExecNoList);
 		BoxSlot->OnUnpointed.BindRaw(this, &SNaItemSlot::ExecNoList);
 		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::ExecNoList);
 		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->GetButton()->SetOnClicked(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+
+		BoxSlot->GetButton()->SetOnMouseButtonDown(this, &SNaItemSlot::ExecNoListMouse);
+		BoxSlot->GetButton()->SetOnMouseButtonUp(SNaItemSlot::SlotMouseButtonUpToList);
+		BoxSlot->GetButton()->SetOnMouseMove(SNaItemSlot::SlotMouseMoveToList);
 	}
 }
 
