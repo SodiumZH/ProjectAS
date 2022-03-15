@@ -11,6 +11,7 @@
 
 class UNaGameModeItemSystemComponent;
 class UNaItemContainerComponent;
+class UNaItemSlotList;
 /**
  * 
  */
@@ -25,6 +26,7 @@ public:
 		_Font = FTextBlockStyle::GetDefault().Font;
 		_bFillDisabledToCompleteRectangle = true;
 		_RowLength = 8;
+		_FromUMG = nullptr;
 	}
 
 	SLATE_ATTRIBUTE(UNaItemContainerComponent*, Container)
@@ -33,6 +35,7 @@ public:
 	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
+	SLATE_ARGUMENT(UNaItemSlotList*, FromUMG) /* If generated from UNaItemSlotList, set this value */
 
 
 	SLATE_END_ARGS()
@@ -161,5 +164,29 @@ public:
 	FNaListSlotPointerEvent OnSlotMouseButtonDown;
 	FNaListSlotPointerEvent OnSlotMouseButtonUp;
 	FNaListSlotPointerEvent OnSlotMouseMove;
+
+public:
+
+	/* UNaItemSlotList interface */
+
+
+	void SlotPointedToUMG(int Position);
+	void SlotUnpointedToUMG(int Position);
+	void SlotSelectedToUMG(int Position);
+	void SlotUnselectedToUMG(int Position);
+	void SlotClickedToUMG(int Position);
+	void SlotHoveredToUMG(int Position);
+	void SlotUnhoveredToUMG(int Position);
+
+	void SlotMouseButtonDownToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	void SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+
+	void SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+
+protected:
+
+	UNaItemSlotList* UMGRef = nullptr;
+
+	void BindEventsToUMG();
 
 };

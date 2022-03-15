@@ -9,6 +9,7 @@
 #include "UI/Widgets/SNaItemSlotList.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaUtilityMinimal.h"
+#include "UI/UMG/NaItemSlotList.h"
 
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION

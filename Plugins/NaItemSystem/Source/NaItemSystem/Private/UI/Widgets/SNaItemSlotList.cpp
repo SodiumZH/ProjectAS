@@ -8,6 +8,7 @@
 #include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Components/NaItemContainerComponent.h"
+#include "UI/UMG/NaItemSlotList.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaItemSlotList::Construct(const FArguments& InArgs)
@@ -41,7 +42,7 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 	Font = InArgs._Font.Get();
 	bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
 	RowLength = InArgs._RowLength.Get();
-
+	UMGRef = InArgs._FromUMG;
 
 	/* Add panel */
 	ChildSlot
@@ -52,7 +53,9 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 
 	/* Reconstruct can do the rest */
 	Reconstruct();
-		
+
+	BindEventsToUMG();
+	
 	return;
 }
 void SNaItemSlotList::Reconstruct() {
@@ -211,4 +214,54 @@ void SNaItemSlotList::UnselectAll() {
 		Slots[SelectedPosition]->GetBoxSlot()->SetSelected(false);
 	}
 	SelectedPosition = -1;
+}
+
+/* UNaItemSlotList event callers */
+
+void SNaItemSlotList::SlotPointedToUMG(int Position) {
+	UMGRef->OnSlotPointed(Position);
+}
+void SNaItemSlotList::SlotUnpointedToUMG(int Position) {
+	UMGRef->OnSlotUnpointed(Position);
+}
+void SNaItemSlotList::SlotSelectedToUMG(int Position) {
+	UMGRef->OnSlotSelected(Position);
+}
+void SNaItemSlotList::SlotUnselectedToUMG(int Position) {
+	UMGRef->OnSlotUnselected(Position);
+}
+void SNaItemSlotList::SlotClickedToUMG(int Position) {
+	UMGRef->OnSlotClicked(Position);
+}
+void SNaItemSlotList::SlotHoveredToUMG(int Position) {
+	UMGRef->OnSlotHovered(Position);
+}
+void SNaItemSlotList::SlotUnhoveredToUMG(int Position) {
+	UMGRef->OnSlotUnhovered(Position);
+}
+
+void SNaItemSlotList::SlotMouseButtonDownToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	UMGRef->OnSlotMouseButtonDown(Position, MyGeometry, MouseEvent);
+}
+void SNaItemSlotList::SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	UMGRef->OnSlotMouseButtonUp(Position, MyGeometry, MouseEvent);
+}
+void SNaItemSlotList::SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	UMGRef->OnSlotMouseMove(Position, MyGeometry, MouseEvent);
+}
+
+void SNaItemSlotList::BindEventsToUMG() {
+	if (IsValid(UMGRef)) {
+		OnSlotPointed.BindRaw(this, &SNaItemSlotList::SlotPointedToUMG);
+		OnSlotUnpointed.BindRaw(this, &SNaItemSlotList::SlotUnpointedToUMG);
+		OnSlotSelected.BindRaw(this, &SNaItemSlotList::SlotSelectedToUMG);
+		OnSlotUnselected.BindRaw(this, &SNaItemSlotList::SlotUnselectedToUMG);
+		OnSlotClicked.BindRaw(this, &SNaItemSlotList::SlotClickedToUMG);
+		OnSlotHovered.BindRaw(this, &SNaItemSlotList::SlotHoveredToUMG);
+		OnSlotUnhovered.BindRaw(this, &SNaItemSlotList::SlotUnhoveredToUMG);
+
+		OnSlotMouseButtonDown.BindRaw(this, &SNaItemSlotList::SlotMouseButtonDownToUMG);
+		OnSlotMouseButtonUp.BindRaw(this, &SNaItemSlotList::SlotMouseButtonUpToUMG);
+		OnSlotMouseMove.BindRaw(this, &SNaItemSlotList::SlotMouseMoveToUMG);
+	}
 }

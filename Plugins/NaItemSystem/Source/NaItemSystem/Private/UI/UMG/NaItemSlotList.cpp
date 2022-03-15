@@ -17,17 +17,15 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 	
 	if (!IsValid(ContainerComponent)) {
 		UE_LOG(LogNaItem, Display, TEXT("UNaItemSlotList: invalid container reference."));
-		SAssignNew(List, SNaItemSlotList);
+		SAssignNew(List, SNaItemSlotList)
+			.FromUMG(this);
 		return List.ToSharedRef();
 	}
 
 	SAssignNew(List, SNaItemSlotList)
-		.Container(ContainerComponent);
+		.Container(ContainerComponent)
+		.FromUMG(this);
 	List->PostConstructionInit();
-
-	// Bind click actions
-	
-
 
 	return List.ToSharedRef();
 	
