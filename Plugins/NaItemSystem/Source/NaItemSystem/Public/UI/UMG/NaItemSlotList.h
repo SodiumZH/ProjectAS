@@ -49,8 +49,8 @@ public:
 
 	/* Input settings */
 
-	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
-	void SelectSlot();
+	//UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
+	//void SelectSlot();
 
 public:
 
