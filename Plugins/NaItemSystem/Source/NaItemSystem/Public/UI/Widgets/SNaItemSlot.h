@@ -111,7 +111,7 @@ public:
 	void SlotUnpointedToList();
 	void SlotSelectedToList();
 	void SlotUnselectedToList();
-	void SlotClickedToList();
+	FReply SlotClickedToList();
 	void SlotHoveredToList();
 	void SlotUnhoveredToList();
 
@@ -121,7 +121,8 @@ public:
 
 	// Empty function when no item slot list.
 	void ExecNoList() { return; };
-	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Unhandled(); };
+	FReply ExecNoListClicked() { return FReply::Handled(); };
+	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Handled(); };
 
 
 	// Call this function ONLY when constructing slots in item slot list.
