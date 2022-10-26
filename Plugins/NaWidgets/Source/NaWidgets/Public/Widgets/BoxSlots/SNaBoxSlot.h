@@ -174,22 +174,24 @@ public:
 	
 	FSlateFontInfo GetFont(bool bGetSuperscriptFont);
 
-protected:
-
 	/* Actions on pointed to this slot. Executed when calling SetPointed(true) */
 	FSimpleDelegate OnPointed;
-	void ExecOnPointed() { SetPointed(true); };
 
 	/* Actions on stop pointing to this slot. Executed when calling SetPointed(false) */
 	FSimpleDelegate OnUnpointed;
-	void ExecOnUnpointed() { SetPointed(false); };
 
 	/* Actions on selecting this slot. Executed when calling SetSelected(true) */
 	FSimpleDelegate OnSelected;
-	void ExecOnSelected() { SetSelected(true); };
 
 	/* Actions on this slot unselected. Executed when calling SetSelected(false) */
 	FSimpleDelegate OnUnselected;
+
+protected:
+
+
+	void ExecOnPointed() { SetPointed(true); };
+	void ExecOnUnpointed() { SetPointed(false); };
+	void ExecOnSelected() { SetSelected(true); };
 	void ExecOnUnselected() { SetSelected(false); };
 
 

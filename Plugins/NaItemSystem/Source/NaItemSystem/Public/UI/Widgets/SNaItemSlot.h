@@ -102,6 +102,8 @@ protected:
 	/* Bind this slot's pointing and selecting state to item slot list */
 	void BindItemSlotListEvents();
 
+public:
+
 	/* Functions for transfer events to ItemSlotList.
 	* Warning: no validity check inside. Check validity before calling.
 	*/
@@ -121,7 +123,6 @@ protected:
 	void ExecNoList() { return; };
 	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Unhandled(); };
 
-public:
 
 	// Call this function ONLY when constructing slots in item slot list.
 	void SetItemSlotList(TSharedPtr<SNaItemSlotList> List, int Position);

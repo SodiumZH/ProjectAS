@@ -151,7 +151,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FNaListSlotEvent, int);
 
 	// List slot event for pointer events, with geometry and pointer event input
-	DECLARE_DELEGATE_OneParam(FNaListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
+	DECLARE_DELEGATE_ThreeParams(FNaListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
 
 	FNaListSlotEvent OnSlotPointed;
 	FNaListSlotEvent OnSlotUnpointed;

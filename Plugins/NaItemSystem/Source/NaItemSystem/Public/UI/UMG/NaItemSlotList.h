@@ -84,14 +84,14 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
 	void OnSlotMouseButtonDown(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotUnhovered_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	void OnSlotMouseButtonDown_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
 
 	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
 	void OnSlotMouseButtonUp(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotUnhovered_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	void OnSlotMouseButtonUp_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
 
 	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
 	void OnSlotMouseMove(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotUnhovered_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	void OnSlotMouseMove_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
 };
 
