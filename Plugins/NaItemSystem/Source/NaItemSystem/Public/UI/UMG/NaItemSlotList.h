@@ -4,16 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
+
 #include "NaItemSlotList.generated.h"
 
-
-class UNaItemContainerComponent;
 class SNaItemSlotList;
-
+class UNaItemContainerComponent;
 
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent_UMG, int, Position);
+
+// List slot event for pointer events, with geometry and pointer event input
+//UDELEGATE()
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FNaItemListSlotPointerEvent_UMG, int, Position, const FGeometry&, MyGeometry, const FPointerEvent&, MouseEvent);
+
+
 UCLASS()
 class NAITEMSYSTEM_API UNaItemSlotList : public UWidget
 {
@@ -63,44 +70,34 @@ public:
 
 public:
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotPointed(int Position);
-	void OnSlotPointed_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotPointed;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotUnpointed(int Position);
-	void OnSlotUnpointed_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotUnpointed;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotSelected(int Position);
-	void OnSlotSelected_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotSelected;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotUnselected(int Position);
-	void OnSlotUnselected_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotUnselected;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotClicked(int Position);
-	void OnSlotClicked_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotClicked;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotHovered(int Position);
-	void OnSlotHovered_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotHovered;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotUnhovered(int Position);
-	void OnSlotUnhovered_Implementation(int Position) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotEvent_UMG OnSlotUnhovered;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotMouseButtonDown(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotMouseButtonDown_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotPointerEvent_UMG OnSlotMouseButtonDown;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotMouseButtonUp(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotMouseButtonUp_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotPointerEvent_UMG OnSlotMouseButtonUp;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaItemSystem|UI|ItemSlotList")
-	void OnSlotMouseMove(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-	void OnSlotMouseMove_Implementation(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {};
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotPointerEvent_UMG OnSlotMouseMove;
 };
 

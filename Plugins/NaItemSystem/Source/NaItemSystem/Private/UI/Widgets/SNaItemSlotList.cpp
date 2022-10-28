@@ -223,49 +223,49 @@ int SNaItemSlotList::GetSelectedPosition() {
 /* UNaItemSlotList event callers */
 
 void SNaItemSlotList::SlotPointedToUMG(int Position) {
-	UMGRef->OnSlotPointed(Position);
+	UMGRef->OnSlotPointed.Broadcast(Position);
 }
 void SNaItemSlotList::SlotUnpointedToUMG(int Position) {
-	UMGRef->OnSlotUnpointed(Position);
+	UMGRef->OnSlotUnpointed.Broadcast(Position);
 }
 void SNaItemSlotList::SlotSelectedToUMG(int Position) {
-	UMGRef->OnSlotSelected(Position);
+	UMGRef->OnSlotSelected.Broadcast(Position);
 }
 void SNaItemSlotList::SlotUnselectedToUMG(int Position) {
-	UMGRef->OnSlotUnselected(Position);
+	UMGRef->OnSlotUnselected.Broadcast(Position);
 }
 void SNaItemSlotList::SlotClickedToUMG(int Position) {
-	UMGRef->OnSlotClicked(Position);
+	UMGRef->OnSlotClicked.Broadcast(Position);
 }
 void SNaItemSlotList::SlotHoveredToUMG(int Position) {
-	UMGRef->OnSlotHovered(Position);
+	UMGRef->OnSlotHovered.Broadcast(Position);
 }
 void SNaItemSlotList::SlotUnhoveredToUMG(int Position) {
-	UMGRef->OnSlotUnhovered(Position);
+	UMGRef->OnSlotUnhovered.Broadcast(Position);
 }
 
 void SNaItemSlotList::SlotMouseButtonDownToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseButtonDown(Position, MyGeometry, MouseEvent);
+	UMGRef->OnSlotMouseButtonDown.Broadcast(Position, MyGeometry, MouseEvent);
 }
 void SNaItemSlotList::SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseButtonUp(Position, MyGeometry, MouseEvent);
+	UMGRef->OnSlotMouseButtonUp.Broadcast(Position, MyGeometry, MouseEvent);
 }
 void SNaItemSlotList::SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseMove(Position, MyGeometry, MouseEvent);
+	UMGRef->OnSlotMouseMove.Broadcast(Position, MyGeometry, MouseEvent);
 }
 
 void SNaItemSlotList::BindEventsToUMG() {
 	if (IsValid(UMGRef)) {
-		OnSlotPointed.BindRaw(this, &SNaItemSlotList::SlotPointedToUMG);
-		OnSlotUnpointed.BindRaw(this, &SNaItemSlotList::SlotUnpointedToUMG);
-		OnSlotSelected.BindRaw(this, &SNaItemSlotList::SlotSelectedToUMG);
-		OnSlotUnselected.BindRaw(this, &SNaItemSlotList::SlotUnselectedToUMG);
-		OnSlotClicked.BindRaw(this, &SNaItemSlotList::SlotClickedToUMG);
-		OnSlotHovered.BindRaw(this, &SNaItemSlotList::SlotHoveredToUMG);
-		OnSlotUnhovered.BindRaw(this, &SNaItemSlotList::SlotUnhoveredToUMG);
+		OnSlotPointed.AddSP(this, &SNaItemSlotList::SlotPointedToUMG);
+		OnSlotUnpointed.AddSP(this, &SNaItemSlotList::SlotUnpointedToUMG);
+		OnSlotSelected.AddSP(this, &SNaItemSlotList::SlotSelectedToUMG);
+		OnSlotUnselected.AddSP(this, &SNaItemSlotList::SlotUnselectedToUMG);
+		OnSlotClicked.AddSP(this, &SNaItemSlotList::SlotClickedToUMG);
+		OnSlotHovered.AddSP(this, &SNaItemSlotList::SlotHoveredToUMG);
+		OnSlotUnhovered.AddSP(this, &SNaItemSlotList::SlotUnhoveredToUMG);
 
-		OnSlotMouseButtonDown.BindRaw(this, &SNaItemSlotList::SlotMouseButtonDownToUMG);
-		OnSlotMouseButtonUp.BindRaw(this, &SNaItemSlotList::SlotMouseButtonUpToUMG);
-		OnSlotMouseMove.BindRaw(this, &SNaItemSlotList::SlotMouseMoveToUMG);
+		OnSlotMouseButtonDown.AddSP(this, &SNaItemSlotList::SlotMouseButtonDownToUMG);
+		OnSlotMouseButtonUp.AddSP(this, &SNaItemSlotList::SlotMouseButtonUpToUMG);
+		OnSlotMouseMove.AddSP(this, &SNaItemSlotList::SlotMouseMoveToUMG);
 	}
 }

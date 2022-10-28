@@ -130,42 +130,42 @@ void SNaItemSlot::BindItemSlotListEvents() {
 /* Events */
 
 void SNaItemSlot::SlotPointedToList() {
-	ItemSlotList.Pin()->OnSlotPointed.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotPointed.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnpointedToList() {
-	ItemSlotList.Pin()->OnSlotUnpointed.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotUnpointed.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotSelectedToList() {
-	ItemSlotList.Pin()->OnSlotSelected.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotSelected.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnselectedToList() {
-	ItemSlotList.Pin()->OnSlotUnselected.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotUnselected.Broadcast(PositionInSlotList);
 }
 FReply SNaItemSlot::SlotClickedToList() {
-	ItemSlotList.Pin()->OnSlotClicked.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotClicked.Broadcast(PositionInSlotList);
 	return FReply::Handled();
 }
 void SNaItemSlot::SlotHoveredToList() {
 	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
 	BoxSlot->SetPointed(true);
-	ItemSlotList.Pin()->OnSlotHovered.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotHovered.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnhoveredToList() {
 	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
 	BoxSlot->SetPointed(false);
-	ItemSlotList.Pin()->OnSlotUnhovered.ExecuteIfBound(PositionInSlotList);
+	ItemSlotList.Pin()->OnSlotUnhovered.Broadcast(PositionInSlotList);
 }
 
 FReply SNaItemSlot::SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseButtonDown.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList.Pin()->OnSlotMouseButtonDown.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 FReply SNaItemSlot::SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseButtonUp.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList.Pin()->OnSlotMouseButtonUp.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 FReply SNaItemSlot::SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseMove.ExecuteIfBound(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList.Pin()->OnSlotMouseMove.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 

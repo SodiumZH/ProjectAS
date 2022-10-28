@@ -15,6 +15,15 @@ class UNaItemSlotList;
 /**
  * 
  */
+/* Delegates */
+ // Event when a child slot is selected of pointed. Input is slot position in the list.
+ // Event from a specific slot of the list, with index of the source slot
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent, int, Position);
+
+// List slot event for pointer events, with geometry and pointer event input
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FNaItemListSlotPointerEvent, int, Position, const FGeometry&, MyGeometry, const FPointerEvent&, MouseEvent);
+
+
 class NAITEMSYSTEM_API SNaItemSlotList : public SCompoundWidget
 {
 public:
@@ -148,26 +157,20 @@ public:
 
 	/* Child slot events */
 
-	// Event when a child slot is selected of pointed. Input is slot position in the list.
 
-	// Event from a specific slot of the list, with index of the source slot
-	DECLARE_DELEGATE_OneParam(FNaListSlotEvent, int);
-
-	// List slot event for pointer events, with geometry and pointer event input
-	DECLARE_DELEGATE_ThreeParams(FNaListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
 	
 	/* Delegates executed when slot mouse/selection events are detected */
-	FNaListSlotEvent OnSlotPointed;
-	FNaListSlotEvent OnSlotUnpointed;
-	FNaListSlotEvent OnSlotSelected;
-	FNaListSlotEvent OnSlotUnselected;
-	FNaListSlotEvent OnSlotClicked;
-	FNaListSlotEvent OnSlotHovered;
-	FNaListSlotEvent OnSlotUnhovered;
+	FNaItemListSlotEvent OnSlotPointed;
+	FNaItemListSlotEvent OnSlotUnpointed;
+	FNaItemListSlotEvent OnSlotSelected;
+	FNaItemListSlotEvent OnSlotUnselected;
+	FNaItemListSlotEvent OnSlotClicked;
+	FNaItemListSlotEvent OnSlotHovered;
+	FNaItemListSlotEvent OnSlotUnhovered;
 
-	FNaListSlotPointerEvent OnSlotMouseButtonDown;
-	FNaListSlotPointerEvent OnSlotMouseButtonUp;
-	FNaListSlotPointerEvent OnSlotMouseMove;
+	FNaItemListSlotPointerEvent OnSlotMouseButtonDown;
+	FNaItemListSlotPointerEvent OnSlotMouseButtonUp;
+	FNaItemListSlotPointerEvent OnSlotMouseMove;
 
 public:
 
