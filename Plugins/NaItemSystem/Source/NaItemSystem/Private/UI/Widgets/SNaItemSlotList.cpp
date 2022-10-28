@@ -139,7 +139,7 @@ bool SNaItemSlotList::IsUpdated(bool bDisplay) {
 	// When invalid, just skip
 	if (!IsValid(Container) || (!IsValid(GMComponent))) {
 		if(!IsInvalid())
-			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, while not invalidated."));
+			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, when this list is not invalid."));
 		return true;
 	}
 	// Case when references are correct but widget is invalid
@@ -215,6 +215,10 @@ void SNaItemSlotList::UnselectAll() {
 	}
 	SelectedPosition = -1;
 }
+
+int SNaItemSlotList::GetSelectedPosition() {
+	return SelectedPosition;
+};
 
 /* UNaItemSlotList event callers */
 

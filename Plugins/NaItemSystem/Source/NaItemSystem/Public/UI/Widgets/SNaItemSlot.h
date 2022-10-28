@@ -27,10 +27,10 @@ public:
 		_Font = FTextBlockStyle::GetDefault().Font;
 	}
 
-	SLATE_ATTRIBUTE(UObject*, WorldContext)
-	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Null ptr means empty */
-	SLATE_ATTRIBUTE(FVector2D, Size)
-	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
+	SLATE_ATTRIBUTE(UObject*, WorldContext)	// object as world context (indicating world)
+	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Ptr to corresponding item entry. Null ptr means empty */
+	SLATE_ATTRIBUTE(FVector2D, Size) // Count of slots
+	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)	// If true, the item amount sub/superscript will be hidden when amount is 1.
 	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
 	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
 

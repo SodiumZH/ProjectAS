@@ -128,7 +128,7 @@ public:
 
 	/* Selection related */
 	
-	// Select a slot
+	// Select a slot. DO NOT SET POSITIONS = -1!!! Use UnselectAll() instead
 	void SelectSlot(int Position);
 
 	// Unselect all slots
@@ -143,6 +143,9 @@ protected:
 
 public:
 
+	// Get current selected position. -1 means no slot is selected.
+	int GetSelectedPosition();
+
 	/* Child slot events */
 
 	// Event when a child slot is selected of pointed. Input is slot position in the list.
@@ -152,7 +155,8 @@ public:
 
 	// List slot event for pointer events, with geometry and pointer event input
 	DECLARE_DELEGATE_ThreeParams(FNaListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
-
+	
+	/* Delegates executed when slot mouse/selection events are detected */
 	FNaListSlotEvent OnSlotPointed;
 	FNaListSlotEvent OnSlotUnpointed;
 	FNaListSlotEvent OnSlotSelected;
@@ -169,7 +173,8 @@ public:
 
 	/* UNaItemSlotList interface */
 
-
+	// Called when slot selection/mouse events are detected and execute UMG's slot selection/mouse events
+	// This will occupy "OnSlot" events. Custom behaviors should be set in the UMG if the UMG exists.
 	void SlotPointedToUMG(int Position);
 	void SlotUnpointedToUMG(int Position);
 	void SlotSelectedToUMG(int Position);

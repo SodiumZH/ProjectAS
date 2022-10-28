@@ -47,10 +47,19 @@ public:
 
 public:
 
-	/* Input settings */
+	/* Selection related */
 
-	//UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
-	//void SelectSlot();
+	// Select a slot. DO NOT SET -1 TO UNSELECT! Use UnselectAll() instead
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
+	void SelectSlot(int Position);
+	
+	// Unselect all slots
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
+	void UnselectAll();
+
+	// Get selected position
+	UFUNCTION(BlueprintPure, Category = "NaItemSystem|UI|ItemSlotList")
+	int GetSelectedPosition();
 
 public:
 

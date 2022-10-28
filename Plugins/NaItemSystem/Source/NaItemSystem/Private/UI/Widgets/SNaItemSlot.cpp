@@ -96,6 +96,7 @@ void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 
 void SNaItemSlot::BindItemSlotListEvents() {
 
+	// If in item slot list, bind mouse events
 	if (ItemSlotList.IsValid() && !ItemSlotList.Pin()->IsInvalid() && ItemSlotList.Pin()->GetContainer()->Container.IsInSize(PositionInSlotList) && BoxSlot.IsValid()) {
 		BoxSlot->OnPointed.BindSP(this, &SNaItemSlot::SlotPointedToList);
 		BoxSlot->OnUnpointed.BindSP(this, &SNaItemSlot::SlotUnpointedToList);
@@ -109,6 +110,8 @@ void SNaItemSlot::BindItemSlotListEvents() {
 		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonUpToList));
 		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseMoveToList));
 	}
+
+	// Or bind to null functions (no behavior).
 	else {
 		BoxSlot->OnPointed.BindSP(this, &SNaItemSlot::ExecNoList);
 		BoxSlot->OnUnpointed.BindSP(this, &SNaItemSlot::ExecNoList);

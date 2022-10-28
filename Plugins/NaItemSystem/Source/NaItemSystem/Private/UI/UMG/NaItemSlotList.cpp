@@ -42,4 +42,18 @@ void UNaItemSlotList::Refresh() {
 		List->ResetAllSlots();
 }
 
+void UNaItemSlotList::SelectSlot(int Position) {
+	if (List.IsValid())
+		List->SelectSlot(Position);
+}
 
+void UNaItemSlotList::UnselectAll() {
+	if (List.IsValid())
+		List->UnselectAll();
+}
+
+int UNaItemSlotList::GetSelectedPosition() {
+	if (List.IsValid())
+		return List->GetSelectedPosition();
+	else return -1;
+}
