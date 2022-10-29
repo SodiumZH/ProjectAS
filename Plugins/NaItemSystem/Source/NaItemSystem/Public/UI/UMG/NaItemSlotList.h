@@ -14,11 +14,11 @@ class UNaItemContainerComponent;
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent_UMG, int, Position);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent, int, Position);
 
 // List slot event for pointer events, with geometry and pointer event input
 //UDELEGATE()
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FNaItemListSlotPointerEvent_UMG, int, Position, const FGeometry&, MyGeometry, const FPointerEvent&, MouseEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FNaItemListSlotPointerEvent, int, Position, const FGeometry&, MyGeometry, const FPointerEvent&, MouseEvent);
 
 
 UCLASS()
@@ -57,10 +57,12 @@ public:
 	/* Selection related */
 
 	// Select a slot. DO NOT SET -1 TO UNSELECT! Use UnselectAll() instead
+	// Selecting condition is not defaultly defined. If selecting is needed, condition should be defined in BP.
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
 	void SelectSlot(int Position);
 	
 	// Unselect all slots
+	// Selecting condition is not defaultly defined. If selecting is needed, condition should be defined in BP.
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
 	void UnselectAll();
 
@@ -71,33 +73,38 @@ public:
 public:
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotPointed;
+	FNaItemListSlotEvent OnSlotPointed;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotUnpointed;
+	FNaItemListSlotEvent OnSlotUnpointed;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotSelected;
+	FNaItemListSlotEvent OnSlotSelected;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotUnselected;
+	FNaItemListSlotEvent OnSlotUnselected;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotClicked;
+	FNaItemListSlotEvent OnSlotClicked;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotHovered;
+	FNaItemListSlotEvent OnSlotHovered;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotEvent_UMG OnSlotUnhovered;
+	FNaItemListSlotEvent OnSlotUnhovered;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotPointerEvent_UMG OnSlotMouseButtonDown;
+	FNaItemListSlotPointerEvent OnSlotMouseButtonDown;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotPointerEvent_UMG OnSlotMouseButtonUp;
+	FNaItemListSlotPointerEvent OnSlotMouseButtonUp;
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
-	FNaItemListSlotPointerEvent_UMG OnSlotMouseMove;
+	FNaItemListSlotPointerEvent OnSlotMouseMove;
+
+public:
+
+	virtual void ReleaseSlateResources(bool bReleaseChildren) override;
+
 };
 

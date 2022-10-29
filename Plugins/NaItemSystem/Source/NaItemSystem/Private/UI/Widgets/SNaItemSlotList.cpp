@@ -56,6 +56,7 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 
 	BindEventsToUMG();
 	
+	bIsConstructed = true;
 	return;
 }
 void SNaItemSlotList::Reconstruct() {
@@ -64,19 +65,17 @@ void SNaItemSlotList::Reconstruct() {
 	Slots.Empty();
 	WrapBox->ClearChildren();
 
+	// Re-get game mode component from container
+	GMComponent = IsValid(Container) ? UNaItemStatics::GetGameModeItemSystemComponent(Container) : nullptr;
+
 	// When container is invalid, this widget is invalid
 	if (!IsValid(Container)) {
 		UE_LOG(LogNaItem, Display, TEXT("NaItemSlotList: invalid item container."));
 		bIsInvalid = true;
 	}
-
-	// Re-get game mode component from container *
-	GMComponent = IsValid(Container) ? UNaItemStatics::GetGameModeItemSystemComponent(Container) : nullptr;
-
 	// When game mode component is invalid, this widget is invalid
-	if (!IsValid(Container) || !IsValid(GMComponent)) {
-		if (!bIsInvalid)
-			UE_LOG(LogNaItem, Warning, TEXT("NaItemSlotList: invalid game mode component."));
+	else if (!IsValid(GMComponent)) {
+		UE_LOG(LogNaItem, Warning, TEXT("NaItemSlotList: invalid game mode component."));
 		bIsInvalid = true;
 	}
 	else bIsInvalid = false;
@@ -86,11 +85,12 @@ void SNaItemSlotList::Reconstruct() {
 	if (!bIsInvalid) {
 
 		// Actual length needs to be re-calculated
-		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() / RowLength * RowLength) + 1;
+		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() - Container->Container.GetSize() % RowLength + RowLength);
 
 		// Re-add child slots
 		int i = 0;
 		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
+		// Add enabled slots first
 		for (i = 0; i < Container->Container.GetSize(); ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
@@ -101,6 +101,7 @@ void SNaItemSlotList::Reconstruct() {
 					.Font(Font)
 			];
 		}
+		// Then fill with disabled slots
 		for (1; i < ActualLength; ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
@@ -112,9 +113,9 @@ void SNaItemSlotList::Reconstruct() {
 			];
 		}
 	}
-	if (bIsConstructed) {
+//	if (bIsConstructed) {
 		PostConstructionInit();
-	}
+//	}
 }
 
 void SNaItemSlotList::PostConstructionInit() {
@@ -123,7 +124,7 @@ void SNaItemSlotList::PostConstructionInit() {
 	// to allow them to apply changes from list
 	int i;
 	for (i = 0; i < ActualLength; ++i) {
-		Slots[i]->SetItemSlotList(TSharedPtr<SNaItemSlotList>(this), i);
+		Slots[i]->SetItemSlotList(this, i);
 	}
 
 	OnPostConstructionInit.ExecuteIfBound();
@@ -201,6 +202,7 @@ void SNaItemSlotList::ResetContainer(UNaItemContainerComponent* NewContainer) {
 }
 
 void SNaItemSlotList::SelectSlot(int Position) {
+	if (!IsValid(Container)) return;
 	check(Container->Container.IsInSize(Position));
 	if (SelectedPosition >= 0) {
 		Slots[SelectedPosition]->GetBoxSlot()->SetSelected(false);

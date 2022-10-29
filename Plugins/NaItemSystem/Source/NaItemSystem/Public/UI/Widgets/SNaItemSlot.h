@@ -95,7 +95,7 @@ protected:
 
 	/* If this ptr is null, this slot is not in an SNaItemSlotList
 	*/
-	TWeakPtr<SNaItemSlotList> ItemSlotList = nullptr;
+	SNaItemSlotList* ItemSlotList = nullptr;
 
 	int PositionInSlotList = -1;
 
@@ -107,6 +107,8 @@ public:
 	/* Functions for transfer events to ItemSlotList.
 	* Warning: no validity check inside. Check validity before calling.
 	*/
+	// SNaItemSlot only transfers pointing/selecting/mouse events from SNaBoxSlot to SNaItemSlotList.
+	// SNaItemSlot itself doesn't detect pointing/selecting/mouse events.
 	void SlotPointedToList();
 	void SlotUnpointedToList();
 	void SlotSelectedToList();
@@ -119,14 +121,14 @@ public:
 	FReply SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 	FReply SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
-	// Empty function when no item slot list.
+	// Empty function when no item slot list. When the slot is not in a list, they skip transferring events to list.
 	void ExecNoList() { return; };
 	FReply ExecNoListClicked() { return FReply::Handled(); };
 	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Handled(); };
 
 
 	// Call this function ONLY when constructing slots in item slot list.
-	void SetItemSlotList(TSharedPtr<SNaItemSlotList> List, int Position);
+	void SetItemSlotList(SNaItemSlotList* List, int Position);
 
 	/* SNaItemSlotList end */
 	/***********************/

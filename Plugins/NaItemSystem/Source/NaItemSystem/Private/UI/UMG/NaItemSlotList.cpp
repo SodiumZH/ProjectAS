@@ -21,10 +21,11 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 			.FromUMG(this);
 		return List.ToSharedRef();
 	}
-
-	SAssignNew(List, SNaItemSlotList)
-		.Container(ContainerComponent)
-		.FromUMG(this);
+	else {
+		SAssignNew(List, SNaItemSlotList)
+			.Container(ContainerComponent)
+			.FromUMG(this);
+	}
 	List->PostConstructionInit();
 
 	return List.ToSharedRef();
@@ -56,4 +57,9 @@ int UNaItemSlotList::GetSelectedPosition() {
 	if (List.IsValid())
 		return List->GetSelectedPosition();
 	else return -1;
+}
+
+void UNaItemSlotList::ReleaseSlateResources(bool bReleaseChildren) {
+	Super::ReleaseSlateResources(bReleaseChildren);
+	List.Reset();
 }

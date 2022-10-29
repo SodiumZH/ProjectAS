@@ -46,12 +46,10 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void SNaItemSlot::ParamsFromEntry(FNaBoxSlotParams& OutParams) {
 
-#if NAPACK_DO_VERBOSE_CHECK
 	if (!IsValid(GMComponent)) {
 		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::ParamsFromEntry: invalid game mode component."));
 		return;
 	}
-#endif
 
 	if (bIsDisabled) {
 		OutParams.ImageFrame = GMComponent->DefaultSlotSettings.IconBorderDisabled;
@@ -97,7 +95,7 @@ void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 void SNaItemSlot::BindItemSlotListEvents() {
 
 	// If in item slot list, bind mouse events
-	if (ItemSlotList.IsValid() && !ItemSlotList.Pin()->IsInvalid() && ItemSlotList.Pin()->GetContainer()->Container.IsInSize(PositionInSlotList) && BoxSlot.IsValid()) {
+	if (ItemSlotList && !ItemSlotList->IsInvalid() && ItemSlotList->GetContainer()->Container.IsInSize(PositionInSlotList) && BoxSlot.IsValid()) {
 		BoxSlot->OnPointed.BindSP(this, &SNaItemSlot::SlotPointedToList);
 		BoxSlot->OnUnpointed.BindSP(this, &SNaItemSlot::SlotUnpointedToList);
 		BoxSlot->OnSelected.BindSP(this, &SNaItemSlot::SlotSelectedToList);
@@ -130,42 +128,42 @@ void SNaItemSlot::BindItemSlotListEvents() {
 /* Events */
 
 void SNaItemSlot::SlotPointedToList() {
-	ItemSlotList.Pin()->OnSlotPointed.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotPointed.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnpointedToList() {
-	ItemSlotList.Pin()->OnSlotUnpointed.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotUnpointed.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotSelectedToList() {
-	ItemSlotList.Pin()->OnSlotSelected.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotSelected.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnselectedToList() {
-	ItemSlotList.Pin()->OnSlotUnselected.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotUnselected.Broadcast(PositionInSlotList);
 }
 FReply SNaItemSlot::SlotClickedToList() {
-	ItemSlotList.Pin()->OnSlotClicked.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotClicked.Broadcast(PositionInSlotList);
 	return FReply::Handled();
 }
 void SNaItemSlot::SlotHoveredToList() {
 	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
 	BoxSlot->SetPointed(true);
-	ItemSlotList.Pin()->OnSlotHovered.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotHovered.Broadcast(PositionInSlotList);
 }
 void SNaItemSlot::SlotUnhoveredToList() {
 	// This will override binding in SNaBoxSlot::Construct(), So the previously bound function should be executed here
 	BoxSlot->SetPointed(false);
-	ItemSlotList.Pin()->OnSlotUnhovered.Broadcast(PositionInSlotList);
+	ItemSlotList->OnSlotUnhovered.Broadcast(PositionInSlotList);
 }
 
 FReply SNaItemSlot::SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseButtonDown.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList->OnSlotMouseButtonDown.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 FReply SNaItemSlot::SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseButtonUp.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList->OnSlotMouseButtonUp.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 FReply SNaItemSlot::SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	ItemSlotList.Pin()->OnSlotMouseMove.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
+	ItemSlotList->OnSlotMouseMove.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
 
@@ -173,7 +171,8 @@ FReply SNaItemSlot::SlotMouseMoveToList(const FGeometry& MyGeometry, const FPoin
 
 /* Events end */
 
-void SNaItemSlot::SetItemSlotList(TSharedPtr<SNaItemSlotList> List, int Position) {
+void SNaItemSlot::SetItemSlotList(SNaItemSlotList* List, int Position) {
+	check(List);
 	ItemSlotList = List;
 	PositionInSlotList = Position;
 	BindItemSlotListEvents();

@@ -110,8 +110,7 @@ protected:
 
 	/* Params */
 	FNaBoxSlotParams Params;
-	FSlateFontInfo SubscriptFont;
-	FSlateFontInfo SuperscriptFont;
+	FSlateFontInfo SubscriptFont;	FSlateFontInfo SuperscriptFont;
 
 	/* Ptrs of brushes for each laer */
 	TSharedPtr<FSlateBrush> BrushBase;
@@ -175,15 +174,19 @@ public:
 	FSlateFontInfo GetFont(bool bGetSuperscriptFont);
 
 	/* Actions on pointed to this slot. Executed when calling SetPointed(true) */
+	// Hard-coded that when the slot is mouse-hovered it will execute
 	FSimpleDelegate OnPointed;
 
 	/* Actions on stop pointing to this slot. Executed when calling SetPointed(false) */
+	// Hard-coded that when the slot is mouse-unhovered it will execute
 	FSimpleDelegate OnUnpointed;
 
 	/* Actions on selecting this slot. Executed when calling SetSelected(true) */
+	// Not set defaultly. Call SetSelected(true) to select.
 	FSimpleDelegate OnSelected;
 
 	/* Actions on this slot unselected. Executed when calling SetSelected(false) */
+	// Not set defaultly. Call SetSelected(false) to select.
 	FSimpleDelegate OnUnselected;
 
 protected:
@@ -193,6 +196,5 @@ protected:
 	void ExecOnUnpointed() { SetPointed(false); };
 	void ExecOnSelected() { SetSelected(true); };
 	void ExecOnUnselected() { SetSelected(false); };
-
 
 };
