@@ -14,8 +14,38 @@ class UNaItemContainerComponent;
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent, int, Position);
+/* FNaItemOperation is a pack defining operation to item container. 
+* All container change requested by UI should be pack into this.
+*/
 
+USTRUCT()
+struct NAITEMSYSTEM_API FNaItemContainerOperation {
+	
+	GENERATED_BODY()
+
+public:
+
+	enum Type {
+		Null,	// No operation
+		Add,	// Add items to container
+		AddNew, // Add new item (stack)
+		Use,	// Use an item
+		Delete,	// Delete items
+		Empty,	// Delete all items and empty a slot
+		Exchange	// Exchange items of two slots
+	};
+
+	Type OperationType = Type::Null;
+	int Position = -1;
+	int Param0 = -1;
+
+};
+
+
+
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNaItemListSlotEvent, int, Position);
 // List slot event for pointer events, with geometry and pointer event input
 //UDELEGATE()
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FNaItemListSlotPointerEvent, int, Position, const FGeometry&, MyGeometry, const FPointerEvent&, MouseEvent);
@@ -101,6 +131,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
 	FNaItemListSlotPointerEvent OnSlotMouseMove;
+
+	UPROPERTY(BlueprintAssignable, Category = "NaItemSystem|UI|ItemSlotList")
+	FNaItemListSlotPointerEvent OnSlotDoubleClicked;
 
 public:
 

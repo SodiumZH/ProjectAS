@@ -104,9 +104,12 @@ void SNaItemSlot::BindItemSlotListEvents() {
 		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::SlotHoveredToList));
 		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::SlotUnhoveredToList));
 
+
 		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonDownToList));
 		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonUpToList));
 		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseMoveToList));
+		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotDoubleClickedToList));
+
 	}
 
 	// Or bind to null functions (no behavior).
@@ -120,8 +123,9 @@ void SNaItemSlot::BindItemSlotListEvents() {
 		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::ExecNoList));
 
 		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
-		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonUpToList));
-		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseMoveToList));
+		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
 	}
 }
 
@@ -166,8 +170,10 @@ FReply SNaItemSlot::SlotMouseMoveToList(const FGeometry& MyGeometry, const FPoin
 	ItemSlotList->OnSlotMouseMove.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
 	return FReply::Handled();
 }
-
-
+FReply SNaItemSlot::SlotDoubleClickedToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	ItemSlotList->OnSlotDoubleClicked.Broadcast(PositionInSlotList, MyGeometry, MouseEvent);
+	return FReply::Handled();
+}
 
 /* Events end */
 

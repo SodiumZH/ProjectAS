@@ -120,8 +120,9 @@ public:
 	FReply SlotMouseButtonDownToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 	FReply SlotMouseButtonUpToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 	FReply SlotMouseMoveToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	FReply SlotDoubleClickedToList(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
-	// Empty function when no item slot list. When the slot is not in a list, they skip transferring events to list.
+	// Empty function when no item slot list. When the slot is not in a list, skip transferring events to list.
 	void ExecNoList() { return; };
 	FReply ExecNoListClicked() { return FReply::Handled(); };
 	FReply ExecNoListMouse(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return FReply::Handled(); };

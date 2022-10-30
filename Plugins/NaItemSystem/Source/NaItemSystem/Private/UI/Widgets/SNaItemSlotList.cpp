@@ -111,10 +111,13 @@ void SNaItemSlotList::Reconstruct() {
 					.Font(Font)
 					.bIsDisabled(true)
 			];
+		}
+		for (i = 0; i < ActualLength; ++i) {
 			Slots[i]->SetItemSlotList(this, i);
 		}
 	}
-		PostConstructionInit();
+
+
 }
 
 
@@ -238,6 +241,9 @@ void SNaItemSlotList::SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGe
 void SNaItemSlotList::SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
 	UMGRef->OnSlotMouseMove.Broadcast(Position, MyGeometry, MouseEvent);
 }
+void SNaItemSlotList::SlotDoubleClickedToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
+	UMGRef->OnSlotDoubleClicked.Broadcast(Position, MyGeometry, MouseEvent);
+}
 
 void SNaItemSlotList::BindEventsToUMG() {
 	if (IsValid(UMGRef)) {
@@ -252,5 +258,6 @@ void SNaItemSlotList::BindEventsToUMG() {
 		OnSlotMouseButtonDown.AddSP(this, &SNaItemSlotList::SlotMouseButtonDownToUMG);
 		OnSlotMouseButtonUp.AddSP(this, &SNaItemSlotList::SlotMouseButtonUpToUMG);
 		OnSlotMouseMove.AddSP(this, &SNaItemSlotList::SlotMouseMoveToUMG);
+		OnSlotDoubleClicked.AddSP(this, &SNaItemSlotList::SlotDoubleClickedToUMG);
 	}
 }

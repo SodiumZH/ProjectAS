@@ -166,6 +166,7 @@ public:
 	FSNaItemListSlotPointerEvent OnSlotMouseButtonDown;
 	FSNaItemListSlotPointerEvent OnSlotMouseButtonUp;
 	FSNaItemListSlotPointerEvent OnSlotMouseMove;
+	FSNaItemListSlotPointerEvent OnSlotDoubleClicked;
 
 public:
 
@@ -183,13 +184,15 @@ public:
 
 	void SlotMouseButtonDownToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 	void SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
-
 	void SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
+	void SlotDoubleClickedToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
 protected:
 
 	UNaItemSlotList* UMGRef = nullptr;
 
 	void BindEventsToUMG();
+
+	/* End UNaItemSlotList interface */
 
 };
