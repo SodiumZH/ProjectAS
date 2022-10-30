@@ -25,7 +25,7 @@ UCLASS()
 class NAITEMSYSTEM_API UNaItemSlotList : public UWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
 
 
@@ -36,6 +36,17 @@ protected:
 #endif
 
 	virtual TSharedRef<SWidget> RebuildWidget() override;
+
+public:
+
+	/* Style */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList|Style")
+	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
+	int RowLength = 8;
+
+
 
 protected:
 
@@ -52,11 +63,7 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI|ItemSlotList")
 	void Refresh();
 
-public:
 
-	/* Style */
-	UPROPERTY(BlueprintReadWrite, Category = "ItemSlotList")
-	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
 
 public:
 

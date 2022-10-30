@@ -35,12 +35,16 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 
 
 	/* Copy inputs */
+	
+	StylePtr = InArgs._StylePtr.Get();
+	bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
+	RowLength = InArgs._RowLength.Get();
 
 	/* Add panel */
 	ChildSlot
 		[
 			SAssignNew(WrapBox, SWrapBox)
-			.PreferredSize((StylePtr ? StylePtr->SlotSize.X : 0.f) * (RowLength + 0.5))
+			.PreferredSize((StylePtr ? StylePtr->SlotSize.X : 0.f) * RowLength)
 		];
 
 	/* Reconstruct can do the rest */
@@ -86,6 +90,7 @@ void SNaItemSlotList::Reconstruct() {
 		for (i = 0; i < Container->Container.GetSize(); ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
+					.StylePtr(StylePtr)
 					.WorldContext(GMComponent)
 					.EntryPtr(Container->Container.Find(i).EntryPtr)
 			];

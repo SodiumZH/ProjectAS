@@ -52,10 +52,6 @@ void SNaItemSlot::MakeParams(FNaBoxSlotParams& OutParams) {
 		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: invalid game mode component."));
 		return;
 	}
-	if (!ItemEntryPtr.IsValid()) {
-		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: Missing Item Entry reference."));
-		return;
-	}
 	if (!StylePtr) {
 		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: Missing Style reference."));
 		return;
