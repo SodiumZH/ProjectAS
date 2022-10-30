@@ -52,11 +52,6 @@ public:
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
-	/* Initialization after construction. Should be called manually after Construct().
-	* When reconstructing after constructed, this function will be automatically called.
-	*/
-	void PostConstructionInit();
-	FSimpleDelegate OnPostConstructionInit;
 
 protected:
 

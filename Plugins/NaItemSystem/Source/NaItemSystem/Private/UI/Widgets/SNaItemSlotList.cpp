@@ -111,24 +111,12 @@ void SNaItemSlotList::Reconstruct() {
 					.Font(Font)
 					.bIsDisabled(true)
 			];
+			Slots[i]->SetItemSlotList(this, i);
 		}
 	}
-//	if (bIsConstructed) {
 		PostConstructionInit();
-//	}
 }
 
-void SNaItemSlotList::PostConstructionInit() {
-
-	// Setup item slot list for each slots 
-	// to allow them to apply changes from list
-	int i;
-	for (i = 0; i < ActualLength; ++i) {
-		Slots[i]->SetItemSlotList(this, i);
-	}
-
-	OnPostConstructionInit.ExecuteIfBound();
-}
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -140,7 +128,7 @@ bool SNaItemSlotList::IsUpdated(bool bDisplay) {
 	// When invalid, just skip
 	if (!IsValid(Container) || (!IsValid(GMComponent))) {
 		if(!IsInvalid())
-			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, when this list is not invalid."));
+			UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList: invalid container or game mode component, when this list is not tagged invalid."));
 		return true;
 	}
 	// Case when references are correct but widget is invalid
@@ -174,16 +162,11 @@ void SNaItemSlotList::ResetSlot(int Position) {
 	if (IsInvalid())
 		return;
 
-#if NAPACK_DO_VERBOSE_CHECK
 	if (Container->Container.IsInSize(Position)) {
 		UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList::ResetSlot() failed: position out of range."));
 		return;
 	}
-#else
-#if NAPACK_DO_COMMON_CHECK
-	check(Container->Container.IsInSize(Position));
-#endif
-#endif
+
 
 	Slots[Position]->ResetItemEntry(Container->Container.Find(Position).EntryPtr);
 

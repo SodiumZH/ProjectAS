@@ -26,7 +26,6 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 			.Container(ContainerComponent)
 			.FromUMG(this);
 	}
-	List->PostConstructionInit();
 
 	return List.ToSharedRef();
 	
