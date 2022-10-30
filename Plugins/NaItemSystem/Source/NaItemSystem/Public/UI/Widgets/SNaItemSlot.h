@@ -6,10 +6,69 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaItemEntry.h"
+#include "Fonts/SlateFontInfo.h"
+#include "SNaItemSlot.generated.h"
 
 class UNaGameModeItemSystemComponent;
 class SNaItemSlotList;
 
+/* Item slot styles that are often constant for a whole slot list.
+* It can also be used to define single slots, and is not limited in slot lists.
+* This struct is utilized in SNaItemSlot input params which can easily defined in slot list BPs and transferred as a whole to each slot.
+*/
+USTRUCT(BlueprintType)
+struct NAITEMSYSTEM_API FNaItemSlotPublicStyle {
+
+	GENERATED_BODY()
+
+public:
+
+	/* Slot size (in pixel). */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector2D SlotSize = FVector2D(64.f, 64.f);
+
+	/* Base icon for empty slots */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconEmpty = nullptr;
+
+	/* Border icon for empty and occupied slots, stacking above the base icon */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconBorder = nullptr;
+
+	/* Base icon for disabled slot */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconDisabled = nullptr;
+
+	/* Border icon for disabled slots, stacking above the base icon */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconBorderDisabled = nullptr;
+
+	/* Additive image for pointed item slot (stack above base and border) */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconPointed = nullptr;
+
+	/* Additive image for selected item slot (stack above all other icons) */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UObject* IconSelected = nullptr;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	/* Font for subscript (amount). */
+	FSlateFontInfo SubscriptFont = FTextBlockStyle::GetDefault().Font;
+
+	/* If true, the disabled item slots will enable to be pointed */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bCanPointAtDisabled = false;
+
+	/* If true, the disabled item slots will enable to be pointed */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bCanSelectDisabled = false;
+
+	/* If true, the subscript will be hidden when amount is 1. */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bHideAmountWhenOne = true;
+
+	FNaItemSlotPublicStyle() {};
+};
 
 /**
  * 
@@ -19,28 +78,24 @@ class NAITEMSYSTEM_API SNaItemSlot : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SNaItemSlot)
 	{
+		_StylePtr = nullptr;
 		_WorldContext = nullptr;
 		_EntryPtr = nullptr;
-		_Size = FVector2D(64.0, 64.0);
-		_bHideAmountWhenOne = true;
 		_bIsDisabled = false;
-		_Font = FTextBlockStyle::GetDefault().Font;
 	}
 
+	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
 	SLATE_ATTRIBUTE(UObject*, WorldContext)	// object as world context (indicating world)
 	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Ptr to corresponding item entry. Null ptr means empty */
-	SLATE_ATTRIBUTE(FVector2D, Size) // Count of slots
-	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)	// If true, the item amount sub/superscript will be hidden when amount is 1.
 	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
-	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
-
+	
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
-	/* Make slot params from item entry using this item slot's context */
-	void ParamsFromEntry(FNaBoxSlotParams& OutParams);
+	/* Make slot params for box slot construction, from public style and item entry */
+	void MakeParams(FNaBoxSlotParams& OutParams);
 
 protected:
 
@@ -53,15 +108,17 @@ protected:
 
 	TSharedPtr<SNaBoxSlot> BoxSlot;
 
+	/* Style */
+	
+	FNaItemSlotPublicStyle* StylePtr = nullptr;
+
+	FSlateFontInfo Font = FTextBlockStyle::GetDefault().Font;
+
 	/* State and general properties */
 
-	bool bIsDisabled;
+	bool bIsDisabled = true;
 
-	bool bHideAmountWhenOne;
-
-	FSlateFontInfo Font;
-
-	FVector2D Size;
+	bool bHideAmountWhenOne = true;
 
 	/* Properties for getting item information */
 

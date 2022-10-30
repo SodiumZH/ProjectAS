@@ -34,21 +34,13 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 	}
 
 
-
-
 	/* Copy inputs */
-	BoxSize = InArgs._BoxSize.Get();
-	bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
-	Font = InArgs._Font.Get();
-	bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
-	RowLength = InArgs._RowLength.Get();
-	UMGRef = InArgs._FromUMG;
 
 	/* Add panel */
 	ChildSlot
 		[
 			SAssignNew(WrapBox, SWrapBox)
-			.PreferredSize(BoxSize.X * (RowLength + 0.5))
+			.PreferredSize((StylePtr ? StylePtr->SlotSize.X : 0.f) * (RowLength + 0.5))
 		];
 
 	/* Reconstruct can do the rest */
@@ -96,20 +88,16 @@ void SNaItemSlotList::Reconstruct() {
 				SAssignNew(Slots[i], SNaItemSlot)
 					.WorldContext(GMComponent)
 					.EntryPtr(Container->Container.Find(i).EntryPtr)
-					.Size(BoxSize)
-					.bHideAmountWhenOne(bHideAmountWhenOne)
-					.Font(Font)
 			];
 		}
 		// Then fill with disabled slots
 		for (1; i < ActualLength; ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
+					.StylePtr(StylePtr)
 					.WorldContext(GMComponent)
-					.Size(BoxSize)
-					.bHideAmountWhenOne(bHideAmountWhenOne)
-					.Font(Font)
 					.bIsDisabled(true)
+					.EntryPtr(Container->Container.Find(i).EntryPtr)
 			];
 		}
 		for (i = 0; i < ActualLength; ++i) {

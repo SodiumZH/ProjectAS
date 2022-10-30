@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "NaItemContainer.h"
-#include "Widgets/BoxSlots/SNaSlotList.h"
+#include "Data/NaItemDisplayData.h"
 #include "UI/Widgets/SNaItemSlot.h"
 #include "../../Components/NaItemContainerComponent.h"
 
@@ -29,23 +29,18 @@ class NAITEMSYSTEM_API SNaItemSlotList : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SNaItemSlotList)
 	{
+		_StylePtr = nullptr;
 		_Container = nullptr;
-		_BoxSize = FVector2D(64.0, 64.0);
-		_bHideAmountWhenOne = true;
-		_Font = FTextBlockStyle::GetDefault().Font;
 		_bFillDisabledToCompleteRectangle = true;
 		_RowLength = 8;
 		_FromUMG = nullptr;
 	}
 
+	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
 	SLATE_ATTRIBUTE(UNaItemContainerComponent*, Container)
-	SLATE_ATTRIBUTE(FVector2D, BoxSize)
-	SLATE_ATTRIBUTE(bool, bHideAmountWhenOne)
-	SLATE_ATTRIBUTE(FSlateFontInfo, Font)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
 	SLATE_ARGUMENT(UNaItemSlotList*, FromUMG) /* If generated from UNaItemSlotList, set this value */
-
 
 	SLATE_END_ARGS()
 
@@ -63,9 +58,7 @@ protected:
 
 	UNaGameModeItemSystemComponent* GMComponent;
 	UNaItemContainerComponent* Container;
-	FVector2D BoxSize;
-	bool bHideAmountWhenOne;
-	FSlateFontInfo Font;
+	FNaItemSlotPublicStyle* StylePtr = nullptr;
 	bool bFillDisabledToCompleteRectangle;
 	int RowLength;
 
@@ -77,8 +70,9 @@ protected:
 
 
 	/* Subwidgets */
-	TSharedPtr<SWrapBox> WrapBox;
+	
 	TArray<TSharedPtr<SNaItemSlot>> Slots;
+	TSharedPtr<class SWrapBox> WrapBox;
 
 public:
 

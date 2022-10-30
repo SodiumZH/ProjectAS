@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
-
+#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaItemSlot.h"
 #include "NaItemSlotList.generated.h"
 
 class SNaItemSlotList;
@@ -50,6 +51,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI|ItemSlotList")
 	void Refresh();
+
+public:
+
+	/* Style */
+	UPROPERTY(BlueprintReadWrite, Category = "ItemSlotList")
+	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
 
 public:
 

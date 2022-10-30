@@ -37,8 +37,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|Defaults")
 	FNaItemDisplayData DefaultDisplayData = FNaItemDisplayData();
 
-	/* Default brush information for drawing item icons in UI. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|Defaults")
-	FNaItemDefaultSlotSettings DefaultSlotSettings = FNaItemDefaultSlotSettings();
-
 };

@@ -27,9 +27,6 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 	// Initial pointer's value will be copied, then the pointer can be safely changed
 	Params = (InArgs._Params.Get()) ? (*(InArgs._Params.Get())) : (FNaBoxSlotParams());
 
-
-
-
 	BrushBase = TSharedPtr<FSlateBrush>(new FSlateBrush(*FCoreStyle::Get().GetDefaultBrush()));
 	BrushBase->SetImageSize(Params.Size);
 	BrushBase->SetResourceObject(Params.ImageBase);

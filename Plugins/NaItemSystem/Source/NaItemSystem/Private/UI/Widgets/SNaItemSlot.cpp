@@ -28,12 +28,13 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 	/* Copy properties */
 	ItemEntryPtr = InArgs._EntryPtr.Get() ;
 	bIsDisabled = InArgs._bIsDisabled.Get();
-	bHideAmountWhenOne = InArgs._bHideAmountWhenOne.Get();
-	Font = InArgs._Font.Get();
-	Size = InArgs._Size.Get();
+	StylePtr = InArgs._StylePtr.Get();
+	if (StylePtr) {
+		Font = StylePtr->SubscriptFont;
+		bHideAmountWhenOne = StylePtr->bHideAmountWhenOne;
+	}
 
-
-	ParamsFromEntry(TempParams);
+	MakeParams(TempParams);
 
 	ChildSlot
 	[
@@ -41,38 +42,48 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 		.Params(&TempParams)
 		.SubscriptFont(Font)
 	];
+
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void SNaItemSlot::ParamsFromEntry(FNaBoxSlotParams& OutParams) {
+void SNaItemSlot::MakeParams(FNaBoxSlotParams& OutParams) {
 
 	if (!IsValid(GMComponent)) {
-		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::ParamsFromEntry: invalid game mode component."));
+		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: invalid game mode component."));
+		return;
+	}
+	if (!ItemEntryPtr.IsValid()) {
+		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: Missing Item Entry reference."));
+		return;
+	}
+	if (!StylePtr) {
+		UE_LOG(LogNaItem, Error, TEXT("NaItemSlot::MakeParams: Missing Style reference."));
 		return;
 	}
 
+
 	if (bIsDisabled) {
-		OutParams.ImageFrame = GMComponent->DefaultSlotSettings.IconBorderDisabled;
-		OutParams.ImageSelected = GMComponent->DefaultSlotSettings.bCanSelectDisabled ? GMComponent->DefaultSlotSettings.IconSelected : nullptr;
-		OutParams.ImagePointed = GMComponent->DefaultSlotSettings.bCanPointAtDisabled ? GMComponent->DefaultSlotSettings.IconPointed : nullptr;
-		OutParams.ImageBase = GMComponent->DefaultSlotSettings.IconDisabled;
+		OutParams.ImageFrame = StylePtr->IconBorderDisabled;
+		OutParams.ImageSelected = StylePtr->bCanSelectDisabled ? StylePtr->IconSelected : nullptr;
+		OutParams.ImagePointed = StylePtr->bCanPointAtDisabled ? StylePtr->IconPointed : nullptr;
+		OutParams.ImageBase = StylePtr->IconDisabled;
 		OutParams.SuperscriptText = FText();
 		OutParams.SubscriptText = FText();
 
 	}
 	else if (IsEmpty()) {
-		OutParams.ImageFrame = GMComponent->DefaultSlotSettings.IconBorder;
-		OutParams.ImageSelected = GMComponent->DefaultSlotSettings.IconSelected;
-		OutParams.ImagePointed = GMComponent->DefaultSlotSettings.IconPointed;
-		OutParams.ImageBase = GMComponent->DefaultSlotSettings.IconEmpty;
+		OutParams.ImageFrame = StylePtr->IconBorder;
+		OutParams.ImageSelected = StylePtr->IconSelected;
+		OutParams.ImagePointed = StylePtr->IconPointed;
+		OutParams.ImageBase = StylePtr->IconEmpty;
 		OutParams.SuperscriptText = FText();
 		OutParams.SubscriptText = FText();
 
 	}
 	else {
-		OutParams.ImageFrame = GMComponent->DefaultSlotSettings.IconBorder;
-		OutParams.ImageSelected = GMComponent->DefaultSlotSettings.IconSelected;
-		OutParams.ImagePointed = GMComponent->DefaultSlotSettings.IconPointed;
+		OutParams.ImageFrame = StylePtr->IconBorder;
+		OutParams.ImageSelected = StylePtr->IconSelected;
+		OutParams.ImagePointed = StylePtr->IconPointed;
 		OutParams.ImageBase = UNaItemDataStatics::GetItemDisplayDataFromID(GMComponent, ItemEntryPtr->TypeDescriptor.ItemTypeID).BrushImage;
 		OutParams.SuperscriptText = FText();
 		OutParams.SubscriptText = (bHideAmountWhenOne && ItemEntryPtr->Amount == 1) ? FText() : FText::FromString(FString::FromInt(ItemEntryPtr->Amount));
@@ -82,13 +93,13 @@ void SNaItemSlot::ParamsFromEntry(FNaBoxSlotParams& OutParams) {
 
 void SNaItemSlot::ResetItemEntry(TSharedPtr<FNaItemEntry> NewEntryPtr) {
 	ItemEntryPtr = NewEntryPtr;
-	ParamsFromEntry(TempParams);
+	MakeParams(TempParams);
 	BoxSlot->Reset(TempParams);
 }
 
 void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 	bIsDisabled = NewDisabledState;
-	ParamsFromEntry(TempParams);
+	MakeParams(TempParams);
 	BoxSlot->Reset(TempParams);
 }
 
