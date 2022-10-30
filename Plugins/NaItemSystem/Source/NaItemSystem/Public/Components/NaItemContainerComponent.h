@@ -45,6 +45,4 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FNaItemContainer Container;
 
-public:
-
 };
