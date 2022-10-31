@@ -40,6 +40,7 @@ public:
 	SLATE_ATTRIBUTE(UNaItemContainerComponent*, Container)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
+	SLATE_ATTRIBUTE(int, RowCount)	// Amount of rows. If this count is not enough for container, it will be ignored and the row count will be automatically calculated from container.
 	SLATE_ARGUMENT(UNaItemSlotList*, FromUMG) /* If generated from UNaItemSlotList, set this value */
 
 	SLATE_END_ARGS()
@@ -61,6 +62,7 @@ protected:
 	FNaItemSlotPublicStyle* StylePtr = nullptr;
 	bool bFillDisabledToCompleteRectangle;
 	int RowLength;
+	int RowCount;
 
 	// Actual length including disabled slots in the end 
 	int ActualLength;

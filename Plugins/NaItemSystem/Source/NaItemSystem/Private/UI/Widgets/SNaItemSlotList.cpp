@@ -39,6 +39,7 @@ void SNaItemSlotList::Construct(const FArguments& InArgs)
 	StylePtr = InArgs._StylePtr.Get();
 	bFillDisabledToCompleteRectangle = InArgs._bFillDisabledToCompleteRectangle.Get();
 	RowLength = InArgs._RowLength.Get();
+	RowCount = InArgs._RowCount.Get();
 
 	/* Add panel */
 	ChildSlot
@@ -80,9 +81,19 @@ void SNaItemSlotList::Reconstruct() {
 	// Start rebuild
 	if (!bIsInvalid) {
 
-		// Actual length needs to be re-calculated
-		ActualLength = (!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) ? Container->Container.GetSize() : (Container->Container.GetSize() - Container->Container.GetSize() % RowLength + RowLength);
-
+		/* Calculate actual length */
+		// When row count is applied
+		if (RowCount * RowLength > Container->Container.GetSize()) {
+			ActualLength = RowCount * RowLength;
+		}
+		// When additional disabled slots are not needed
+		else if(!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) {
+			ActualLength = Container->Container.GetSize();
+		}
+		// When disabled slots are needed and actual length needs to be automatically calculated (no rows with all disabled)
+		else {
+			ActualLength = (int(Container->Container.GetSize() / RowLength) + 1) * RowLength;
+		}
 		// Re-add child slots
 		int i = 0;
 		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);

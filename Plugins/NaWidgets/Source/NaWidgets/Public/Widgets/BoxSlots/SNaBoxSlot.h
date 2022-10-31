@@ -80,12 +80,16 @@ public:
 		_Params = nullptr;
 		_SubscriptFont = FTextBlockStyle::GetDefault().Font;
 		_SuperscriptFont = FTextBlockStyle::GetDefault().Font;
+		_SubscriptColor = FLinearColor(1, 1, 1, 1);
+		_SuperscriptColor = FLinearColor(1, 1, 1, 1);
 		_bShowPointedWhenSelected = true;
 	}
 
 	SLATE_ATTRIBUTE(const FNaBoxSlotParams*, Params) /* Only for initialization. After initialization this pointer will be no longer valid. */
 	SLATE_ATTRIBUTE(FSlateFontInfo, SubscriptFont)
 	SLATE_ATTRIBUTE(FSlateFontInfo, SuperscriptFont)
+	SLATE_ATTRIBUTE(FLinearColor, SubscriptColor)
+	SLATE_ATTRIBUTE(FLinearColor, SuperscriptColor)
 	SLATE_ATTRIBUTE(bool, bShowPointedWhenSelected)	/* If true, when the slot is both selected and pointed, the pointed image will still be shown. */
 
 
@@ -110,7 +114,10 @@ protected:
 
 	/* Params */
 	FNaBoxSlotParams Params;
-	FSlateFontInfo SubscriptFont;	FSlateFontInfo SuperscriptFont;
+	FSlateFontInfo SubscriptFont;	
+	FSlateFontInfo SuperscriptFont;
+	FLinearColor SubscriptColor;
+	FLinearColor SuperscriptColor;
 
 	/* Ptrs of brushes for each laer */
 	TSharedPtr<FSlateBrush> BrushBase;

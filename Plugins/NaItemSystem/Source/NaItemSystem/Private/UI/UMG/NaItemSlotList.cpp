@@ -21,7 +21,8 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 		SAssignNew(List, SNaItemSlotList)
 			.FromUMG(this)
 			.StylePtr(PublicStylePtr)
-			.RowLength(RowLength);
+			.RowLength(RowLength)
+			.RowCount(RowCount);
 		return List.ToSharedRef();
 	}
 	else {
@@ -29,7 +30,8 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 			.Container(ContainerComponent)
 			.FromUMG(this)
 			.StylePtr(PublicStylePtr)
-			.RowLength(RowLength);
+			.RowLength(RowLength)
+			.RowCount(RowCount);
 	}
 
 	return List.ToSharedRef();

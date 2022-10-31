@@ -21,6 +21,8 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 	OnUnpointed = InArgs._OnUnpointed;
 	OnSelected = InArgs._OnSelected;
 	OnUnselected = InArgs._OnUnselected;
+	SubscriptColor = InArgs._SubscriptColor.Get();
+	SuperscriptColor = InArgs._SubscriptColor.Get();
 
 
 	// If _Params attribute is not set, initialize with default params
@@ -73,6 +75,7 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 					SAssignNew(Subscript, STextBlock)
 					.Text(TAttribute<FText>(Params.SubscriptText))
 					.Font(TAttribute<FSlateFontInfo>(SubscriptFont))
+					.ColorAndOpacity(SubscriptColor)
 				]
 			+ SOverlay::Slot()
 				.HAlign(HAlign_Right)
@@ -81,6 +84,7 @@ void SNaBoxSlot::Construct(const FArguments& InArgs)
 					SAssignNew(Superscript, STextBlock)
 					.Text(TAttribute<FText>(Params.SuperscriptText))
 					.Font(TAttribute<FSlateFontInfo>(SuperscriptFont))
+					.ColorAndOpacity(SuperscriptColor)
 				]
 		]
 	];

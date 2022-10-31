@@ -51,9 +51,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UObject* IconSelected = nullptr;
 
+	/* Font for subscript (amount indicator). */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	/* Font for subscript (amount). */
 	FSlateFontInfo SubscriptFont = FTextBlockStyle::GetDefault().Font;
+
+	/* Color for subscript (amount indicator). */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FLinearColor SubscriptColor = FLinearColor(1, 1, 1, 1);
 
 	/* If true, the disabled item slots will enable to be pointed */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -113,6 +117,8 @@ protected:
 	FNaItemSlotPublicStyle* StylePtr = nullptr;
 
 	FSlateFontInfo Font = FTextBlockStyle::GetDefault().Font;
+
+	FLinearColor SubscriptColor = FLinearColor(1, 1, 1, 1);
 
 	/* State and general properties */
 

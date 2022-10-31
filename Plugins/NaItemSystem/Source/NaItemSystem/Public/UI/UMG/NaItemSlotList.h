@@ -40,11 +40,22 @@ protected:
 public:
 
 	/* Style */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList|Style")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
 	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
 
+	// Amount of slots each row
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
 	int RowLength = 8;
+	
+	// Amount of rows. If this count is not enough for container, it will be ignored and the row count will be automatically
+	// calculated from container.
+	// If this value is applied, the slot will always be a complete rectangle.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
+	int RowCount = 0;
+
+	// If true, it will automatically add disabled slots at the end to make it a complete rectangle
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
+	bool bFillDisabledToCompleteRectangle = true;
 
 
 

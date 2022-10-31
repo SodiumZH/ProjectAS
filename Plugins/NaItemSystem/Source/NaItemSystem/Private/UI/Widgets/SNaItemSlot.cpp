@@ -32,6 +32,7 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 	if (StylePtr) {
 		Font = StylePtr->SubscriptFont;
 		bHideAmountWhenOne = StylePtr->bHideAmountWhenOne;
+		SubscriptColor = StylePtr->SubscriptColor;
 	}
 
 	MakeParams(TempParams);
@@ -41,6 +42,7 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 		SAssignNew(BoxSlot, SNaBoxSlot)
 		.Params(&TempParams)
 		.SubscriptFont(Font)
+		.SubscriptColor(SubscriptColor)
 	];
 
 }
