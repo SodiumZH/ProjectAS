@@ -72,7 +72,7 @@ FNaItemEffectData UNaItemDataStatics::GetItemEffectDataFromID(UObject* WorldCont
 		UE_LOG(LogNaItem, Warning, TEXT("Get item effect data failed: GameModeItemSystemComponent isn't correctly loaded to game mode."));
 		return FNaItemEffectData();
 	}
-	if (!IsValid(GMComp->ItemDisplayDataTable)) {
+	if (!IsValid(GMComp->ItemEffectDataTable)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Get item effect data failed: item display data table is invalid. Set in GameModeItemSystemComponent."));
 		return FNaItemEffectData();
 	}

@@ -15,12 +15,12 @@ struct NAITEMSYSTEM_API FNaItemUsageReturn {
 public:
 	
 	// Whether usage succeeded
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bSucceeded = false;
 	FNaItemUsageReturn SetSucceeded(bool value);
 
 	// Amount of items consumed per usage
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	int ConsumedAmount = 0;
 	FNaItemUsageReturn SetConsumedAmount(int value);
 
