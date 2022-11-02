@@ -9,7 +9,6 @@
 #include "Components/NaGameModeItemSystemComponent.h"
 #include "BPLibraries/NaItemStatics.h"
 #include "BPLibraries/NaItemDataStatics.h"
-#include "GameFramework/Actor.h"
 
 
 // Found item successfully
@@ -347,7 +346,7 @@ int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaI
 	return Entry.Amount;
 }
 
-FNaItemUsageReturn FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
+FNaItemUsageReturn FNaItemContainer::UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target) {
 	check(CheckStacking(WorldContext));
 	UClass* EffectClass = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).EffectClass.Get();
 	return dynamic_cast<UNaItemEffect*>(EffectClass->GetDefaultObject())->UseItem(Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
