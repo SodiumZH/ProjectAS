@@ -5,6 +5,8 @@
 #include "NaItemContainer.h"
 #include "UI/UMG/NaItemSlotList.h"
 #include "UI/Widgets/SNaItemSlotList.h"
+#include "NaItemContainer.h"
+#include "NaItemEffect.h"
 
 // Sets default values for this component's properties
 UNaItemContainerComponent::UNaItemContainerComponent()
@@ -43,3 +45,9 @@ void UNaItemContainerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// ...
 }
 
+FNaItemUsageReturn UNaItemContainerComponent::UseItemFromSelf(int Position, AActor* Target) {
+	checkf(Container.IsInSize(Position), TEXT("NaItemContainerComponent use item error: invalid position. Position: %d"), Position);
+	if(IsValid(GetOwner()))
+		return Container.UseItem(this, Position, GetOwner(), Target);
+	else return FNaItemUsageReturn::Null();
+}

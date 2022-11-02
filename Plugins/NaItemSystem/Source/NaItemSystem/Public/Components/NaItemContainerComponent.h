@@ -45,4 +45,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FNaItemContainer Container;
 
+	/* Usage */
+
+	/* Use item once from owning actor */
+	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
+	struct FNaItemUsageReturn UseItemFromSelf(int Position, AActor* Target);
+
+
 };

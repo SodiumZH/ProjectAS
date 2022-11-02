@@ -51,6 +51,15 @@ struct FNaItemContainerFindingReturn {
 	{};
 };
 
+UENUM()
+enum class ENaItemContainerAddingCheckResult {
+	ICACR_CanAdd,
+	ICACR_CanPartlyAdd,
+	ICACR_CannotAdd
+
+	
+};
+
 /* Structure that contains a series of items.
 * It can be used to describe a bag, shop, etc.
 */
@@ -170,7 +179,12 @@ public:
 	* @ReturnValue Amount of item that cannot be added to the container.
 	*/
 	
+	/* Check if a stack of items can be added into the container. */
+	ENaItemContainerAddingCheckResult CanAdd(UObject* WorldContext);
+
+
 	/*--- Item Usage ---*/
+	
 	FNaItemUsageReturn UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
 

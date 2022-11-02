@@ -51,6 +51,7 @@ public:
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get display data"), Category = "NaItemSystem|ItemType")
 	static FNaItemDisplayData GetItemDisplayDataFromID(UObject* WorldContext, int ID);
 
+	/* Get item effect data from ID */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get effect usage use using data"), Category = "NaItemSystem|ItemType")
 	static FNaItemEffectData GetItemEffectDataFromID(UObject* WorldContext, int ID);
 

@@ -88,7 +88,7 @@ public:
 	// Check if an int ID is available for an ID
 	static bool IsValidID(int ID) { return ID >= 0 && ID <= 9999999; };
 
-	// Check if type data is valid
+	// Check if type data ptr is valid (non-null).
 	FORCEINLINE bool IsValid() const { return TypeData.IsValid(); };
 
 	// Get a ref of type data
@@ -99,7 +99,7 @@ public:
 
 	TSharedPtr<FNaItemTypeData> CopyTypeData() const;
 
-	// Check if a type is valid
-	FORCEINLINE bool IsValidType() const { return TypeData.IsValid(); };
+	// Check if this item type is valid
+	FORCEINLINE bool IsValidType() const { return TypeData.IsValid() && FNaItemTypeData::IsValidRowName(FNaItemTypeData::IntToRowName(ID)); };
 
 };

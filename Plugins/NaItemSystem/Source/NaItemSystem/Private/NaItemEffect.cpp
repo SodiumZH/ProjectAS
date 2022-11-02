@@ -1,5 +1,6 @@
 
 #include "NaItemEffect.h"
+#include "BPLibraries/NaItemDataStatics.h"
 
 FNaItemUsageReturn FNaItemUsageReturn::SetSucceeded(bool value) {
 	bSucceeded = value;
@@ -32,10 +33,23 @@ FNaItemUsageReturn UNaItemEffect::ItemEffectBP_Implementation(int ItemID, AActor
 }
 
 FNaItemUsageReturn UNaItemEffect::UseItem(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
-	checkf(IsValid(SourceActor), TEXT("UseItem error: Invalid source actor."));
+	
+	// Source actor is not allowed to be null
+	checkf(IsValid(SourceActor), TEXT("UseItem error: Invalid source actor. Using item ID: %d"), ItemID);
+
+	// When ID is invalid (including empty), do nothing
+	if (!UNaItemDataStatics::GetItemTypeFromID(StaticClass()->GetDefaultObject(), ItemID).IsValidType()) {
+		return FNaItemUsageReturn::Null();
+	}
+	// If the item is not usable, do nothing
+	if (!UNaItemDataStatics::GetItemEffectDataFromID(StaticClass()->GetDefaultObject(), ItemID).bCanUse) {
+		return FNaItemUsageReturn::Null();
+	}
+	// Blueprint override
 	if (Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->bUseBlueprintOverride) {
 		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffectBP(ItemID, SourceActor, TargetActor, ItemPosition);
 	}
+	// C++ override
 	else {
 		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
 	}
