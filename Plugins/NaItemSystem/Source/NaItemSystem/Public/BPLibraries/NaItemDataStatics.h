@@ -4,7 +4,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "../Data/NaItemType.h"
 #include "../Data/NaItemDisplaydata.h"
-#include "../Data/NaItemEffectdata.h"
 #include "../NaItemContainer.h"
 #include "../NaItemEntry.h"
 #include "NaItemDataStatics.generated.h"
@@ -50,9 +49,6 @@ public:
 	/* Get item display data from ID */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get display data"), Category = "NaItemSystem|ItemType")
 	static FNaItemDisplayData GetItemDisplayDataFromID(UObject* WorldContext, int ID);
-
-	UFUNCTION(BlueprintPure, meta = (Keywords = "get effect usage use using data"), Category = "NaItemSystem|ItemType")
-	static FNaItemEffectData GetItemEffectDataFromID(UObject* WorldContext, int ID);
 
 	/*- Item descriptor -*/
 

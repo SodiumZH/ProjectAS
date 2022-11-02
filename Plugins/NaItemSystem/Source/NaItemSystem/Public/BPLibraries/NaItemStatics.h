@@ -15,7 +15,6 @@ struct FNaItemDescriptor;
 struct FNaItemType;
 struct FTableRowBase;
 struct FNaItemEntry;
-struct FNaItem
 class UNaGameModeItemSystemComponent;
 
 UCLASS()
@@ -141,12 +140,4 @@ public:
 	/*- Item System game mode component related 0-*/
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|GameMode")
 	static UNaGameModeItemSystemComponent * GetGameModeItemSystemComponent(UObject* WorldContext);
-
-
-
-	/*-- Item usage --*/
-	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|Usage")
-	static 
-
-
 };

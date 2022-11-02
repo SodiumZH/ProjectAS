@@ -9,7 +9,6 @@
 struct FNaItemType;
 struct FNaItemDescriptor;
 struct FNaItemEntry;
-struct FNaItemUsageReturn;
 class UNaGameModeItemSystemComponent;
 
 
@@ -150,8 +149,6 @@ public:
 	* So a world context object is required for getting world
 	*/
 
-	/** Check if the container's item stack amounts are correct. */
-	bool CheckStacking(UObject* WorldContext);
 
 	/** Add or stack items to a position.
 	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
@@ -170,10 +167,6 @@ public:
 	* @ReturnValue Amount of item that cannot be added to the container.
 	*/
 	
-	/*--- Item Usage ---*/
-	FNaItemUsageReturn UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
-
-
 };
 
 

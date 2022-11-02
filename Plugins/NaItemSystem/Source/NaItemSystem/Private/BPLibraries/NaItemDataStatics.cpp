@@ -66,24 +66,6 @@ FNaItemDisplayData UNaItemDataStatics::GetItemDisplayDataFromID(UObject* WorldCo
 	return RetValPtr ? (*RetValPtr) : FNaItemDisplayData();
 }
 
-FNaItemEffectData UNaItemDataStatics::GetItemEffectDataFromID(UObject* WorldContext, int ID) {
-	UNaGameModeItemSystemComponent * GMComp = UNaItemStatics::GetGameModeItemSystemComponent(WorldContext);
-	if (!IsValid(GMComp)) {
-		UE_LOG(LogNaItem, Warning, TEXT("Get item effect data failed: GameModeItemSystemComponent isn't correctly loaded to game mode."));
-		return FNaItemEffectData();
-	}
-	if (!IsValid(GMComp->ItemDisplayDataTable)) {
-		UE_LOG(LogNaItem, Warning, TEXT("Get item effect data failed: item display data table is invalid. Set in GameModeItemSystemComponent."));
-		return FNaItemEffectData();
-	}
-	if (GMComp->ItemDisplayDataTable->RowStruct != FNaItemDisplayData::StaticStruct()) {
-		UE_LOG(LogNaItem, Warning, TEXT("Get item effect data failed: item display data table row struct must be FNaItemEffectData."));
-		return FNaItemEffectData();
-	}
-	FNaItemEffectData* RetValPtr = GMComp->ItemEffectDataTable->FindRow<FNaItemEffectData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemEffectDataTable"));
-	return RetValPtr ? (*RetValPtr) : FNaItemEffectData();
-}
-
 FNaItemDescriptor UNaItemDataStatics::MakeDefaultDescriptor(int ID) {
 	return FNaItemDescriptor(ID);
 }

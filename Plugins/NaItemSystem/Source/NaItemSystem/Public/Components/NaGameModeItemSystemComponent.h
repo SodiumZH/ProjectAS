@@ -27,9 +27,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|DataTables")
 	UDataTable * ItemDisplayDataTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|DataTables")
-	UDataTable * ItemEffectDataTable;
-
 public:
 
 	/* Default type data struct for reply when reading a null data piece */
