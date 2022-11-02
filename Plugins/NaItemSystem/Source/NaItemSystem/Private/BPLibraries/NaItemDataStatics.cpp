@@ -2,7 +2,7 @@
 #include "NaItemEntry.h"
 #include "NaUtility.h"
 #include "Data/NaItemType.h"
-#include "Actors/NaItemEffect.h"
+#include "NaItemEffect.h"
 #include "Engine/DataTable.h"
 #include "NaPublicDependencies/NaPublicDependencies.h"
 #include "Components/NaGameModeItemSystemComponent.h"

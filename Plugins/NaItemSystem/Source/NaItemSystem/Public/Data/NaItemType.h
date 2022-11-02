@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "Actors/NaItemEffect.h"
+#include "NaItemEffect.h"
 #include "NaItemType.generated.h"
 
 /* Struct for the item type database. This is the item for distinction of items.

@@ -294,9 +294,8 @@ void FNaItemContainer::SwapEntry(int P1, int P2) {
 bool FNaItemContainer::CheckStacking(UObject* WorldContext) {
 	int i = 0;
 	for (i = 0; i < Size; ++i) {
-		temp = UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).GetTypeData().MaxStackingAmount;
-		if (Content[Position].Amount <= 0
-			|| Content[Position].Amount > UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).GetTypeData().MaxStackingAmount)
+		if (Content[i]->Amount <= 0 ||
+			Content[i]->Amount > UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[i]->TypeDescriptor.ItemTypeID).GetTypeData().MaxStackingAmount)
 			return false;
 	}
 	return true;
@@ -350,5 +349,5 @@ int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaI
 FNaItemUsageReturn FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
 	check(CheckStacking(WorldContext));
 	UClass* EffectClass = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).EffectClass.Get();
-	return dynamic_cast<UNaItemEffect*>(EffectClass->GetDefaultObject())->UseItem(Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
+	return Cast<UNaItemEffect>(EffectClass->GetDefaultObject())->UseItem(Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
 }

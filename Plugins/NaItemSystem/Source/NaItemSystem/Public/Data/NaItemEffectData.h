@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,4 +17,4 @@ public:
 public:
 
 
-}
+};
