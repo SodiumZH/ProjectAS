@@ -32,17 +32,17 @@ FNaItemUsageReturn UNaItemEffect::ItemEffectBP_Implementation(int ItemID, AActor
 	return FNaItemUsageReturn::Null();
 }
 
-FNaItemUsageReturn UNaItemEffect::UseItem(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
+FNaItemUsageReturn UNaItemEffect::UseItem(UObject* WorldContext, int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
 	
 	// Source actor is not allowed to be null
 	checkf(IsValid(SourceActor), TEXT("UseItem error: Invalid source actor. Using item ID: %d"), ItemID);
 
 	// When ID is invalid (including empty), do nothing
-	if (!UNaItemDataStatics::GetItemTypeFromID(StaticClass()->GetDefaultObject(), ItemID).IsValidType()) {
+	if (!UNaItemDataStatics::GetItemTypeFromID(WorldContext, ItemID).IsValidType()) {
 		return FNaItemUsageReturn::Null();
 	}
 	// If the item is not usable, do nothing
-	if (!UNaItemDataStatics::GetItemEffectDataFromID(StaticClass()->GetDefaultObject(), ItemID).bCanUse) {
+	if (!UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, ItemID).bCanUse) {
 		return FNaItemUsageReturn::Null();
 	}
 	// Blueprint override

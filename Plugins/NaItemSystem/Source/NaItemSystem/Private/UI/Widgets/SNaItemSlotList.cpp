@@ -113,7 +113,6 @@ void SNaItemSlotList::Reconstruct() {
 					.StylePtr(StylePtr)
 					.WorldContext(GMComponent)
 					.bIsDisabled(true)
-					.EntryPtr(Container->Container.Find(i).EntryPtr)
 			];
 		}
 		for (i = 0; i < ActualLength; ++i) {

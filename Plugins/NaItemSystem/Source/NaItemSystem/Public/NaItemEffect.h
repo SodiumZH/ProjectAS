@@ -73,7 +73,7 @@ public:
 
 public:
 
-	FNaItemUsageReturn UseItem(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition);
+	FNaItemUsageReturn UseItem(UObject* WorldContext, int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition);
 
 };
 
