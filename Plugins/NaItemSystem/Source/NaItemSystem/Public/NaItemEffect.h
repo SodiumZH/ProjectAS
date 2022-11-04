@@ -50,11 +50,11 @@ public:
 	// @Param TargetActor Actor as target of the item.
 	// @Param ItemPosition If the item comes from an item container, its position in the container. -1 means disabled.
 	// @ReturnValue Whether the usage succeeded.
-	virtual FNaItemUsageReturn ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
+	//virtual FNaItemUsageReturn ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
 
 	// If true, the effect will use blueprint function override (i.e. use ItemEffectBP() instead of ItemEffect()).
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ItemEffect")
-	bool bUseBlueprintOverride = false;
+//	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ItemEffect")
+//	bool bUseBlueprintOverride = false;
 
 	/* Item effect defined in BP.
 	* WARNINGS
@@ -68,8 +68,8 @@ public:
 	* For tutorial and warnings, see NaItemEffect.h
 	**/
 	UFUNCTION(BlueprintNativeEvent, DisplayName = "ItemEffectBlueprintOverride", Category = "NaItemSystem|ItemEffect")
-	FNaItemUsageReturn ItemEffectBP(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
-	FNaItemUsageReturn ItemEffectBP_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
+	FNaItemUsageReturn ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
+	virtual FNaItemUsageReturn ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
 
 public:
 
@@ -79,7 +79,7 @@ public:
 
 /* ItemEffect setting tutorial
 * Item ID is the item expected to use. This means multiple items can be defined in a single effect class.
-* SourceActor is the item used from (usually the player, must be valid). Invalid source actor triggers assert.
+* SourceActor is the item used from (usually the player, must be valid). Invalid source actor triggers assert. Keep in mind that what exactly the source actor is, player controller or pawn.
 * TargetActor is the item used toward. E.g. Other players, monsters, etc. Optional, allowed to be invalid. (Caution for nullptr error!)
 * Position: Only for when the item is used from a container. This input is applied to define position-related behaviors. Also, this value can serve as an additional parameter, not limited in the container position.
 * return

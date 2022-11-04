@@ -24,11 +24,11 @@ FNaItemUsageReturn FNaItemUsageReturn::UsedNoConsumption() {
 	return FNaItemUsageReturn().SetSucceeded(true);
 }
 
-FNaItemUsageReturn UNaItemEffect::ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
-	return FNaItemUsageReturn::Null();
-}
+//FNaItemUsageReturn UNaItemEffect::ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
+//	return FNaItemUsageReturn::Null();
+//}
 
-FNaItemUsageReturn UNaItemEffect::ItemEffectBP_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
+FNaItemUsageReturn UNaItemEffect::ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
 	return FNaItemUsageReturn::Null();
 }
 
@@ -46,11 +46,11 @@ FNaItemUsageReturn UNaItemEffect::UseItem(UObject* WorldContext, int ItemID, AAc
 		return FNaItemUsageReturn::Null();
 	}
 	// Blueprint override
-	if (bUseBlueprintOverride) {
-		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffectBP(ItemID, SourceActor, TargetActor, ItemPosition);
-	}
+	//if (bUseBlueprintOverride) {
+		return ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
+	//}
 	// C++ override
-	else {
-		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
-	}
+//	else {
+//		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
+//	}
 }
