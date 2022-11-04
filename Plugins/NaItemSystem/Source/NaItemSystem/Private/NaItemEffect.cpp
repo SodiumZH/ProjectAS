@@ -46,7 +46,7 @@ FNaItemUsageReturn UNaItemEffect::UseItem(UObject* WorldContext, int ItemID, AAc
 		return FNaItemUsageReturn::Null();
 	}
 	// Blueprint override
-	if (Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->bUseBlueprintOverride) {
+	if (bUseBlueprintOverride) {
 		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffectBP(ItemID, SourceActor, TargetActor, ItemPosition);
 	}
 	// C++ override
