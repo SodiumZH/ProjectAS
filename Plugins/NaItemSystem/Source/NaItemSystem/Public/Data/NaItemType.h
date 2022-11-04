@@ -69,15 +69,15 @@ struct NAITEMSYSTEM_API FNaItemType {
 protected:
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int ID;
+	int ID = 0;
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TSharedPtr<FNaItemTypeData> TypeData;
+	FNaItemTypeData* TypeData = nullptr;
 
 public:
 
 	// Make from ID and data ptr
-	FNaItemType(int InID, TSharedPtr<FNaItemTypeData> InData);
+	FNaItemType(int InID, FNaItemTypeData* InData);
 
 	// Make an invalid default type
 	FNaItemType() :FNaItemType(0, nullptr) {};
@@ -89,7 +89,7 @@ public:
 	static bool IsValidID(int ID) { return ID >= 0 && ID <= 9999999; };
 
 	// Check if type data ptr is valid (non-null).
-	FORCEINLINE bool IsValid() const { return TypeData.IsValid(); };
+	FORCEINLINE bool IsValid() const { return (bool)TypeData; };
 
 	// Get a ref of type data
 	FORCEINLINE const FNaItemTypeData & GetTypeData() const { return *TypeData; };
@@ -97,9 +97,9 @@ public:
 	// Get a copy of type data
 	void CopyTypeData(FNaItemTypeData & OutData) const;
 
-	TSharedPtr<FNaItemTypeData> CopyTypeData() const;
+	FNaItemTypeData CopyTypeData() const;
 
 	// Check if this item type is valid
-	FORCEINLINE bool IsValidType() const { return TypeData.IsValid() && FNaItemTypeData::IsValidRowName(FNaItemTypeData::IntToRowName(ID)); };
+	FORCEINLINE bool IsValidType() const { return TypeData && FNaItemTypeData::IsValidRowName(FNaItemTypeData::IntToRowName(ID)); };
 
 };

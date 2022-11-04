@@ -45,7 +45,7 @@ FNaItemType UNaItemDataStatics::GetItemTypeFromID(UObject* WorldContext, int ID)
 		UE_LOG(LogNaItem, Warning, TEXT("Get item type failed: item type data table row struct must be FNaItemTypeData."));
 		return FNaItemType();
 	}
-	return FNaItemType(ID, TSharedPtr<FNaItemTypeData>(GMComp->ItemTypeDataTable->FindRow<FNaItemTypeData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemTypeDataTable"))));
+	return FNaItemType(ID, GMComp->ItemTypeDataTable->FindRow<FNaItemTypeData>(FNaItemTypeData::IntToRowName(ID), TEXT("ItemTypeDataTable")));
 }
 
 FNaItemDisplayData UNaItemDataStatics::GetItemDisplayDataFromID(UObject* WorldContext, int ID){

@@ -61,13 +61,13 @@ int FNaItemTypeData::RowNameToInt(FName InRowName) {
 	return UKismetStringLibrary::Conv_StringToInt(InRowName.ToString());
 }
 
-FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeData> InData) {
+FNaItemType::FNaItemType(int InID, FNaItemTypeData* InData) {
 	if (!IsValidID(InID)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Making NaItemType: invalid ID."));
 		ID = 0;
 		TypeData = nullptr;
 	}
-	else if (!InData.IsValid()) {
+	else if (!InData) {
 		UE_LOG(LogNaItem, Warning, TEXT("Making NaItemType: Making from an invalid type data."));
 		ID = InID;
 		TypeData = nullptr;
@@ -79,7 +79,7 @@ FNaItemType::FNaItemType(int InID, TSharedPtr<FNaItemTypeData> InData) {
 }
 
 void FNaItemType::CopyTypeData(FNaItemTypeData & OutData) const {
-	if (!TypeData.IsValid()) {
+	if (!TypeData) {
 		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
 		OutData = FNaItemTypeData();
 		return;
@@ -87,10 +87,10 @@ void FNaItemType::CopyTypeData(FNaItemTypeData & OutData) const {
 	OutData = *TypeData;
 }
 
-TSharedPtr<FNaItemTypeData> FNaItemType::CopyTypeData() const {
-	if (!TypeData.IsValid()) {
+FNaItemTypeData FNaItemType::CopyTypeData() const {
+	if (!TypeData) {
 		UE_LOG(LogNaItem, Warning, TEXT("Copying NaItemType: Trying copying from invalid type. Return default."));
-		return TSharedPtr<FNaItemTypeData>(new FNaItemTypeData());
+		return FNaItemTypeData();
 	}
-	return TSharedPtr<FNaItemTypeData>(new FNaItemTypeData(*TypeData));
+	return *TypeData;
 }
