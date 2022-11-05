@@ -349,14 +349,14 @@ int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaI
 	return Entry.Amount;
 }
 
-FNaItemUsageReturn FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
-	check(CheckStacking(WorldContext));
+ENaItemContainerUsageResult FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
+	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer Pre-item-usage check failed: Item stacking amount error detected."));
 	if (!Content[Position].IsValid()) {
 		UE_LOG(LogNaItem, Log, TEXT("NaItemContainer using item: using item from an empty slot."));
-		return FNaItemUsageReturn::Null();
+		return ENaItemContainerUsageResult::Null();
 	}
 	UClass* EffectClass = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).EffectClass.Get();
-	FNaItemUsageReturn res = Cast<UNaItemEffect>(EffectClass->GetDefaultObject())->UseItem(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
+	ENaItemContainerUsageResult res = Cast<UNaItemEffect>(EffectClass->GetDefaultObject())->UseItem(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
 	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer using item error: Item stacking amount error after usage. Position: %d, Item ID: %d"), Position, Content[Position]->TypeDescriptor.ItemTypeID);
 	return res;
 }

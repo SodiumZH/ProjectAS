@@ -9,7 +9,7 @@
 struct FNaItemType;
 struct FNaItemDescriptor;
 struct FNaItemEntry;
-struct FNaItemUsageReturn;
+struct ENaItemContainerUsageResult;
 class UNaGameModeItemSystemComponent;
 
 
@@ -59,6 +59,7 @@ enum class ENaItemContainerAddingCheckResult {
 
 	
 };
+
 
 /* Structure that contains a series of items.
 * It can be used to describe a bag, shop, etc.
@@ -185,7 +186,8 @@ public:
 
 	/*--- Item Usage ---*/
 	
-	FNaItemUsageReturn UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
+	 VirtualUseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target)
+	ENaItemContainerUsageResult UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
 
 };

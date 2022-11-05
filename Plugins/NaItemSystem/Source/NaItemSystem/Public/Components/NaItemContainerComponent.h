@@ -49,7 +49,7 @@ public:
 
 	/* Use item once from owning actor */
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|ItemContainer")
-	struct FNaItemUsageReturn UseItemFromSelf(int Position, AActor* Target);
+	struct ENaItemContainerUsageResult UseItemFromSelf(int Position, AActor* Target);
 
 
 };

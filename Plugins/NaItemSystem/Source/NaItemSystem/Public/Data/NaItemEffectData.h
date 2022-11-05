@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "../NaItemEffect.h"
+#include "../NaItemEntry.h"
 #include "NaItemEffectData.generated.h"
 
 // Data table row struct defining usage effect of item
@@ -21,7 +22,15 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UNaItemEffect> EffectClass = UNaItemEffect::StaticClass();
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ENaItemUsageConsumptionType ConsumptionType = ENaItemUsageConsumptionType::IUCT_One;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int IntParam = -1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FNaItemEntry> EntryArray = TArray<FNaItemEntry>();
 public:
 
 
