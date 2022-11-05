@@ -47,7 +47,7 @@ enum class ENaItemUsageConsumptionType:uint8 {
 
 	// Get other item without consuming this
 	// EntryArray - Other items to get
-	IUCT_GetOtherNoConsumption	UMETA(DisplayName = "Get Other Items without Consumption"),
+	IUCT_GetOtherNoConsumption	UMETA(DisplayName = "Getting Other Items without Consumption"),
 
 	// Consume multiple this and get other items
 	// IntParam - Consuming amount
@@ -57,54 +57,65 @@ enum class ENaItemUsageConsumptionType:uint8 {
 	// Custom type. Should be defined in corresponding item effect
 	IUCT_Custom	UMETA(DisplayName = "Custom")
 };
-/*
-USTRUCT(BlueprintType)
-struct NAITEMSYSTEM_API ENaItemContainerUsageResult {
 
-	GENERATED_BODY()
-
-public:
-	
-	// Whether usage succeeded
-	UPROPERTY(BlueprintReadWrite)
-	bool bSucceeded = false;
-	ENaItemContainerUsageResult SetSucceeded(bool value);
-
-	// Amount of items consumed per usage
-	UPROPERTY(BlueprintReadWrite)
-	int ConsumedAmount = 0;
-	ENaItemContainerUsageResult SetConsumedAmount(int value);
-
-	// Usage failed, nothing happened
-	static ENaItemContainerUsageResult Null();
-	
-	// Usage succeeded and an item was consumed
-	static ENaItemContainerUsageResult Consumed();
-
-	// Usage succeeded but not consumed
-	static ENaItemContainerUsageResult UsedNoConsumption();
-
-};
-*/
 
 // When item is used from a container, the usage result
 UENUM()
 enum class ENaItemContainerUsageResult :uint8 {
 
+	/*------------- Errors -------------*/
+
+	// Unidentified failure
+	ICUR_Failed	UMETA(Display = "UnidentifiedFailure"),
+
+	// Internal error, usually from C++ code
+	ICUR_Error	UMETA(Display = "InternalError"),
+
+	// Using items undefined in data table
+	ICUR_Invalid	UMETA(Display = "UsingItemWithInvalidIndex"),
+
+	/*------------- Succeeded -------------*/
+
 	// Usage succeeded
 	ICUR_Succeeded	UMETA(DisplayName = "Succeeded"),
 
+
+	/*------------- Normal failures from item properties -------------*/
+	/*------------- index starts from 10 -------------*/
+
+	// Item to use is defined non-usable in Effect Data Table
+	ICUR_NotUsable = 10	UMETA(DisplayName = "NotUsable"),
+
+	// Attempting to use an empty item
+	ICUR_Empty	UMETA(DisplayName = "UsingEmptyItem"),
+
+
+	/*------------- Normal failures from container -------------*/
+	/*------------- index start from 20 -------------*/
 	// The item to use is not enough
-	ICUR_NotEnoughItem	UMETA(DisplayName = "NotEnoughItem"),
+	ICUR_NoEnoughItem = 20	UMETA(DisplayName = "NoEnoughItem"),
 
 	// The item to use is enough, but additional other items to consume are not enough
-	ICUR_NotEnoughAdditionItems	UMETA(DisplayName = "NotEnoughOtherItems"),
+	ICUR_NoEnoughAdditionalItems	UMETA(DisplayName = "NoEnoughOtherItems"),
 
 	// The item will give another items to the container, but the space of container is not enough
-	ICUR_NotEnoughSpace	UMETA(DisplayName = "ContainerSpaceNotEnough"),
+	ICUR_NoEnoughSpace	UMETA(DisplayName = "NoEnoughContainerSpace"),
 
-	// Unidentified failure
-	ICUR_Failed	UMETA(Display = "Unidentified Failure")
+
+	/*------------- Custom failure types -------------*/
+	/*------------- index start from 100 -------------*/
+
+	ICUR_CustomFailure0 = 100	UMETA(DisplayName = "Custom Failure Type 0"),
+	ICUR_CustomFailure1	UMETA(DisplayName = "Custom Failure Type 1"),
+	ICUR_CustomFailure2	UMETA(DisplayName = "Custom Failure Type 2"),
+	ICUR_CustomFailure3	UMETA(DisplayName = "Custom Failure Type 3"),
+	ICUR_CustomFailure4	UMETA(DisplayName = "Custom Failure Type 4"),
+	ICUR_CustomFailure5	UMETA(DisplayName = "Custom Failure Type 5"),
+	ICUR_CustomFailure6	UMETA(DisplayName = "Custom Failure Type 6"),
+	ICUR_CustomFailure7	UMETA(DisplayName = "Custom Failure Type 7"),
+	ICUR_CustomFailure8	UMETA(DisplayName = "Custom Failure Type 8"),
+	ICUR_CustomFailure9	UMETA(DisplayName = "Custom Failure Type 9")
+
 };
 
 
@@ -117,22 +128,9 @@ class NAITEMSYSTEM_API UNaItemEffect :public UObject {
 
 public:
 
-	// Item effect defined in cpp.
-	// @Param ItemID Item ID to be used.
-	// @Param SourceActor Actor which uses the item.
-	// @Param TargetActor Actor as target of the item.
-	// @Param ItemPosition If the item comes from an item container, its position in the container. -1 means disabled.
-	// @ReturnValue Whether the usage succeeded.
-	//virtual ENaItemContainerUsageResult ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
-
-	// If true, the effect will use blueprint function override (i.e. use ItemEffectBP() instead of ItemEffect()).
-//	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ItemEffect")
-//	bool bUseBlueprintOverride = false;
-
-	/* Item effect defined in BP.
-	* WARNINGS
-	* Keep in mind to ensure the container item stacking amounts are correct! If not, it may trigger asserts or cause unexpected behaviors.
-	* Consumption or adding items should be especially noticed. When adding item, always check if the container is full!
+	/* Item effect applied.
+	* When the item type can be used, return Succeeded without considering the container status. 
+	* Usage in the container will double check its usability, and is not defined here.
 	* @Param ItemID Item ID to be used.
 	* @Param SourceActor Actor which uses the item.
 	* @Param TargetActor Actor as target of the item.
@@ -140,7 +138,7 @@ public:
 	* @ReturnValue Usage result, including whether successful, how many consumed.
 	* For tutorial and warnings, see NaItemEffect.h
 	**/
-	UFUNCTION(BlueprintNativeEvent, DisplayName = "ItemEffectBlueprintOverride", Category = "NaItemSystem|ItemEffect")
+	UFUNCTION(BlueprintNativeEvent, DisplayName = "ItemEffect", Category = "NaItemSystem|ItemEffect")
 	ENaItemContainerUsageResult ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
 	virtual ENaItemContainerUsageResult ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition = -1);
 
@@ -155,9 +153,34 @@ public:
 * SourceActor is the item used from (usually the player, must be valid). Invalid source actor triggers assert. Keep in mind that what exactly the source actor is, player controller or pawn.
 * TargetActor is the item used toward. E.g. Other players, monsters, etc. Optional, allowed to be invalid. (Caution for nullptr error!)
 * Position: Only for when the item is used from a container. This input is applied to define position-related behaviors. Also, this value can serve as an additional parameter, not limited in the container position.
-* return
-* 
-* WARNINGS
-* Keep in mind to ensure the container item stacking amounts are correct! If not, it may trigger asserts or cause unexpected behaviors. 
-* Consumption or adding items should be especially noticed. When adding item, always check if the container is full!
+* return: Whether this item type is usable, and why it's not usable. DO NOT CONSIDER CONTAINER!!
+*/
+
+/** Example
+	If we want to implement an HP potion recovering 50 HP each use, as ID == 10
+
+	In ItemEffect override (for BP, override ItemEffect()):
+class UMyEffect: public UNaItemEffect
+{
+	//....
+	virtual ENaItemContainerUsageResult ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) override
+	{
+		switch (ItemID){
+		//....
+		case 10:
+		{
+		Cast<AMyPlayer> SourceActor->HP += 50;	// Usage behavior here
+		return ENaItemContainerUsageResult::Succeeded;	// Return succeeded because this item is usable
+		}
+		//....
+	};
+	//....
+};
+
+	In Item Effect Data Table:
+		ID: 0000010,
+		EffectClass: UMyEffect, // Browsed in editor here
+		ConsumptionType: ConsumingOne, // Set here and consumption will be executed in container's using item
+		IntParam: -1,	// ConsumingOne has no int param input, so it will not be applied
+		TypeArray: {}	// ConsumingOne has no type array input, so it will not be applied
 */

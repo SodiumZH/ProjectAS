@@ -1,35 +1,10 @@
 
 #include "NaItemEffect.h"
 #include "BPLibraries/NaItemDataStatics.h"
-
-ENaItemContainerUsageResult ENaItemContainerUsageResult::SetSucceeded(bool value) {
-	bSucceeded = value;
-	return *this;
-}
-
-ENaItemContainerUsageResult ENaItemContainerUsageResult::SetConsumedAmount(int value) {
-	ConsumedAmount = value;
-	return *this;
-}
-
-ENaItemContainerUsageResult ENaItemContainerUsageResult::Null(){
-	return ENaItemContainerUsageResult();
-}
-
-ENaItemContainerUsageResult ENaItemContainerUsageResult::Consumed(){
-	return ENaItemContainerUsageResult().SetSucceeded(true).SetConsumedAmount(1);
-}
-
-ENaItemContainerUsageResult ENaItemContainerUsageResult::UsedNoConsumption() {
-	return ENaItemContainerUsageResult().SetSucceeded(true);
-}
-
-//ENaItemContainerUsageResult UNaItemEffect::ItemEffect(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
-//	return ENaItemContainerUsageResult::Null();
-//}
+#include "NaItemType.h"
 
 ENaItemContainerUsageResult UNaItemEffect::ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
-	return ENaItemContainerUsageResult::Null();
+	return ENaItemContainerUsageResult::ICUR_Failed;
 }
 
 ENaItemContainerUsageResult UNaItemEffect::UseItem(UObject* WorldContext, int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
@@ -37,20 +12,21 @@ ENaItemContainerUsageResult UNaItemEffect::UseItem(UObject* WorldContext, int It
 	// Source actor is not allowed to be null
 	checkf(IsValid(SourceActor), TEXT("UseItem error: Invalid source actor. Using item ID: %d"), ItemID);
 
-	// When ID is invalid (including empty), do nothing
-	if (!UNaItemDataStatics::GetItemTypeFromID(WorldContext, ItemID).IsValidType()) {
-		return ENaItemContainerUsageResult::Null();
+	// ID == 0, empty item
+	if (ItemID == 0) {
+		return ENaItemContainerUsageResult::ICUR_Empty;
 	}
+
+	// Found a null type ptr => invalid type
+	else if (!UNaItemDataStatics::GetItemTypeFromID(WorldContext, ItemID).IsValid()){
+		return ENaItemContainerUsageResult::ICUR_Invalid;
+	}
+
 	// If the item is not usable, do nothing
-	if (!UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, ItemID).bCanUse) {
-		return ENaItemContainerUsageResult::Null();
+	else if (!UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, ItemID).bCanUse) {
+		return ENaItemContainerUsageResult::ICUR_NotUsable;
 	}
-	// Blueprint override
-	//if (bUseBlueprintOverride) {
-		return ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
-	//}
-	// C++ override
-//	else {
-//		return Cast<UNaItemEffect>(StaticClass()->GetDefaultObject())->ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
-//	}
+
+	return ItemEffect(ItemID, SourceActor, TargetActor, ItemPosition);
+
 }
