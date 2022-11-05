@@ -351,12 +351,19 @@ int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaI
 
 ENaItemContainerUsageResult FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
 	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer Pre-item-usage check failed: Item stacking amount error detected."));
-	if (!Content[Position].IsValid()) {
-		UE_LOG(LogNaItem, Log, TEXT("NaItemContainer using item: using item from an empty slot."));
-		return ENaItemContainerUsageResult::Null();
-	}
+	
+	// Get effect class from effect data table
 	UClass* EffectClass = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).EffectClass.Get();
+
+	// Check if can use from container content
+	// COMPLEX CHECKING PROCESS!! NOT IMPLEMENTED
+	// MAYBE MORE FUNCTIONS ABOUT ADDING/REMOVING ITEMS SHOULD BE DEFINED FIRST
+
+	// Execute effect function and get result
 	ENaItemContainerUsageResult res = Cast<UNaItemEffect>(EffectClass->GetDefaultObject())->UseItem(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
+	
+
+
 	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer using item error: Item stacking amount error after usage. Position: %d, Item ID: %d"), Position, Content[Position]->TypeDescriptor.ItemTypeID);
 	return res;
 }

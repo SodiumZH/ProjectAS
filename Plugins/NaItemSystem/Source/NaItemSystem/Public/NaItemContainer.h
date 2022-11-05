@@ -9,7 +9,7 @@
 struct FNaItemType;
 struct FNaItemDescriptor;
 struct FNaItemEntry;
-struct ENaItemContainerUsageResult;
+enum class ENaItemContainerUsageResult;
 class UNaGameModeItemSystemComponent;
 
 
