@@ -157,7 +157,7 @@ public:
 	/*----- Data-dependent Operations ------*/
 	
 	/* Data-dependent operations need to read the data table(configured in game mode), 
-	* So a world context object is required for getting world
+	* This operation is data-dependent, so a world context is needed.
 	*/
 
 	/** Check if the container's item stack amounts are correct. */
@@ -170,23 +170,24 @@ public:
 	*/
 	int AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry);
 
-	/** Add a batch of a certain type of items to the container.
-	* @Param Type Type of items to add.
-	* @Param Amount Total amount of items.
-	* @Param bSearchStackable If true, it will firstly search if there are any same item entries to be stacked on. Or it will add to empty positions only.
-	* @Param StartPosition Start position for finding empty positions.
-	* @Param bIsUniquified If the items to add are uniquified.
-	* @Param UniqName Name if the items are uniquified.
-	* @ReturnValue Amount of item that cannot be added to the container.
-	*/
-	
-	/* Check if a stack of items can be added into the container. */
-	ENaItemContainerAddingCheckResult CanAdd(UObject* WorldContext);
+	/** Give an entry to the container, not specifying the position
+	* This operation is data-dependent, so a world context is needed.
+	* @ ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
+	**/
+	int GiveItem(UObject* WorldContext, const FNaItemEntry & Entry);
+
+	/** Try adding a series of item entries to the container. 
+	* This container is a virtual operation and will NOT really change the container.
+	**/
+	bool CanGiveItems(UObject* WorldContext, const TArray<FNaItemEntry> & InEntries) const;
+
+	/** Give multiple item entries to the container 
+	* 
+	**/
 
 
 	/*--- Item Usage ---*/
 	
-	 VirtualUseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target)
 	ENaItemContainerUsageResult UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
 
