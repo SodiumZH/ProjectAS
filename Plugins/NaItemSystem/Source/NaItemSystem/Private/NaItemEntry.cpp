@@ -1,5 +1,5 @@
 #include "NaItemEntry.h"
-
+#include "BPLibraries/NaItemDataStatics.h"
 
 /**** FNaItemDescriptor ****/
 
@@ -61,5 +61,32 @@ bool FNaItemEntry::IsValid() const {
 	return true;
 }
 
+FNaItemEntry FNaItemEntry::SetAmount(int val) {
+	check(val >= 0);
+	Amount = val;
+	return *this;
+}
+
+FNaItemEntry FNaItemEntry::AddToAmount(int val) {
+	check(val >= 0);
+	Amount += val;
+	return *this; 
+}
+
+FNaItemEntry FNaItemEntry::RemoveFromAmount(int val) {
+	check(val >= 0);
+	checkf(val <= Amount, TEXT("FNaItemEntry error: negative amount after removing from amount."));
+	Amount -= val;
+	return *this;
+}
+
+int FNaItemEntry::GetItemID(){
+	return TypeDescriptor.ItemTypeID;
+}
+/*
+int FNaItemEntry::GetMaxStackingAmount(UObject* WorldContext) {
+
+}
 
 
+*/

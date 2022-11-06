@@ -152,6 +152,12 @@ public:
 	void SwapEntry(int P1, int P2);
 	
 
+	/** Maintainance **/
+
+	// Find all positions with invalid items (incorrect amount, zero type ID, etc.) and reset them to null
+	void ClearInvalid();
+
+
 
 
 	/*----- Data-dependent Operations ------*/
@@ -163,6 +169,9 @@ public:
 	/** Check if the container's item stack amounts are correct. */
 	bool CheckStacking(UObject* WorldContext);
 
+
+	/*--- Operations on specific positions ---*/
+
 	/** Add or stack items to a position.
 	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
 	* This operation is data-dependent, so a world context is needed.
@@ -170,27 +179,68 @@ public:
 	*/
 	int AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry);
 
+
+	/* --- Operations not specifying positions --- */
+
+	// Single Entry
+
 	/** Give an entry to the container, not specifying the position
 	* This operation is data-dependent, so a world context is needed.
 	* @ ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
 	**/
 	int GiveItem(UObject* WorldContext, const FNaItemEntry & Entry);
 
-	/** Try adding a series of item entries to the container. 
-	* This container is a virtual operation and will NOT really change the container.
+	/** GiveItem function that executes only when all items can be given.
+	* This operation is data-dependent, so a world context is needed.
+	* @ ReturnValue Whether succeeded.
 	**/
-	bool CanGiveItems(UObject* WorldContext, const TArray<FNaItemEntry> & InEntries) const;
+	bool GiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry);
 
-	/** Give multiple item entries to the container 
-	* 
+	/** Check if an entry can be completely added to the container.
+	* This function doesn't really add items.
 	**/
+	bool CanGiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry) const;
+
+
+	// Batch Adding
+	
+	/** Give multiple entries to the container.
+	* @Param Entries Item entries to give. 
+	* WARNING: the entry array ref input will be edited during adding! After the function, the input array will contain only items not added to the container.
+	* @ReturnValue Whether entries are all completely added.
+	**/
+	bool GiveItemMulti(UObject* WorldContext, TArray<FNaItemEntry> & Entries);
+
+	/** Give multiple entries to the container.
+	* It will fail and do exactly nothing if they cannot be completely added.
+	* @Param Entries Item entries to give.
+	* @ReturnValue Whether succeeded.
+	**/
+	bool GiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
+
+	/** Check if multiple entries can be completely added.
+	* This function doesn't really add items.
+	* @Param Entries Item entries to give.
+	* @ReturnValue Whether succeeded.
+	**/
+	bool CanGiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
+
 
 
 	/*--- Item Usage ---*/
 	
-	ENaItemContainerUsageResult UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
+	// Check if the container is correct and item can be used before usage; actions before usage
+	virtual ENaItemContainerUsageResult PreUsageProcess(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
+	// Action of usage of item itself
+	virtual ENaItemContainerUsageResult ExecuteUseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target, ENaItemContainerUsageResult PreUsageResult);
 
+	// Actions after usage
+	virtual ENaItemContainerUsageResult PostUsageProcess(UObject* WorldContext, int Position, class AActor* Source, AActor* Target, ENaItemContainerUsageResult UsageResult);
+
+	// Function actually called for usage
+	virtual ENaItemContainerUsageResult UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
+		
 };
 
 

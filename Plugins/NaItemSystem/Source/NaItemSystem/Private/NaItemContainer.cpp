@@ -169,6 +169,18 @@ bool FNaItemContainer::FindItemExplicit(const FNaItemDescriptor & Type, TArray<i
 	return Positions.Num() != 0;
 }
 
+void FNaItemContainer::ClearInvalid() {
+	int i = 0;
+	for (i = 0; i < Size; ++i) {
+		if (!Content[i].IsValid())
+			continue;
+		if (Content[i]->Amount <= 0 || Content[i]->TypeDescriptor.ItemTypeID == 0) {
+			UE_LOG(LogNaItem, Warning, TEXT("NaItemContainer ClearInvalid: Invalid item entry detected. Automatically cleared. Not recommended to depend on this auto-repair method."));
+			Content[i] = nullptr;
+		}
+	}
+}
+
 
 bool FNaItemContainer::AddEntry(int Position, const FNaItemEntry & Entry, bool bForce) {
 
@@ -366,4 +378,24 @@ ENaItemContainerUsageResult FNaItemContainer::UseItem(UObject* WorldContext, int
 
 	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer using item error: Item stacking amount error after usage. Position: %d, Item ID: %d"), Position, Content[Position]->TypeDescriptor.ItemTypeID);
 	return res;
+}
+
+
+
+
+int FNaItemContainer::GiveItem(UObject* WorldContext, const FNaItemEntry & Entry) {
+	
+	ClearInvalid();
+
+	int i = 0;
+	// Iterate the container and find existing item that can be stacked on
+	for (i = 0; i < Size; ++i) {
+		// Skip empty
+		if (!Content[i].IsValid())
+			continue;
+		else if(UNaItemDataStatics::GetItemTypeFromID(WorldContext, Entry->))
+		
+	}
+
+
 }

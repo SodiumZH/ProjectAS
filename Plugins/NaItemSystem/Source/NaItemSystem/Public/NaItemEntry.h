@@ -91,6 +91,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Amount = 1;
 
+	// Set amount of entry. Return self so chain setting is supported
+	FNaItemEntry SetAmount(int val);
+
+	// Add amount to entry. Return self so chain setting is supported
+	FNaItemEntry AddToAmount(int val) { Amount += val; return *this; };
+
+	// Remove amount from entry. Return self so chain setting is supported/
+	// WARNING: Ensure amount is enough to remove! Or it will hit assert
+	FNaItemEntry RemoveFromAmount(int val);
+
+
+
 public:
 
 	/* Constructors */
@@ -104,6 +116,13 @@ public:
 	// Check if this entry is valid (no error.)
 	bool IsValid() const;
 
+public:
+
+	/* Function utilities */
+
+	int GetItemID();
+
+	int GetMaxStackingAmount(UObject* WorldContext);
 
 
 };
