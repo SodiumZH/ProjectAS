@@ -26,33 +26,33 @@ enum class ENaItemUsageConsumptionType:uint8 {
 	// Applied on e.g. equipments, replacing the equipment with player's wearing one
 	// Only applied on items not stackable (i.e. MaxStackingAmount == 1).
 	// EntryArray[0] - Item entry to replace
-	IUCT_Replace UMETA(DisplayName = "Replacing"),
+	IUCT_Replace_NOT_IMPLEMENTED UMETA(DisplayName = "Replacing NOT IMPLEMENTED"),
 
 	// Consume not this but other items, e.g. recipes
 	// EntryArray - Other items to consume
-	IUCT_Other UMETA(DisplayName = "Consuming Other Items"),
+	IUCT_Other_NOT_IMPLEMENTED UMETA(DisplayName = "Consuming Other Items NOT IMPLEMENTED"),
 
 	// Consume other items and this item
 	// EntryArray - Other items to consume
-	IUCT_OtherAndThis	UMETA(DisplayName = "Consuming Other Items and This"),
+	IUCT_OtherAndThis_NOT_IMPLEMENTED	UMETA(DisplayName = "Consuming Other Items and This NOT IMPLEMENTED"),
 
 	// Consume other items and multiple this items
 	// IntParam - Consuming amount
 	// EntryArray - Other items to consume
-	IUCT_OtherAndMultiThis	UMETA(DisplayName = "Consuming Other Items and Multiple This"), 
+	IUCT_OtherAndMultiThis_NOT_IMPLEMENTED	UMETA(DisplayName = "Consuming Other Items and Multiple This NOT IMPLEMENTED"),
 
 	// Consume one this and get other items
 	// EntryArray - Other items to get
-	IUCT_GetOther	UMETA(DisplayName = "Consuming This and Get Other Items"),
+	IUCT_GetOther_NOT_IMPLEMENTED	UMETA(DisplayName = "Consuming This and Get Other Items NOT IMPLEMENTED"),
 
 	// Get other item without consuming this
 	// EntryArray - Other items to get
-	IUCT_GetOtherNoConsumption	UMETA(DisplayName = "Getting Other Items without Consumption"),
+	IUCT_GetOtherNoConsumption_NOT_IMPLEMENTED	UMETA(DisplayName = "Getting Other Items without Consumption NOT IMPLEMENTED"),
 
 	// Consume multiple this and get other items
 	// IntParam - Consuming amount
 	// EntryArray - Other items to get
-	IUCT_GetOtherConsumingMulti	UMETA(DisplayName = "Consuming Multiple This and Get Other Items"),
+	IUCT_GetOtherConsumingMulti_NOT_IMPLEMENTED	UMETA(DisplayName = "Consuming Multiple This and Get Other Items NOT IMPLEMENTED"),
 
 	// Custom type. Should be defined in corresponding item effect
 	IUCT_Custom	UMETA(DisplayName = "Custom")

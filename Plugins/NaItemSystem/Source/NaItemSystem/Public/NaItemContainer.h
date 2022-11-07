@@ -9,7 +9,7 @@
 struct FNaItemType;
 struct FNaItemDescriptor;
 struct FNaItemEntry;
-enum class ENaItemContainerUsageResult;
+enum class ENaItemContainerUsageResult:uint8;
 class UNaGameModeItemSystemComponent;
 
 
@@ -209,14 +209,14 @@ public:
 	* WARNING: the entry array ref input will be edited during adding! After the function, the input array will contain only items not added to the container.
 	* @ReturnValue Whether entries are all completely added.
 	**/
-	bool GiveItemMulti(UObject* WorldContext, TArray<FNaItemEntry> & Entries);
+	//bool GiveItemMulti(UObject* WorldContext, TArray<FNaItemEntry> & Entries);
 
 	/** Give multiple entries to the container.
 	* It will fail and do exactly nothing if they cannot be completely added.
 	* @Param Entries Item entries to give.
 	* @ReturnValue Whether succeeded.
 	**/
-	bool GiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
+	//bool GiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
 
 	/** Check if multiple entries can be completely added.
 	* This function doesn't really add items.
@@ -230,6 +230,7 @@ public:
 	/*--- Item Usage ---*/
 	
 	// Check if the container is correct and item can be used before usage; actions before usage
+	// Consumption is here
 	virtual ENaItemContainerUsageResult PreUsageProcess(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
 	// Action of usage of item itself
@@ -241,6 +242,8 @@ public:
 	// Function actually called for usage
 	virtual ENaItemContainerUsageResult UseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 		
+
+	virtual ~FNaItemContainer() {};
 };
 
 

@@ -80,13 +80,12 @@ FNaItemEntry FNaItemEntry::RemoveFromAmount(int val) {
 	return *this;
 }
 
-int FNaItemEntry::GetItemID(){
+int FNaItemEntry::GetItemID() const {
 	return TypeDescriptor.ItemTypeID;
 }
-/*
-int FNaItemEntry::GetMaxStackingAmount(UObject* WorldContext) {
 
+int FNaItemEntry::GetMaxStackingAmount(UObject* WorldContext) const {
+	return UNaItemDataStatics::GetItemTypeFromID(WorldContext, GetItemID()).GetTypeData().MaxStackingAmount;
 }
 
 
-*/

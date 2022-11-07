@@ -1,7 +1,7 @@
 
 #include "NaItemEffect.h"
 #include "BPLibraries/NaItemDataStatics.h"
-#include "NaItemType.h"
+#include "Data/NaItemType.h"
 
 ENaItemContainerUsageResult UNaItemEffect::ItemEffect_Implementation(int ItemID, AActor* SourceActor, AActor* TargetActor, int ItemPosition) {
 	return ENaItemContainerUsageResult::ICUR_Failed;

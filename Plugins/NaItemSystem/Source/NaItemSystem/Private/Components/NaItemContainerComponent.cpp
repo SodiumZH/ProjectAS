@@ -49,5 +49,5 @@ ENaItemContainerUsageResult UNaItemContainerComponent::UseItemFromSelf(int Posit
 	checkf(Container.IsInSize(Position), TEXT("NaItemContainerComponent use item error: invalid position. Position: %d"), Position);
 	if(IsValid(GetOwner()))
 		return Container.UseItem(this, Position, GetOwner(), Target);
-	else return ENaItemContainerUsageResult::Null();
+	else return ENaItemContainerUsageResult::ICUR_Failed;
 }

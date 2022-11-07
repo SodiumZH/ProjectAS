@@ -95,7 +95,7 @@ public:
 	FNaItemEntry SetAmount(int val);
 
 	// Add amount to entry. Return self so chain setting is supported
-	FNaItemEntry AddToAmount(int val) { Amount += val; return *this; };
+	FNaItemEntry AddToAmount(int val);
 
 	// Remove amount from entry. Return self so chain setting is supported/
 	// WARNING: Ensure amount is enough to remove! Or it will hit assert
@@ -120,9 +120,9 @@ public:
 
 	/* Function utilities */
 
-	int GetItemID();
+	int GetItemID() const;
 
-	int GetMaxStackingAmount(UObject* WorldContext);
+	int GetMaxStackingAmount(UObject* WorldContext) const;
 
 
 };
