@@ -26,6 +26,8 @@ public class NaMobSystem : ModuleRules
 			new string[]
 			{
 				"Core",
+                "NaItemSystem",
+                "NaWidgets",
                 "NaUtility",
 				// ... add other public dependencies that you statically link with here ...
 			}

@@ -39,7 +39,7 @@ class UNaMobDataManager;
 class UNaMobBasicStateManager;
 
 UCLASS(BlueprintType)
-class ANaMob : public ACharacter, public INaMobBase
+class NAMOBSYSTEM_API ANaMob : public ACharacter, public INaMobBase
 {
 	GENERATED_BODY()
 
