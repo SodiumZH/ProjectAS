@@ -70,10 +70,11 @@ struct FNaMobStamina {
 
 public:
 
-	// Current health
+	// The mob doesn't take damage (and knockback, etc.) when true
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsInvincible = false;
 
+	// Current health
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int64 CurrentHP = 100;
 

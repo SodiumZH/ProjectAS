@@ -6,10 +6,15 @@
 #include "NaPublicDependencies/NaGameModeBaseComponent.h"
 #include "NaPublicDependencies/NaGameModeSubunitComponent.h"
 #include "Utility/BPLibraries/NaObjectStatics.h"
+#include "Utility/DebugUtil/NaDebugUtility.h"
 #include "Components/SceneComponent.h"
 #include "GameFramework/GameModeBase.h"
 
-ENaGameModeComponentErrorType UNaPublicDependencyStatics::CheckGameModeHierarchy(AActor* WorldContext, bool bAssertWhenFailed) {
+ENaGameModeComponentErrorType UNaPublicDependencyStatics::CheckGameModeHierarchy(UObject* WorldContext, bool bAssertWhenFailed) {
+	if (!IsValid(WorldContext) || !IsValid(WorldContext->GetWorld())) {
+		UE_LOG(LogNaUtil, Warning, TEXT("NaPublicDependencies: Invalid world context object."));
+		return ENaGameModeComponentErrorType::GMCET_NoBase;
+	}
 	AGameModeBase* GM = WorldContext->GetWorld()->GetAuthGameMode();
 	if (!GM)	// No gamemode, maybe default object or client
 		return ENaGameModeComponentErrorType::GMCET_Correct;
@@ -28,11 +33,19 @@ ENaGameModeComponentErrorType UNaPublicDependencyStatics::CheckGameModeHierarchy
 	return Base->CheckGameModeHierarchy(bAssertWhenFailed);
 }
 
-UNaGameModeBaseComponent* UNaPublicDependencyStatics::GetNaGameModeBase(AActor* WorldContext) {
+UNaGameModeBaseComponent* UNaPublicDependencyStatics::GetNaGameModeBase(UObject* WorldContext) {
+	if (!IsValid(WorldContext) || !IsValid(WorldContext->GetWorld())) {
+		UE_LOG(LogNaUtil, Warning, TEXT("NaPublicDependencies: Invalid world context object."));
+		return nullptr;
+	}
+	if (CheckGameModeHierarchy(WorldContext) != ENaGameModeComponentErrorType::GMCET_Correct) {
+		UE_LOG(LogNaUtil, Error, TEXT("NaPublicDependencies: Game mode component hierarchy error."));
+		return nullptr;
+	}
 	TArray<UNaGameModeBaseComponent*> Res;
 	AGameModeBase* GameMode = WorldContext->GetWorld()->GetAuthGameMode();
 	if (!GameMode) {
-		LogWriteNoContext("GetNaGameModeBase: GameMode is not valid.");
+		UE_LOG(LogNaUtil, Warning, TEXT("GetNaGameModeBase: GameMode is not valid."));
 		return nullptr;
 	}
 	GameMode->GetComponents<UNaGameModeBaseComponent>(Res);
@@ -42,7 +55,7 @@ UNaGameModeBaseComponent* UNaPublicDependencyStatics::GetNaGameModeBase(AActor* 
 	else return nullptr;
 }
 
-UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunit(AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class) {
+UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunit(UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class) {
 	UNaGameModeBaseComponent* Base = GetNaGameModeBase(WorldContext);
 	if (!Base) {
 		LogWriteNoContext("GetNaGameModeSubunit: Base component is invalid.");
@@ -51,7 +64,7 @@ UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunit(AA
 	return Base->GetSubunit(Class);
 }
 
-UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunitSpecific(AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass) {
+UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunitSpecific(UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass) {
 	UNaGameModeBaseComponent* Base = GetNaGameModeBase(WorldContext);
 	if (!Base) {
 		LogWriteNoContext("GetNaGameModeSubunit: Base component is invalid.");
@@ -60,7 +73,11 @@ UNaGameModeSubunitComponent* UNaPublicDependencyStatics::GetNaGameModeSubunitSpe
 	return Base->GetSubunitSpecificClass(SpecificClass);
 }
 
-void UNaPublicDependencyStatics::GetAllNaGameModeSubunits(TArray<UNaGameModeSubunitComponent*>& Out, AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class) {
+void UNaPublicDependencyStatics::GetAllNaGameModeSubunits(TArray<UNaGameModeSubunitComponent*>& Out, UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> Class) {
+	if (!IsValid(WorldContext->GetWorld())) {
+		UE_LOG(LogNaUtil, Warning, TEXT("NaPublicDependencies: Invalid world context object."));
+		return;
+	}
 	UNaGameModeBaseComponent* Base = GetNaGameModeBase(WorldContext);
 	Out.Empty();
 	if (!Base) {
@@ -70,7 +87,7 @@ void UNaPublicDependencyStatics::GetAllNaGameModeSubunits(TArray<UNaGameModeSubu
 	Base->GetAllSubunits(Out, Class);
 }
 
-void UNaPublicDependencyStatics::GetAllNaGameModeSubunitsSpecific(TArray<UNaGameModeSubunitComponent*>& Out, AActor* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass) {
+void UNaPublicDependencyStatics::GetAllNaGameModeSubunitsSpecific(TArray<UNaGameModeSubunitComponent*>& Out, UObject* WorldContext, TSubclassOf<UNaGameModeSubunitComponent> SpecificClass) {
 	UNaGameModeBaseComponent* Base = GetNaGameModeBase(WorldContext);
 	Out.Empty();
 	if (!Base) {

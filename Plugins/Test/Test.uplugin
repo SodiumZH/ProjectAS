@@ -1,0 +1,42 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Test",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "Test",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "NaUtility",
+			"Enabled": true
+		},
+		{
+			"Name": "NaWidgets",
+			"Enabled": true
+		},
+		{
+			"Name": "NaItemSystem",
+			"Enabled": true
+		},
+		{
+			"Name": "NaMobSystem",
+			"Enabled": true
+		}
+	]
+}

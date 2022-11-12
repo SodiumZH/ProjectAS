@@ -6,7 +6,7 @@
 /**
 * NaItemEntry is a struct for describing a socket content
 * Including the full item data and the amount.
-* Some item properties needs to be referred to the item type database. (see /Database/ItemTypeDatabaseEntry.h)
+* Some item properties needs to be referred to the item type database. (see /Data/ItemTypeData.h)
 **/
 
 
@@ -79,9 +79,6 @@ struct NAITEMSYSTEM_API FNaItemEntry {
 
 public:
 
-
-
-
 	/*** Properties***/
 
 	/* Descriptor of the type */
@@ -93,6 +90,18 @@ public:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Amount = 1;
+
+	// Set amount of entry. Return self so chain setting is supported
+	FNaItemEntry SetAmount(int val);
+
+	// Add amount to entry. Return self so chain setting is supported
+	FNaItemEntry AddToAmount(int val);
+
+	// Remove amount from entry. Return self so chain setting is supported/
+	// WARNING: Ensure amount is enough to remove! Or it will hit assert
+	FNaItemEntry RemoveFromAmount(int val);
+
+
 
 public:
 
@@ -107,6 +116,13 @@ public:
 	// Check if this entry is valid (no error.)
 	bool IsValid() const;
 
+public:
+
+	/* Function utilities */
+
+	int GetItemID() const;
+
+	int GetMaxStackingAmount(UObject* WorldContext) const;
 
 
 };

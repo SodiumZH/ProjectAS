@@ -5,7 +5,6 @@
 #include "NaSystem.generated.h"
 
 
-#define ExistingInvalid(ptr) (!IsValid(ptr) && ptr)
 
 
 UCLASS()

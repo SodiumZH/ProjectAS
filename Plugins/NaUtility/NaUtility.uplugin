@@ -3,7 +3,7 @@
 	"Version": 1,
 	"VersionName": "0.1",
 	"FriendlyName": "NaUtility",
-	"Description": "The basic dependence of all NaPacks. It contains math, function and object utilities.",
+	"Description": "The basic dependency of all NaPacks. It contains math, function and object utilities.",
 	"Category": "Other",
 	"CreatedBy": "Sodium",
 	"CreatedByURL": "",

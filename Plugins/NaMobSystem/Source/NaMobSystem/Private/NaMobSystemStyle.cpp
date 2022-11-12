@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
+/*
 #include "NaMobSystemStyle.h"
 #include "Styling/SlateStyleRegistry.h"
 #include "Framework/Application/SlateApplication.h"
@@ -68,3 +68,4 @@ const ISlateStyle& FNaMobSystemStyle::Get()
 {
 	return *StyleInstance;
 }
+*/

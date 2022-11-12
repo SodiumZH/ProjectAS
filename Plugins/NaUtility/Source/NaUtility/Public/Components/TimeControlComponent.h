@@ -48,7 +48,7 @@ public:
 
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(NaUtility), meta=(BlueprintSpawnableComponent) )
 class NAUTILITY_API UTimeControlComponent : public UActorComponent
 {
 	GENERATED_BODY()

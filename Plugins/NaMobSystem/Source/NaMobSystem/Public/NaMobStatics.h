@@ -16,7 +16,7 @@ class UNaMobPlayerComponent;
 class AHitDetectorInterface;
 
 UCLASS()
-class UNaMobStatics : public UBlueprintFunctionLibrary
+class NAMOBSYSTEM_API UNaMobStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

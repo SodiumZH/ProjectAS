@@ -6,7 +6,9 @@
 #include "NaMobControllerInterfaceComponent.generated.h"
 
 
-// This class is only for public properties and functions for all mob controllers. 
+/* This class is for transferring data from mobs to controllers.
+* Including target selection,
+*/
 UCLASS(BlueprintType)
 class UNaMobControllerInterfaceComponent : public UActorComponent
 {
@@ -24,12 +26,12 @@ public:
 	/* Selecting actors */
 
 	/* Select an actor. If the actor is not selectable (defined in class filter), no action. If null is input, it will be set null (i.e. unselect).*/
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
+	UFUNCTION(BlueprintCallable, Category = "NaMobSystem|Control|Selection")
 	void SelectActor(AActor* InActor);
 
-	/* Classes of actors(including subclasses) which can be selected with mouse. If not set, the mouse will be unable to select anything.
+	/* Classes of actors(including subclasses) selectable. If not set, the mob will be unable to select anything.
 	When determining if an actor can be selected, it will read filter first, then exclusions, lastly inclusions.
-	That is, "Excluded" is for excluding some classes in filter list, and "Included" in for removing some classes from "Excluded" list.
+	That is, "Excluded" is for excluding some classes in filter list, and "Included" is for removing some classes from "Excluded" list.
 	*/
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MobPlayerController|Selection")
 	TArray<TSubclassOf<AActor>> SelectActorClassFilter;
@@ -51,11 +53,11 @@ public:
 	TArray<TSubclassOf<AActor>> SelectActorClassIncludedSpecific;
 
 	// Check if an actor can be selected
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
+	UFUNCTION(BlueprintCallable, Category = "NaMobSystem|Control|Selection")
 	bool CanSelectActor(AActor* InActor);
 
 	// Check if a class can be selected
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Selection")
+	UFUNCTION(BlueprintCallable, Category = "NaMobSystem|Control|Selection")
 	bool CanSelectClass(TSubclassOf<AActor> InClass);
 
 	/* If true, the filter will add NaMob by default. */

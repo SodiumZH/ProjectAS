@@ -2,8 +2,14 @@
 #include "NaItemContainer.h"
 #include "NaUtility.h"
 #include "NaItemEntry.h"
-#include "Database/NaItemType.h"
+#include "NaItemEffect.h"
+#include "Data/NaItemType.h"
+#include "Data/NaItemEffectData.h"
 #include "Engine/DataTable.h"
+#include "Components/NaGameModeItemSystemComponent.h"
+#include "BPLibraries/NaItemStatics.h"
+#include "BPLibraries/NaItemDataStatics.h"
+#include "GameFramework/Actor.h"
 
 
 // Found item successfully
@@ -69,6 +75,14 @@ FNaItemContainer::FNaItemContainer(const FNaItemContainer & CopyFrom) {
 	}
 }
 
+FNaItemContainer::FNaItemContainer(int InSize, const TMap<int, FNaItemEntry> & InitialContent ) : FNaItemContainer(InSize){
+	for (auto & Elem : InitialContent) {
+		if (IsInSize(Elem.Key)) {
+			Content[Elem.Key] = TSharedPtr<FNaItemEntry>(new FNaItemEntry(Elem.Value));
+		}
+	}
+}
+
 bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 	
 	check(Content.Num() == Size);
@@ -79,6 +93,7 @@ bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 		for (i = Size; i < NewSize; ++i) {
 			Content.Emplace(TSharedPtr<FNaItemEntry>(nullptr));
 		}
+		Size = NewSize;
 		return true;
 	}
 	else {
@@ -98,6 +113,7 @@ bool FNaItemContainer::Resize(int NewSize, bool bForce) {
 			while (Content.Num() > NewSize)
 				Content.RemoveAt(Content.Num() - 1);
 		}
+		Size = NewSize;
 		return true;
 	}
 }
@@ -151,6 +167,18 @@ bool FNaItemContainer::FindItemExplicit(const FNaItemDescriptor & Type, TArray<i
 			Positions.Add(i);
 	}
 	return Positions.Num() != 0;
+}
+
+void FNaItemContainer::ClearInvalid() {
+	int i = 0;
+	for (i = 0; i < Size; ++i) {
+		if (!Content[i].IsValid())
+			continue;
+		if (Content[i]->Amount <= 0 || Content[i]->TypeDescriptor.ItemTypeID == 0) {
+			UE_LOG(LogNaItem, Warning, TEXT("NaItemContainer ClearInvalid: Invalid item entry detected. Automatically cleared. Not recommended to depend on this auto-repair method."));
+			Content[i] = nullptr;
+		}
+	}
 }
 
 
@@ -273,40 +301,227 @@ void FNaItemContainer::SwapEntry(int P1, int P2) {
 
 }
 
-int FNaItemContainer::AddOrStack(int Position, const FNaItemEntry & Entry) {
+/*- Data-dependent Operations Below -*/
+
+bool FNaItemContainer::CheckStacking(UObject* WorldContext) {
+	int i = 0;
+	for (i = 0; i < Size; ++i) {
+		if (!Content[i].IsValid())
+			continue;
+		int CurrentVal = Content[i]->Amount;
+		int CurrentMax = UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[i]->TypeDescriptor.ItemTypeID).GetTypeData().MaxStackingAmount;
+		if (CurrentVal <= 0 || CurrentVal > CurrentMax)
+			return false;
+	}
+	return true;
+}
+
+int FNaItemContainer::AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry) {
 
 	CheckSize();
 
+	// OOS case
 	if (!IsInSize(Position)) {
 		UE_LOG(LogNaItem, Warning, TEXT("Add or Stack: index out of size."));
 		return Entry.Amount;
 	}
 
+	// Empty, add
 	if (!Content[Position].IsValid()) {
 		AddEntry(Position, Entry);
+		check(CheckStacking(WorldContext));
 		return 0;
 	}
 
-	else if (Content[Position]->TypeDescriptor == Entry.TypeDescriptor) {
-		FNaItemType Type = FNaItemType(Entry.TypeDescriptor.ItemTypeID);
-		
-		// If type is invalid, report error and abort. This case should never happen. 
-		if (!Type.IsValidType()) {
+	// Containing the same item, stack
+	if (Content[Position]->TypeDescriptor == Entry.TypeDescriptor) {
+		FNaItemType Type = UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID);
+
+		// If type is invalid, report error and abort. This case should not happen. 
+		if (!Type.IsValid()) {
 			UE_LOG(LogNaItem, Error, TEXT("NaItemContainer Error: type of item entry on position &d is invalid."), Position);
 			return Entry.Amount;
 		}
 		// When space is enough for all items input
 		if (Type.GetTypeData().MaxStackingAmount - Content[Position]->Amount >= Entry.Amount) {
 			Content[Position]->Amount += Entry.Amount;
+			check(CheckStacking(WorldContext));
 			return 0;
 		}
 		// Not enough, stack as possible and return the rest
 		else {
 			int RestAmount = Content[Position]->Amount + Entry.Amount - Type.GetTypeData().MaxStackingAmount;
 			Content[Position]->Amount = Type.GetTypeData().MaxStackingAmount;
+			check(CheckStacking(WorldContext));
 			return RestAmount;
 		}
 	}
 	// Mismatch, do nothing and return the input
+	check(CheckStacking(WorldContext));
 	return Entry.Amount;
 }
+
+int FNaItemContainer::GiveItem(UObject* WorldContext, const FNaItemEntry & Entry) {
+	
+	ClearInvalid();
+
+	int AmountLeft = Entry.Amount;
+	int ID = Entry.GetItemID();
+	int MaxStacking = Entry.GetMaxStackingAmount(WorldContext);
+	int i = 0;
+
+	// Try stacking
+	for (i = 0; i < Size; ++i) {
+		// Skip empty
+		if (!Content[i].IsValid())
+			continue;
+		// Match, stack
+		else if (ID == Content[i]->GetItemID()) {
+			// Fully occupied, skip
+			if (Content[i]->Amount == MaxStacking)
+				continue;
+			// Cannot completely add
+			else if (AmountLeft > MaxStacking - Content[i]->Amount) {
+				AmountLeft -= (MaxStacking - Content[i]->Amount);
+				Content[i]->Amount = MaxStacking;
+			}
+			// Can completely add
+			else {
+				Content[i]->Amount += AmountLeft;
+				AmountLeft = 0;
+				break;
+			}
+		}
+	}
+	// Stacking end
+
+	// Completely stacked, stop
+	if (MaxStacking == 0)
+		return 0;
+
+	// Try adding 
+	for (i = 0; i < Size; ++i) {
+		if (!Content[i].IsValid()) {
+			// More than max stacking amount to be added
+			if (AmountLeft > MaxStacking) {
+				AmountLeft -= MaxStacking;
+				AddEntry(i, Entry);
+				Content[i]->Amount = MaxStacking;
+			}
+			// Completely added
+			else{
+				AddEntry(i, Entry);
+				Content[i]->Amount = Entry.Amount;
+				AmountLeft = 0;
+				break;
+			}
+		}
+	}
+
+	return AmountLeft;
+
+}
+
+bool FNaItemContainer::CanGiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry) const {
+	FNaItemContainer* ContainerCopy = new FNaItemContainer(*this);
+	int res = ContainerCopy->GiveItem(WorldContext, Entry);
+	delete ContainerCopy;
+	return (bool)res;
+}
+
+bool FNaItemContainer::GiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry) {
+	if (CanGiveItemComplete(WorldContext, Entry)) {
+		GiveItem(WorldContext, Entry);
+		return true;
+	}
+	else return false;
+}
+
+// Copy a container
+
+bool FNaItemContainer::CanGiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries) {
+	FNaItemContainer* ContainerCopy = new FNaItemContainer(*this);
+	int temp = 0;
+	for (auto & Entry: Entries) {
+		temp = GiveItem(WorldContext, Entry);
+		if (temp) {
+			delete(ContainerCopy);
+			return false;
+		}
+	}
+	delete(ContainerCopy);
+	return true;
+}
+
+ENaItemContainerUsageResult FNaItemContainer::PreUsageProcess(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
+	
+	if (!Content[Position].IsValid())
+		return ENaItemContainerUsageResult::ICUR_Empty;
+	if (!UNaItemDataStatics::GetItemTypeFromID(WorldContext, Content[Position]->GetItemID()).IsValidType())
+		return ENaItemContainerUsageResult::ICUR_Invalid;
+
+	FNaItemEffectData Type = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->GetItemID());
+	
+
+	if (!Type.bCanUse)
+		return ENaItemContainerUsageResult::ICUR_NotUsable;
+
+	switch (Type.ConsumptionType) {
+	case ENaItemUsageConsumptionType::IUCT_None: {
+		return ENaItemContainerUsageResult::ICUR_Succeeded;
+	}
+	case ENaItemUsageConsumptionType::IUCT_One: {
+		// Don't clear empty here because the ID is still needed for usage; Will be cleard on PostUsageProcess()
+		Content[Position]->Amount -= 1;		// Consume here
+		return ENaItemContainerUsageResult::ICUR_Succeeded;
+	}
+	case ENaItemUsageConsumptionType::IUCT_Multi: {
+		// Not enough
+		if (Content[Position]->Amount < Type.IntParam) {
+			return ENaItemContainerUsageResult::ICUR_NoEnoughItem;
+		}
+		else {
+			// enough, consume
+			Content[Position]->Amount -= Type.IntParam;
+			return ENaItemContainerUsageResult::ICUR_Succeeded;
+		}
+	}
+	default: {
+		checkf(false, TEXT("NaItemContainer Use Item error: Using non-implemented Consumption type. See NaItemEffect.h for details."));
+		return ENaItemContainerUsageResult::ICUR_Error;
+	}
+	}
+}
+
+ENaItemContainerUsageResult FNaItemContainer::ExecuteUseItem(UObject* WorldContext, int Position, class AActor* Source, AActor* Target, ENaItemContainerUsageResult PreUsageResult) {
+	if (PreUsageResult == ENaItemContainerUsageResult::ICUR_Succeeded) {
+		UClass* EffectClass = UNaItemDataStatics::GetItemEffectDataFromID(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID).EffectClass.Get();
+		ENaItemContainerUsageResult res = Cast<UNaItemEffect>(EffectClass->GetDefaultObject())->UseItem(WorldContext, Content[Position]->TypeDescriptor.ItemTypeID, Source, Target, Position);
+		return res;
+	}
+	else return PreUsageResult;
+}
+
+ENaItemContainerUsageResult FNaItemContainer::PostUsageProcess(UObject* WorldContext, int Position, class AActor* Source, AActor* Target, ENaItemContainerUsageResult UsageResult) {
+	if (UsageResult == ENaItemContainerUsageResult::ICUR_Succeeded) {
+		// If consumed all, clear ptr
+		if (Content[Position]->Amount == 0)
+			Content[Position] = nullptr;
+	}
+	return UsageResult;
+}
+
+ENaItemContainerUsageResult FNaItemContainer::UseItem(UObject* WorldContext, int Position, AActor* Source, AActor* Target) {
+	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer Pre-item-usage check failed: Item stacking amount error detected."));
+
+	ENaItemContainerUsageResult PreRes = PreUsageProcess(WorldContext, Position, Source, Target);
+	ENaItemContainerUsageResult UseRes = ExecuteUseItem(WorldContext, Position, Source, Target, PreRes);
+	ENaItemContainerUsageResult PostRes = PostUsageProcess(WorldContext, Position, Source, Target, UseRes);
+
+
+	checkf(CheckStacking(WorldContext), TEXT("NaItemContainer using item error: Item stacking amount error after usage. Position: %d, Item ID: %d"), Position, Content[Position]->TypeDescriptor.ItemTypeID);
+	return PostRes;
+}
+
+
+
