@@ -1,8 +1,9 @@
-/* Created by Sodium */
+// By Sodium
 
 /**
 	NaMobSystem is a creature framework for third-person RPG, including mobs(creatures) as player, npc, monster, etc.
-	Need support of NaUtility, NaActor and NaComponent.
+	* "Mob" is a term borrowed from Minecraft, representing "Mobile".
+	Need support of NaUtility and NaItemSystem.
 */
 
 #pragma once

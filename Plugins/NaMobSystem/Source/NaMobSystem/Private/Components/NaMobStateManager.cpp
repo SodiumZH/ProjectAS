@@ -28,7 +28,7 @@ void UNaMobBasicStateManager::StateSync() {
 
 	ANaMob* Mob = dynamic_cast<ANaMob*>(GetOwner());
 	if (!Mob) {
-		LogError("Mob Basic Static Manager is only valid for NaMob.")
+		UE_LOG(LogNaMob, Error, TEXT("Mob Basic Static Manager is only valid for NaMob."));
 		return;
 	}
 	UCharacterMovementComponent* CharMove = Mob->GetCharacterMovement();

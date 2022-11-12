@@ -151,7 +151,7 @@ public:
 /* ItemEffect setting tutorial
 * Item ID is the item expected to use. This means multiple items can be defined in a single effect class.
 * SourceActor is the item used from (usually the player, must be valid). Invalid source actor triggers assert. Keep in mind that what exactly the source actor is, player controller or pawn.
-* TargetActor is the item used toward. E.g. Other players, monsters, etc. Optional, allowed to be invalid. (Caution for nullptr error!)
+* TargetActor is the item used toward. E.g. Other players, monsters, etc. Optional. (Caution for nullptr error!)
 * Position: Only for when the item is used from a container. This input is applied to define position-related behaviors. Also, this value can serve as an additional parameter, not limited in the container position.
 * return: Whether this item type is usable, and why it's not usable. DO NOT CONSIDER CONTAINER!!
 */
