@@ -1,16 +1,13 @@
 #pragma once
 
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NaItemEffect.generated.h"
 
-class AActor;
-
 // Types of consumption on item usage.
 // Consumption needs additionally an int (IntParam) and a NaItemEntry array (EntryArray).
 UENUM(BlueprintType)
-enum class ENaItemUsageConsumptionType:uint8 {
+enum class ENaItemUsageConsumptionType :uint8 {
 
 	// Consume one item
 	IUCT_One UMETA(DisplayName = "Consuming One"),
@@ -60,7 +57,7 @@ enum class ENaItemUsageConsumptionType:uint8 {
 
 
 // When item is used from a container, the usage result
-UENUM()
+UENUM(BlueprintType)
 enum class ENaItemContainerUsageResult :uint8 {
 
 	/*------------- Errors -------------*/

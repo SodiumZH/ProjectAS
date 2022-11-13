@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "NaItemEffect.h"
-#include "ItemEffect.generated.h"
+#include "LItemEffectBase.generated.h"
 
 /**
  * Base of game item effects, providing MobSystem interface
  */
 UCLASS()
-class NAPACKTP_API UItemEffectBase : public UNaItemEffect
+class PROJECTAS_API UItemEffectBase : public UNaItemEffect
 {
 	GENERATED_BODY()
 

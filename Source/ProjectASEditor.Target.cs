@@ -3,12 +3,12 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class NaPackTPEditorTarget : TargetRules
+public class ProjectASEditorTarget : TargetRules
 {
-	public NaPackTPEditorTarget(TargetInfo Target) : base(Target)
+	public ProjectASEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("NaPackTP");
+		ExtraModuleNames.Add("ProjectAS");
 	}
 }

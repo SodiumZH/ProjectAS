@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Controllers/NaMobNonplayerControllerBase.h"
+#include "Controllers/NaMobAIControllerBase.h"
 #include "NaMobEnemyController.generated.h"
 
 class AActor;
@@ -10,7 +10,7 @@ class UPawnSensingComponent;
 
 
 UCLASS(Blueprintable)
-class ANaMobEnemyController : public UNaMobNonplayerControllerBase {
+class ANaMobEnemyController : public ANaMobAIControllerBase {
 	
 	GENERATED_BODY()
 

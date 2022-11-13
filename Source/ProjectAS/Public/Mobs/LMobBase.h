@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "NaMob.h"
-#include "ItemEffect.generated.h"
+#include "LMobBase.generated.h"
 
 /**
  *
  */
 UCLASS()
-class NAPACKTP_API ALMobBase : public ANaMob
+class PROJECTAS_API ALMobBase : public ANaMob
 {
 	GENERATED_BODY()
 

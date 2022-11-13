@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "NaItemEffect.h"
-#include "ItemEffect.generated.h"
+#include "LItemEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NAPACKTP_API UItemEffect : public UNaItemEffect
+class PROJECTAS_API UItemEffect : public UNaItemEffect
 {
 	GENERATED_BODY()
 	
