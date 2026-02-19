@@ -34,11 +34,6 @@
 "Name": "NaMobs",
 "Type": "Runtime",
 "LoadingPhase": "Default"
-},
-{
-"Name": "NaTest",
-"Type": "Runtime",
-"LoadingPhase": "Default"
 }
 ]
 }
