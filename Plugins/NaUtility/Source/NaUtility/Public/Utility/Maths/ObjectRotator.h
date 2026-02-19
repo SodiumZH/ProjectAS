@@ -60,7 +60,7 @@
 #include "ObjectRotator.generated.h"
 
 // Math error reporting macro
-#define MathError(ID, FuncName, Info, Treat) UE_LOG(LogTemp, Error, TEXT("Math error(0x%04X):[%s()] %s. Treatment: %s."), ID, FuncName, Info, Treat)
+#define MathError(ID, FuncName, Info, Treat) UE_LOG(LogTemp, Error, TEXT("Math error(0x%04X):[%hs()] %hs. Treatment: %hs."), ID, FuncName, Info, Treat)
 
 
 
