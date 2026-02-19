@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class Test : ModuleRules
+public class NaMobSystem : ModuleRules
 {
-	public Test(ReadOnlyTargetRules Target) : base(Target)
+	public NaMobSystem(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -26,6 +26,9 @@ public class Test : ModuleRules
 			new string[]
 			{
 				"Core",
+                "NaItemSystem",
+                "NaWidgets",
+                "NaUtility",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -42,10 +45,7 @@ public class Test : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-                "NaUtility",
-                "NaWidgets",
-                "NaItemSystem",
-                "NaMobSystem"
+                "AIModule",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

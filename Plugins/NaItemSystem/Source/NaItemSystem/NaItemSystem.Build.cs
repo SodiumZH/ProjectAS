@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class Test : ModuleRules
+public class NaItemSystem : ModuleRules
 {
-	public Test(ReadOnlyTargetRules Target) : base(Target)
+	public NaItemSystem(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -26,6 +26,8 @@ public class Test : ModuleRules
 			new string[]
 			{
 				"Core",
+                "NaUtility",
+                "NaWidgets",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -34,18 +36,12 @@ public class Test : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Projects",
-				"InputCore",
-				"UnrealEd",
-				"ToolMenus",
 				"CoreUObject",
 				"Engine",
 				"Slate",
 				"SlateCore",
-                "NaUtility",
-                "NaWidgets",
-                "NaItemSystem",
-                "NaMobSystem"
+                "UMG",
+                "InputCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -19,7 +19,19 @@
 			]
 		},
 		{
-			"Name": "NatriumUnrealLibrary",
+			"Name": "NaUtility",
+			"Enabled": true
+		},
+		{
+			"Name": "NaMobSystem",
+			"Enabled": true
+		},
+		{
+			"Name": "NaItemSystem",
+			"Enabled": true
+		},
+		{
+			"Name": "NaWidgets",
 			"Enabled": true
 		}
 	]
