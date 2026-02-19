@@ -18,7 +18,7 @@ struct NAITEMSYSTEM_API FNaItemDisplayData : public FTableRowBase {
 public:
 
 	/* Image applied to display an item in container UI. */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* BrushImage = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

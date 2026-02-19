@@ -37,19 +37,19 @@ public:
 	FVector2D BoxSize = FVector2D(64.f, 64.f);
 
 	/* Base image drawn on the bottom layer */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	TArray<UObject*> ImageBaseArray;
 
 	/* Slot frame. Drawn above the base. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	TArray<UObject*> ImageFrameArray;
 
 	/* Additional image when being pointed at. Drawn above base and frame. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImagePointed = nullptr;
 
 	/* Additional image when selected. Drawn on the top. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaSlotListDisplayInfo", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImageSelected = nullptr;
 
 	/* Text for superscript (drawn on the top right). */

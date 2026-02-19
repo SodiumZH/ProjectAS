@@ -27,19 +27,19 @@ public:
 	FVector2D Size = FVector2D(64.f, 64.f);
 
 	/* Base image drawn on the bottom layer */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImageBase = nullptr;
 
 	/* Slot frame. Drawn above the base. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImageFrame = nullptr;
 
 	/* Additional image when pointed at. Drawn above base and frame. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImagePointed = nullptr;
 
 	/* Additional image when selected. Drawn on the top. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "Texture,MaterialInterface,SlateTextureAtlasInterface", DisallowedClasses = "MediaTexture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NaBoxSlotParams", meta = (AllowedClasses = "/Script/Engine.Texture, /Script/Engine.MaterialInterface, /Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
 	UObject* ImageSelected = nullptr;
 
 	/* Text for superscript (drawn on the top right). */
