@@ -134,11 +134,11 @@ public:
 	TArray<USkeletalMesh*> SkeletalMeshes;
 
 	// Skeletal mesh component array. Each update of skeletal mesh should reset this array.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Skeletal Mesh Components", Keywords = "skmesh"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get Skeletal Mesh Components", Keywords = "skmesh"), category = "Natrium|MobSystem")
 	TArray<USkeletalMeshComponent*> GetSkeletalMeshComponents() { return SkeletalMeshComponents; };
 
 	// Reset skeletal mesh components from skeletal mesh setting.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Skeletal Mesh Components", Keywords = "skmesh"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Skeletal Mesh Components", Keywords = "skmesh"), category = "Natrium|MobSystem")
 	void ResetSkMeshComponents(const TArray<USkeletalMesh*> & NewMeshes);
 
 protected:
@@ -175,11 +175,11 @@ public:
 	TArray<int> MatMapping;
 
 	// Reset boolean "enable material override" and update materials if needed.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Enable Material Override", Keywords = "enable"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Enable Material Override", Keywords = "enable"), category = "Natrium|MobSystem")
 	void ResetEnableMatOverride(bool NewEnable);
 
 	// Reset material overrides. If material override is disabled, it will do nothing.
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Materials"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Materials"), category = "Natrium|MobSystem")
 	void ResetMaterials(const TArray<UMaterialInterface*> & NewMats, const TArray<int> & NewMapping);
 
 
@@ -240,7 +240,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (DisplayName = "Mesh Offset", Keywords = "transforms"), category = "Mob|Mesh")
 	FTransform MeshOffset = FTransform();
 
-	UFUNCTION(BlueprintCallable, meta=(DisplayName = "Reset Capsule Scale", Keywords = "set reset capsule scale size", DefaultToSelf), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta=(DisplayName = "Reset Capsule Scale", Keywords = "set reset capsule scale size", DefaultToSelf), category = "Natrium|MobSystem")
 	void SetCapsuleScale(float HeightScale = 1.f, float DiameterScale = 1.f);
 
 protected:
@@ -257,19 +257,19 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "Natrium|MobSystem")
 	void SetMeshOffset(FTransform InTrans);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset (In LRS)", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Reset Mesh Offset (In LRS)", Keywords = "set reset mesh offset transform location rotation position scale size"), category = "Natrium|MobSystem")
 	void SetMeshOffset_LRS(FVector Location = FVector(0, 0, 0), FRotator Rotation = FRotator(0, 0, 0), FVector Scale = FVector(1, 1, 1));
 
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Location", category = "Natrium|MobSystem")
 	void SetMeshLocation(FVector InLoc = FVector(0, 0, 0));
 
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Rotation", category = "Natrium|MobSystem")
 	void SetMeshRotation(FRotator InRot = FRotator(0, 0, 0));
 	
-	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, DisplayName = "Reset Mesh Scale", category = "Natrium|MobSystem")
 	void SetMeshScale(FVector InScale = FVector(0, 0, 0));
 
 
@@ -295,32 +295,32 @@ public:
 	/* Basic actions */
 
 	// Kill a mob
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem")
 	virtual void MobDie();
-	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Natrium|MobSystem")
 	void OnMobDying();
 
 	// Resume a mob, set HP & MP max with no other effects
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem")
 	void DefaultMobResume();
 
 	// Resume a mob, with custom settings
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem")
 	void CustomMobResume(int64 NewHP = 1);
 
 	// Actions on any type of resuming
-	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Natrium|MobSystem")
 	void OnMobResuming();
 
 	// Actions only on custom resuming
-	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Natrium|MobSystem")
 	void OnCustomMobResuming(int64 NewHP);
 
 	// Take damage
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem")
 	virtual void MobTakeDamage(int64 Damage);
 	// Actions when taking damage
-	UFUNCTION(BlueprintImplementableEvent, Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Natrium|MobSystem")
 	void OnMobTakingDamage(int64 Damage);
 	
 	//=======================================================================
@@ -335,7 +335,7 @@ protected:
 	void UpdateAnimClass();
 public:
 
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "Natrium|MobSystem")
 	void SetAnimClass(TSubclassOf<UAnimInstance> NewClass);
 
 

@@ -29,11 +29,11 @@ public:
 	TArray<ANaMobEnemyController*> ActiveControllers;
 
 	/* Find a free (not working) enemy controller. If there isn't one, return null. */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "find get controller"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "find get controller"), Category = "Natrium|MobSystem")
 	ANaMobEnemyController* FindExistingFreeController(TSubclassOf<ANaMobEnemyController> InClass);
 
 	/* Find a free (not working) enemy controller. If there isn't one, spawn one and return. */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "find get add controller"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "find get add controller"), Category = "Natrium|MobSystem")
 	ANaMobEnemyController* GetFreeController(TSubclassOf<ANaMobEnemyController> InClass);
 
 	/* Allocate a controller to an enemy mob. If there is an existing free controller, use this controller to possess. Or spawn one and possess.
@@ -41,7 +41,7 @@ public:
 	* @Param ForcePossess Whether possess if the input mob has already been possessed.
 	* @ReturnValue Allocated controller.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "possess give add"), Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf, Keywords = "possess give add"), Category = "Natrium|MobSystem")
 	ANaMobEnemyController* AllocateController(ANaMob* InMob, bool ForcePossess = false);
 
 };

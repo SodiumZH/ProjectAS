@@ -34,7 +34,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	class UBehaviorTree* BehaviorTree;
 
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|AI")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem|AI")
 	void SetBehaviorTree(UBehaviorTree* NewBehaviorTree) {};	// NOT IMPLEMENTED!!!
 
 };

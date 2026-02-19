@@ -25,7 +25,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyComponent")
 	TSubclassOf<ANaMobEnemyController> ControllerClass = ANaMobEnemyController::StaticClass();
 
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|NaMobSystem")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "Natrium|NaMobSystem")
 	ANaMobEnemyController* AddController(bool ForceAdd = false);
 
 protected:

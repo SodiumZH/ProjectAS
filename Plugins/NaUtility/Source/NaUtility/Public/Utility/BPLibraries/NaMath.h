@@ -32,7 +32,7 @@ public:
 	static bool NearlyEqual(float a, float b, float toleration = KINDA_SMALL_NUMBER);
 public:
 
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Identity (Transform)", Keywords = "identity zero"), Category = "NaPack|Utility|Math")
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Identity (Transform)", Keywords = "identity zero"), Category = "Natrium|Utility|Math")
 	static void IdentityTransform(FTransform & Value) { Value = FTransform::Identity; };
 
 };

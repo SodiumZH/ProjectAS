@@ -51,7 +51,7 @@ public:
 	* Use this instead of begin play in mob skill collision, since begin play will cause initialization issues.
 	* Will be called on the first frame, after a tick delta time from begin play.
 	*/
-	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "Initialized (Skill Collision)"), Category = "NaPack|MobSystem|SkillCollision")
+	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "Initialized (Skill Collision)"), Category = "Natrium|MobSystem|SkillCollision")
 	void Initialized();
 	void Initialized_Implementation() {};
 
@@ -118,7 +118,7 @@ public:
 	UFUNCTION()
 	void SendSkillHit(const FHitResult& HitResult);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|SkillCollision")
+	UFUNCTION(BlueprintNativeEvent, Category = "Natrium|MobSystem|SkillCollision")
 	void OnSkillHit(const FHitResult& HitResult);
 	void OnSkillHit_Implementation(const FHitResult& HitResult){};
 	

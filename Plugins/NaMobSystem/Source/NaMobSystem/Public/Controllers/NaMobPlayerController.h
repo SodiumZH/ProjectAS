@@ -36,7 +36,7 @@ public:
 	This doesn't affect the UI Mouse Cursor (In-game mouse cursor). 
 	@ReturnValue value of bShowMouseCursor after switching.
 	*/
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|Control|Mouse")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem|Control|Mouse")
 	void SwitchShowMouseCursor();
 
 

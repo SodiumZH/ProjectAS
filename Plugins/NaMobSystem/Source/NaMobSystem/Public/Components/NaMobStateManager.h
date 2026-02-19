@@ -51,13 +51,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (Keywords = "state state data synchonize"), Category = "MobState|Synchonization")
 	bool bDoTickSync = true;
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "State Synchonize", Keywords = "state state data synchronize"), Category = "NaPack|MobSystem|MobState|Synchonization")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "State Synchonize", Keywords = "state state data synchronize"), Category = "Natrium|MobSystem|MobState|Synchonization")
 	virtual void StateSync();
 
 	/* On mob state manager doing state synchonization. 
 	* It will be executed every tick (when bDoTickSync == true) or when calling StateSync().
 	*/
-	UFUNCTION(BlueprintNativeEvent, DisplayName = "On State Synchonizing", Category = "NaPack|MobSystem|MobState|Synchonization")
+	UFUNCTION(BlueprintNativeEvent, DisplayName = "On State Synchonizing", Category = "Natrium|MobSystem|MobState|Synchonization")
 	void OnStateSync();
 	void OnStateSync_Implementation() {};
 };
@@ -90,18 +90,18 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintPure, Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintPure, Category = "Natrium|MobSystem|MobState|Movement")
 	ENaMobMovementType GetMovementType() { return MovementType; };
 
 	// Force set movement type.
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem|MobState|Movement")
 	ENaMobMovementType SetMovementType(ENaMobMovementType NewType);
 	
 	// Enable/Disable movement. When enabling, it will refer to bRunWalkSetting to choose run or walk.
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem|MobState|Movement")
 	void SetCanMove(bool CanMove);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintNativeEvent, Category = "Natrium|MobSystem|MobState|Movement")
 	void OnSetMovementType(ENaMobMovementType OldType, ENaMobMovementType NewType);
 	void OnSetMovementType_Implementation(ENaMobMovementType OldType, ENaMobMovementType NewType) {};
 
@@ -112,7 +112,7 @@ public:
 	/* Set Run/Walk. This function is a setting: when it's running/walking, it will switch. In other cases, set new run/walk but doesn't immediately change movement type.
 	* True for run, false for walk. 
 	*/
-	UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem|MobState|Movement")
 	void SetRunWalk(bool NewRunWalk);
 
 	/* Speed scale when using walk state. This value will be multiplied by basic walk speed. */
@@ -134,7 +134,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobState|Movement")
 	float MaxAccel = 1.0;
 
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "enable movement enabled"), Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "enable movement enabled"), Category = "Natrium|MobSystem|MobState|Movement")
 	bool CanMove() { return MovementType != ENaMobMovementType::MMT_NoMove; };
 
 	/*********** Jump related ************/
@@ -148,7 +148,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobState|Jump")
 	float RealtimeJumpHeightScale = 1.0;
 
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "enable movement enabled"), Category = "NaPack|MobSystem|MobState|Movement")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, Keywords = "enable movement enabled"), Category = "Natrium|MobSystem|MobState|Movement")
 	bool CanJump() { return JumpType != ENaMobJumpType::MJT_NoJump; };
 
 	/* Stamina */

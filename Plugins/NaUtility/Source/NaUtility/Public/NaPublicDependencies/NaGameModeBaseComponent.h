@@ -24,9 +24,9 @@ enum class ENaGameModeComponentErrorType : uint8 {
 };
 
 /**
-* NaGameModeBaseComponent is a container component for GameMode as all NaPack GameMode dependencies.
+* NaGameModeBaseComponent is a container component for GameMode as all Natrium GameMode dependencies.
 * This component should be attached only to the root component of GameMode.
-* All other NaPack GameMode components should be directly attached to this component.
+* All other Natrium GameMode components should be directly attached to this component.
 */
 
 UCLASS(BlueprintType, ClassGroup = (NaPublicDependencies), meta = (BlueprintSpawnableComponent))

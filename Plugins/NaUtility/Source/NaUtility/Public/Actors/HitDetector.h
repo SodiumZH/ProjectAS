@@ -40,7 +40,7 @@ public:
 	
 
 	// BP Actions when hit is detected
-	UFUNCTION(BlueprintNativeEvent, DisplayName = "On Hit Detected", Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintNativeEvent, DisplayName = "On Hit Detected", Category = "Natrium|Actor|HitDetector")
 	void OnHitDetected_BP(const FHitResult & HitResult);
 	void OnHitDetected_BP_Implementation(const FHitResult & HitResult) {};
 
@@ -74,23 +74,23 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Actor|HitDetector")
 	void GetIgnoreList(TArray<AActor*>& IgnoreList) { IgnoreList = IgnoreActors; };
 
 	// Add an actor to ignore list
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Actor|HitDetector")
 	void AddIgnore(AActor* Ignore);
 
 	// Add actors in array to ignore list
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Actor|HitDetector")
 	void AddIgnoreMulti(const TArray<AActor*> Ignore);
 
 	// Remove an actor from ignore list
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Actor|HitDetector")
 	void ResumeIgnored(AActor* InActor);
 
 	// Remove actors in array from ignore list
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Actor|HitDetector")
 	void ResumeIgnoredMulti(const TArray<AActor*> InActorSet);
 
 
@@ -120,7 +120,7 @@ public:
 	* @Param DeltaTime Tick delta time.
 	* @Param HitResult Hit result array generated from tick detection. It will automatically generate OnHitDetected event with each element.
 	*/
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Tick Hit Detecting Method", Keywords = "hit detect hit check"), Category = "NaPack|Actor|HitDetector")
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Tick Hit Detecting Method", Keywords = "hit detect hit check"), Category = "Natrium|Actor|HitDetector")
 	void Tick_DetectHit(float DeltaTime, TArray<FHitResult> & HitResult);
 	virtual void Tick_DetectHit_Implementation(float DeltaTime, TArray<FHitResult> & HitResult) {};
 

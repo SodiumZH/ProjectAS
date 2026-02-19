@@ -110,32 +110,32 @@ public:
 
 
 	/* Get time seconds from begin play of this component */
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category="NaPack|Component")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf), Category="Natrium|Component")
 	float GetTimeSecondsFromBeginPlay();
 
 	/* Return true only when time is passing the given time point, i.e. time is right standing on the point.
 	* This will be true at most one frame during the whole life span of this component.
 	*/
 	bool IsPassing(double TimePoint);
-	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "IsPassing"), Category = "NaPack|Component")
+	UFUNCTION(BlueprintPure, meta = (DefaultToSelf, DisplayName = "IsPassing"), Category = "Natrium|Component")
 	bool IsPassing_Float(float TimePoint);
 
 	/** Add time point event using time seconds from now. The event will be executed only once.
 	* @Param ForceAdd If true, when the name is existing, the new event will override the old one. Or new event will not be added if the name is existing.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|Component")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "Natrium|Component")
 	void AddTimePointEvent(FName Name, float TimeSecondsFromNow, const FTimePointEventSignature & Event, bool bForceAdd = true);
 
 	/* Add loop event using time seconds from now as the first execution time.
 	* @Param ForceAdd If true, when the name is existing, the new event will override the old one. Or new event will not be added if the name is existing.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "NaPack|Component")
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf), Category = "Natrium|Component")
 	void AddLoopEvent(FName Name, float TimeSecondsFromNow, float Period, FTimeLoopEventSignature Event, bool bForceAdd = true);
 
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Component")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Component")
 	void RemoveTimePointEvent(FName Name, bool ExecuteBeforeRemove = false);
 
-	UFUNCTION(BlueprintCallable, Category = "NaPack|Component")
+	UFUNCTION(BlueprintCallable, Category = "Natrium|Component")
 	void RemoveLoopEvent(FName Name, bool ExecuteBeforeRemove = false);
 
 };

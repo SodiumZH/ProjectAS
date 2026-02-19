@@ -53,7 +53,7 @@ protected:
 
 	/* Input */
 	// Call only in NaMob::SetupPlayerInputComponent()
-	//UFUNCTION(BlueprintCallable, Category = "NaPack|MobSystem")
+	//UFUNCTION(BlueprintCallable, Category = "Natrium|MobSystem")
 
 
 	// Movement function bound to input
@@ -76,7 +76,7 @@ public:
 
 	// Actual input direction (zero or normalized).
 	FVector GetInputDirection_Local() { return InputDirection; };
-	UFUNCTION(BlueprintPure, DisplayName = "GetInputDirection", Category = "NaPack|MobSystem")
+	UFUNCTION(BlueprintPure, DisplayName = "GetInputDirection", Category = "Natrium|MobSystem")
 	static FVector GetInputDirection_Static(UNaMobPlayerComponent* Target) { return Target->GetInputDirection_Local(); };
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MobPlayerComponent|Movement")
