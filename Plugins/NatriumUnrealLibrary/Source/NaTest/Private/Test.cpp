@@ -145,4 +145,4 @@ void FTestModule::RegisterMenus()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FTestModule, Test)
+IMPLEMENT_MODULE(FTestModule, NaTest)
