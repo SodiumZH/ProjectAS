@@ -102,7 +102,7 @@ bool UNaMobStatics::IsPlayerMob_BP(ANaMob* Target) {
 
 UNaMobPlayerComponent* UNaMobStatics::GetPlayerComponent_BP(ANaMob* Target) {
 	if (!IsValid(Target))
-		return false;
+		return nullptr;
 	return Target->GetPlayerComponent();
 }
 
@@ -114,7 +114,7 @@ bool UNaMobStatics::IsEnemyMob_BP(ANaMob* Target) {
 
 UNaMobEnemyComponent* UNaMobStatics::GetEnemyComponent_BP(ANaMob* Target) {
 	if (!IsValid(Target))
-		return false;
+		return nullptr;
 	return Target->GetEnemyComponent();
 }
 

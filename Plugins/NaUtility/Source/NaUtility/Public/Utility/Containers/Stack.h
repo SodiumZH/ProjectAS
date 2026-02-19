@@ -11,6 +11,10 @@ template<typename T>
 class TStack : private TArray<T> {
 
 public:
+	using TArray<T>::Num;
+	using TArray<T>::RemoveAt;
+	using TArray<T>::operator[];
+	using TArray<T>::Add;
 
 	TStack() {};
 

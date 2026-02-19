@@ -66,7 +66,7 @@ AHitDetectorInterface* ANaMobSkillCollision::GetDetector() {
 
 void ANaMobSkillCollision::SendSkillHit(const FHitResult& HitResult) {
 	// Check validity
-	AActor* HitActor = HitResult.Actor.Get();
+	AActor* HitActor = HitResult.GetActor();
 	if (!IsValid(SourceSkill) || !IsValid(SourceSkill->GetSource())) {
 		GetDetector()->ResumeIgnored(HitActor);	// Should not send hit but has added ignored. Resume it.
 		return;

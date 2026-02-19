@@ -158,7 +158,7 @@ ANaMobSkillCollision* ANaMobWeapon::MakeWeaponCollision(ANaMobSkill* SourceSkill
 		SourceSkill,
 		CollisionSpawnInfo.Class,
 		CollisionSpawnInfo.Transform,
-		IsValid(CollisionSpawnInfo.AttachToComponent) ? CollisionSpawnInfo.AttachToComponent : RootComponent,
+		IsValid(CollisionSpawnInfo.AttachToComponent) ? CollisionSpawnInfo.AttachToComponent : (USceneComponent*)RootComponent,
 		CollisionSpawnInfo.WeaponSocketName,
 		true
 	);

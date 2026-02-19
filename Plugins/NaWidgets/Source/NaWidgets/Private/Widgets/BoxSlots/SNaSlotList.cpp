@@ -14,52 +14,52 @@ void FNaSlotListDisplayInfo::FixArrays() {
 
 	if (ImageBaseArray.Num() > Length) {
 		UE_LOG(LogNaWidgets, Display, TEXT("NaSlotList initiailizer: Image base array truncated from %d to Length == %d."), ImageBaseArray.Num(), Length);
-		ImageBaseArray.SetNum(Length, true);
+		ImageBaseArray.SetNum(Length, EAllowShrinking::Yes);
 	}
 	else if (ImageBaseArray.Num() < Length) {
 		UObject* LastElement = ImageBaseArray.Num() ? ImageBaseArray[ImageBaseArray.Num() - 1] : nullptr;
 		int temp = ImageBaseArray.Num();
 		int i;
-		ImageBaseArray.SetNum(Length, true);
+		ImageBaseArray.SetNum(Length, EAllowShrinking::Yes);
 		for (i = temp; i < Length; ++i)
 			ImageBaseArray[i] = LastElement;
 	}
 
 	if (ImageFrameArray.Num() > Length) {
 		UE_LOG(LogNaWidgets, Display, TEXT("NaSlotList initiailizer: Image frame array truncated from %d to Length == %d."), ImageFrameArray.Num(), Length);
-		ImageFrameArray.SetNum(Length, true);
+		ImageFrameArray.SetNum(Length, EAllowShrinking::Yes);
 	}
 	else if (ImageFrameArray.Num() < Length) {
 		UObject* LastElement = ImageFrameArray.Num() ? ImageFrameArray[ImageFrameArray.Num() - 1] : nullptr;
 		int temp = ImageFrameArray.Num();
 		int i;
-		ImageFrameArray.SetNum(Length, true);
+		ImageFrameArray.SetNum(Length, EAllowShrinking::Yes);
 		for (i = temp; i < Length; ++i)
 			ImageFrameArray[i] = LastElement;
 	}
 
 	if (SuperscriptTextArray.Num() > Length) {
 		UE_LOG(LogNaWidgets, Display, TEXT("NaSlotList display info: Superscript text array truncated from %d to Length == %d."), SuperscriptTextArray.Num(), Length);
-		SuperscriptTextArray.SetNum(Length, true);
+		SuperscriptTextArray.SetNum(Length, EAllowShrinking::Yes);
 	}
 	else if (SuperscriptTextArray.Num() < Length) {
 		FText LastElement = SuperscriptTextArray.Num() ? SuperscriptTextArray[SuperscriptTextArray.Num() - 1] : FText();
 		int temp = SuperscriptTextArray.Num();
 		int i;
-		SuperscriptTextArray.SetNum(Length, true);
+		SuperscriptTextArray.SetNum(Length, EAllowShrinking::Yes);
 		for (i = temp; i < Length; ++i) 
 			SuperscriptTextArray[i] = LastElement;
 	}
 
 	if (SubscriptTextArray.Num() > Length) {
 		UE_LOG(LogNaWidgets, Display, TEXT("NaSlotList display info: Subscript text array truncated from %d to Length == %d."), SubscriptTextArray.Num(), Length);
-		SubscriptTextArray.SetNum(Length, true);
+		SubscriptTextArray.SetNum(Length, EAllowShrinking::Yes);
 	}
 	else if (SubscriptTextArray.Num() < Length) {
 		FText LastElement = SubscriptTextArray.Num() ? SubscriptTextArray[SubscriptTextArray.Num() - 1] : FText();
 		int temp = SubscriptTextArray.Num();
 		int i;
-		SubscriptTextArray.SetNum(Length, true);
+		SubscriptTextArray.SetNum(Length, EAllowShrinking::Yes);
 		for (i = temp; i < Length; ++i)
 			SubscriptTextArray[i] = LastElement;
 	}
