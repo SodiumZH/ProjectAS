@@ -1,0 +1,39 @@
+{
+"FileVersion": 3,
+"Version": 1,
+"VersionName": "1.0",
+"FriendlyName": "Natrium Unreal Library",
+"Description": "A comprehensive Unreal Engine library for third-person RPG gameplay systems",
+"Category": "Gameplay",
+"CreatedBy": "SodiumZH",
+"CreatedByURL": "",
+"DocsURL": "",
+"MarketplaceURL": "",
+"SupportURL": "",
+"CanContainContent": true,
+"IsBetaVersion": false,
+"IsExperimentalVersion": false,
+"Installed": false,
+"Modules": [
+{
+"Name": "NaUtility",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+},
+{
+"Name": "NaWidgets",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+},
+{
+"Name": "NaInventory",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+},
+{
+"Name": "NaMobs",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+}
+]
+}

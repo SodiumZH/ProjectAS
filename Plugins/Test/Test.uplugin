@@ -23,19 +23,7 @@
 	],
 	"Plugins": [
 		{
-			"Name": "NaUtility",
-			"Enabled": true
-		},
-		{
-			"Name": "NaWidgets",
-			"Enabled": true
-		},
-		{
-			"Name": "NaItemSystem",
-			"Enabled": true
-		},
-		{
-			"Name": "NaMobSystem",
+			"Name": "NatriumUnrealLibrary",
 			"Enabled": true
 		}
 	]

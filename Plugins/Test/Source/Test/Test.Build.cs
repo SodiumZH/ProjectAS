@@ -44,8 +44,8 @@ public class Test : ModuleRules
 				"SlateCore",
                 "NaUtility",
                 "NaWidgets",
-                "NaItemSystem",
-                "NaMobSystem"
+                "NaInventory",
+                "NaMobs"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
