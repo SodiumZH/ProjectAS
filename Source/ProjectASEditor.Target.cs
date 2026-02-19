@@ -1,14 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-using UnrealBuildTool;
 using System.Collections.Generic;
+using UnrealBuildTool;
 
 public class ProjectASEditorTarget : TargetRules
 {
 	public ProjectASEditorTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("ProjectAS");
-	}
+        Type = TargetType.Editor;
+        DefaultBuildSettings = BuildSettingsVersion.V6;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
+        ExtraModuleNames.Add("ProjectAS");
+    }
 }

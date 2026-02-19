@@ -36,7 +36,6 @@
 *.xcodeproj
 *.xcworkspace
 *.sln
-*.uproject
 *.suo
 *.opensdf
 *.sdf

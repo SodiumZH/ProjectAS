@@ -1,0 +1,38 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.7",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ProjectAS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		},
+		{
+			"Name": "NaUtility",
+			"Enabled": true
+		},
+		{
+			"Name": "NaMobSystem",
+			"Enabled": true
+		},
+		{
+			"Name": "NaItemSystem",
+			"Enabled": true
+		},
+		{
+			"Name": "NaWidgets",
+			"Enabled": true
+		}
+	]
+}
