@@ -50,7 +50,7 @@ void AHitDetectorInterface::Tick(float dt) {
 
 		for (int i = 0; i < HitResultTemp.Num(); ++i) {
 
-			HitActorTemp = HitResultTemp[i].Actor.Get();
+			HitActorTemp = HitResultTemp[i].GetActor();
 			check(HitActorTemp);
 
 			if (!IgnoreActors.Contains(HitActorTemp)) {
