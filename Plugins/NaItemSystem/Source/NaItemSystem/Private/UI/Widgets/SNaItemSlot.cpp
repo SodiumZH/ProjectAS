@@ -4,7 +4,6 @@
 #include "UI/Widgets/SNaItemSlot.h"
 #include "SlateOptMacros.h"
 #include "BPLibraries/NaItemStatics.h"
-#include "BPLibraries/NaItemDataStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
 #include "UI/Widgets/SNaItemSlotList.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
@@ -26,7 +25,7 @@ void SNaItemSlot::Construct(const FArguments& InArgs)
 #endif
 
 	/* Copy properties */
-	ItemEntryPtr = InArgs._EntryPtr.Get() ;
+	ItemStack = InArgs._Stack.Get();
 	bIsDisabled = InArgs._bIsDisabled.Get();
 	StylePtr = InArgs._StylePtr.Get();
 	if (StylePtr) {
@@ -82,15 +81,20 @@ void SNaItemSlot::MakeParams(FNaBoxSlotParams& OutParams) {
 		OutParams.ImageFrame = StylePtr->IconBorder;
 		OutParams.ImageSelected = StylePtr->IconSelected;
 		OutParams.ImagePointed = StylePtr->IconPointed;
-		OutParams.ImageBase = UNaItemDataStatics::GetItemDisplayDataFromID(GMComponent, ItemEntryPtr->TypeDescriptor.ItemTypeID).BrushImage;
+		OutParams.ImageBase = ItemStack ? ItemStack->GetIcon() : nullptr;
 		OutParams.SuperscriptText = FText();
-		OutParams.SubscriptText = (bHideAmountWhenOne && ItemEntryPtr->Amount == 1) ? FText() : FText::FromString(FString::FromInt(ItemEntryPtr->Amount));
+		if (ItemStack && bHideAmountWhenOne && ItemStack->Count == 1)
+			OutParams.SubscriptText = FText();
+		else if (ItemStack)
+			OutParams.SubscriptText = FText::FromString(FString::FromInt(ItemStack->Count));
+		else
+			OutParams.SubscriptText = FText();
 	}
 	
 }
 
-void SNaItemSlot::ResetItemEntry(TSharedPtr<FNaItemEntry> NewEntryPtr) {
-	ItemEntryPtr = NewEntryPtr;
+void SNaItemSlot::ResetItemStack(UNaItemStack* NewStack) {
+	ItemStack = NewStack;
 	MakeParams(TempParams);
 	BoxSlot->Reset(TempParams);
 }

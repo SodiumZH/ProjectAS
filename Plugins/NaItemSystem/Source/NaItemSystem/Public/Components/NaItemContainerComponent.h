@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "NaItemEntry.h"
+#include "NaItemStack.h"
+#include "NaItemContainer.h"
 #include "NaItemContainerComponent.generated.h"
-
-struct FNaItemContainer;
 
 /** NaItemContainerComponent is a component bringing an item container for attachment to actors.
 */
@@ -40,7 +39,7 @@ public:
 
 	/* Initializer if bInitFromInitializer is true. Key integer = index. Indexes out of size will be ignored. */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ItemContainer|ContainerInitialization")
-	TMap<int, FNaItemEntry> Initializer;
+	TMap<int, UNaItemStack*> Initializer;
 
 	UPROPERTY(BlueprintReadWrite)
 	FNaItemContainer Container;

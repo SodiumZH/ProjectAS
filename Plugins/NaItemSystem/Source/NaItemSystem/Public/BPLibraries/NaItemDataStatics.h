@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "../Data/NaItemEffectdata.h"
+#include "../NaItemType.h"
 #include "NaItemDataStatics.generated.h"
 
 
@@ -11,7 +12,6 @@
 * For non-database-related functions, see NaItemStatics.h.
 */
 
-struct FNaItemDescriptor;
 struct FTableRowBase;
 class UDataTable;
 class ANaItemEffect;
@@ -25,7 +25,7 @@ public:
 
 	/*- Item type data table -*/
 
-	/* Get item type from database from ID. */
+	/* Get item type from database by name. */
 	UFUNCTION(BlueprintPure, meta = (Keywords = "get na item type make na item type"), Category = "NaItemSystem|ItemType")
 	static TOptional<UNaItemType*> GetItemTypeFromName(UObject* WorldContext, FName name);
 

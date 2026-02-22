@@ -229,11 +229,37 @@ public:
 	void SetCustomData(TSharedPtr<FJsonObject> InData);
 
 	/**
+	 * Check if custom data object exists and has entries
+	 */
+	UFUNCTION(BlueprintPure, Category = "Item Stack|Custom Data")
+	bool HasCustomData() const;
+
+	/**
+	 * Check if custom data has a specific key
+	 */
+	UFUNCTION(BlueprintPure, Category = "Item Stack|Custom Data")
+	bool HasCustomDataKey(const FString& Key) const;
+
+	/**
+	 * Get a string value from custom data
+	 */
+	UFUNCTION(BlueprintPure, Category = "Item Stack|Custom Data")
+	FString GetCustomString(const FString& Key, const FString& DefaultValue = TEXT("")) const;
+
+	/**
 	 * Merge custom data from another stack
 	 * @param Other Source stack to merge from
 	 * @param bOverwrite If true, overwrite existing keys
 	 */
 	void MergeCustomData(const UNaItemStack* Other, bool bOverwrite = true);
+
+	/**
+	 * Consume this item (calls ItemType->OnConsume)
+	 * @param User The actor consuming the item
+	 * @return Whether item was successfully consumed
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Item Stack")
+	bool Consume(AActor* User);
 
 protected:
 	/**
