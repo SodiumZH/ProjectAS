@@ -140,7 +140,7 @@ public:
 
 	/*- Item System game mode component related 0-*/
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|GameMode")
-	static UNaGameModeItemSystemComponent * GetGameModeItemSystemComponent(UObject* WorldContext);
+	static UNaGameModeItemSystemComponent * GetGameModeItemSystemComponent(const UObject* WorldContext);
 
 
 

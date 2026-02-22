@@ -19,6 +19,8 @@
 #include "Controllers/NaMobPlayerController.h"
 #include "WorldManagers/NaWorldEnemyControllerManager.h"
 
+NAMOBSYSTEM_API DECLARE_LOG_CATEGORY_EXTERN(LogNaMob, Log, All);
+
 class FToolBarBuilder;
 class FMenuBuilder;
 

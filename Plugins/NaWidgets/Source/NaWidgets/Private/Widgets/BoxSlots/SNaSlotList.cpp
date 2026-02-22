@@ -1,10 +1,8 @@
-// By Sodium
-
-
 #include "Widgets/BoxSlots/SNaSlotList.h"
 #include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
+#include "NaWidgets.h"
 
 FNaSlotListDisplayInfo FNaSlotListDisplayInfo::Defaults = FNaSlotListDisplayInfo();
 

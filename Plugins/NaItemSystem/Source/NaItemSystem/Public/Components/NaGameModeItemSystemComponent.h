@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "NaPublicDependencies/NaGameModeSubunitComponent.h"
-#include "Data/NaItemDisplayData.h"
-#include "Data/NaItemType.h"
+#include "Data/NaItemTableRow.h"
 #include "NaGameModeItemSystemComponent.generated.h"
 
 class UDataTable;
@@ -19,25 +18,11 @@ class NAITEMSYSTEM_API UNaGameModeItemSystemComponent : public UNaGameModeSubuni
 	GENERATED_BODY()
 	
 public:
-
+	
 	// Basic item type data table. Warning: row struct of this data table must be FNaItemTypeData or subtype.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|DataTables")
 	UDataTable * ItemTypeDataTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|DataTables")
-	UDataTable * ItemDisplayDataTable;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|DataTables")
-	UDataTable * ItemEffectDataTable;
-
+	
 public:
-
-	/* Default type data struct for reply when reading a null data piece */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|Defaults")
-	FNaItemTypeData DefaultTypeData = FNaItemTypeData();
-
-	/* Default display data struct for reply when reading a null data piece */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSystem|Defaults")
-	FNaItemDisplayData DefaultDisplayData = FNaItemDisplayData();
-
 };

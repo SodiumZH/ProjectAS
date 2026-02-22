@@ -1,7 +1,6 @@
-
+#pragma once
 #include "BPLibraries/NaItemStatics.h"
 #include "NaItemEntry.h"
-#include "Data/NaItemType.h"
 #include "NaItemContainer.h"
 #include "NaPublicDependencies/NaPublicDependencies.h"
 #include "Components/NaGameModeItemSystemComponent.h"
@@ -60,6 +59,6 @@ void UNaItemStatics::SwapItemEntry(FNaItemContainer & Target, int P1, int P2) {
 	Target.SwapEntry(P1, P2);
 }
 
-UNaGameModeItemSystemComponent * UNaItemStatics::GetGameModeItemSystemComponent(UObject* WorldContext) {
+UNaGameModeItemSystemComponent * UNaItemStatics::GetGameModeItemSystemComponent(const UObject* WorldContext) {
 	return Cast<UNaGameModeItemSystemComponent>(UNaPublicDependencyStatics::GetNaGameModeSubunit(WorldContext, UNaGameModeItemSystemComponent::StaticClass()));
 }

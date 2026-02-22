@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
+#include "Logging/LogMacros.h"
 
+NAITEMSYSTEM_API DECLARE_LOG_CATEGORY_EXTERN(LogNaItem, Log, All);
 
 class FNaItemSystemModule : public IModuleInterface
 {
