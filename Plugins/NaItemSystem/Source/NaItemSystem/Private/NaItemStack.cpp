@@ -201,10 +201,10 @@ FText UNaItemStack::GetDisplayName() const
 	// Check for custom name in data
 	if (HasCustomDataKey(TEXT("CustomName")))
 	{
-		FString CustomName = GetCustomString(TEXT("CustomName"));
-		if (!CustomName.IsEmpty())
+		FString CustomItemName = GetCustomString(TEXT("CustomName"));
+		if (!CustomItemName.IsEmpty())
 		{
-			return FText::FromString(CustomName);
+			return FText::FromString(CustomItemName);
 		}
 	}
 
@@ -537,16 +537,38 @@ bool UNaItemStack::AreJsonObjectsEqual(const TSharedPtr<FJsonObject>& A, const T
 					return false;
 				}
 
-				// For simplicity, compare as strings
-				// Could recursively compare for nested arrays/objects
-				FString StrA, StrB;
-				TSharedRef<TJsonWriter<>> WriterA = TJsonWriterFactory<>::Create(&StrA);
-				TSharedRef<TJsonWriter<>> WriterB = TJsonWriterFactory<>::Create(&StrB);
-				FJsonSerializer::Serialize(ArrayA[i], WriterA);
-				FJsonSerializer::Serialize(ArrayB[i], WriterB);
-
-				if (StrA != StrB)
+				// Compare values based on type
+				switch (ArrayA[i]->Type)
 				{
+				case EJson::Number:
+					if (ArrayA[i]->AsNumber() != ArrayB[i]->AsNumber())
+						return false;
+					break;
+				case EJson::String:
+					if (ArrayA[i]->AsString() != ArrayB[i]->AsString())
+						return false;
+					break;
+				case EJson::Boolean:
+					if (ArrayA[i]->AsBool() != ArrayB[i]->AsBool())
+						return false;
+					break;
+				case EJson::Object:
+					if (!AreJsonObjectsEqual(ArrayA[i]->AsObject(), ArrayB[i]->AsObject()))
+						return false;
+					break;
+				case EJson::Array:
+				{
+					const TArray<TSharedPtr<FJsonValue>>& SubArrayA = ArrayA[i]->AsArray();
+					const TArray<TSharedPtr<FJsonValue>>& SubArrayB = ArrayB[i]->AsArray();
+					if (SubArrayA.Num() != SubArrayB.Num())
+						return false;
+					break;
+				}
+				case EJson::Null:
+				case EJson::None:
+					// Both null/none = equal
+					break;
+				default:
 					return false;
 				}
 			}

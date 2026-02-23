@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utility/DebugUtil/NaDebugUtility.h"
+#include "Logging/LogMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogNaUtil);
