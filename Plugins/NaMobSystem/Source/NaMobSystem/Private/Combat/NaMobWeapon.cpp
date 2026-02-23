@@ -7,7 +7,7 @@
 #include "NaMob.h"
 #include "Combat/NaMobSkill.h"
 #include "Combat/NaMobSkillCollision.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "Components/NaMobWeaponManager.h"
 
 ANaMobWeapon::ANaMobWeapon() {

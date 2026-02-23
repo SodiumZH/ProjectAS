@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "NaWidgets.h"
+#include "NatriumWidgets.h"
 
 #define LOCTEXT_NAMESPACE "FNaWidgetsModule"
 

@@ -1,14 +1,13 @@
-// By Sodium
-
-
 #include "UI/Widgets/SNaItemSlotList.h"
+
+#include "NatriumItemSystem.h"
 #include "SlateOptMacros.h"
 #include "BPLibraries/NaItemStatics.h"
 #include "BPLibraries/NaItemDataStatics.h"
-#include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Components/NaItemContainerComponent.h"
 #include "UI/UMG/NaItemSlotList.h"
+#include "Components/NaGameModeItemSystemComponent.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaItemSlotList::Construct(const FArguments& InArgs)

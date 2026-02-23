@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "NaMobWeaponManager.generated.h"
 
 class ANaMob;

@@ -3,7 +3,7 @@
 
 #include "Components/NaMobPlayerComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "Components/NaMobStateManager.h"
 
 // Sets default values for this component's properties

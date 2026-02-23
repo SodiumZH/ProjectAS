@@ -1,6 +1,3 @@
-// By Sodium
-
-
 #include "UI/Widgets/SNaItemSlot.h"
 #include "SlateOptMacros.h"
 #include "BPLibraries/NaItemStatics.h"
@@ -9,6 +6,7 @@
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaUtilityMinimal.h"
 #include "UI/UMG/NaItemSlotList.h"
+#include "NatriumItemSystem.h"
 
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION

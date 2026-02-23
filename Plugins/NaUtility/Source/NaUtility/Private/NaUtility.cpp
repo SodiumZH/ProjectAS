@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 
 #define LOCTEXT_NAMESPACE "FNaUtilityModule"
 

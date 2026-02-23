@@ -1,13 +1,19 @@
 #pragma once
 
+#include "NaMobSkill.h"
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "Combat/NaMobSkill.h"
 #include "NaMob.h"
+#include "TimerManager.h"
 #include "Components/SceneComponent.h"
 #include "Combat/NaMobSkillCollision.h"
 #include "Components/TimeControlComponent.h"
 #include "Components/NaMobSkillManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/NaMobStateManager.h"
+#include "Utility/BPLibraries/NaObjectStatics.h"
+#include "Utility/BPLibraries/NaString.h"
 
 FMobSkillUsageOptions FMobSkillUsageOptions::Default = FMobSkillUsageOptions();
 

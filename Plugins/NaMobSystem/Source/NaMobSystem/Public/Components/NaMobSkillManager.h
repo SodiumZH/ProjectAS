@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "NaMobSkillManager.generated.h"
 
 /* NaMob Skill Manager is an interface component attached only to NaMob for handling skills (based on class ANaMobSkill). 

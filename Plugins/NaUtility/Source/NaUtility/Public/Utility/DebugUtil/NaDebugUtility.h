@@ -7,7 +7,7 @@
 
 /* Natrium logs */
 NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaUtil, Log, All);
-NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNatriumTemp, Log, All);
+NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNaTemp, Log, All);
 
 
 /* Input checking verbosity */
@@ -32,17 +32,17 @@ NAUTILITY_API DECLARE_LOG_CATEGORY_EXTERN(LogNatriumTemp, Log, All);
 
 /* Debug Macros */
 /* Deprecated, should be replaced by UE_LOG_UOBJECT */
-#define LogWarning(text) UE_LOG(LogNatriumTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
-#define LogError(text) UE_LOG(LogNatriumTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
-#define LogWrite(text) UE_LOG(LogNatriumTemp, Display, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+#define LogWarning(text) UE_LOG(LogNaTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+#define LogError(text) UE_LOG(LogNaTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
+#define LogWrite(text) UE_LOG(LogNaTemp, Display, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(this), TEXT(text))
 
-#define LogWarningContext(text, context) UE_LOG(LogNatriumTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
-#define LogErrorContext(text, context) UE_LOG(LogNatriumTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
-#define LogWriteContext(text, context) UE_LOG(LogNatriumTemp, Display, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+#define LogWarningContext(text, context) UE_LOG(LogNaTemp, Warning, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+#define LogErrorContext(text, context) UE_LOG(LogNaTemp, Error, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
+#define LogWriteContext(text, context) UE_LOG(LogNaTemp, Display, TEXT("%s: %s"), *UNaDebugUtility::DisplayName(context), TEXT(text))
 
-#define LogWarningNoContext(text) UE_LOG(LogNatriumTemp, Warning, TEXT(text))
-#define LogErrorNoContext(text) UE_LOG(LogNatriumTemp, Error, TEXT(text))
-#define LogWriteNoContext(text) UE_LOG(LogNatriumTemp, Display, TEXT(text))
+#define LogWarningNoContext(text) UE_LOG(LogNaTemp, Warning, TEXT(text))
+#define LogErrorNoContext(text) UE_LOG(LogNaTemp, Error, TEXT(text))
+#define LogWriteNoContext(text) UE_LOG(LogNaTemp, Display, TEXT(text))
 
 #define PrintToScreen(text) UNaDebugUtility::DebugInfo(this, TEXT(text))
 

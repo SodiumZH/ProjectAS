@@ -3,6 +3,7 @@
 #include "Components/NaMobWeaponManager.h"
 #include "NaMob.h"
 #include "Combat/NaMobWeapon.h"
+#include "Utility/DebugUtil/NaDebugUtility.h"
 
 
 UNaMobWeaponManager::UNaMobWeaponManager() {

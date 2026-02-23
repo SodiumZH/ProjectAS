@@ -2,7 +2,7 @@
 #include "NaUtilityMinimal.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
-#include "NaWidgets.h"
+#include "NatriumWidgets.h"
 
 FNaSlotListDisplayInfo FNaSlotListDisplayInfo::Defaults = FNaSlotListDisplayInfo();
 

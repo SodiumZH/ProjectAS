@@ -3,7 +3,7 @@
 #include "Components/NaMobStateManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "NaMob.h"
-#include "NaMobSystem.h"
+#include "NatriumMobSystem.h"
 
 UNaMobStateManager::UNaMobStateManager() {
 	PrimaryComponentTick.bCanEverTick = true;

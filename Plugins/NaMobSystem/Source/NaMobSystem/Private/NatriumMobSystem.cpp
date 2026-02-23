@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "NaMobSystem.h"
+#include "NatriumMobSystem.h"
 #include "NaMobSystemStyle.h"
 #include "NaMobSystemCommands.h"
 #include "LevelEditor.h"

@@ -1,9 +1,10 @@
 
 #include "Components/NaMobEnemyComponent.h"
 #include "NaMob.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "WorldManagers/NaWorldEnemyControllerManager.h"
 #include "NaPublicDependencies/NaGameModeBaseComponent.h"
+#include "Utility/DebugUtil/NaDebugUtility.h"
 
 void UNaMobEnemyComponent::BeginPlay() {
 
@@ -16,7 +17,7 @@ void UNaMobEnemyComponent::BeginPlay() {
 ANaMobEnemyController* UNaMobEnemyComponent::AddController(bool ForceAdd) {
 	
 	ANaMob* Owner = dynamic_cast<ANaMob*>(GetOwner());
-	if (!IsValid(Owner)) {
+	if (!IsValid(Owner)) 
 		LogError("Mob Enemy Component: invalid owner. Owner must be a NaMob.");
 		return nullptr;
 	}

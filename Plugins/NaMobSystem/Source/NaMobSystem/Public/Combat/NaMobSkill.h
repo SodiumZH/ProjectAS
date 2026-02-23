@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "NaMobSkillCollision.h"
+#include "Utility/DebugUtil/NaDebugUtility.h"
 #include "NaMobSkill.generated.h"
 
 /**

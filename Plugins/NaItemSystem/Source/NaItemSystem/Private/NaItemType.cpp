@@ -2,7 +2,7 @@
 #include "Engine/DataTable.h"
 #include "BPLibraries/NaItemStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
-#include "NaItemSystem.h"
+#include "NatriumItemSystem.h"
 #include "Data/NaItemTableRow.h"
 
 UNaItemType::UNaItemType()
@@ -70,7 +70,7 @@ bool UNaItemType::AreItemTypesEqual(const UNaItemType* A, const UNaItemType* B)
 
 FNaItemProperties& UNaItemType::GetProperties() const
 {
-	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(this);
+	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(const_cast<UNaItemType*>(this));
 	if (GM && GM->ItemTypeDataTable)
 	{
 		FNaItemTableRow* Row = GM->ItemTypeDataTable->FindRow<FNaItemTableRow>(RegistryName, TEXT("UNaItemType::GetProperties"));
@@ -86,7 +86,7 @@ FNaItemProperties& UNaItemType::GetProperties() const
 
 TOptional<FName> UNaItemType::GetRegistryName() const
 {
-	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(this);
+	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent((UObject*)this);
 	if (!GM || !GM->ItemTypeDataTable)
 	{
 		return TOptional<FName>();

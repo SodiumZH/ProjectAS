@@ -9,15 +9,8 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
-#include "NaMobData.h"
-#include "NaMobStatics.h"
 #include "Components/NaMobComponent.h"
-#include "Combat/NaMobSkill.h"
-#include "Combat/NaMobSkillCollision.h"
-#include "Combat/NaMobWeapon.h"
-#include "Controllers/NaMobEnemyController.h"
-#include "Controllers/NaMobPlayerController.h"
-#include "WorldManagers/NaWorldEnemyControllerManager.h"
+#include "Logging/LogMacros.h"
 
 NAMOBSYSTEM_API DECLARE_LOG_CATEGORY_EXTERN(LogNaMob, Log, All);
 

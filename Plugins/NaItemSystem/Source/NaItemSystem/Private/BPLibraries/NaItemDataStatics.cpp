@@ -1,5 +1,5 @@
 #include "BPLibraries/NaItemDataStatics.h"
-#include "NaItemSystem.h"
+#include "NatriumItemSystem.h"
 #include "NaItemType.h"
 #include "Data/NaItemTableRow.h"
 #include "Engine/DataTable.h"

@@ -8,7 +8,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "NaMobData.h"
-#include "NaUtility.h"
+#include "NatriumUtility.h"
 #include "NaMobBase.generated.h"
 
 // This class does not need to be modified.
