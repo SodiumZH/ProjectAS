@@ -103,7 +103,7 @@ void SNaItemSlotList::Reconstruct() {
 				SAssignNew(Slots[i], SNaItemSlot)
 					.StylePtr(StylePtr)
 					.WorldContext(GMComponent)
-					.EntryPtr(Container->Container.Find(i).EntryPtr)
+					.Stack(Container->Container.Find(i).Stack)
 			];
 		}
 		// Then fill with disabled slots
@@ -151,7 +151,7 @@ bool SNaItemSlotList::IsUpdated(bool bDisplay) {
 
 	// Check each slots
 	for (i = 0; i < Slots.Num(); ++i) {
-		if (Slots[i]->GetEntryPtr() != Container->Container.Find(i).EntryPtr) {
+		if (Slots[i]->GetStack() != Container->Container.Find(i).Stack) {
 			if(bDisplay)
 				UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: position %d is not updated."), i);
 			Res = false;
@@ -174,14 +174,14 @@ void SNaItemSlotList::ResetSlot(int Position) {
 	}
 
 
-	Slots[Position]->ResetItemEntry(Container->Container.Find(Position).EntryPtr);
+	Slots[Position]->ResetItemStack(Container->Container.Find(Position).Stack);
 
 }
 
 void SNaItemSlotList::ResetAllSlots() {
 	int i = 0;
 	for (i = 0; i < Slots.Num(); ++i) {
-		Slots[i]->ResetItemEntry(Container->Container.Find(i).EntryPtr);
+		Slots[i]->ResetItemStack(Container->Container.Find(i).Stack);
 	}
 }
 

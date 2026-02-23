@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
-#include "NaItemEntry.h"
+#include "NaItemStack.h"
 #include "Fonts/SlateFontInfo.h"
 #include "SNaItemSlot.generated.h"
 
@@ -84,13 +84,13 @@ public:
 	{
 		_StylePtr = nullptr;
 		_WorldContext = nullptr;
-		_EntryPtr = nullptr;
+		_Stack = nullptr;
 		_bIsDisabled = false;
 	}
 
 	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
 	SLATE_ATTRIBUTE(UObject*, WorldContext)	// object as world context (indicating world)
-	SLATE_ATTRIBUTE(TSharedPtr<FNaItemEntry>, EntryPtr)	/* Ptr to corresponding item entry. Null ptr means empty */
+	SLATE_ATTRIBUTE(UNaItemStack*, Stack)	/* Ptr to corresponding item stack. Null ptr means empty */
 	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
 	
 	SLATE_END_ARGS()
@@ -130,23 +130,23 @@ protected:
 
 	UNaGameModeItemSystemComponent * GMComponent;
 
-	TSharedPtr<FNaItemEntry> ItemEntryPtr;
+	UNaItemStack* ItemStack = nullptr;
 
 public:
 
 	// Check if it's an empty slot
-	bool IsEmpty() { return !ItemEntryPtr.IsValid(); };
+	bool IsEmpty() { return !ItemStack || ItemStack->IsEmpty(); };
 
 public:
 
-	// Get item entry ptr
-	TSharedPtr<FNaItemEntry> GetEntryPtr() { return ItemEntryPtr; };
+	// Get item stack
+	UNaItemStack* GetStack() { return ItemStack; };
 
 	// Get child as box slot
 	TSharedPtr<SNaBoxSlot> GetBoxSlot() { return BoxSlot; };
 
-	// Get a new item entry ptr and reset the slot from it
-	void ResetItemEntry(TSharedPtr<FNaItemEntry> NewEntryPtr);
+	// Get a new item stack and reset the slot from it
+	void ResetItemStack(UNaItemStack* NewStack);
 
 	// Set if the slot is disabled
 	void SetDisabled(bool NewDisabledState);

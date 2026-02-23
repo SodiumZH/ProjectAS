@@ -49,6 +49,16 @@ public:
 	virtual bool OnUse_Implementation(AActor* User, AActor* Target);
 
 	/**
+	 * Called when item is consumed.
+	 * Override in child classes for custom consume behavior.
+	 * @param User The actor consuming the item
+	 * @return Whether the item was successfully consumed (true = remove 1 from stack)
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Natrium|Item System")
+	bool OnConsume(AActor* User);
+	virtual bool OnConsume_Implementation(AActor* User);
+
+	/**
 	 * Get formatted tooltip text for display.
 	 * Override to customize tooltip.
 	 */

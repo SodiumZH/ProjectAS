@@ -42,6 +42,8 @@ public class NaItemSystem : ModuleRules
 				"SlateCore",
                 "UMG",
                 "InputCore",
+				"Json",
+				"JsonUtilities",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

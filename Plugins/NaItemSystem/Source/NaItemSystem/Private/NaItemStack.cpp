@@ -23,7 +23,7 @@ bool UNaItemStack::IsValid() const
 
 int32 UNaItemStack::GetMaxStackSize() const
 {
-	return ItemType ? ItemType->MaxStackSize : 1;
+	return ItemType ? ItemType->GetProperties().MaxStackSize : 1;
 }
 
 bool UNaItemStack::IsFullStack() const
@@ -32,7 +32,7 @@ bool UNaItemStack::IsFullStack() const
 	{
 		return true;
 	}
-	return Count >= ItemType->MaxStackSize;
+	return Count >= ItemType->GetProperties().MaxStackSize;
 }
 
 int32 UNaItemStack::GetRemainingCapacity() const
@@ -41,7 +41,7 @@ int32 UNaItemStack::GetRemainingCapacity() const
 	{
 		return 0;
 	}
-	return FMath::Max(0, ItemType->MaxStackSize - Count);
+	return FMath::Max(0, ItemType->GetProperties().MaxStackSize - Count);
 }
 
 int32 UNaItemStack::Grow(int32 Amount)
@@ -52,7 +52,7 @@ int32 UNaItemStack::Grow(int32 Amount)
 	}
 
 	const int32 OldCount = Count;
-	const int32 MaxSize = ItemType->MaxStackSize;
+	const int32 MaxSize = ItemType->GetProperties().MaxStackSize;
 	Count = FMath::Clamp(Count + Amount, 0, MaxSize);
 	
 	return Count - OldCount;
@@ -208,8 +208,8 @@ FText UNaItemStack::GetDisplayName() const
 		}
 	}
 
-	// Use item type name
-	return ItemType->DisplayName;
+	// Use item type display name from properties
+	return ItemType->GetProperties().DisplayName;
 }
 
 FText UNaItemStack::GetTooltipText() const
@@ -237,7 +237,7 @@ FText UNaItemStack::GetTooltipText() const
 
 UTexture2D* UNaItemStack::GetIcon() const
 {
-	return ItemType ? ItemType->ItemIcon : nullptr;
+	return ItemType ? ItemType->GetProperties().ItemIcon : nullptr;
 }
 
 void UNaItemStack::Serialize(FArchive& Ar)
@@ -385,7 +385,7 @@ bool UNaItemStack::AreStacksSameTypeAndData(const UNaItemStack* A, const UNaItem
 	return A->CanStackWith(B, true);
 }
 
-TSharedPtr<FJsonObject> UNaItemStack::GetCustomDataObject()
+TSharedPtr<FJsonObject> UNaItemStack::GetOrCreateCustomData()
 {
 	if (!CustomData.IsValid())
 	{
@@ -394,14 +394,33 @@ TSharedPtr<FJsonObject> UNaItemStack::GetCustomDataObject()
 	return CustomData;
 }
 
-TSharedPtr<FJsonObject> UNaItemStack::GetCustomDataObject() const
+TSharedPtr<FJsonObject> UNaItemStack::GetCustomData() const
 {
 	return CustomData;
 }
 
-void UNaItemStack::SetCustomDataObject(TSharedPtr<FJsonObject> InData)
+void UNaItemStack::SetCustomData(TSharedPtr<FJsonObject> InData)
 {
 	CustomData = InData;
+}
+
+bool UNaItemStack::HasCustomData() const
+{
+	return CustomData.IsValid() && CustomData->Values.Num() > 0;
+}
+
+bool UNaItemStack::HasCustomDataKey(const FString& Key) const
+{
+	return CustomData.IsValid() && CustomData->HasField(Key);
+}
+
+FString UNaItemStack::GetCustomString(const FString& Key, const FString& DefaultValue) const
+{
+	if (!CustomData.IsValid() || !CustomData->HasField(Key))
+	{
+		return DefaultValue;
+	}
+	return CustomData->GetStringField(Key);
 }
 
 void UNaItemStack::MergeCustomData(const UNaItemStack* Other, bool bOverwrite)
@@ -411,7 +430,7 @@ void UNaItemStack::MergeCustomData(const UNaItemStack* Other, bool bOverwrite)
 		return;
 	}
 
-	TSharedPtr<FJsonObject> Data = GetCustomDataObject();
+	TSharedPtr<FJsonObject> Data = GetOrCreateCustomData();
 
 	for (const auto& Pair : Other->CustomData->Values)
 	{
@@ -426,7 +445,7 @@ void UNaItemStack::ClampCount()
 {
 	if (ItemType)
 	{
-		Count = FMath::Clamp(Count, 0, ItemType->MaxStackSize);
+		Count = FMath::Clamp(Count, 0, ItemType->GetProperties().MaxStackSize);
 	}
 	else
 	{

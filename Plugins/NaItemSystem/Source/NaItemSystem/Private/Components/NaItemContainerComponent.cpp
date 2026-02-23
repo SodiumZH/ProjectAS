@@ -1,11 +1,9 @@
 // By Sodium
 
 #include "Components/NaItemContainerComponent.h"
-#include "NaItemEntry.h"
 #include "NaItemContainer.h"
 #include "UI/UMG/NaItemSlotList.h"
 #include "UI/Widgets/SNaItemSlotList.h"
-#include "NaItemContainer.h"
 #include "NaItemEffect.h"
 
 // Sets default values for this component's properties

@@ -1,15 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NaItemStack.h"
+#include "NaItemEffect.h"
 #include "NaItemContainer.generated.h"
 
 // This value is intended to avoid integer overflow.
 #define ITEM_CONTAINER_MAX_SIZE 10000
 
-struct FNaItemType;
-struct FNaItemDescriptor;
-struct FNaItemEntry;
-enum class ENaItemContainerUsageResult:uint8;
 class UNaGameModeItemSystemComponent;
 
 
@@ -30,7 +28,7 @@ enum class ENaItemContainerFindingResult :uint8 {
 /* Return values for Searching in a container */
 struct FNaItemContainerFindingReturn {
 	// Values
-	TSharedPtr<FNaItemEntry> EntryPtr;
+	UNaItemStack* Stack;
 	ENaItemContainerFindingResult Result;
 
 	// Initializer when not found
@@ -39,14 +37,14 @@ struct FNaItemContainerFindingReturn {
 	};
 
 	// Found item successfully
-	FNaItemContainerFindingReturn(TSharedPtr<FNaItemEntry> InEntryPtr);
+	FNaItemContainerFindingReturn(UNaItemStack* InStack);
 
 	// Not found
 	FNaItemContainerFindingReturn(NotFoundType);
 
 	// Copy
-	FNaItemContainerFindingReturn(const FNaItemContainerFindingReturn & Copy) :
-		EntryPtr(Copy.EntryPtr),
+	FNaItemContainerFindingReturn(const FNaItemContainerFindingReturn& Copy) :
+		Stack(Copy.Stack),
 		Result(Copy.Result)
 	{};
 };
@@ -71,8 +69,9 @@ struct NAITEMSYSTEM_API FNaItemContainer {
 
 protected:
 
-	/* Content as an array */
-	TArray<TSharedPtr<FNaItemEntry>> Content;
+	/* Content as an array of item stacks. Null entries represent empty slots. */
+	UPROPERTY()
+	TArray<TObjectPtr<UNaItemStack>> Content;
 
 	/* Max size */
 	int Size = 64;
@@ -90,14 +89,14 @@ public:
 	// Make an empty container. Default size is 64.
 	FNaItemContainer();
 
-	// Make empty container with givin size.
+	// Make empty container with given size.
 	FNaItemContainer(int InSize);
 
 	// Copy from other. 
-	FNaItemContainer(const FNaItemContainer & CopyFrom);
+	FNaItemContainer(const FNaItemContainer& CopyFrom);
 
 	// Make from initial content map and size
-	FNaItemContainer(int InSize, const TMap<int, FNaItemEntry> & InitialContent);
+	FNaItemContainer(int InSize, const TMap<int, UNaItemStack*>& InitialContent);
 
 	/** Resize the container.
 	* @Param bForce If true, when shrinked area contains items, it will ignore them (causing the items lost!). Or it will fail if shrinked area contains items.
@@ -116,27 +115,21 @@ public:
 	// Get entry from index
 	FNaItemContainerFindingReturn Find(int Index) const;
 
-	/** Get all positions that contains item in given type
+	/** Get all positions that contain items of a given type.
 	* Return whether there are any.
-	* @Param TypeIndex The index in item type datatable of the item type.
+	* @Param Type The item type to search for.
 	* @Param Positions Return positions containing the item of given type.
-	* @Param bIncludeUniquified If true, the search result will include uniquified items.
 	*/
-	bool FindItem(int TypeIndex, TArray<int>& Positions, bool bIncludeUniquified = false);
-
-	/** Get all positions that is identical to the item, including unique item information and uniquification.
-	* Return whether there are any.
-	*/
-	bool FindItemExplicit(const FNaItemDescriptor & Type, TArray<int>& Positions);
+	bool FindByType(UNaItemType* Type, TArray<int>& Positions);
 
 
 	/** Operations **/
 
-	/** Add entry. 
+	/** Add item stack at position. 
 	* If the container position is occupied, the values will not be added unless bForce == true.
 	* Return whether succeeded.
 	*/
-	bool AddEntry(int Position, const FNaItemEntry & Entry, bool bForce = false);
+	bool AddEntry(int Position, UNaItemStack* Stack, bool bForce = false);
 
 
 	/* Remove an item from position. */
@@ -154,83 +147,48 @@ public:
 
 	/** Maintainance **/
 
-	// Find all positions with invalid items (incorrect amount, zero type ID, etc.) and reset them to null
+	// Find all positions with invalid/empty stacks and reset them to null
 	void ClearInvalid();
 
 
 
 
 	/*----- Data-dependent Operations ------*/
-	
-	/* Data-dependent operations need to read the data table(configured in game mode), 
-	* This operation is data-dependent, so a world context is needed.
-	*/
-
-	/** Check if the container's item stack amounts are correct. */
-	bool CheckStacking(UObject* WorldContext);
-
-
-	/*--- Operations on specific positions ---*/
 
 	/** Add or stack items to a position.
-	* If the position is empty, add entry. If the position contains identical items, stack on it. Or fail.
-	* This operation is data-dependent, so a world context is needed.
-	* @ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
+	* If the position is empty, add stack. If the position contains the same item type, stack on it. Or fail.
+	* @ReturnValue Amount that cannot be added. If failed, return the total amount of input stack.
 	*/
-	int AddOrStack(UObject* WorldContext, int Position, const FNaItemEntry & Entry);
+	int AddOrStack(int Position, UNaItemStack* Stack);
 
 
 	/* --- Operations not specifying positions --- */
 
-	// Single Entry
-
-	/** Give an entry to the container, not specifying the position
-	* This operation is data-dependent, so a world context is needed.
-	* @ ReturnValue Amount that cannot be added. If failed, return the total amount of input entry.
+	/** Give a stack to the container, not specifying the position.
+	* @ ReturnValue Amount that cannot be added. If failed, return the total amount of input stack.
 	**/
-	int GiveItem(UObject* WorldContext, const FNaItemEntry & Entry);
+	int GiveItem(UNaItemStack* Stack);
 
 	/** GiveItem function that executes only when all items can be given.
-	* This operation is data-dependent, so a world context is needed.
 	* @ ReturnValue Whether succeeded.
 	**/
-	bool GiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry);
+	bool GiveItemComplete(UNaItemStack* Stack);
 
-	/** Check if an entry can be completely added to the container.
+	/** Check if a stack can be completely added to the container.
 	* This function doesn't really add items.
 	**/
-	bool CanGiveItemComplete(UObject* WorldContext, const FNaItemEntry & Entry) const;
+	bool CanGiveItemComplete(const UNaItemStack* Stack) const;
 
-
-	// Batch Adding
-	
-	/** Give multiple entries to the container.
-	* @Param Entries Item entries to give. 
-	* WARNING: the entry array ref input will be edited during adding! After the function, the input array will contain only items not added to the container.
-	* @ReturnValue Whether entries are all completely added.
-	**/
-	//bool GiveItemMulti(UObject* WorldContext, TArray<FNaItemEntry> & Entries);
-
-	/** Give multiple entries to the container.
-	* It will fail and do exactly nothing if they cannot be completely added.
-	* @Param Entries Item entries to give.
-	* @ReturnValue Whether succeeded.
-	**/
-	//bool GiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
-
-	/** Check if multiple entries can be completely added.
+	/** Check if multiple stacks can all be completely added.
 	* This function doesn't really add items.
-	* @Param Entries Item entries to give.
-	* @ReturnValue Whether succeeded.
 	**/
-	bool CanGiveItemMultiComplete(UObject* WorldContext, const TArray<FNaItemEntry> & Entries);
+	bool CanGiveItemMultiComplete(const TArray<UNaItemStack*>& Stacks);
 
 
 
 	/*--- Item Usage ---*/
 	
 	// Check if the container is correct and item can be used before usage; actions before usage
-	// Consumption is here
 	virtual ENaItemContainerUsageResult PreUsageProcess(UObject* WorldContext, int Position, class AActor* Source, AActor* Target);
 
 	// Action of usage of item itself

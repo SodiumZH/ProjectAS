@@ -3,16 +3,11 @@
 #include "BPLibraries/NaItemStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
 #include "NaItemSystem.h"
+#include "Data/NaItemTableRow.h"
 
 UNaItemType::UNaItemType()
 {
 	RegistryName = NAME_None;
-	DisplayName = FText::FromString(TEXT("Unknown Item"));
-	MaxStackSize = 64;
-	bRequiresNBT = false;
-	ItemIcon = nullptr;
-	RarityColor = FLinearColor::White;
-	Description = FText::FromString(TEXT("An item."));
 }
 
 bool UNaItemType::CanStackWith(const UNaItemType* Other) const
@@ -30,7 +25,7 @@ bool UNaItemType::OnUse_Implementation(AActor* User, AActor* Target)
 {
 	// Base implementation: do nothing
 	UE_LOG(LogTemp, Log, TEXT("Item type %s used by %s"), 
-		*GetRegistryNameString(), 
+		*RegistryName.ToString(), 
 		User ? *User->GetName() : TEXT("None"));
 	
 	return false;
@@ -38,17 +33,18 @@ bool UNaItemType::OnUse_Implementation(AActor* User, AActor* Target)
 
 bool UNaItemType::OnConsume_Implementation(AActor* User)
 {
-	// Base implementation: do nothing, don't consume
+	// Base implementation: do not consume
 	return false;
 }
 
 FText UNaItemType::GetTooltipText_Implementation() const
 {
+	const FNaItemProperties& Props = GetProperties();
 	FString TooltipString = FString::Printf(
 		TEXT("%s\n%s\nMax Stack: %d"),
-		*DisplayName.ToString(),
-		*Description.ToString(),
-		MaxStackSize
+		*Props.DisplayName.ToString(),
+		*Props.Description.ToString(),
+		Props.MaxStackSize
 	);
 
 	return FText::FromString(TooltipString);
@@ -72,18 +68,65 @@ bool UNaItemType::AreItemTypesEqual(const UNaItemType* A, const UNaItemType* B)
 	return A == B;
 }
 
-FNaItemProperties & UNaItemType::GetProperties() const
+FNaItemProperties& UNaItemType::GetProperties() const
 {
-	
+	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(this);
+	if (GM && GM->ItemTypeDataTable)
+	{
+		FNaItemTableRow* Row = GM->ItemTypeDataTable->FindRow<FNaItemTableRow>(RegistryName, TEXT("UNaItemType::GetProperties"));
+		if (Row)
+		{
+			return Row->Properties;
+		}
+	}
+	UE_LOG(LogNaItem, Error, TEXT("UNaItemType::GetProperties: Failed to find properties for item type '%s'"), *RegistryName.ToString());
+	static FNaItemProperties DefaultProperties;
+	return DefaultProperties;
 }
 
 TOptional<FName> UNaItemType::GetRegistryName() const
 {
 	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(this);
+	if (!GM || !GM->ItemTypeDataTable)
+	{
+		return TOptional<FName>();
+	}
 	const FNaItemTableRow* Row = GM->ItemTypeDataTable
 		->FindRow<FNaItemTableRow>(this->RegistryName, TEXT("UNaItemType::GetRegistryName"));
 	if (!Row || Row->Type != this)
 	{
-		UE_LOG(LogNaItem, Error, TEXT("Item type %s missing registry entry. Is its name field identical to its data table key?"), this->RegistryName.ToString());
+		UE_LOG(LogNaItem, Error, TEXT("Item type %s missing registry entry. Is its name field identical to its data table key?"), *this->RegistryName.ToString());
+		return TOptional<FName>();
 	}
+	return TOptional<FName>(RegistryName);
+}
+
+TOptional<FName> UNaItemType::GetOrUpdateName()
+{
+	// First try current registry name
+	TOptional<FName> Result = GetRegistryName();
+	if (Result.IsSet())
+	{
+		return Result;
+	}
+
+	// Try to find by scanning all rows
+	UNaGameModeItemSystemComponent* GM = UNaItemStatics::GetGameModeItemSystemComponent(this);
+	if (!GM || !GM->ItemTypeDataTable)
+	{
+		return TOptional<FName>();
+	}
+
+	TArray<FName> RowNames = GM->ItemTypeDataTable->GetRowNames();
+	for (const FName& RowName : RowNames)
+	{
+		const FNaItemTableRow* Row = GM->ItemTypeDataTable->FindRow<FNaItemTableRow>(RowName, TEXT("UNaItemType::GetOrUpdateName"));
+		if (Row && Row->Type == this)
+		{
+			RegistryName = RowName;
+			return TOptional<FName>(RegistryName);
+		}
+	}
+
+	return TOptional<FName>();
 }
