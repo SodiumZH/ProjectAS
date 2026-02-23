@@ -1,9 +1,8 @@
 #pragma once
 
-#include "NaMobSkill.h"
+#include "Combat/NaMobSkill.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Combat/NaMobSkill.h"
 #include "NaMob.h"
 #include "TimerManager.h"
 #include "Components/SceneComponent.h"

@@ -1,10 +1,8 @@
-// By Sodium
-
-
 #include "UI/UMG/NaItemSlotList.h"
 #include "UI/Widgets/SNaItemSlotList.h"
 #include "Components/NaItemContainerComponent.h"
 #include "NaItemContainer.h"
+#include "NatriumItemSystem.h"
 #include "NaUtilityMinimal.h"
 
 #define LOCTEXT_NAMESPACE "NaItemSystem"

@@ -4,6 +4,7 @@
 #include "NatriumUtility.h"
 #include "NaMob.h"
 #include "Combat/NaMobSkill.h"
+#include "Utility/BPLibraries/NaContainerUtility.h"
 
 
 UNaMobSkillManager::UNaMobSkillManager() {
