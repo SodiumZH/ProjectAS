@@ -17,17 +17,18 @@ void UNaMobEnemyComponent::BeginPlay() {
 ANaMobEnemyController* UNaMobEnemyComponent::AddController(bool ForceAdd) {
 	
 	ANaMob* Owner = dynamic_cast<ANaMob*>(GetOwner());
-	if (!IsValid(Owner)) 
+	if (!IsValid(Owner)) {
 		LogError("Mob Enemy Component: invalid owner. Owner must be a NaMob.");
 		return nullptr;
 	}
-	else {
-		UNaWorldEnemyControllerManager* CtrlMgr = Cast<UNaWorldEnemyControllerManager>(UNaPublicDependencyStatics::GetNaGameModeSubunit(Owner, UNaWorldEnemyControllerManager::StaticClass()));
-		if (!IsValid(CtrlMgr)) {
-			LogError("Mob Enemy Component: World Enemy Controller Manager on GameMode is invalid.");
-			return nullptr;
-		}
-		return CtrlMgr->AllocateController(Owner, ForceAdd);
-		
+	
+	UNaWorldEnemyControllerManager* CtrlMgr = Cast<UNaWorldEnemyControllerManager>(
+		UNaPublicDependencyStatics::GetNaGameModeSubunit(Owner, UNaWorldEnemyControllerManager::StaticClass())
+	);
+	if (!IsValid(CtrlMgr)) {
+		LogError("Mob Enemy Component: World Enemy Controller Manager on GameMode is invalid.");
+		return nullptr;
 	}
+	
+	return CtrlMgr->AllocateController(Owner, ForceAdd);
 }

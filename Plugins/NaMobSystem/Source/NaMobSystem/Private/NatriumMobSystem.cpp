@@ -13,6 +13,8 @@ static const FName NaMobSystemTabName("NaMobSystem");
 
 #define LOCTEXT_NAMESPACE "FNaMobSystemModule"
 
+DEFINE_LOG_CATEGORY(LogNaMob);
+
 void FNaMobSystemModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module

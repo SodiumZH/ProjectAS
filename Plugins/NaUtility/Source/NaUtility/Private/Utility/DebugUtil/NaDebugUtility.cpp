@@ -4,6 +4,9 @@
 #include "Logging/LogMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+DEFINE_LOG_CATEGORY(LogNaUtil);
+DEFINE_LOG_CATEGORY(LogNaTemp);
+
 void UNaDebugUtility::DebugInfo(UObject* Source, FString Info, float Time, bool bShowSource, bool bPrintToScreen, bool bPrintToLog, FLinearColor Color) {
 
 	if (bShowSource)

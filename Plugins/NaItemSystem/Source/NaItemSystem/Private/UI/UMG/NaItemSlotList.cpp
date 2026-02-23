@@ -6,6 +6,7 @@
 #include "Components/NaItemContainerComponent.h"
 #include "NaItemContainer.h"
 #include "NaUtilityMinimal.h"
+#include "NatriumItemSystem.h"
 
 #define LOCTEXT_NAMESPACE "NaItemSystem"
 

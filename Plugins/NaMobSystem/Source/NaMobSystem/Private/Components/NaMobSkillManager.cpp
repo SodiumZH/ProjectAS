@@ -87,7 +87,16 @@ void UNaMobSkillManager::UnregisterSkill(ANaMobSkill* InSkill) {
 
 	if (!IsValid(this)) return;
 
-	bool Succeeded = UNaContainerUtility::RemoveValue<FName, ANaMobSkill*>(SkillRegistry, InSkill);
+	bool Succeeded = false;
+	for (auto It = SkillRegistry.CreateIterator(); It; ++It)
+	{
+		if (It->Value == InSkill)
+		{
+			It.RemoveCurrent();
+			Succeeded = true;
+			break;
+		}
+	}
 	if (!Succeeded)
 		LogWarning("Unregister Skill Failed: skill doesn't exist.");
 
@@ -114,13 +123,15 @@ FName UNaMobSkillManager::GetSkillRegisterName(ANaMobSkill* Skill) {
 
 	if (!IsValid(this)) return NAME_None;
 
-	FName* ResPtr = UNaContainerUtility::FindKeyFromValue(SkillRegistry, Skill);
-	if (ResPtr)
-		return *ResPtr;
-	else {
-		LogWarning("Get Register Name Failed: not found.");
-		return NAME_None;
+	for (const auto& Elem : SkillRegistry)
+	{
+		if (Elem.Value == Skill)
+		{
+			return Elem.Key;
+		}
 	}
+	LogWarning("Get Register Name Failed: not found.");
+	return NAME_None;
 
 }
 
