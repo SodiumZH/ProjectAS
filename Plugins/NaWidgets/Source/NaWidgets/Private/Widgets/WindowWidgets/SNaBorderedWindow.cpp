@@ -3,7 +3,7 @@
 #include "Widgets/WindowWidgets/SNaBorderedWindow.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
-#include "Widgets/Layout/SCanvas.h"
+#include "Widgets/SCanvas.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/SNullWidget.h"
 #include "Styling/CoreStyle.h"

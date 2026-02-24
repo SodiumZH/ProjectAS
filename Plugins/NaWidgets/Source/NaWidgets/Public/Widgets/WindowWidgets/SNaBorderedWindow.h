@@ -5,8 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Images/SImage.h"
-#include "Widgets/Layout/SCanvas.h"
-#include "Widgets/Layout/SBox.h"
+#include "Widgets/SCanvas.h"
 #include "Styling/SlateBrush.h"
 #include "SNaBorderedWindow.generated.h"
 
