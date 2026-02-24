@@ -174,7 +174,9 @@ FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const F
 	if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
 	{
 		const FVector2D LocalPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
-		const EWindowRegion Region = GetRegionAtPosition(MyGeometry, LocalPos);
+		// Offset into inner-canvas space by subtracting the current window position
+		const FVector2D CanvasLocalPos = LocalPos - WindowPosition;
+		const EWindowRegion Region = GetRegionAtPosition(MyGeometry, CanvasLocalPos);
 
 		if (Region == EWindowRegion::TopBorder)
 		{
@@ -186,7 +188,7 @@ FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const F
 		else if (Region == EWindowRegion::BottomRightCorner)
 		{
 			bIsResizing = true;
-			DragStartPosition = LocalPos;
+			DragStartPosition = CanvasLocalPos;
 			DragStartBodySize = Params.BodySize;
 			return FReply::Handled().CaptureMouse(SharedThis(this));
 		}
@@ -215,7 +217,9 @@ FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointe
 	if (bIsResizing)
 	{
 		const FVector2D CurrentPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
-		const FVector2D Delta = CurrentPos - DragStartPosition;
+		// Offset into inner-canvas space to match DragStartPosition coordinate system
+		const FVector2D CanvasLocalPos = CurrentPos - WindowPosition;
+		const FVector2D Delta = CanvasLocalPos - DragStartPosition;
 
 		FVector2D NewBodySize = DragStartBodySize + Delta;
 		Params.BodySize = ClampBodySize(NewBodySize);
@@ -226,7 +230,7 @@ FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointe
 	{
 		const FVector2D Delta = MouseEvent.GetScreenSpacePosition() - DragStartPosition;
 		WindowPosition = DragStartWindowPosition + Delta;
-		OuterCanvas->Invalidate(EInvalidateWidgetReason::Layout);
+		OuterCanvas->Invalidate(EInvalidateWidgetReason::LayoutAndVolatility);
 		return FReply::Handled();
 	}
 
