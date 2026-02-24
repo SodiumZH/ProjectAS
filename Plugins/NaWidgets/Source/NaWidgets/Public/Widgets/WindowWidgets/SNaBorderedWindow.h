@@ -5,10 +5,8 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Images/SImage.h"
-#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Styling/SlateBrush.h"
-#include "Styling/SlateTypes.h"
 #include "SNaBorderedWindow.generated.h"
 
 /** Configuration struct for all 9 image parts and size parameters of SNaBorderedWindow. */
@@ -107,7 +105,7 @@ public:
 
 protected:
 	TSharedPtr<SCanvas> Canvas;
-	TSharedPtr<SButton> ResizeButton;
+	TSharedPtr<SWidget> ResizeButton;
 
 	/* The 9 image sub-widgets. */
 	TSharedPtr<SImage> ImgCenter;
@@ -140,9 +138,6 @@ protected:
 	bool bIsResizing = false;
 	FVector2D DragStartPosition;
 	FVector2D DragStartBodySize;
-
-	/** Style applied to the resize handle button; rebuilt from Params.ResizeHandleBrush each layout. */
-	FButtonStyle ResizeButtonStyle;
 
 	/** Rebuild the canvas layout after any size or image change. */
 	void RebuildLayout();
