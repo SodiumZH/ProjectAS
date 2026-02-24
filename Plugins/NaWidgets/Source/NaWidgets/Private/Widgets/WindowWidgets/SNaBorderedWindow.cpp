@@ -3,7 +3,6 @@
 #include "Widgets/WindowWidgets/SNaBorderedWindow.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
-#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Widgets/SNullWidget.h"
 #include "Styling/CoreStyle.h"
@@ -65,17 +64,16 @@ void SNaBorderedWindow::RebuildLayout()
 	BrushBottom.SetImageSize(FVector2D(Params.BodySize.X,  Params.BorderBottom));
 	BrushBottomRight.SetImageSize(FVector2D(Params.BorderRight, Params.BorderBottom));
 
-	// Slot positions: origin is at the top-left of the center content area.
-	// Border parts therefore have negative or positive offsets relative to that origin.
-	const FVector2D PosTopLeft    (-Params.BorderLeft,  -Params.BorderTop);
-	const FVector2D PosTop        (0.f,                 -Params.BorderTop);
-	const FVector2D PosTopRight   (Params.BodySize.X,   -Params.BorderTop);
-	const FVector2D PosLeft       (-Params.BorderLeft,  0.f);
-	const FVector2D PosCenter     (0.f,                 0.f);
-	const FVector2D PosRight      (Params.BodySize.X,   0.f);
-	const FVector2D PosBottomLeft (-Params.BorderLeft,  Params.BodySize.Y);
-	const FVector2D PosBottom     (0.f,                 Params.BodySize.Y);
-	const FVector2D PosBottomRight(Params.BodySize.X,   Params.BodySize.Y);
+	// Slot positions
+	const FVector2D PosTopLeft    (0.f,                                    0.f);
+	const FVector2D PosTop        (Params.BorderLeft,                      0.f);
+	const FVector2D PosTopRight   (Params.BorderLeft + Params.BodySize.X,  0.f);
+	const FVector2D PosLeft       (0.f,                                    Params.BorderTop);
+	const FVector2D PosCenter     (Params.BorderLeft,                      Params.BorderTop);
+	const FVector2D PosRight      (Params.BorderLeft + Params.BodySize.X,  Params.BorderTop);
+	const FVector2D PosBottomLeft (0.f,                                    Params.BorderTop + Params.BodySize.Y);
+	const FVector2D PosBottom     (Params.BorderLeft,                      Params.BorderTop + Params.BodySize.Y);
+	const FVector2D PosBottomRight(Params.BorderLeft + Params.BodySize.X,  Params.BorderTop + Params.BodySize.Y);
 
 	// Slot sizes
 	const FVector2D SzCornerTL(Params.BorderLeft,  Params.BorderTop);
@@ -93,26 +91,7 @@ void SNaBorderedWindow::RebuildLayout()
 		? ContentWidget.ToSharedRef()
 		: SNullWidget::NullWidget;
 
-	// Build the resize button style from the configured brush (all states use the same brush).
-	// The default ResizeHandleBrush has DrawAs=NoDrawType, making the button invisible by default.
-	{
-		FSlateBrush NoBrush;
-		NoBrush.DrawAs = ESlateBrushDrawType::NoDrawType;
-		ResizeButtonStyle
-			.SetNormal(Params.ResizeHandleBrush)
-			.SetHovered(Params.ResizeHandleBrush)
-			.SetPressed(Params.ResizeHandleBrush)
-			.SetDisabled(NoBrush)
-			.SetNormalPadding(FMargin(0))
-			.SetPressedPadding(FMargin(0));
-	}
-
-	SAssignNew(ResizeButton, SButton)
-		.ButtonStyle(&ResizeButtonStyle)
-		.OnMouseButtonDown(this, &SNaBorderedWindow::HandleResizeButtonMouseDown);
-
-	// Rebuild canvas with updated absolute positions/sizes.
-	// The resize button is layered on top of ImgBottomRight to serve as the interactive handle.
+	// Rebuild canvas with updated absolute positions/sizes
 	SAssignNew(Canvas, SCanvas)
 		+ SCanvas::Slot().Position(PosTopLeft).Size(SzCornerTL)    [ImgTopLeft.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosTop).Size(SzTop)             [ImgTop.ToSharedRef()]
@@ -123,8 +102,7 @@ void SNaBorderedWindow::RebuildLayout()
 		+ SCanvas::Slot().Position(PosBottomLeft).Size(SzCornerBL) [ImgBottomLeft.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosBottom).Size(SzBottom)       [ImgBottom.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosBottomRight).Size(SzCornerBR)[ImgBottomRight.ToSharedRef()]
-		+ SCanvas::Slot().Position(PosCenter).Size(SzCenter)       [CenterContent]
-		+ SCanvas::Slot().Position(PosBottomRight).Size(SzCornerBR)[ResizeButton.ToSharedRef()];
+		+ SCanvas::Slot().Position(PosCenter).Size(SzCenter)       [CenterContent];
 
 	ChildSlot
 	[
@@ -170,15 +148,20 @@ void SNaBorderedWindow::UpdateImages(const FNaBorderedWindowParams& NewParams)
 	RebuildLayout();
 }
 
-FReply SNaBorderedWindow::HandleResizeButtonMouseDown(const FGeometry& Geometry, const FPointerEvent& MouseEvent)
+FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
 	if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
 	{
-		bIsResizing = true;
-		// Store screen-space position; converted to local in OnMouseMove using parent geometry.
-		DragStartPosition = MouseEvent.GetScreenSpacePosition();
-		DragStartBodySize = Params.BodySize;
-		return FReply::Handled().CaptureMouse(SharedThis(this));
+		const FVector2D LocalPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
+		const EWindowRegion Region = GetRegionAtPosition(MyGeometry, LocalPos);
+
+		if (Region == EWindowRegion::BottomRightCorner)
+		{
+			bIsResizing = true;
+			DragStartPosition = LocalPos;
+			DragStartBodySize = Params.BodySize;
+			return FReply::Handled().CaptureMouse(SharedThis(this));
+		}
 	}
 
 	return FReply::Unhandled();
@@ -203,13 +186,35 @@ FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointe
 	if (bIsResizing)
 	{
 		const FVector2D CurrentPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
-		const FVector2D StartPos   = MyGeometry.AbsoluteToLocal(DragStartPosition);
-		const FVector2D Delta      = CurrentPos - StartPos;
+		const FVector2D Delta = CurrentPos - DragStartPosition;
 
-		Params.BodySize = ClampBodySize(DragStartBodySize + Delta);
+		FVector2D NewBodySize = DragStartBodySize + Delta;
+		Params.BodySize = ClampBodySize(NewBodySize);
 		RebuildLayout();
 		return FReply::Handled();
 	}
 
 	return FReply::Unhandled();
+}
+
+SNaBorderedWindow::EWindowRegion SNaBorderedWindow::GetRegionAtPosition(
+	const FGeometry& MyGeometry, const FVector2D& LocalPosition) const
+{
+	// Bottom-right corner
+	if (LocalPosition.X >= Params.BorderLeft + Params.BodySize.X &&
+		LocalPosition.Y >= Params.BorderTop  + Params.BodySize.Y)
+	{
+		return EWindowRegion::BottomRightCorner;
+	}
+
+	// Center
+	if (LocalPosition.X >= Params.BorderLeft &&
+		LocalPosition.X <  Params.BorderLeft + Params.BodySize.X &&
+		LocalPosition.Y >= Params.BorderTop  &&
+		LocalPosition.Y <  Params.BorderTop  + Params.BodySize.Y)
+	{
+		return EWindowRegion::Center;
+	}
+
+	return EWindowRegion::None;
 }
