@@ -3,6 +3,7 @@
 #include "Widgets/WindowWidgets/SNaBorderedWindow.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
+#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Widgets/SNullWidget.h"
 #include "Styling/CoreStyle.h"
@@ -15,37 +16,6 @@ static FSlateBrush MakeBorderedWindowBrush(UObject* ResourceObj, FVector2D Size)
 	Brush.Tiling = ESlateBrushTileType::NoTile;
 	return Brush;
 }
-
-/** Internal resize handle widget: renders a brush and forwards OnMouseButtonDown to a delegate. */
-class SNaResizeHandle : public SCompoundWidget
-{
-public:
-	SLATE_BEGIN_ARGS(SNaResizeHandle) {}
-		SLATE_ATTRIBUTE(const FSlateBrush*, Brush)
-		SLATE_EVENT(FPointerEventHandler, OnMouseButtonDown)
-	SLATE_END_ARGS()
-
-	void Construct(const FArguments& InArgs)
-	{
-		MouseDownHandler = InArgs._OnMouseButtonDown;
-		ChildSlot
-		[
-			SNew(SImage).Image(InArgs._Brush)
-		];
-	}
-
-	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override
-	{
-		if (MouseDownHandler.IsBound())
-		{
-			return MouseDownHandler.Execute(MyGeometry, MouseEvent);
-		}
-		return FReply::Unhandled();
-	}
-
-private:
-	FPointerEventHandler MouseDownHandler;
-};
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaBorderedWindow::Construct(const FArguments& InArgs)
@@ -123,10 +93,22 @@ void SNaBorderedWindow::RebuildLayout()
 		? ContentWidget.ToSharedRef()
 		: SNullWidget::NullWidget;
 
-	// Build the resize handle widget using the configured brush.
-	// The default ResizeHandleBrush has DrawAs=NoDrawType, making the handle invisible by default.
-	SAssignNew(ResizeButton, SNaResizeHandle)
-		.Brush(&Params.ResizeHandleBrush)
+	// Build the resize button style from the configured brush (all states use the same brush).
+	// The default ResizeHandleBrush has DrawAs=NoDrawType, making the button invisible by default.
+	{
+		FSlateBrush NoBrush;
+		NoBrush.DrawAs = ESlateBrushDrawType::NoDrawType;
+		ResizeButtonStyle
+			.SetNormal(Params.ResizeHandleBrush)
+			.SetHovered(Params.ResizeHandleBrush)
+			.SetPressed(Params.ResizeHandleBrush)
+			.SetDisabled(NoBrush)
+			.SetNormalPadding(FMargin(0))
+			.SetPressedPadding(FMargin(0));
+	}
+
+	SAssignNew(ResizeButton, SButton)
+		.ButtonStyle(&ResizeButtonStyle)
 		.OnMouseButtonDown(this, &SNaBorderedWindow::HandleResizeButtonMouseDown);
 
 	// Rebuild canvas with updated absolute positions/sizes.
