@@ -61,7 +61,7 @@ struct NAWIDGETS_API FNaBorderedWindowParams
 
 /**
  * SNaBorderedWindow is a bordered window widget composed of 9 image parts.
- * Supports dragging (top border) and resizing (bottom-right corner).
+ * Supports resizing via the bottom-right corner. Dragging is not supported.
  */
 class NAWIDGETS_API SNaBorderedWindow : public SCompoundWidget
 {
@@ -93,11 +93,7 @@ public:
 	/** Replace all image resources and rebuild layout. */
 	void UpdateImages(const FNaBorderedWindowParams& NewParams);
 
-	/** Returns the current screen-space position of the window (updated while dragging). */
-	FVector2D GetWindowPosition() const { return WindowPosition; }
-
 protected:
-	TSharedPtr<SCanvas> OuterCanvas;
 	TSharedPtr<SCanvas> Canvas;
 
 	/* The 9 image sub-widgets. */
@@ -128,15 +124,9 @@ protected:
 
 	TSharedPtr<SWidget> ContentWidget;
 
-	bool bIsDragging = false;
 	bool bIsResizing = false;
 	FVector2D DragStartPosition;
 	FVector2D DragStartBodySize;
-
-	/** Current layout position of the window within the outer canvas. */
-	FVector2D WindowPosition = FVector2D::ZeroVector;
-	/** Snapshot of WindowPosition taken when a drag begins. */
-	FVector2D DragStartWindowPosition = FVector2D::ZeroVector;
 
 	/** Rebuild the canvas layout after any size or image change. */
 	void RebuildLayout();
@@ -151,7 +141,6 @@ protected:
 	enum class EWindowRegion
 	{
 		None,
-		TopBorder,
 		BottomRightCorner,
 		Center
 	};
