@@ -1,5 +1,3 @@
-// By Sodium
-
 #include "Widgets/WindowWidgets/SNaBorderedWindow.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
@@ -65,15 +63,15 @@ void SNaBorderedWindow::RebuildLayout()
 	BrushBottomRight.SetImageSize(FVector2D(Params.BorderRight, Params.BorderBottom));
 
 	// Slot positions
-	const FVector2D PosTopLeft    (0.f,                                    0.f);
-	const FVector2D PosTop        (Params.BorderLeft,                      0.f);
-	const FVector2D PosTopRight   (Params.BorderLeft + Params.BodySize.X,  0.f);
-	const FVector2D PosLeft       (0.f,                                    Params.BorderTop);
-	const FVector2D PosCenter     (Params.BorderLeft,                      Params.BorderTop);
-	const FVector2D PosRight      (Params.BorderLeft + Params.BodySize.X,  Params.BorderTop);
-	const FVector2D PosBottomLeft (0.f,                                    Params.BorderTop + Params.BodySize.Y);
-	const FVector2D PosBottom     (Params.BorderLeft,                      Params.BorderTop + Params.BodySize.Y);
-	const FVector2D PosBottomRight(Params.BorderLeft + Params.BodySize.X,  Params.BorderTop + Params.BodySize.Y);
+	const FVector2D PosTopLeft    (-Params.BorderLeft,  -Params.BorderTop);
+	const FVector2D PosTop        (0.f,                 -Params.BorderTop);
+	const FVector2D PosTopRight   (Params.BodySize.X,   -Params.BorderTop);
+	const FVector2D PosLeft       (-Params.BorderLeft,  0.f);
+	const FVector2D PosCenter     (0.f,                 0.f);
+	const FVector2D PosRight      (Params.BodySize.X,   0.f);
+	const FVector2D PosBottomLeft (-Params.BorderLeft,  Params.BodySize.Y);
+	const FVector2D PosBottom     (0.f,                 Params.BodySize.Y);
+	const FVector2D PosBottomRight(Params.BodySize.X,   Params.BodySize.Y);
 
 	// Slot sizes
 	const FVector2D SzCornerTL(Params.BorderLeft,  Params.BorderTop);
@@ -201,17 +199,15 @@ SNaBorderedWindow::EWindowRegion SNaBorderedWindow::GetRegionAtPosition(
 	const FGeometry& MyGeometry, const FVector2D& LocalPosition) const
 {
 	// Bottom-right corner
-	if (LocalPosition.X >= Params.BorderLeft + Params.BodySize.X &&
-		LocalPosition.Y >= Params.BorderTop  + Params.BodySize.Y)
+	if (LocalPosition.X >= Params.BodySize.X &&
+		LocalPosition.Y >= Params.BodySize.Y)
 	{
 		return EWindowRegion::BottomRightCorner;
 	}
 
 	// Center
-	if (LocalPosition.X >= Params.BorderLeft &&
-		LocalPosition.X <  Params.BorderLeft + Params.BodySize.X &&
-		LocalPosition.Y >= Params.BorderTop  &&
-		LocalPosition.Y <  Params.BorderTop  + Params.BodySize.Y)
+	if (LocalPosition.X >= 0.f && LocalPosition.X <  Params.BodySize.X &&
+		LocalPosition.Y >= 0.f && LocalPosition.Y <  Params.BodySize.Y)
 	{
 		return EWindowRegion::Center;
 	}
