@@ -3,10 +3,12 @@
 #include "Widgets/WindowWidgets/SNaBorderedWindow.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
+#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/SNullWidget.h"
 #include "Styling/CoreStyle.h"
+#include "Framework/Application/SlateApplication.h"
 
 static FSlateBrush MakeBorderedWindowBrush(UObject* ResourceObj, FVector2D Size)
 {
@@ -70,16 +72,16 @@ void SNaBorderedWindow::RebuildLayout()
 		Params.BorderTop  + Params.BodySize.Y + Params.BorderBottom
 	);
 
-	// Slot positions
-	const FVector2D PosTopLeft    (0.f,                                    0.f);
-	const FVector2D PosTop        (Params.BorderLeft,                      0.f);
-	const FVector2D PosTopRight   (Params.BorderLeft + Params.BodySize.X,  0.f);
-	const FVector2D PosLeft       (0.f,                                    Params.BorderTop);
-	const FVector2D PosCenter     (Params.BorderLeft,                      Params.BorderTop);
-	const FVector2D PosRight      (Params.BorderLeft + Params.BodySize.X,  Params.BorderTop);
-	const FVector2D PosBottomLeft (0.f,                                    Params.BorderTop + Params.BodySize.Y);
-	const FVector2D PosBottom     (Params.BorderLeft,                      Params.BorderTop + Params.BodySize.Y);
-	const FVector2D PosBottomRight(Params.BorderLeft + Params.BodySize.X,  Params.BorderTop + Params.BodySize.Y);
+	// All positions relative to center's top-left (0,0)
+	const FVector2D PosTopLeft    (-Params.BorderLeft,           -Params.BorderTop);
+	const FVector2D PosTop        (0.f,                          -Params.BorderTop);
+	const FVector2D PosTopRight   (Params.BodySize.X,            -Params.BorderTop);
+	const FVector2D PosLeft       (-Params.BorderLeft,           0.f);
+	const FVector2D PosCenter     (0.f,                          0.f);
+	const FVector2D PosRight      (Params.BodySize.X,            0.f);
+	const FVector2D PosBottomLeft (-Params.BorderLeft,           Params.BodySize.Y);
+	const FVector2D PosBottom     (0.f,                          Params.BodySize.Y);
+	const FVector2D PosBottomRight(Params.BodySize.X,            Params.BodySize.Y);
 
 	// Slot sizes
 	const FVector2D SzCornerTL(Params.BorderLeft,  Params.BorderTop);
@@ -92,12 +94,31 @@ void SNaBorderedWindow::RebuildLayout()
 	const FVector2D SzBottom  (Params.BodySize.X,  Params.BorderBottom);
 	const FVector2D SzCornerBR(Params.BorderRight, Params.BorderBottom);
 
+	// Create transparent overlay buttons for drag and resize
+	SAssignNew(DragButton, SButton)
+		.ButtonStyle(FCoreStyle::Get(), "NoBorder")
+		.OnPressed(this, &SNaBorderedWindow::OnDragButtonPressed)
+		.OnReleased(this, &SNaBorderedWindow::OnDragButtonReleased)
+		.Cursor(EMouseCursor::GrabHand)
+		[
+			SNullWidget::NullWidget
+		];
+
+	SAssignNew(ResizeButton, SButton)
+		.ButtonStyle(FCoreStyle::Get(), "NoBorder")
+		.OnPressed(this, &SNaBorderedWindow::OnResizeButtonPressed)
+		.OnReleased(this, &SNaBorderedWindow::OnResizeButtonReleased)
+		.Cursor(EMouseCursor::ResizeSouthEast)
+		[
+			SNullWidget::NullWidget
+		];
+
 	// Optional content widget placed over the center area
 	const TSharedRef<SWidget> CenterContent = ContentWidget.IsValid()
 		? ContentWidget.ToSharedRef()
 		: SNullWidget::NullWidget;
 
-	// Rebuild canvas with updated absolute positions/sizes
+	// Rebuild inner canvas with updated positions/sizes (center as origin)
 	SAssignNew(Canvas, SCanvas)
 		+ SCanvas::Slot().Position(PosTopLeft).Size(SzCornerTL)    [ImgTopLeft.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosTop).Size(SzTop)             [ImgTop.ToSharedRef()]
@@ -108,13 +129,14 @@ void SNaBorderedWindow::RebuildLayout()
 		+ SCanvas::Slot().Position(PosBottomLeft).Size(SzCornerBL) [ImgBottomLeft.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosBottom).Size(SzBottom)       [ImgBottom.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosBottomRight).Size(SzCornerBR)[ImgBottomRight.ToSharedRef()]
-		+ SCanvas::Slot().Position(PosCenter).Size(SzCenter)       [CenterContent];
+		+ SCanvas::Slot().Position(PosCenter).Size(SzCenter)       [CenterContent]
+		+ SCanvas::Slot().Position(PosTop).Size(SzTop)             [DragButton.ToSharedRef()]
+		+ SCanvas::Slot().Position(PosBottomRight).Size(SzCornerBR)[ResizeButton.ToSharedRef()];
 
-	// Outer canvas: its single slot's position is driven by WindowPosition so that
-	// dragging changes the real layout position, moving all children with it.
+	// Outer canvas: WindowPosition represents the center's top-left; offset by borders to get the whole window's top-left
 	SAssignNew(OuterCanvas, SCanvas)
 		+ SCanvas::Slot()
-		  .Position(TAttribute<FVector2D>::CreateSP(this, &SNaBorderedWindow::GetWindowPosition))
+		  .Position(TAttribute<FVector2D>::CreateSP(this, &SNaBorderedWindow::GetOuterCanvasPosition))
 		  .Size(TotalSize)
 		  [
 			SNew(SBox)
@@ -169,96 +191,48 @@ void SNaBorderedWindow::UpdateImages(const FNaBorderedWindowParams& NewParams)
 	RebuildLayout();
 }
 
-FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+void SNaBorderedWindow::OnDragButtonPressed()
 {
-	if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
-	{
-		const FVector2D LocalPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
-		const EWindowRegion Region = GetRegionAtPosition(MyGeometry, LocalPos);
-
-		if (Region == EWindowRegion::TopBorder)
-		{
-			bIsDragging = true;
-			DragStartPosition = MouseEvent.GetScreenSpacePosition();
-			DragStartWindowPosition = WindowPosition;
-			return FReply::Handled().CaptureMouse(SharedThis(this));
-		}
-		else if (Region == EWindowRegion::BottomRightCorner)
-		{
-			bIsResizing = true;
-			DragStartPosition = LocalPos;
-			DragStartBodySize = Params.BodySize;
-			return FReply::Handled().CaptureMouse(SharedThis(this));
-		}
-	}
-
-	return FReply::Unhandled();
+	bIsDragging = true;
+	DragStartPosition = FSlateApplication::Get().GetCursorPos();
+	DragStartWindowPosition = WindowPosition;
 }
 
-FReply SNaBorderedWindow::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+void SNaBorderedWindow::OnDragButtonReleased()
 {
-	if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
-	{
-		if (bIsDragging || bIsResizing)
-		{
-			bIsDragging = false;
-			bIsResizing = false;
-			return FReply::Handled().ReleaseMouseCapture();
-		}
-	}
-
-	return FReply::Unhandled();
+	bIsDragging = false;
 }
 
-FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+void SNaBorderedWindow::OnResizeButtonPressed()
 {
-	if (bIsResizing)
+	bIsResizing = true;
+	DragStartPosition = FSlateApplication::Get().GetCursorPos();
+	DragStartBodySize = Params.BodySize;
+}
+
+void SNaBorderedWindow::OnResizeButtonReleased()
+{
+	bIsResizing = false;
+}
+
+void SNaBorderedWindow::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+{
+	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+
+	if (bIsDragging)
 	{
-		const FVector2D CurrentPos = MyGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
-		const FVector2D Delta = CurrentPos - DragStartPosition;
+		const FVector2D CurrentCursorPos = FSlateApplication::Get().GetCursorPos();
+		const FVector2D Delta = CurrentCursorPos - DragStartPosition;
+		WindowPosition = DragStartWindowPosition + Delta;
+		OuterCanvas->Invalidate(EInvalidateWidgetReason::Layout);
+	}
+	else if (bIsResizing)
+	{
+		const FVector2D CurrentCursorPos = FSlateApplication::Get().GetCursorPos();
+		const FVector2D Delta = CurrentCursorPos - DragStartPosition;
 
 		FVector2D NewBodySize = DragStartBodySize + Delta;
 		Params.BodySize = ClampBodySize(NewBodySize);
 		RebuildLayout();
-		return FReply::Handled();
 	}
-	else if (bIsDragging)
-	{
-		const FVector2D Delta = MouseEvent.GetScreenSpacePosition() - DragStartPosition;
-		WindowPosition = DragStartWindowPosition + Delta;
-		OuterCanvas->Invalidate(EInvalidateWidgetReason::Layout);
-		return FReply::Handled();
-	}
-
-	return FReply::Unhandled();
-}
-
-SNaBorderedWindow::EWindowRegion SNaBorderedWindow::GetRegionAtPosition(
-	const FGeometry& MyGeometry, const FVector2D& LocalPosition) const
-{
-	// Bottom-right corner
-	if (LocalPosition.X >= Params.BorderLeft + Params.BodySize.X &&
-		LocalPosition.Y >= Params.BorderTop  + Params.BodySize.Y)
-	{
-		return EWindowRegion::BottomRightCorner;
-	}
-
-	// Top border (excluding corners)
-	if (LocalPosition.Y < Params.BorderTop &&
-		LocalPosition.X >= Params.BorderLeft &&
-		LocalPosition.X <  Params.BorderLeft + Params.BodySize.X)
-	{
-		return EWindowRegion::TopBorder;
-	}
-
-	// Center
-	if (LocalPosition.X >= Params.BorderLeft &&
-		LocalPosition.X <  Params.BorderLeft + Params.BodySize.X &&
-		LocalPosition.Y >= Params.BorderTop  &&
-		LocalPosition.Y <  Params.BorderTop  + Params.BodySize.Y)
-	{
-		return EWindowRegion::Center;
-	}
-
-	return EWindowRegion::None;
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Images/SImage.h"
+#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Styling/SlateBrush.h"
 #include "SNaBorderedWindow.generated.h"
@@ -122,6 +123,10 @@ protected:
 	FSlateBrush BrushBottomLeft;
 	FSlateBrush BrushBottomRight;
 
+	/** Transparent overlay buttons for drag and resize interactions. */
+	TSharedPtr<SButton> DragButton;
+	TSharedPtr<SButton> ResizeButton;
+
 	FNaBorderedWindowParams Params;
 	FVector2D MinBodySize;
 	FVector2D MaxBodySize;
@@ -133,10 +138,13 @@ protected:
 	FVector2D DragStartPosition;
 	FVector2D DragStartBodySize;
 
-	/** Current layout position of the window within the outer canvas. */
+	/** Current layout position of the center area within the outer canvas. */
 	FVector2D WindowPosition = FVector2D::ZeroVector;
 	/** Snapshot of WindowPosition taken when a drag begins. */
 	FVector2D DragStartWindowPosition = FVector2D::ZeroVector;
+
+	/** Returns the position of the outer canvas slot (WindowPosition offset by borders). */
+	FVector2D GetOuterCanvasPosition() const { return WindowPosition + FVector2D(-Params.BorderLeft, -Params.BorderTop); }
 
 	/** Rebuild the canvas layout after any size or image change. */
 	void RebuildLayout();
@@ -144,17 +152,10 @@ protected:
 	/** Clamp a candidate body size to [MinBodySize, MaxBodySize]. */
 	FVector2D ClampBodySize(FVector2D Size) const;
 
-	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
-	virtual FReply OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
-	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	void OnDragButtonPressed();
+	void OnDragButtonReleased();
+	void OnResizeButtonPressed();
+	void OnResizeButtonReleased();
 
-	enum class EWindowRegion
-	{
-		None,
-		TopBorder,
-		BottomRightCorner,
-		Center
-	};
-
-	EWindowRegion GetRegionAtPosition(const FGeometry& MyGeometry, const FVector2D& LocalPosition) const;
+	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 };
