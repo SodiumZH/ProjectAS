@@ -170,6 +170,7 @@ FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const F
 		{
 			bIsDragging = true;
 			DragStartPosition = MouseEvent.GetScreenSpacePosition();
+			DragStartRenderOffset = CurrentRenderOffset;
 			return FReply::Handled().CaptureMouse(SharedThis(this));
 		}
 		else if (Region == EWindowRegion::BottomRightCorner)
@@ -213,7 +214,9 @@ FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointe
 	}
 	else if (bIsDragging)
 	{
-		// Window movement is handled by the parent container via position change
+		const FVector2D Delta = MouseEvent.GetScreenSpacePosition() - DragStartPosition;
+		CurrentRenderOffset = DragStartRenderOffset + Delta;
+		SetRenderTransform(FSlateRenderTransform(CurrentRenderOffset));
 		return FReply::Handled();
 	}
 

@@ -129,6 +129,11 @@ protected:
 	FVector2D DragStartPosition;
 	FVector2D DragStartBodySize;
 
+	/** Accumulated render-transform translation applied while dragging. */
+	FVector2D CurrentRenderOffset = FVector2D::ZeroVector;
+	/** Snapshot of CurrentRenderOffset taken when a drag begins. */
+	FVector2D DragStartRenderOffset = FVector2D::ZeroVector;
+
 	/** Rebuild the canvas layout after any size or image change. */
 	void RebuildLayout();
 
