@@ -10,7 +10,7 @@
 /**
  * UMG wrapper for SNaBorderedWindow.
  * Exposes the 9-part bordered window widget for use in UMG and Blueprints.
- * Supports resizing via the bottom-right corner. Dragging is not supported.
+ * Supports resizing via the bottom-right corner button.
  */
 UCLASS()
 class NAWIDGETS_API UNaBorderedWindow : public UWidget

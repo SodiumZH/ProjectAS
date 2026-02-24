@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Images/SImage.h"
+#include "Widgets/Input/SButton.h"
 #include "Widgets/SCanvas.h"
 #include "Styling/SlateBrush.h"
+#include "Styling/SlateTypes.h"
 #include "SNaBorderedWindow.generated.h"
 
 /** Configuration struct for all 9 image parts and size parameters of SNaBorderedWindow. */
@@ -57,11 +59,21 @@ struct NAWIDGETS_API FNaBorderedWindowParams
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UObject* ImageBottomRight = nullptr;
+
+	/** Brush for the bottom-right resize handle button. Defaults to invisible. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FSlateBrush ResizeHandleBrush;
+
+	FNaBorderedWindowParams()
+	{
+		ResizeHandleBrush.DrawAs = ESlateBrushDrawType::NoDrawType;
+	}
 };
 
 /**
  * SNaBorderedWindow is a bordered window widget composed of 9 image parts.
- * Supports resizing via the bottom-right corner. Dragging is not supported.
+ * The widget origin is at the top-left of the center content area; borders extend outward.
+ * Supports resizing via the bottom-right corner button.
  */
 class NAWIDGETS_API SNaBorderedWindow : public SCompoundWidget
 {
@@ -95,6 +107,7 @@ public:
 
 protected:
 	TSharedPtr<SCanvas> Canvas;
+	TSharedPtr<SButton> ResizeButton;
 
 	/* The 9 image sub-widgets. */
 	TSharedPtr<SImage> ImgCenter;
@@ -128,22 +141,18 @@ protected:
 	FVector2D DragStartPosition;
 	FVector2D DragStartBodySize;
 
+	/** Style applied to the resize handle button; rebuilt from Params.ResizeHandleBrush each layout. */
+	FButtonStyle ResizeButtonStyle;
+
 	/** Rebuild the canvas layout after any size or image change. */
 	void RebuildLayout();
 
 	/** Clamp a candidate body size to [MinBodySize, MaxBodySize]. */
 	FVector2D ClampBodySize(FVector2D Size) const;
 
-	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	/** Called by the resize button to begin a resize operation and capture mouse on this widget. */
+	FReply HandleResizeButtonMouseDown(const FGeometry& Geometry, const FPointerEvent& MouseEvent);
+
 	virtual FReply OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
 	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
-
-	enum class EWindowRegion
-	{
-		None,
-		BottomRightCorner,
-		Center
-	};
-
-	EWindowRegion GetRegionAtPosition(const FGeometry& MyGeometry, const FVector2D& LocalPosition) const;
 };
