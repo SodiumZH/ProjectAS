@@ -110,14 +110,24 @@ void SNaBorderedWindow::RebuildLayout()
 		+ SCanvas::Slot().Position(PosBottomRight).Size(SzCornerBR)[ImgBottomRight.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosCenter).Size(SzCenter)       [CenterContent];
 
+	// Outer canvas: its single slot's position is driven by WindowPosition so that
+	// dragging changes the real layout position, moving all children with it.
+	SAssignNew(OuterCanvas, SCanvas)
+		+ SCanvas::Slot()
+		  .Position(TAttribute<FVector2D>::CreateSP(this, &SNaBorderedWindow::GetWindowPosition))
+		  .Size(TotalSize)
+		  [
+			SNew(SBox)
+			.WidthOverride(TotalSize.X)
+			.HeightOverride(TotalSize.Y)
+			[
+				Canvas.ToSharedRef()
+			]
+		  ];
+
 	ChildSlot
 	[
-		SNew(SBox)
-		.WidthOverride(TotalSize.X)
-		.HeightOverride(TotalSize.Y)
-		[
-			Canvas.ToSharedRef()
-		]
+		OuterCanvas.ToSharedRef()
 	];
 }
 
@@ -170,7 +180,7 @@ FReply SNaBorderedWindow::OnMouseButtonDown(const FGeometry& MyGeometry, const F
 		{
 			bIsDragging = true;
 			DragStartPosition = MouseEvent.GetScreenSpacePosition();
-			DragStartRenderOffset = CurrentRenderOffset;
+			DragStartWindowPosition = WindowPosition;
 			return FReply::Handled().CaptureMouse(SharedThis(this));
 		}
 		else if (Region == EWindowRegion::BottomRightCorner)
@@ -215,8 +225,8 @@ FReply SNaBorderedWindow::OnMouseMove(const FGeometry& MyGeometry, const FPointe
 	else if (bIsDragging)
 	{
 		const FVector2D Delta = MouseEvent.GetScreenSpacePosition() - DragStartPosition;
-		CurrentRenderOffset = DragStartRenderOffset + Delta;
-		SetRenderTransform(FSlateRenderTransform(CurrentRenderOffset));
+		WindowPosition = DragStartWindowPosition + Delta;
+		OuterCanvas->Invalidate(EInvalidateWidgetReason::Layout);
 		return FReply::Handled();
 	}
 
