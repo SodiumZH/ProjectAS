@@ -72,16 +72,16 @@ void SNaBorderedWindow::RebuildLayout()
 		Params.BorderTop  + Params.BodySize.Y + Params.BorderBottom
 	);
 
-	// All positions relative to center's top-left (0,0)
-	const FVector2D PosTopLeft    (-Params.BorderLeft,           -Params.BorderTop);
-	const FVector2D PosTop        (0.f,                          -Params.BorderTop);
-	const FVector2D PosTopRight   (Params.BodySize.X,            -Params.BorderTop);
-	const FVector2D PosLeft       (-Params.BorderLeft,           0.f);
-	const FVector2D PosCenter     (0.f,                          0.f);
-	const FVector2D PosRight      (Params.BodySize.X,            0.f);
-	const FVector2D PosBottomLeft (-Params.BorderLeft,           Params.BodySize.Y);
-	const FVector2D PosBottom     (0.f,                          Params.BodySize.Y);
-	const FVector2D PosBottomRight(Params.BodySize.X,            Params.BodySize.Y);
+	// All positions relative to the top-left corner (0,0) of the window box (within SBox/Canvas)
+	const FVector2D PosTopLeft    (0.f,                                    0.f);
+	const FVector2D PosTop        (Params.BorderLeft,                      0.f);
+	const FVector2D PosTopRight   (Params.BorderLeft + Params.BodySize.X,  0.f);
+	const FVector2D PosLeft       (0.f,                                    Params.BorderTop);
+	const FVector2D PosCenter     (Params.BorderLeft,                      Params.BorderTop);
+	const FVector2D PosRight      (Params.BorderLeft + Params.BodySize.X,  Params.BorderTop);
+	const FVector2D PosBottomLeft (0.f,                                    Params.BorderTop + Params.BodySize.Y);
+	const FVector2D PosBottom     (Params.BorderLeft,                      Params.BorderTop + Params.BodySize.Y);
+	const FVector2D PosBottomRight(Params.BorderLeft + Params.BodySize.X,  Params.BorderTop + Params.BodySize.Y);
 
 	// Slot sizes
 	const FVector2D SzCornerTL(Params.BorderLeft,  Params.BorderTop);
@@ -94,31 +94,34 @@ void SNaBorderedWindow::RebuildLayout()
 	const FVector2D SzBottom  (Params.BodySize.X,  Params.BorderBottom);
 	const FVector2D SzCornerBR(Params.BorderRight, Params.BorderBottom);
 
-	// Create transparent overlay buttons for drag and resize
-	SAssignNew(DragButton, SButton)
-		.ButtonStyle(FCoreStyle::Get(), "NoBorder")
-		.OnPressed(this, &SNaBorderedWindow::OnDragButtonPressed)
-		.OnReleased(this, &SNaBorderedWindow::OnDragButtonReleased)
-		.Cursor(EMouseCursor::GrabHand)
-		[
-			SNullWidget::NullWidget
-		];
+	// Create transparent overlay buttons for drag and resize only once; reuse on subsequent rebuilds
+	if (!DragButton.IsValid())
+	{
+		SAssignNew(DragButton, SButton)
+			.ButtonStyle(FCoreStyle::Get(), "NoBorder")
+			.OnPressed(this, &SNaBorderedWindow::OnDragButtonPressed)
+			.OnReleased(this, &SNaBorderedWindow::OnDragButtonReleased)
+			.Cursor(EMouseCursor::GrabHand)
+			[
+				SNullWidget::NullWidget
+			];
 
-	SAssignNew(ResizeButton, SButton)
-		.ButtonStyle(FCoreStyle::Get(), "NoBorder")
-		.OnPressed(this, &SNaBorderedWindow::OnResizeButtonPressed)
-		.OnReleased(this, &SNaBorderedWindow::OnResizeButtonReleased)
-		.Cursor(EMouseCursor::ResizeSouthEast)
-		[
-			SNullWidget::NullWidget
-		];
+		SAssignNew(ResizeButton, SButton)
+			.ButtonStyle(FCoreStyle::Get(), "NoBorder")
+			.OnPressed(this, &SNaBorderedWindow::OnResizeButtonPressed)
+			.OnReleased(this, &SNaBorderedWindow::OnResizeButtonReleased)
+			.Cursor(EMouseCursor::ResizeSouthEast)
+			[
+				SNullWidget::NullWidget
+			];
+	}
 
 	// Optional content widget placed over the center area
 	const TSharedRef<SWidget> CenterContent = ContentWidget.IsValid()
 		? ContentWidget.ToSharedRef()
 		: SNullWidget::NullWidget;
 
-	// Rebuild inner canvas with updated positions/sizes (center as origin)
+	// Rebuild inner canvas with updated positions/sizes (top-left of window box as origin)
 	SAssignNew(Canvas, SCanvas)
 		+ SCanvas::Slot().Position(PosTopLeft).Size(SzCornerTL)    [ImgTopLeft.ToSharedRef()]
 		+ SCanvas::Slot().Position(PosTop).Size(SzTop)             [ImgTop.ToSharedRef()]
