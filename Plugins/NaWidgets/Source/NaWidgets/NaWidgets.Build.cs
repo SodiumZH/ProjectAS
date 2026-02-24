@@ -36,6 +36,7 @@ public class NaWidgets : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
+				"InputCore",
 				"Engine",
 				"Slate",
 				"SlateCore",
