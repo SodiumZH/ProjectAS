@@ -5,7 +5,7 @@
 #include "BPLibraries/NaItemStatics.h"
 #include "BPLibraries/NaItemDataStatics.h"
 #include "Widgets/Layout/SWrapBox.h"
-#include "Components/NaItemContainerComponent.h"
+#include "Components/NaItemInventoryComponent.h"
 #include "UI/UMG/NaItemSlotList.h"
 #include "Components/NaGameModeItemSystemComponent.h"
 
@@ -80,29 +80,32 @@ void SNaItemSlotList::Reconstruct() {
 	// Start rebuild
 	if (!bIsInvalid) {
 
+		UNaItemInventory* Inv = Container->GetInventory();
+		const int32 ContainerSize = Inv->GetSize();
+
 		/* Calculate actual length */
 		// When row count is applied
-		if (RowCount * RowLength > Container->Container.GetSize()) {
+		if (RowCount * RowLength > ContainerSize) {
 			ActualLength = RowCount * RowLength;
 		}
 		// When additional disabled slots are not needed
-		else if(!bFillDisabledToCompleteRectangle || Container->Container.GetSize() % RowLength == 0) {
-			ActualLength = Container->Container.GetSize();
+		else if(!bFillDisabledToCompleteRectangle || ContainerSize % RowLength == 0) {
+			ActualLength = ContainerSize;
 		}
 		// When disabled slots are needed and actual length needs to be automatically calculated (no rows with all disabled)
 		else {
-			ActualLength = (int(Container->Container.GetSize() / RowLength) + 1) * RowLength;
+			ActualLength = (int(ContainerSize / RowLength) + 1) * RowLength;
 		}
 		// Re-add child slots
 		int i = 0;
 		Slots.Init(TSharedPtr<SNaItemSlot>(nullptr), ActualLength);
 		// Add enabled slots first
-		for (i = 0; i < Container->Container.GetSize(); ++i) {
+		for (i = 0; i < ContainerSize; ++i) {
 			WrapBox->AddSlot()[
 				SAssignNew(Slots[i], SNaItemSlot)
 					.StylePtr(StylePtr)
 					.WorldContext(GMComponent)
-					.Stack(Container->Container.Find(i).Stack)
+					.Stack(Inv->GetSlot(i))
 			];
 		}
 		// Then fill with disabled slots
@@ -143,14 +146,14 @@ bool SNaItemSlotList::IsUpdated(bool bDisplay) {
 	}
 
 	// Check size
-	if (Slots.Num() != Container->Container.GetSize()) {
+	if (Slots.Num() != Container->GetInventory()->GetSize()) {
 		UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: incorrect size."));
 		return false;
 	}
 
 	// Check each slots
 	for (i = 0; i < Slots.Num(); ++i) {
-		if (Slots[i]->GetStack() != Container->Container.Find(i).Stack) {
+		if (Slots[i]->GetStack() != Container->GetInventory()->GetSlot(i)) {
 			if(bDisplay)
 				UE_LOG(LogNaItem, Display, TEXT("SNaItemSlotList: position %d is not updated."), i);
 			Res = false;
@@ -167,31 +170,31 @@ void SNaItemSlotList::ResetSlot(int Position) {
 	if (IsInvalid())
 		return;
 
-	if (Container->Container.IsInSize(Position)) {
+	if (!Container->GetInventory()->IsValidSlot(Position)) {
 		UE_LOG(LogNaItem, Warning, TEXT("SNaItemSlotList::ResetSlot() failed: position out of range."));
 		return;
 	}
 
 
-	Slots[Position]->ResetItemStack(Container->Container.Find(Position).Stack);
+	Slots[Position]->ResetItemStack(Container->GetInventory()->GetSlot(Position));
 
 }
 
 void SNaItemSlotList::ResetAllSlots() {
 	int i = 0;
 	for (i = 0; i < Slots.Num(); ++i) {
-		Slots[i]->ResetItemStack(Container->Container.Find(i).Stack);
+		Slots[i]->ResetItemStack(Container->GetInventory()->GetSlot(i));
 	}
 }
 
-void SNaItemSlotList::ResetContainer(UNaItemContainerComponent* NewContainer) {
+void SNaItemSlotList::ResetContainer(UNaItemInventoryComponent* NewContainer) {
 	Container = NewContainer;
 	Reconstruct();
 }
 
 void SNaItemSlotList::SelectSlot(int Position) {
 	if (!IsValid(Container)) return;
-	check(Container->Container.IsInSize(Position));
+	check(Container->GetInventory()->IsValidSlot(Position));
 	if (SelectedPosition >= 0) {
 		Slots[SelectedPosition]->GetBoxSlot()->SetSelected(false);
 	}
