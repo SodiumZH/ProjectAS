@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Components/NaItemInventoryComponent.h"
-#include "Data/NaItemDisplayData.h"
 #include "UI/Widgets/SNaItemSlot.h"
 
 class UNaGameModeItemSystemComponent;
