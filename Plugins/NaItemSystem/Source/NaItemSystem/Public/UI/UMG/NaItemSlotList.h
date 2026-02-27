@@ -9,7 +9,7 @@
 #include "NaItemSlotList.generated.h"
 
 class SNaItemSlotList;
-class UNaItemContainerComponent;
+class UNaItemInventoryComponent;
 
 /**
  * 
@@ -66,10 +66,10 @@ protected:
 public:
 
 	UPROPERTY(BlueprintReadOnly)
-	UNaItemContainerComponent* ContainerComponent = nullptr;
+	UNaItemInventoryComponent* ContainerComponent = nullptr;
 
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
-	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
+	void SetContainerComponent(UNaItemInventoryComponent* NewComponent);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI|ItemSlotList")
 	void Refresh();

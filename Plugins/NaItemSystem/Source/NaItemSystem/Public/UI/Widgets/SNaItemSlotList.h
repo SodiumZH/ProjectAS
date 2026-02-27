@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
-#include "NaItemContainer.h"
+#include "Components/NaItemInventoryComponent.h"
 #include "Data/NaItemDisplayData.h"
 #include "UI/Widgets/SNaItemSlot.h"
-#include "../../Components/NaItemContainerComponent.h"
 
 class UNaGameModeItemSystemComponent;
-class UNaItemContainerComponent;
+class UNaItemInventoryComponent;
 class UNaItemSlotList;
 /**
  * 
@@ -37,7 +36,7 @@ public:
 	}
 
 	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
-	SLATE_ATTRIBUTE(UNaItemContainerComponent*, Container)
+	SLATE_ATTRIBUTE(UNaItemInventoryComponent*, Container)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
 	SLATE_ATTRIBUTE(int, RowCount)	// Amount of rows. If this count is not enough for container, it will be ignored and the row count will be automatically calculated from container.
@@ -58,7 +57,7 @@ protected:
 	/* Input copies */
 
 	UNaGameModeItemSystemComponent* GMComponent;
-	UNaItemContainerComponent* Container;
+	UNaItemInventoryComponent* Container;
 	FNaItemSlotPublicStyle* StylePtr = nullptr;
 	bool bFillDisabledToCompleteRectangle;
 	int RowLength;
@@ -79,7 +78,7 @@ protected:
 public:
 
 	/* Get functions */
-	UNaItemContainerComponent* GetContainer(){ return Container; };
+	UNaItemInventoryComponent* GetContainer(){ return Container; };
 
 	TSharedPtr<SWrapBox> GetWrapBox() {	return WrapBox; };
 
@@ -122,7 +121,7 @@ public:
 	void ResetAllSlots();
 
 	/* Reset container reference, and reconstruct widget */
-	void ResetContainer(UNaItemContainerComponent* NewContainer);
+	void ResetContainer(UNaItemInventoryComponent* NewContainer);
 
 public:
 
