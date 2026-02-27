@@ -130,3 +130,11 @@ TOptional<FName> UNaItemType::GetOrUpdateName()
 
 	return TOptional<FName>();
 }
+
+UNaItemStack* UNaItemType::CreateDefaultInstance() const
+{
+	UNaItemStack* Stack = NewObject<UNaItemStack>(GetTransientPackage());
+	Stack->ItemType = const_cast<UNaItemType*>(this);
+	Stack->Count = 1;
+	return Stack;
+}

@@ -1,7 +1,6 @@
 #include "UI/UMG/NaItemSlotList.h"
 #include "UI/Widgets/SNaItemSlotList.h"
-#include "Components/NaItemContainerComponent.h"
-#include "NaItemContainer.h"
+#include "Components/NaItemInventoryComponent.h"
 #include "NatriumItemSystem.h"
 #include "NaUtilityMinimal.h"
 
@@ -36,7 +35,7 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 	
 }
 
-void UNaItemSlotList::SetContainerComponent(UNaItemContainerComponent* NewComponent) {
+void UNaItemSlotList::SetContainerComponent(UNaItemInventoryComponent* NewComponent) {
 	ContainerComponent = NewComponent;
 	if(List.IsValid())
 		List->ResetContainer(NewComponent);
