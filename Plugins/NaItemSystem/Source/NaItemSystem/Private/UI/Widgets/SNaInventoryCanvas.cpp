@@ -172,12 +172,16 @@ FReply SNaInventoryCanvas::HandleSlotClicked(int32 Position) {
 }
 void SNaInventoryCanvas::HandleSlotHovered(int32 Position) {
 	// Replicate the SetPointed(true) behavior from SNaItemSlot::SlotHoveredToList
-	Slots[Position]->GetBoxSlot()->SetPointed(true);
+	if (Slots.IsValidIndex(Position) && Slots[Position].IsValid()) {
+		Slots[Position]->GetBoxSlot()->SetPointed(true);
+	}
 	OnSlotHovered.Broadcast(Position);
 }
 void SNaInventoryCanvas::HandleSlotUnhovered(int32 Position) {
 	// Replicate the SetPointed(false) behavior from SNaItemSlot::SlotUnhoveredToList
-	Slots[Position]->GetBoxSlot()->SetPointed(false);
+	if (Slots.IsValidIndex(Position) && Slots[Position].IsValid()) {
+		Slots[Position]->GetBoxSlot()->SetPointed(false);
+	}
 	OnSlotUnhovered.Broadcast(Position);
 }
 
