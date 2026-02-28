@@ -39,7 +39,7 @@ public:
 
 	/* Style */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryCanvas")
-	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
+	FNaItemSlotStyle PublicStyle = FNaItemSlotStyle();
 
 	/**
 	 * Overall slot amount including disabled slots.

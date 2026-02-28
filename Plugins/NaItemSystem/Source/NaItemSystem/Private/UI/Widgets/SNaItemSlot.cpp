@@ -2,12 +2,13 @@
 #include "SlateOptMacros.h"
 #include "BPLibraries/NaItemStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
-#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaInventoryWrappedBox.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaUtilityMinimal.h"
 #include "UI/UMG/NaItemSlotList.h"
 #include "NatriumItemSystem.h"
 
+const FNaItemSlotStyle FNaItemSlotStyle::DefaultStyle = FNaItemSlotStyle();
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaItemSlot::Construct(const FArguments& InArgs)
@@ -188,7 +189,7 @@ FReply SNaItemSlot::SlotDoubleClickedToList(const FGeometry& MyGeometry, const F
 
 /* Events end */
 
-void SNaItemSlot::SetItemSlotList(SNaItemSlotList* List, int Position) {
+void SNaItemSlot::SetItemSlotList(SNaInventoryWrappedBox* List, int Position) {
 	check(List);
 	ItemSlotList = List;
 	PositionInSlotList = Position;

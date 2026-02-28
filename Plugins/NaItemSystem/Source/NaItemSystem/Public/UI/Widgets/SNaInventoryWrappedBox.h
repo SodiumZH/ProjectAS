@@ -22,10 +22,10 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FSNaItemListSlotEvent, int);
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FSNaItemListSlotPointerEvent, int, const FGeometry&, const FPointerEvent&);
 
 
-class NAITEMSYSTEM_API SNaItemSlotList : public SCompoundWidget
+class NAITEMSYSTEM_API SNaInventoryWrappedBox : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SNaItemSlotList)
+	SLATE_BEGIN_ARGS(SNaInventoryWrappedBox)
 	{
 		_StylePtr = nullptr;
 		_Container = nullptr;
@@ -34,12 +34,12 @@ public:
 		_FromUMG = nullptr;
 	}
 
-	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
-	SLATE_ATTRIBUTE(UNaItemInventoryComponent*, Container)
+	SLATE_ATTRIBUTE(TSharedRef<FNaItemSlotStyle>, StylePtr)
+	SLATE_ATTRIBUTE(TWeakObjectPtr<UNaItemInventory>, Container)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
 	SLATE_ATTRIBUTE(int, RowCount)	// Amount of rows. If this count is not enough for container, it will be ignored and the row count will be automatically calculated from container.
-	SLATE_ARGUMENT(UNaItemSlotList*, FromUMG) /* If generated from UNaItemSlotList, set this value */
+	SLATE_ARGUMENT(TWeakObjectPtr<UNaItemSlotList*>, FromUMG) /* If generated from UNaItemSlotList, set this value */
 
 	SLATE_END_ARGS()
 
@@ -57,7 +57,7 @@ protected:
 
 	UNaGameModeItemSystemComponent* GMComponent;
 	UNaItemInventoryComponent* Container;
-	FNaItemSlotPublicStyle* StylePtr = nullptr;
+	FNaItemSlotStyle* StylePtr = nullptr;
 	bool bFillDisabledToCompleteRectangle;
 	int RowLength;
 	int RowCount;

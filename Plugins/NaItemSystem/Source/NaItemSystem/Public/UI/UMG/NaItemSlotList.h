@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
-#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaInventoryWrappedBox.h"
 #include "UI/Widgets/SNaItemSlot.h"
 #include "NaItemSlotList.generated.h"
 
-class SNaItemSlotList;
+class SNaInventoryWrappedBox;
 class UNaItemInventoryComponent;
 
 /**
@@ -41,7 +41,7 @@ public:
 
 	/* Style */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
-	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
+	FNaItemSlotStyle PublicStyle = FNaItemSlotStyle();
 
 	// Amount of slots each row
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
@@ -61,7 +61,7 @@ public:
 
 protected:
 
-	TSharedPtr<SNaItemSlotList> List;
+	TSharedRef<SNaInventoryWrappedBox> List;
 
 public:
 

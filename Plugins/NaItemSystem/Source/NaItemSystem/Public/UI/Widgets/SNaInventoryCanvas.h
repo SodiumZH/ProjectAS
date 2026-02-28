@@ -33,7 +33,7 @@ public:
 		_FromUMG = nullptr;
 	}
 
-	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
+	SLATE_ATTRIBUTE(FNaItemSlotStyle*, StylePtr)
 	SLATE_ATTRIBUTE(UNaItemInventoryComponent*, Container)
 	/** Overall slot amount including disabled slots. If <= 0, uses inventory size. */
 	SLATE_ATTRIBUTE(int, SlotAmount)
@@ -52,7 +52,7 @@ protected:
 	/* Input copies */
 	UNaGameModeItemSystemComponent* GMComponent = nullptr;
 	UNaItemInventoryComponent* Container = nullptr;
-	FNaItemSlotPublicStyle* StylePtr = nullptr;
+	FNaItemSlotStyle* StylePtr = nullptr;
 	int SlotAmount;
 
 	// If true, this widget will not contain anything.

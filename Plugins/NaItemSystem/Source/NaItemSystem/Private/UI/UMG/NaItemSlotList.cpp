@@ -1,5 +1,5 @@
 #include "UI/UMG/NaItemSlotList.h"
-#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaInventoryWrappedBox.h"
 #include "Components/NaItemInventoryComponent.h"
 #include "NatriumItemSystem.h"
 #include "NaUtilityMinimal.h"
@@ -12,10 +12,10 @@ const FText UNaItemSlotList::GetPaletteCategory() {
 
 TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 	
-	FNaItemSlotPublicStyle* PublicStylePtr = &PublicStyle;
+	FNaItemSlotStyle* PublicStylePtr = &PublicStyle;
 	if (!IsValid(ContainerComponent)) {
 		UE_LOG(LogNaItem, Display, TEXT("UNaItemSlotList: invalid container reference."));
-		SAssignNew(List, SNaItemSlotList)
+		SAssignNew(List, SNaInventoryWrappedBox)
 			.FromUMG(this)
 			.StylePtr(PublicStylePtr)
 			.RowLength(RowLength)
@@ -23,7 +23,7 @@ TSharedRef<SWidget> UNaItemSlotList::RebuildWidget(){
 		return List.ToSharedRef();
 	}
 	else {
-		SAssignNew(List, SNaItemSlotList)
+		SAssignNew(List, SNaInventoryWrappedBox)
 			.Container(ContainerComponent)
 			.FromUMG(this)
 			.StylePtr(PublicStylePtr)

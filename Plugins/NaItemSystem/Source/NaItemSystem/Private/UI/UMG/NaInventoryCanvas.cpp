@@ -14,7 +14,7 @@ const FText UNaInventoryCanvas::GetPaletteCategory() {
 
 TSharedRef<SWidget> UNaInventoryCanvas::RebuildWidget() {
 
-	FNaItemSlotPublicStyle* PublicStylePtr = &PublicStyle;
+	FNaItemSlotStyle* PublicStylePtr = &PublicStyle;
 	if (!IsValid(ContainerComponent)) {
 		UE_LOG(LogNaItem, Display, TEXT("UNaInventoryCanvas: invalid container reference."));
 		SAssignNew(CanvasWidget, SNaInventoryCanvas)
