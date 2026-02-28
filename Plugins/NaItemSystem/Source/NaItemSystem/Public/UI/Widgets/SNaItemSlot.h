@@ -86,15 +86,15 @@ class NAITEMSYSTEM_API SNaItemSlot : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SNaItemSlot)
 	{
-		_StylePtr = nullptr;
+		_Style = FNaItemSlotStyle::DefaultStyle;
 		_WorldContext = nullptr;
 		_Stack = nullptr;
 		_bIsDisabled = false;
 	}
 
-	SLATE_ATTRIBUTE(FNaItemSlotStyle*, StylePtr)
+	SLATE_ATTRIBUTE(FNaItemSlotStyle, Style)
 	SLATE_ATTRIBUTE(UObject*, WorldContext)	// object as world context (indicating world)
-	SLATE_ATTRIBUTE(UNaItemStack*, Stack)	/* Ptr to corresponding item stack. Null ptr means empty */
+	SLATE_ATTRIBUTE(TWeakObjectPtr<UNaItemStack>, Stack)	/* Ptr to corresponding item stack. Null ptr means empty */
 	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
 	
 	SLATE_END_ARGS()
@@ -118,7 +118,7 @@ protected:
 
 	/* Style */
 	
-	FNaItemSlotStyle* StylePtr = nullptr;
+	TSharedPtr<FNaItemSlotStyle> StylePtr = nullptr;
 
 	FSlateFontInfo Font = FTextBlockStyle::GetDefault().Font;
 
@@ -161,7 +161,7 @@ protected:
 
 	/* If this ptr is null, this slot is not in an SNaItemSlotList
 	*/
-	SNaInventoryWrappedBox* ItemSlotList = nullptr;
+	TWeakPtr<SNaInventoryWrappedBox> ItemSlotList = nullptr;
 
 	int PositionInSlotList = -1;
 

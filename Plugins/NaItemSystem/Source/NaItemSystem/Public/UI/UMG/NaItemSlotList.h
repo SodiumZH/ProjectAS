@@ -61,7 +61,7 @@ public:
 
 protected:
 
-	TSharedPtr<SNaInventoryWrappedBox> List;
+	TSharedRef<SNaInventoryWrappedBox> List;
 
 public:
 

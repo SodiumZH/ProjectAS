@@ -164,7 +164,7 @@ public:
 
 protected:
 
-	TWeakObjectPtr<UNaInventoryCanvas> UMGRef = nullptr;
+	UNaInventoryCanvas* UMGRef = nullptr;
 
 	void BindEventsToUMG();
 

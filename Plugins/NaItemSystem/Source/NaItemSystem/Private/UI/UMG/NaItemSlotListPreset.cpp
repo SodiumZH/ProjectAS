@@ -7,10 +7,8 @@ TSharedRef<SWidget> UNaItemSlotListPreset::RebuildWidget() {
 
 	TSharedRef<SWidget> Widget = Super::RebuildWidget();
 	
-	if (List.IsValid()) {
-		List->OnSlotClicked.AddUObject(this, &UNaItemSlotListPreset::EventClickedPreset);
-		List->OnSlotDoubleClicked.AddUObject(this, &UNaItemSlotListPreset::EventDoubleClickedPreset);
-	}
+	List->OnSlotClicked.AddUObject(this, &UNaItemSlotListPreset::EventClickedPreset);
+	List->OnSlotDoubleClicked.AddUObject(this, &UNaItemSlotListPreset::EventDoubleClickedPreset);
 
 	return Widget;
 }
