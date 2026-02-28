@@ -88,6 +88,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Natrium|Item System")
 	TOptional<FName> GetRegistryName() const;
 	
-	
+	UFUNCTION(BlueprintPure, Category = "Natrium|Item System")
+	virtual UNaItemStack* CreateDefaultInstance() const;
 	
 };

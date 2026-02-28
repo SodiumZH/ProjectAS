@@ -2,12 +2,13 @@
 #include "SlateOptMacros.h"
 #include "BPLibraries/NaItemStatics.h"
 #include "Components/NaGameModeItemSystemComponent.h"
-#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaInventoryWrappedBox.h"
 #include "Widgets/BoxSlots/SNaBoxSlot.h"
 #include "NaUtilityMinimal.h"
 #include "UI/UMG/NaItemSlotList.h"
 #include "NatriumItemSystem.h"
 
+const FNaItemSlotStyle FNaItemSlotStyle::DefaultStyle = FNaItemSlotStyle();
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SNaItemSlot::Construct(const FArguments& InArgs)
@@ -106,37 +107,37 @@ void SNaItemSlot::SetDisabled(bool NewDisabledState) {
 void SNaItemSlot::BindItemSlotListEvents() {
 
 	// If in item slot list, bind mouse events
-	if (ItemSlotList && !ItemSlotList->IsInvalid() && ItemSlotList->GetContainer()->Container.IsInSize(PositionInSlotList) && BoxSlot.IsValid()) {
-		BoxSlot->OnPointed.BindSP(this, &SNaItemSlot::SlotPointedToList);
-		BoxSlot->OnUnpointed.BindSP(this, &SNaItemSlot::SlotUnpointedToList);
-		BoxSlot->OnSelected.BindSP(this, &SNaItemSlot::SlotSelectedToList);
-		BoxSlot->OnUnselected.BindSP(this, &SNaItemSlot::SlotUnselectedToList);
-		BoxSlot->GetButton()->SetOnClicked(FOnClicked::CreateSP(this, &SNaItemSlot::SlotClickedToList));
-		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::SlotHoveredToList));
-		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::SlotUnhoveredToList));
+	if (ItemSlotList && !ItemSlotList->IsInvalid() && ItemSlotList->GetContainer()->Inventory->IsValidSlot(PositionInSlotList) && BoxSlot.IsValid()) {
+		BoxSlot->OnPointed.BindRaw(this, &SNaItemSlot::SlotPointedToList);
+		BoxSlot->OnUnpointed.BindRaw(this, &SNaItemSlot::SlotUnpointedToList);
+		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::SlotSelectedToList);
+		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::SlotUnselectedToList);
+		BoxSlot->GetButton()->SetOnClicked(FOnClicked::CreateRaw(this, &SNaItemSlot::SlotClickedToList));
+		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotHoveredToList));
+		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::SlotUnhoveredToList));
 
 
-		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonDownToList));
-		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseButtonUpToList));
-		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotMouseMoveToList));
-		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateSP(this, &SNaItemSlot::SlotDoubleClickedToList));
+		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::SlotMouseButtonDownToList));
+		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::SlotMouseButtonUpToList));
+		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::SlotMouseMoveToList));
+		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::SlotDoubleClickedToList));
 
 	}
 
 	// Or bind to null functions (no behavior).
 	else {
-		BoxSlot->OnPointed.BindSP(this, &SNaItemSlot::ExecNoList);
-		BoxSlot->OnUnpointed.BindSP(this, &SNaItemSlot::ExecNoList);
-		BoxSlot->OnSelected.BindSP(this, &SNaItemSlot::ExecNoList);
-		BoxSlot->OnUnselected.BindSP(this, &SNaItemSlot::ExecNoList);
-		BoxSlot->GetButton()->SetOnClicked(FOnClicked::CreateSP(this, &SNaItemSlot::ExecNoListClicked));
-		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::ExecNoList));
-		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateSP(this, &SNaItemSlot::ExecNoList));
+		BoxSlot->OnPointed.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnUnpointed.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnSelected.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->OnUnselected.BindRaw(this, &SNaItemSlot::ExecNoList);
+		BoxSlot->GetButton()->SetOnClicked(FOnClicked::CreateRaw(this, &SNaItemSlot::ExecNoListClicked));
+		BoxSlot->GetButton()->SetOnHovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::ExecNoList));
+		BoxSlot->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaItemSlot::ExecNoList));
 
-		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
-		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
-		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
-		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateSP(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
+		BoxSlot->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateRaw(this, &SNaItemSlot::ExecNoListMouse));
 	}
 }
 
@@ -188,7 +189,7 @@ FReply SNaItemSlot::SlotDoubleClickedToList(const FGeometry& MyGeometry, const F
 
 /* Events end */
 
-void SNaItemSlot::SetItemSlotList(SNaItemSlotList* List, int Position) {
+void SNaItemSlot::SetItemSlotList(SNaInventoryWrappedBox* List, int Position) {
 	check(List);
 	ItemSlotList = List;
 	PositionInSlotList = Position;

@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
-#include "UI/Widgets/SNaItemSlotList.h"
+#include "UI/Widgets/SNaInventoryWrappedBox.h"
 #include "UI/Widgets/SNaItemSlot.h"
 #include "NaItemSlotList.generated.h"
 
-class SNaItemSlotList;
-class UNaItemContainerComponent;
+class SNaInventoryWrappedBox;
+class UNaItemInventoryComponent;
 
 /**
  * 
@@ -41,7 +41,7 @@ public:
 
 	/* Style */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
-	FNaItemSlotPublicStyle PublicStyle = FNaItemSlotPublicStyle();
+	FNaItemSlotStyle PublicStyle = FNaItemSlotStyle();
 
 	// Amount of slots each row
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemSlotList")
@@ -61,15 +61,15 @@ public:
 
 protected:
 
-	TSharedPtr<SNaItemSlotList> List;
+	TSharedPtr<SNaInventoryWrappedBox> List;
 
 public:
 
 	UPROPERTY(BlueprintReadOnly)
-	UNaItemContainerComponent* ContainerComponent = nullptr;
+	UNaItemInventoryComponent* ContainerComponent = nullptr;
 
 	UFUNCTION(BlueprintCallable, Category = "NaItemSystem|UI|ItemSlotList")
-	void SetContainerComponent(UNaItemContainerComponent* NewComponent);
+	void SetContainerComponent(UNaItemInventoryComponent* NewComponent);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Refresh Item Slot List"), Category = "NaItemSystem|UI|ItemSlotList")
 	void Refresh();

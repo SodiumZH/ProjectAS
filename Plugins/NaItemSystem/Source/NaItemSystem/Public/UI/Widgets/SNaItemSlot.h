@@ -10,19 +10,22 @@
 #include "SNaItemSlot.generated.h"
 
 class UNaGameModeItemSystemComponent;
-class SNaItemSlotList;
+class SNaInventoryWrappedBox;
 
-/* Item slot styles that are often constant for a whole slot list.
+/** 
+ * Item slot styles that are often constant for a whole slot list.
 * It can also be used to define single slots, and is not limited in slot lists.
-* This struct is utilized in SNaItemSlot input params which can easily defined in slot list BPs and transferred as a whole to each slot.
+* This struct is used in SNaItemSlot input params which can easily defined in slot list BPs and transferred as a whole to each slot.
 */
 USTRUCT(BlueprintType)
-struct NAITEMSYSTEM_API FNaItemSlotPublicStyle {
+struct NAITEMSYSTEM_API FNaItemSlotStyle {
 
 	GENERATED_BODY()
 
 public:
-
+	
+	static const FNaItemSlotStyle DefaultStyle;
+	
 	/* Slot size (in pixel). */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector2D SlotSize = FVector2D(64.f, 64.f);
@@ -71,7 +74,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bHideAmountWhenOne = true;
 
-	FNaItemSlotPublicStyle() {};
+	FNaItemSlotStyle() {};
+	
 };
 
 /**
@@ -88,7 +92,7 @@ public:
 		_bIsDisabled = false;
 	}
 
-	SLATE_ATTRIBUTE(FNaItemSlotPublicStyle*, StylePtr)
+	SLATE_ATTRIBUTE(FNaItemSlotStyle*, StylePtr)
 	SLATE_ATTRIBUTE(UObject*, WorldContext)	// object as world context (indicating world)
 	SLATE_ATTRIBUTE(UNaItemStack*, Stack)	/* Ptr to corresponding item stack. Null ptr means empty */
 	SLATE_ATTRIBUTE(bool, bIsDisabled) /* If true, this slot will be regarded as disabled, ignoring the value of ItemEntry and bIsEmpty() */
@@ -98,7 +102,7 @@ public:
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
-	/* Make slot params for box slot construction, from public style and item entry */
+	/* Make slot params for box slot construction, from style and item stack */
 	void MakeParams(FNaBoxSlotParams& OutParams);
 
 protected:
@@ -114,7 +118,7 @@ protected:
 
 	/* Style */
 	
-	FNaItemSlotPublicStyle* StylePtr = nullptr;
+	FNaItemSlotStyle* StylePtr = nullptr;
 
 	FSlateFontInfo Font = FTextBlockStyle::GetDefault().Font;
 
@@ -153,12 +157,11 @@ public:
 
 protected:
 
-	/**************************************************/
-	/* Functions for interaction with SNaItemSlotList */
+	/* Functions for interaction with inventory widget */
 
 	/* If this ptr is null, this slot is not in an SNaItemSlotList
 	*/
-	SNaItemSlotList* ItemSlotList = nullptr;
+	SNaInventoryWrappedBox* ItemSlotList = nullptr;
 
 	int PositionInSlotList = -1;
 
@@ -167,7 +170,8 @@ protected:
 
 public:
 
-	/* Functions for transfer events to ItemSlotList.
+	/* 
+	 * Functions for transfer events to ItemSlotList.
 	* Warning: no validity check inside. Check validity before calling.
 	*/
 	// SNaItemSlot only transfers pointing/selecting/mouse events from SNaBoxSlot to SNaItemSlotList.
@@ -192,7 +196,7 @@ public:
 
 
 	// Call this function ONLY when constructing slots in item slot list.
-	void SetItemSlotList(SNaItemSlotList* List, int Position);
+	void SetItemSlotList(SNaInventoryWrappedBox* List, int Position);
 
 	/* SNaItemSlotList end */
 	/***********************/

@@ -28,10 +28,10 @@ public:
 	UNaItemType* ItemType;
 
 	/** Number of items in this stack */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Stack", meta = (ClampMin = "0", ClampMax = "999"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Stack", meta = (ClampMin = "0"))
 	int32 Count;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Stack", meta = (ClampMin = "0", ClampMax = "999"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Stack")
 	TOptional<FText> CustomName;
 	/***** Stack Management Functions *****/
 
