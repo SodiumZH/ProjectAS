@@ -34,12 +34,12 @@ public:
 		_FromUMG = nullptr;
 	}
 
-	SLATE_ATTRIBUTE(TSharedRef<FNaItemSlotStyle>, StylePtr)
-	SLATE_ATTRIBUTE(TWeakObjectPtr<UNaItemInventory>, Container)
+	SLATE_ATTRIBUTE(FNaItemSlotStyle*, StylePtr)
+	SLATE_ATTRIBUTE(UNaItemInventoryComponent*, Container)
 	SLATE_ATTRIBUTE(bool, bFillDisabledToCompleteRectangle)	/* If true, it will add disabled slots to the end to fill a complete rectangle. */
 	SLATE_ATTRIBUTE(int, RowLength)	/* How many boxes in a row */
 	SLATE_ATTRIBUTE(int, RowCount)	// Amount of rows. If this count is not enough for container, it will be ignored and the row count will be automatically calculated from container.
-	SLATE_ARGUMENT(TWeakObjectPtr<UNaItemSlotList*>, FromUMG) /* If generated from UNaItemSlotList, set this value */
+	SLATE_ARGUMENT(UNaItemSlotList*, FromUMG) /* If generated from UNaItemSlotList, set this value */
 
 	SLATE_END_ARGS()
 
@@ -183,7 +183,7 @@ public:
 
 protected:
 
-	UNaItemSlotList* UMGRef = nullptr;
+	TWeakObjectPtr<UNaItemSlotList> UMGRef = nullptr;
 
 	void BindEventsToUMG();
 

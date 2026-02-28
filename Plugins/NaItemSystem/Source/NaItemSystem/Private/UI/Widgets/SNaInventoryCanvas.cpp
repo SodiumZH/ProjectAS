@@ -135,21 +135,23 @@ void SNaInventoryCanvas::BindSlotEvents(int32 Position)
 	}
 
 	// Bind pointing and selection events with Position payload
-	BoxSlotWidget->OnPointed.BindSP(this, &SNaInventoryCanvas::HandleSlotPointed, Position);
-	BoxSlotWidget->OnUnpointed.BindSP(this, &SNaInventoryCanvas::HandleSlotUnpointed, Position);
-	BoxSlotWidget->OnSelected.BindSP(this, &SNaInventoryCanvas::HandleSlotSelected, Position);
-	BoxSlotWidget->OnUnselected.BindSP(this, &SNaInventoryCanvas::HandleSlotUnselected, Position);
+	// Use BindRaw/CreateRaw instead of BindSP/CreateSP to avoid cyclic TSharedPtr references
+	// (Canvas → Slots → SNaItemSlot → BoxSlot → delegates → Canvas)
+	BoxSlotWidget->OnPointed.BindRaw(this, &SNaInventoryCanvas::HandleSlotPointed, Position);
+	BoxSlotWidget->OnUnpointed.BindRaw(this, &SNaInventoryCanvas::HandleSlotUnpointed, Position);
+	BoxSlotWidget->OnSelected.BindRaw(this, &SNaInventoryCanvas::HandleSlotSelected, Position);
+	BoxSlotWidget->OnUnselected.BindRaw(this, &SNaInventoryCanvas::HandleSlotUnselected, Position);
 
 	// Bind button events
-	BoxSlotWidget->GetButton()->SetOnClicked(FOnClicked::CreateSP(this, &SNaInventoryCanvas::HandleSlotClicked, Position));
-	BoxSlotWidget->GetButton()->SetOnHovered(FSimpleDelegate::CreateSP(this, &SNaInventoryCanvas::HandleSlotHovered, Position));
-	BoxSlotWidget->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateSP(this, &SNaInventoryCanvas::HandleSlotUnhovered, Position));
+	BoxSlotWidget->GetButton()->SetOnClicked(FOnClicked::CreateRaw(this, &SNaInventoryCanvas::HandleSlotClicked, Position));
+	BoxSlotWidget->GetButton()->SetOnHovered(FSimpleDelegate::CreateRaw(this, &SNaInventoryCanvas::HandleSlotHovered, Position));
+	BoxSlotWidget->GetButton()->SetOnUnhovered(FSimpleDelegate::CreateRaw(this, &SNaInventoryCanvas::HandleSlotUnhovered, Position));
 
 	// Bind mouse events
-	BoxSlotWidget->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateSP(this, &SNaInventoryCanvas::HandleSlotMouseButtonDown, Position));
-	BoxSlotWidget->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateSP(this, &SNaInventoryCanvas::HandleSlotMouseButtonUp, Position));
-	BoxSlotWidget->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateSP(this, &SNaInventoryCanvas::HandleSlotMouseMove, Position));
-	BoxSlotWidget->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateSP(this, &SNaInventoryCanvas::HandleSlotDoubleClicked, Position));
+	BoxSlotWidget->GetButton()->SetOnMouseButtonDown(FPointerEventHandler::CreateRaw(this, &SNaInventoryCanvas::HandleSlotMouseButtonDown, Position));
+	BoxSlotWidget->GetButton()->SetOnMouseButtonUp(FPointerEventHandler::CreateRaw(this, &SNaInventoryCanvas::HandleSlotMouseButtonUp, Position));
+	BoxSlotWidget->GetButton()->SetOnMouseMove(FPointerEventHandler::CreateRaw(this, &SNaInventoryCanvas::HandleSlotMouseMove, Position));
+	BoxSlotWidget->GetButton()->SetOnMouseDoubleClick(FPointerEventHandler::CreateRaw(this, &SNaInventoryCanvas::HandleSlotDoubleClicked, Position));
 }
 
 /* Slot event handlers */
@@ -259,54 +261,65 @@ int SNaInventoryCanvas::GetSelectedPosition()
 /* UMG event callers */
 
 void SNaInventoryCanvas::SlotPointedToUMG(int Position) {
-	UMGRef->OnSlotPointed.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotPointed.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotUnpointedToUMG(int Position) {
-	UMGRef->OnSlotUnpointed.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotUnpointed.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotSelectedToUMG(int Position) {
-	UMGRef->OnSlotSelected.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotSelected.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotUnselectedToUMG(int Position) {
-	UMGRef->OnSlotUnselected.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotUnselected.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotClickedToUMG(int Position) {
-	UMGRef->OnSlotClicked.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotClicked.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotHoveredToUMG(int Position) {
-	UMGRef->OnSlotHovered.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotHovered.Broadcast(Position);
 }
 void SNaInventoryCanvas::SlotUnhoveredToUMG(int Position) {
-	UMGRef->OnSlotUnhovered.Broadcast(Position);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotUnhovered.Broadcast(Position);
 }
 
 void SNaInventoryCanvas::SlotMouseButtonDownToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseButtonDown.Broadcast(Position, MyGeometry, MouseEvent);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotMouseButtonDown.Broadcast(Position, MyGeometry, MouseEvent);
 }
 void SNaInventoryCanvas::SlotMouseButtonUpToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseButtonUp.Broadcast(Position, MyGeometry, MouseEvent);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotMouseButtonUp.Broadcast(Position, MyGeometry, MouseEvent);
 }
 void SNaInventoryCanvas::SlotMouseMoveToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotMouseMove.Broadcast(Position, MyGeometry, MouseEvent);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotMouseMove.Broadcast(Position, MyGeometry, MouseEvent);
 }
 void SNaInventoryCanvas::SlotDoubleClickedToUMG(int Position, const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) {
-	UMGRef->OnSlotDoubleClicked.Broadcast(Position, MyGeometry, MouseEvent);
+	if (UMGRef.IsValid())
+		UMGRef->OnSlotDoubleClicked.Broadcast(Position, MyGeometry, MouseEvent);
 }
 
 void SNaInventoryCanvas::BindEventsToUMG()
 {
-	if (IsValid(UMGRef)) {
-		OnSlotPointed.AddSP(this, &SNaInventoryCanvas::SlotPointedToUMG);
-		OnSlotUnpointed.AddSP(this, &SNaInventoryCanvas::SlotUnpointedToUMG);
-		OnSlotSelected.AddSP(this, &SNaInventoryCanvas::SlotSelectedToUMG);
-		OnSlotUnselected.AddSP(this, &SNaInventoryCanvas::SlotUnselectedToUMG);
-		OnSlotClicked.AddSP(this, &SNaInventoryCanvas::SlotClickedToUMG);
-		OnSlotHovered.AddSP(this, &SNaInventoryCanvas::SlotHoveredToUMG);
-		OnSlotUnhovered.AddSP(this, &SNaInventoryCanvas::SlotUnhoveredToUMG);
+	if (UMGRef.IsValid()) {
+		OnSlotPointed.AddRaw(this, &SNaInventoryCanvas::SlotPointedToUMG);
+		OnSlotUnpointed.AddRaw(this, &SNaInventoryCanvas::SlotUnpointedToUMG);
+		OnSlotSelected.AddRaw(this, &SNaInventoryCanvas::SlotSelectedToUMG);
+		OnSlotUnselected.AddRaw(this, &SNaInventoryCanvas::SlotUnselectedToUMG);
+		OnSlotClicked.AddRaw(this, &SNaInventoryCanvas::SlotClickedToUMG);
+		OnSlotHovered.AddRaw(this, &SNaInventoryCanvas::SlotHoveredToUMG);
+		OnSlotUnhovered.AddRaw(this, &SNaInventoryCanvas::SlotUnhoveredToUMG);
 
-		OnSlotMouseButtonDown.AddSP(this, &SNaInventoryCanvas::SlotMouseButtonDownToUMG);
-		OnSlotMouseButtonUp.AddSP(this, &SNaInventoryCanvas::SlotMouseButtonUpToUMG);
-		OnSlotMouseMove.AddSP(this, &SNaInventoryCanvas::SlotMouseMoveToUMG);
-		OnSlotDoubleClicked.AddSP(this, &SNaInventoryCanvas::SlotDoubleClickedToUMG);
+		OnSlotMouseButtonDown.AddRaw(this, &SNaInventoryCanvas::SlotMouseButtonDownToUMG);
+		OnSlotMouseButtonUp.AddRaw(this, &SNaInventoryCanvas::SlotMouseButtonUpToUMG);
+		OnSlotMouseMove.AddRaw(this, &SNaInventoryCanvas::SlotMouseMoveToUMG);
+		OnSlotDoubleClicked.AddRaw(this, &SNaInventoryCanvas::SlotDoubleClickedToUMG);
 	}
 }
